@@ -1,0 +1,16 @@
+node_modules
+.next
+.env
+.env.local
+.env*.local
+.DS_Store
+*.log
+.vercel
+.turbo
+build
+dist
+coverage
+prisma/migrations
+public/uploads
+tsconfig.tsbuildinfo
+preview/

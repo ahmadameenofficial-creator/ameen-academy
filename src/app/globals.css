@@ -1,0 +1,149 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    /* الخلفيات والنصوص */
+    --background: 0 0% 100%;
+    --foreground: 222 47% 11%;
+
+    --card: 0 0% 100%;
+    --card-foreground: 222 47% 11%;
+
+    --muted: 240 5% 96%;
+    --muted-foreground: 215 16% 47%;
+
+    /* اللون الأساسي - بنفسجي Ameen */
+    --primary: 277 100% 50%; /* #A002FF */
+    --primary-foreground: 0 0% 100%;
+
+    --secondary: 277 100% 96%;
+    --secondary-foreground: 277 100% 25%;
+
+    --accent: 277 100% 96%;
+    --accent-foreground: 277 100% 30%;
+
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 0 0% 100%;
+
+    --border: 220 13% 91%;
+    --input: 220 13% 91%;
+    --ring: 277 100% 50%;
+
+    --radius: 0.75rem;
+  }
+
+  .dark {
+    --background: 240 10% 4%;
+    --foreground: 0 0% 98%;
+
+    --card: 240 10% 6%;
+    --card-foreground: 0 0% 98%;
+
+    --muted: 240 4% 12%;
+    --muted-foreground: 240 5% 65%;
+
+    --primary: 277 100% 60%;
+    --primary-foreground: 0 0% 100%;
+
+    --secondary: 277 50% 15%;
+    --secondary-foreground: 277 100% 85%;
+
+    --accent: 277 50% 15%;
+    --accent-foreground: 277 100% 85%;
+
+    --destructive: 0 70% 50%;
+    --destructive-foreground: 0 0% 98%;
+
+    --border: 240 4% 16%;
+    --input: 240 4% 16%;
+    --ring: 277 100% 60%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  html {
+    direction: rtl;
+    scroll-behavior: smooth;
+  }
+
+  body {
+    @apply bg-background text-foreground font-sans antialiased;
+    font-feature-settings: "ss01", "cv01";
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  /* تحسين الـ scrollbar */
+  ::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+  ::-webkit-scrollbar-track {
+    background: hsl(var(--muted));
+  }
+  ::-webkit-scrollbar-thumb {
+    background: hsl(var(--brand-300) / 0.5);
+    border-radius: 8px;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background: hsl(var(--brand-400) / 0.7);
+  }
+
+  /* تحديد النص */
+  ::selection {
+    background: #A002FF;
+    color: white;
+  }
+}
+
+@layer components {
+  .gradient-brand {
+    background: linear-gradient(135deg, #A002FF 0%, #6D01B0 100%);
+  }
+
+  .gradient-brand-soft {
+    background: linear-gradient(135deg, #F5E6FF 0%, #EAD0FF 100%);
+  }
+
+  .text-gradient-brand {
+    background: linear-gradient(135deg, #A002FF 0%, #6D01B0 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+
+  .mesh-bg {
+    background-color: hsl(var(--background));
+    background-image:
+      radial-gradient(at 0% 0%, rgba(160, 2, 255, 0.08) 0px, transparent 50%),
+      radial-gradient(at 100% 100%, rgba(160, 2, 255, 0.06) 0px, transparent 50%);
+  }
+
+  .no-select {
+    -webkit-user-select: none;
+    user-select: none;
+  }
+
+  .protected-video {
+    -webkit-user-select: none;
+    user-select: none;
+    pointer-events: auto;
+  }
+  .protected-video video::-webkit-media-controls-download-button {
+    display: none !important;
+  }
+}
+
+/* تحسينات الأداء */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}

@@ -1,0 +1,13 @@
+{
+  "permissions": {
+    "allow": [
+      "PowerShell($env:Path = \"C:\\\\Program Files\\\\nodejs;\" + $env:Path; Get-ChildItem \"D:\\\\ahmad ameen\\\\Ameen\\\\ameen-academy\\\\node_modules\" -ErrorAction SilentlyContinue | Select-Object -First 5)",
+      "WebFetch(domain:ahmadameen.space)",
+      "mcp__Claude_Preview__preview_start",
+      "PowerShell(Get-Process -Name \"node\" -ErrorAction SilentlyContinue)",
+      "PowerShell(Stop-Process -Force -ErrorAction SilentlyContinue)",
+      "Bash(git init *)",
+      "Bash(git add *)"
+    ]
+  }
+}

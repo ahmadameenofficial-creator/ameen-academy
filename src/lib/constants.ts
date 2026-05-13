@@ -1,0 +1,91 @@
+export const SITE_CONFIG = {
+  name: "Ameen Academy",
+  nameAr: "أكاديمية أمين",
+  description: "منصة تعليمية احترافية للمحتوى العربي عالي الجودة",
+  url: process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000",
+  ogImage: "/og-image.png",
+  links: {
+    facebook: "https://facebook.com/ameenacademy",
+    youtube: "https://youtube.com/@ameenacademy",
+    twitter: "https://twitter.com/ameenacademy",
+  },
+} as const;
+
+export const PAYMENT_CONFIG = {
+  methods: [
+    {
+      id: "vodafone_cash",
+      name: "فودافون كاش",
+      number: "01090912747",
+      instructions: "حوّل المبلغ على الرقم ده وابعتلنا رقم العملية",
+    },
+    {
+      id: "instapay",
+      name: "إنستاباي",
+      number: "01090912747",
+      instructions: "حوّل على إنستاباي وابعتلنا رقم العملية",
+    },
+  ],
+} as const;
+
+export const ROUTES = {
+  home: "/",
+  courses: "/courses",
+  community: "/community",
+  about: "/about",
+  contact: "/contact",
+  login: "/login",
+  register: "/register",
+  forgotPassword: "/forgot-password",
+  dashboard: "/dashboard",
+  profile: "/dashboard/profile",
+  myCourses: "/dashboard/my-courses",
+  admin: {
+    root: "/admin",
+    courses: "/admin/courses",
+    students: "/admin/students",
+    payments: "/admin/payments",
+    community: "/admin/community",
+    settings: "/admin/settings",
+  },
+} as const;
+
+export const FEATURES = [
+  {
+    title: "محتوى احترافي",
+    description: "كورسات مصممة بعناية لتعطيك أفضل تجربة تعليمية",
+    icon: "trophy",
+  },
+  {
+    title: "حماية كاملة",
+    description: "فيديوهات محمية بأحدث تقنيات الأمان ضد القرصنة",
+    icon: "shield-check",
+  },
+  {
+    title: "تعلم بإيقاعك",
+    description: "ادرس وقت ما تحب، من أي جهاز، بدون قيود",
+    icon: "clock",
+  },
+  {
+    title: "مجتمع تفاعلي",
+    description: "تواصل مع طلاب من جميع أنحاء العالم العربي",
+    icon: "users",
+  },
+  {
+    title: "شهادة معتمدة",
+    description: "احصل على شهادة إكمال بعد كل كورس",
+    icon: "certificate",
+  },
+  {
+    title: "دعم مستمر",
+    description: "فريق الدعم متواجد لمساعدتك في أي وقت",
+    icon: "headset",
+  },
+] as const;
+
+export const STATS = [
+  { value: "1000+", label: "طالب مسجل" },
+  { value: "50+", label: "ساعة محتوى" },
+  { value: "98%", label: "نسبة الرضا" },
+  { value: "24/7", label: "دعم مستمر" },
+] as const;
