@@ -1,11 +1,10 @@
 import Link from "next/link";
 import {
-  IconBrandFacebook,
-  IconBrandYoutube,
-  IconBrandTwitter,
   IconBrandInstagram,
+  IconBrandLinkedin,
+  IconBrandWhatsapp,
+  IconWorld,
   IconMail,
-  IconPhone,
 } from "@tabler/icons-react";
 import { Logo } from "@/components/shared/logo";
 import { ROUTES } from "@/lib/constants";
@@ -28,10 +27,10 @@ const footerLinks = {
 };
 
 const socials = [
-  { icon: IconBrandFacebook, href: "#", label: "فيسبوك" },
-  { icon: IconBrandYoutube, href: "#", label: "يوتيوب" },
-  { icon: IconBrandTwitter, href: "#", label: "تويتر" },
-  { icon: IconBrandInstagram, href: "#", label: "إنستجرام" },
+  { icon: IconBrandInstagram, href: "https://www.instagram.com/Ahmadameenofficial", label: "إنستجرام" },
+  { icon: IconBrandLinkedin, href: "https://www.linkedin.com/in/ahmad-ameen/", label: "لينكد إن" },
+  { icon: IconWorld, href: "https://www.ahmadameen.space/portfolio", label: "البورتفوليو" },
+  { icon: IconBrandWhatsapp, href: "https://wa.me/201090902747", label: "واتساب" },
 ];
 
 export function Footer() {

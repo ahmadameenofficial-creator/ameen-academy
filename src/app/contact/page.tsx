@@ -6,7 +6,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import {
   IconMail,
   IconBrandWhatsapp,
-  IconBrandFacebook,
+  IconBrandLinkedin,
   IconBrandInstagram,
   IconClock,
 } from "@tabler/icons-react";
@@ -20,8 +20,8 @@ const contactMethods = [
     icon: IconBrandWhatsapp,
     title: "واتساب",
     desc: "تقدر تكلمنا مباشرة على واتساب",
-    value: "+20 XXX XXX XXXX",
-    href: "https://wa.me/20XXXXXXXXXX",
+    value: "+20 109 090 2747",
+    href: "https://wa.me/201090902747",
     color: "bg-green-50 text-green-600",
     iconColor: "text-green-500",
   },
@@ -35,22 +35,22 @@ const contactMethods = [
     iconColor: "text-brand-500",
   },
   {
-    icon: IconBrandFacebook,
-    title: "فيسبوك",
-    desc: "تابعنا واكتبلنا في الرسائل",
-    value: "Ameen Academy",
-    href: "#",
-    color: "bg-blue-50 text-blue-600",
-    iconColor: "text-blue-500",
-  },
-  {
     icon: IconBrandInstagram,
     title: "إنستجرام",
     desc: "شوف أعمالنا وشغل الطلاب",
-    value: "@ameenacademy",
-    href: "#",
+    value: "@Ahmadameenofficial",
+    href: "https://www.instagram.com/Ahmadameenofficial",
     color: "bg-pink-50 text-pink-600",
     iconColor: "text-pink-500",
+  },
+  {
+    icon: IconBrandLinkedin,
+    title: "لينكد إن",
+    desc: "تابع مسيرتنا المهنية",
+    value: "Ahmad Ameen",
+    href: "https://www.linkedin.com/in/ahmad-ameen/",
+    color: "bg-blue-50 text-blue-600",
+    iconColor: "text-blue-500",
   },
 ];
 
