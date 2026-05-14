@@ -81,9 +81,9 @@ export default async function Image() {
           }}
         >
           <span>Pro Courses</span>
-          <span style={{ fontSize: 14 }}>&#9679;</span>
+          <span style={{ fontSize: 14 }}>|</span>
           <span>Arabic Content</span>
-          <span style={{ fontSize: 14 }}>&#9679;</span>
+          <span style={{ fontSize: 14 }}>|</span>
           <span>Full Protection</span>
         </div>
       </div>
