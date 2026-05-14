@@ -1,5 +1,6 @@
 import { ImageResponse } from "next/og";
-export const alt = "أكاديمية أمين — تعلّم صح";
+
+export const alt = "Ameen Academy — Learn Right";
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
 
@@ -14,7 +15,8 @@ export default async function Image() {
           flexDirection: "column",
           alignItems: "center",
           justifyContent: "center",
-          background: "linear-gradient(135deg, #A002FF 0%, #6D01B0 50%, #3F0066 100%)",
+          background:
+            "linear-gradient(135deg, #A002FF 0%, #6D01B0 50%, #3F0066 100%)",
           fontFamily: "sans-serif",
         }}
       >
@@ -58,13 +60,13 @@ export default async function Image() {
         {/* Subtitle */}
         <div
           style={{
-            fontSize: 32,
+            fontSize: 28,
             color: "rgba(255,255,255,0.8)",
             marginTop: 16,
             textAlign: "center",
           }}
         >
-          أكاديمية أمين — تعلّم صح
+          Professional Graphic Design Courses
         </div>
 
         {/* Bottom bar */}
@@ -78,11 +80,11 @@ export default async function Image() {
             fontSize: 20,
           }}
         >
-          <span>كورسات احترافية</span>
-          <span>•</span>
-          <span>محتوى عربي</span>
-          <span>•</span>
-          <span>حماية كاملة</span>
+          <span>Pro Courses</span>
+          <span style={{ fontSize: 14 }}>&#9679;</span>
+          <span>Arabic Content</span>
+          <span style={{ fontSize: 14 }}>&#9679;</span>
+          <span>Full Protection</span>
         </div>
       </div>
     ),
