@@ -2,6 +2,8 @@ import { Suspense } from "react";
 import { LoginForm } from "./login-form";
 import { IconLoader2 } from "@tabler/icons-react";
 
+export const dynamic = "force-dynamic";
+
 export default function LoginPage() {
   return (
     <Suspense
