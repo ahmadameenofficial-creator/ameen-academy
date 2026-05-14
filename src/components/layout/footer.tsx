@@ -30,7 +30,7 @@ const socials = [
   { icon: IconBrandInstagram, href: "https://www.instagram.com/Ahmadameenofficial", label: "إنستجرام" },
   { icon: IconBrandLinkedin, href: "https://www.linkedin.com/in/ahmad-ameen/", label: "لينكد إن" },
   { icon: IconWorld, href: "https://www.ahmadameen.space/portfolio", label: "البورتفوليو" },
-  { icon: IconBrandWhatsapp, href: "https://wa.me/201090902747", label: "واتساب" },
+  { icon: IconBrandWhatsapp, href: "https://wa.me/201090912747", label: "واتساب" },
 ];
 
 export function Footer() {
