@@ -1,14 +1,19 @@
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
-import { getToken } from "next-auth/jwt";
 
 const protectedPaths = ["/dashboard", "/admin"];
 const authPaths = ["/login", "/register"];
 
-export async function middleware(req: NextRequest) {
-  const token = await getToken({ req, secret: process.env.AUTH_SECRET });
+export function middleware(req: NextRequest) {
   const { pathname } = req.nextUrl;
-  const isLoggedIn = !!token;
+
+  // نشيك على وجود session cookie فقط
+  // التحقق الفعلي بيحصل في الـ server components عبر auth()
+  const sessionCookie =
+    req.cookies.get("authjs.session-token") ||
+    req.cookies.get("__Secure-authjs.session-token");
+
+  const isLoggedIn = !!sessionCookie;
 
   // صفحات محمية — لازم يكون مسجّل دخول
   const isProtected = protectedPaths.some((p) => pathname.startsWith(p));
