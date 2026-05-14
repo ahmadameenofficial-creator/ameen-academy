@@ -4,6 +4,8 @@ import { auth } from "@/auth";
 import { prisma } from "@/lib/prisma";
 import { ProfileForm } from "./profile-form";
 
+export const dynamic = "force-dynamic";
+
 export const metadata: Metadata = {
   title: "حسابي",
 };

@@ -1,6 +1,8 @@
 import { prisma } from "@/lib/prisma";
 import { formatPrice } from "@/lib/format";
 import { Card } from "@/components/ui/card";
+
+export const dynamic = "force-dynamic";
 import { Badge } from "@/components/ui/badge";
 import { IconClock, IconCheck, IconX } from "@tabler/icons-react";
 import { PaymentActions } from "./payment-actions";

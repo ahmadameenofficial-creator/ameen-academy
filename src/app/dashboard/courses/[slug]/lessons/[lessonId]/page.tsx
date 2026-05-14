@@ -1,6 +1,8 @@
 import { notFound, redirect } from "next/navigation";
 import { auth } from "@/auth";
 import { prisma } from "@/lib/prisma";
+
+export const dynamic = "force-dynamic";
 import { VideoPlayer } from "./video-player";
 import { LessonNav } from "./lesson-nav";
 

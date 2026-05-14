@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { auth } from "@/auth";
 
+export const dynamic = "force-dynamic";
+
 export const metadata: Metadata = {
   title: "لوحتي",
 };

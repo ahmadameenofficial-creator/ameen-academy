@@ -3,6 +3,8 @@ import Image from "next/image";
 import Link from "next/link";
 import { prisma } from "@/lib/prisma";
 
+export const dynamic = "force-dynamic";
+
 export const metadata: Metadata = {
   title: "الكورسات",
   description: "تصفّح كورسات أكاديمية أمين في الجرافيك ديزاين والتصميم الاحترافي",

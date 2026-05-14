@@ -2,6 +2,8 @@ import { notFound } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
 import { prisma } from "@/lib/prisma";
+
+export const dynamic = "force-dynamic";
 import { auth } from "@/auth";
 import { formatPrice, formatDuration, getLevelLabel } from "@/lib/format";
 import { Button } from "@/components/ui/button";
