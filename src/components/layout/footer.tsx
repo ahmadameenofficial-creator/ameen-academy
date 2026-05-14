@@ -19,7 +19,6 @@ const footerLinks = {
   المساعدة: [
     { href: ROUTES.contact, label: "تواصل معنا" },
     { href: "/faq", label: "الأسئلة الشائعة" },
-    { href: "/support", label: "الدعم الفني" },
   ],
   قانوني: [
     { href: "/terms", label: "الشروط والأحكام" },
@@ -44,8 +43,7 @@ export function Footer() {
           <div className="lg:col-span-2">
             <Logo />
             <p className="mt-4 max-w-sm text-sm leading-relaxed text-muted-foreground">
-              منصة تعليمية احترافية تقدم محتوى عربي عالي الجودة في البرمجة
-              والتقنية، بحماية كاملة وتجربة تعلم متميزة.
+              منصة تعليمية مصرية متخصصة في التصميم الجرافيكي — هنعلمك تصمم، تبيع شغلك، وتبني اسمك.
             </p>
             <div className="mt-5 flex items-center gap-2">
               {socials.map((s) => {
