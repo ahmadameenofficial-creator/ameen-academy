@@ -10,7 +10,7 @@ async function main() {
     where: { email: "admin@ameenacademy.com" },
     update: {},
     create: {
-      name: "عمرو أمين",
+      name: "أحمد أمين",
       email: "admin@ameenacademy.com",
       password: hashedPassword,
       role: "ADMIN",
