@@ -6,7 +6,7 @@ import { useSearchParams } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
-import { IconLoader2, IconLock, IconCheck } from "@tabler/icons-react";
+import { IconLoader2, IconLock, IconCheck, IconEye, IconEyeOff } from "@tabler/icons-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Logo } from "@/components/shared/logo";
@@ -33,6 +33,8 @@ export function ResetForm() {
   const [isLoading, setIsLoading] = useState(false);
   const [done, setDone] = useState(false);
   const [error, setError] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirm, setShowConfirm] = useState(false);
 
   const {
     register,
@@ -140,11 +142,19 @@ export function ResetForm() {
             <IconLock className="absolute right-3 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" />
             <Input
               id="password"
-              type="password"
+              type={showPassword ? "text" : "password"}
               placeholder="8 حروف على الأقل"
-              className="pr-10"
+              className="pr-10 pl-10"
               {...register("password")}
             />
+            <button
+              type="button"
+              tabIndex={-1}
+              onClick={() => setShowPassword(!showPassword)}
+              className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors"
+            >
+              {showPassword ? <IconEyeOff className="h-5 w-5" /> : <IconEye className="h-5 w-5" />}
+            </button>
           </div>
           {errors.password && (
             <p className="text-xs text-destructive">{errors.password.message}</p>
@@ -159,11 +169,19 @@ export function ResetForm() {
             <IconLock className="absolute right-3 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" />
             <Input
               id="confirmPassword"
-              type="password"
+              type={showConfirm ? "text" : "password"}
               placeholder="اكتب الباسورد تاني"
-              className="pr-10"
+              className="pr-10 pl-10"
               {...register("confirmPassword")}
             />
+            <button
+              type="button"
+              tabIndex={-1}
+              onClick={() => setShowConfirm(!showConfirm)}
+              className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors"
+            >
+              {showConfirm ? <IconEyeOff className="h-5 w-5" /> : <IconEye className="h-5 w-5" />}
+            </button>
           </div>
           {errors.confirmPassword && (
             <p className="text-xs text-destructive">{errors.confirmPassword.message}</p>
