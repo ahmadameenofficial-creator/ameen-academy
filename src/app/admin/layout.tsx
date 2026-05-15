@@ -6,12 +6,14 @@ import {
   IconBook,
   IconUsers,
   IconCreditCard,
+  IconArticle,
   IconArrowRight,
 } from "@tabler/icons-react";
 
 const navItems = [
   { href: "/admin", label: "الرئيسية", icon: IconLayoutDashboard },
   { href: "/admin/courses", label: "الكورسات", icon: IconBook },
+  { href: "/admin/blog", label: "المدونة", icon: IconArticle },
   { href: "/admin/students", label: "الطلاب", icon: IconUsers },
   { href: "/admin/payments", label: "المدفوعات", icon: IconCreditCard },
 ];

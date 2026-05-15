@@ -140,6 +140,45 @@
   }
 }
 
+/* تنسيق المقالات */
+.prose-custom {
+  font-size: 1.05rem;
+  line-height: 1.9;
+  color: hsl(var(--muted-foreground));
+}
+.prose-custom h1,
+.prose-custom h2,
+.prose-custom h3 {
+  color: hsl(var(--foreground));
+}
+.prose-custom a {
+  color: #A002FF;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  transition: color 0.2s;
+}
+.prose-custom a:hover {
+  color: #6D01B0;
+}
+.prose-custom strong {
+  color: hsl(var(--foreground));
+  font-weight: 600;
+}
+.prose-custom blockquote {
+  font-style: italic;
+  color: hsl(var(--muted-foreground));
+}
+.prose-custom img {
+  border-radius: 12px;
+  margin: 1.5rem 0;
+}
+.prose-custom code {
+  background: hsl(var(--muted));
+  padding: 0.15rem 0.4rem;
+  border-radius: 4px;
+  font-size: 0.9em;
+}
+
 /* تحسينات الأداء */
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after {

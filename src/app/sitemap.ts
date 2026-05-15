@@ -1,12 +1,11 @@
 import type { MetadataRoute } from "next";
 import { prisma } from "@/lib/prisma";
 
-export const revalidate = 3600; // الـ sitemap بتتحدث كل ساعة
+export const revalidate = 3600;
 
 const BASE_URL = process.env.NEXT_PUBLIC_APP_URL || "https://ameenacademy.com";
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  // الصفحات الثابتة
   const staticPages: MetadataRoute.Sitemap = [
     {
       url: BASE_URL,
@@ -16,6 +15,12 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     },
     {
       url: `${BASE_URL}/courses`,
+      lastModified: new Date(),
+      changeFrequency: "daily",
+      priority: 0.9,
+    },
+    {
+      url: `${BASE_URL}/blog`,
       lastModified: new Date(),
       changeFrequency: "daily",
       priority: 0.9,
@@ -64,11 +69,16 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     },
   ];
 
-  // صفحات الكورسات الديناميكية
-  const courses = await prisma.course.findMany({
-    where: { isPublished: true },
-    select: { slug: true, updatedAt: true },
-  });
+  const [courses, blogPosts] = await Promise.all([
+    prisma.course.findMany({
+      where: { isPublished: true },
+      select: { slug: true, updatedAt: true },
+    }),
+    prisma.blogPost.findMany({
+      where: { isPublished: true },
+      select: { slug: true, updatedAt: true },
+    }),
+  ]);
 
   const coursePages: MetadataRoute.Sitemap = courses.map((course) => ({
     url: `${BASE_URL}/courses/${course.slug}`,
@@ -77,5 +87,12 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     priority: 0.8,
   }));
 
-  return [...staticPages, ...coursePages];
+  const blogPages: MetadataRoute.Sitemap = blogPosts.map((post) => ({
+    url: `${BASE_URL}/blog/${post.slug}`,
+    lastModified: post.updatedAt,
+    changeFrequency: "weekly" as const,
+    priority: 0.8,
+  }));
+
+  return [...staticPages, ...coursePages, ...blogPages];
 }

@@ -9,6 +9,7 @@ import {
   IconBook2,
   IconUsers,
   IconHome,
+  IconArticle,
 } from "@tabler/icons-react";
 import { Logo } from "@/components/shared/logo";
 import { ROUTES } from "@/lib/constants";
@@ -18,6 +19,7 @@ import { AuthButtons } from "./auth-buttons";
 const navLinks = [
   { href: ROUTES.home, label: "الرئيسية", icon: IconHome },
   { href: ROUTES.courses, label: "الكورسات", icon: IconBook2 },
+  { href: ROUTES.blog, label: "المدونة", icon: IconArticle },
   { href: ROUTES.community, label: "المجتمع", icon: IconUsers },
 ];
 

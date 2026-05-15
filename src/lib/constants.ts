@@ -32,6 +32,7 @@ export const ROUTES = {
   home: "/",
   courses: "/courses",
   community: "/community",
+  blog: "/blog",
   about: "/about",
   contact: "/contact",
   login: "/login",
@@ -46,6 +47,7 @@ export const ROUTES = {
     students: "/admin/students",
     payments: "/admin/payments",
     community: "/admin/community",
+    blog: "/admin/blog",
     settings: "/admin/settings",
   },
 } as const;
