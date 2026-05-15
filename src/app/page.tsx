@@ -8,9 +8,9 @@ import { TestimonialsSection } from "@/components/landing/testimonials-section";
 import { CtaSection } from "@/components/landing/cta-section";
 
 export const metadata: Metadata = {
-  title: "أكاديمية أمين | تعلّم الجرافيك ديزاين باحتراف",
+  title: "أكاديمية أمين | اتعلم المهارات اللي هتجيبلك فلوس في 2026",
   description:
-    "أكاديمية أمين — أقوى كورسات جرافيك ديزاين باللغة العربية. اتعلم Photoshop و Illustrator من الصفر للاحتراف مع شهادة معتمدة ووصول مدى الحياة.",
+    "أكاديمية أمين — اتعلم المهارات اللي السوق محتاجها: تصميم جرافيك، ذكاء اصطناعي، فريلانس. كورسات عملية بالعربي من الصفر للاحتراف مع شهادة معتمدة ووصول مدى الحياة.",
   alternates: {
     canonical: "/",
   },

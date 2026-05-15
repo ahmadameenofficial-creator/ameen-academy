@@ -1,7 +1,7 @@
 export const SITE_CONFIG = {
   name: "Ameen Academy",
   nameAr: "أكاديمية أمين",
-  description: "منصة تعليمية احترافية للمحتوى العربي عالي الجودة",
+  description: "اتعلم المهارات اللي هتجيبلك فلوس في 2026 — تصميم، AI، فريلانس، ومهارات حديثة مطلوبة في سوق العمل",
   url: process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000",
   ogImage: "/og-image.png",
   links: {

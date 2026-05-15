@@ -14,7 +14,7 @@ export function OrganizationSchema() {
     alternateName: "أكاديمية أمين",
     url: BASE_URL,
     logo: `${BASE_URL}/images/logo.svg`,
-    description: "منصة تعليمية احترافية لتعليم الجرافيك ديزاين والتصميم الاحترافي باللغة العربية",
+    description: "منصة تعليمية عربية تعلمك المهارات اللي تجيبلك فلوس — تصميم جرافيك، ذكاء اصطناعي، فريلانس، ومهارات حديثة مطلوبة في سوق العمل 2026",
     foundingDate: "2026",
     founder: {
       "@type": "Person",
