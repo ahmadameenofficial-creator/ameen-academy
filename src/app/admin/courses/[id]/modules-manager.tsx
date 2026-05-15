@@ -9,6 +9,10 @@ import {
   IconPlayerPlay,
   IconLock,
   IconChevronDown,
+  IconVideo,
+  IconUpload,
+  IconCheck,
+  IconX,
 } from "@tabler/icons-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -46,7 +50,12 @@ export function ModulesManager({
   const [newLessonTitle, setNewLessonTitle] = useState("");
   const [newLessonDuration, setNewLessonDuration] = useState(0);
   const [newLessonFree, setNewLessonFree] = useState(false);
+  const [newLessonVideo, setNewLessonVideo] = useState<File | null>(null);
   const [loading, setLoading] = useState<string | null>(null);
+  const [uploadingFor, setUploadingFor] = useState<string | null>(null);
+  const [uploadProgress, setUploadProgress] = useState(0);
+
+  // ============ Modules ============
 
   async function addModule() {
     if (!newModuleTitle.trim()) return;
@@ -85,11 +94,14 @@ export function ModulesManager({
     setLoading(null);
   }
 
+  // ============ Lessons ============
+
   async function addLesson(moduleId: string) {
     if (!newLessonTitle.trim()) return;
     setLoading(`lesson-${moduleId}`);
 
     try {
+      // الخطوة 1: إضافة الدرس
       const res = await fetch(`/api/admin/courses/${courseId}/modules/${moduleId}/lessons`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -102,6 +114,15 @@ export function ModulesManager({
 
       if (res.ok) {
         const lesson = await res.json();
+
+        // الخطوة 2: رفع الفيديو لو موجود
+        if (newLessonVideo) {
+          const videoId = await uploadVideoForLesson(lesson.id, newLessonTitle, newLessonVideo);
+          if (videoId) {
+            lesson.videoId = videoId;
+          }
+        }
+
         setModules((prev) =>
           prev.map((m) =>
             m.id === moduleId ? { ...m, lessons: [...m.lessons, lesson] } : m
@@ -110,6 +131,7 @@ export function ModulesManager({
         setNewLessonTitle("");
         setNewLessonDuration(0);
         setNewLessonFree(false);
+        setNewLessonVideo(null);
         setAddingLessonTo(null);
         router.refresh();
       }
@@ -136,6 +158,88 @@ export function ModulesManager({
     } catch {}
     setLoading(null);
   }
+
+  // ============ رفع فيديو ============
+
+  async function uploadVideoForLesson(lessonId: string, title: string, file: File): Promise<string | null> {
+    try {
+      setUploadingFor(lessonId);
+      setUploadProgress(0);
+
+      // 1. إنشاء الفيديو على Bunny
+      const createRes = await fetch("/api/admin/videos", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ title }),
+      });
+
+      if (!createRes.ok) throw new Error("فشل إنشاء الفيديو");
+      const { videoId } = await createRes.json();
+
+      // 2. رفع الفيديو
+      setUploadProgress(10);
+      const uploadRes = await fetch(`/api/admin/videos/${videoId}/upload`, {
+        method: "PUT",
+        body: file,
+      });
+
+      if (!uploadRes.ok) throw new Error("فشل رفع الفيديو");
+      setUploadProgress(80);
+
+      // 3. ربط الفيديو بالدرس
+      await fetch(`/api/admin/lessons/${lessonId}`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ videoId }),
+      });
+
+      setUploadProgress(100);
+      return videoId;
+    } catch (err) {
+      console.error("Video upload failed:", err);
+      return null;
+    } finally {
+      setTimeout(() => {
+        setUploadingFor(null);
+        setUploadProgress(0);
+      }, 1500);
+    }
+  }
+
+  async function handleUploadForExisting(lessonId: string, moduleId: string) {
+    const input = document.createElement("input");
+    input.type = "file";
+    input.accept = "video/*";
+    input.onchange = async (e) => {
+      const file = (e.target as HTMLInputElement).files?.[0];
+      if (!file) return;
+
+      const lesson = modules
+        .find((m) => m.id === moduleId)
+        ?.lessons.find((l) => l.id === lessonId);
+
+      const videoId = await uploadVideoForLesson(lessonId, lesson?.title || "فيديو", file);
+
+      if (videoId) {
+        setModules((prev) =>
+          prev.map((m) =>
+            m.id === moduleId
+              ? {
+                  ...m,
+                  lessons: m.lessons.map((l) =>
+                    l.id === lessonId ? { ...l, videoId } : l
+                  ),
+                }
+              : m
+          )
+        );
+        router.refresh();
+      }
+    };
+    input.click();
+  }
+
+  // ============ Render ============
 
   return (
     <div className="space-y-4">
@@ -200,9 +304,39 @@ export function ModulesManager({
                     )}
                     <span className="text-foreground">{lesson.title}</span>
                     {lesson.isFree && <Badge variant="success" className="text-[10px]">مجاني</Badge>}
-                    {lesson.videoId && <Badge variant="default" className="text-[10px]">فيديو</Badge>}
+                    {lesson.videoId ? (
+                      <Badge variant="default" className="text-[10px] gap-1">
+                        <IconCheck className="h-2.5 w-2.5" /> فيديو
+                      </Badge>
+                    ) : (
+                      <Badge variant="outline" className="text-[10px] text-amber-600 border-amber-300 gap-1">
+                        <IconX className="h-2.5 w-2.5" /> بدون فيديو
+                      </Badge>
+                    )}
                   </div>
-                  <div className="flex items-center gap-3">
+                  <div className="flex items-center gap-2">
+                    {/* حالة الرفع */}
+                    {uploadingFor === lesson.id ? (
+                      <div className="flex items-center gap-2">
+                        <div className="w-20 bg-muted rounded-full h-1.5">
+                          <div
+                            className="bg-brand-500 h-1.5 rounded-full transition-all duration-300"
+                            style={{ width: `${uploadProgress}%` }}
+                          />
+                        </div>
+                        <span className="text-xs text-brand-500">{uploadProgress}%</span>
+                      </div>
+                    ) : (
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        className="h-7 text-xs gap-1"
+                        onClick={() => handleUploadForExisting(lesson.id, module.id)}
+                      >
+                        <IconUpload className="h-3 w-3" />
+                        {lesson.videoId ? "استبدال" : "رفع فيديو"}
+                      </Button>
+                    )}
                     <span className="text-xs text-muted-foreground">
                       {Math.floor(lesson.duration / 60)} دقيقة
                     </span>
@@ -223,6 +357,7 @@ export function ModulesManager({
                 </div>
               ))}
 
+              {/* فورم إضافة درس جديد */}
               {addingLessonTo === module.id && (
                 <div className="p-4 bg-muted/30 border-t border-border space-y-3">
                   <Input
@@ -231,7 +366,7 @@ export function ModulesManager({
                     placeholder="عنوان الدرس"
                     autoFocus
                   />
-                  <div className="flex items-center gap-3">
+                  <div className="flex items-center gap-3 flex-wrap">
                     <Input
                       type="number"
                       value={newLessonDuration || ""}
@@ -250,21 +385,71 @@ export function ModulesManager({
                       />
                       مجاني
                     </label>
+                  </div>
+
+                  {/* رفع فيديو مع الدرس */}
+                  <div
+                    className={`border-2 border-dashed rounded-xl p-4 text-center transition-colors cursor-pointer ${
+                      newLessonVideo ? "border-brand-300 bg-brand-50/30" : "border-border hover:border-brand-300"
+                    }`}
+                    onClick={() => {
+                      const input = document.createElement("input");
+                      input.type = "file";
+                      input.accept = "video/*";
+                      input.onchange = (e) => {
+                        const file = (e.target as HTMLInputElement).files?.[0];
+                        if (file) setNewLessonVideo(file);
+                      };
+                      input.click();
+                    }}
+                  >
+                    {newLessonVideo ? (
+                      <div className="flex items-center justify-center gap-2 text-sm">
+                        <IconVideo className="h-5 w-5 text-brand-500" />
+                        <span className="text-foreground font-medium">{newLessonVideo.name}</span>
+                        <span className="text-muted-foreground">
+                          ({(newLessonVideo.size / (1024 * 1024)).toFixed(1)} MB)
+                        </span>
+                        <button
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            setNewLessonVideo(null);
+                          }}
+                          className="text-destructive hover:bg-destructive/10 rounded p-0.5"
+                        >
+                          <IconX className="h-4 w-4" />
+                        </button>
+                      </div>
+                    ) : (
+                      <div className="flex items-center justify-center gap-2 text-sm text-muted-foreground">
+                        <IconUpload className="h-5 w-5" />
+                        <span>اضغط لاختيار فيديو الدرس (اختياري)</span>
+                      </div>
+                    )}
+                  </div>
+
+                  <div className="flex items-center gap-2">
                     <Button
                       size="sm"
                       onClick={() => addLesson(module.id)}
-                      disabled={loading === `lesson-${module.id}`}
+                      disabled={loading === `lesson-${module.id}` || !newLessonTitle.trim()}
                     >
                       {loading === `lesson-${module.id}` ? (
                         <IconLoader2 className="h-4 w-4 animate-spin" />
                       ) : (
-                        "إضافة"
+                        <>
+                          <IconPlus className="h-4 w-4" />
+                          {newLessonVideo ? "إضافة + رفع" : "إضافة"}
+                        </>
                       )}
                     </Button>
                     <Button
                       size="sm"
                       variant="ghost"
-                      onClick={() => setAddingLessonTo(null)}
+                      onClick={() => {
+                        setAddingLessonTo(null);
+                        setNewLessonVideo(null);
+                      }}
                     >
                       إلغاء
                     </Button>
