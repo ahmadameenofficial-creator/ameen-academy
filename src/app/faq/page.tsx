@@ -4,9 +4,16 @@ import { Navbar } from "@/components/layout/navbar";
 import { Footer } from "@/components/layout/footer";
 import { Button } from "@/components/ui/button";
 import { IconChevronDown, IconMessageCircle } from "@tabler/icons-react";
+import { FaqSchema, BreadcrumbSchema } from "@/lib/structured-data";
+import { SITE_CONFIG } from "@/lib/constants";
 
 export const metadata: Metadata = {
   title: "الأسئلة الشائعة",
+  description:
+    "إجابات على أشهر الأسئلة عن كورسات أكاديمية أمين — الدفع، الشهادات، الوصول، والدعم الفني.",
+  alternates: {
+    canonical: "/faq",
+  },
 };
 
 const faqs = [
@@ -51,6 +58,13 @@ const faqs = [
 export default function FaqPage() {
   return (
     <>
+      <FaqSchema faqs={faqs} />
+      <BreadcrumbSchema
+        items={[
+          { name: "الرئيسية", url: SITE_CONFIG.url },
+          { name: "الأسئلة الشائعة", url: `${SITE_CONFIG.url}/faq` },
+        ]}
+      />
       <Navbar />
       <main className="flex-1">
         {/* Hero */}

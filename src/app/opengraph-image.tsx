@@ -1,6 +1,6 @@
 import { ImageResponse } from "next/og";
 
-export const alt = "Ameen Academy — Learn Right";
+export const alt = "Ameen Academy — Professional Graphic Design Courses";
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
 
@@ -26,16 +26,17 @@ export default async function Image() {
             display: "flex",
             alignItems: "center",
             justifyContent: "center",
-            width: 120,
-            height: 120,
+            width: 130,
+            height: 130,
             borderRadius: "50%",
             background: "rgba(255,255,255,0.15)",
-            marginBottom: 32,
+            marginBottom: 36,
+            border: "3px solid rgba(255,255,255,0.2)",
           }}
         >
           <div
             style={{
-              fontSize: 64,
+              fontSize: 72,
               fontWeight: 700,
               color: "white",
             }}
@@ -61,7 +62,7 @@ export default async function Image() {
         <div
           style={{
             fontSize: 28,
-            color: "rgba(255,255,255,0.8)",
+            color: "rgba(255,255,255,0.85)",
             marginTop: 16,
             textAlign: "center",
           }}
@@ -74,17 +75,20 @@ export default async function Image() {
           style={{
             display: "flex",
             alignItems: "center",
-            gap: 32,
+            gap: 40,
             marginTop: 48,
-            color: "rgba(255,255,255,0.6)",
-            fontSize: 20,
+            padding: "16px 32px",
+            borderRadius: 16,
+            background: "rgba(255,255,255,0.08)",
           }}
         >
-          <span>Pro Courses</span>
-          <span style={{ fontSize: 14 }}>|</span>
-          <span>Arabic Content</span>
-          <span style={{ fontSize: 14 }}>|</span>
-          <span>Full Protection</span>
+          <span style={{ color: "rgba(255,255,255,0.7)", fontSize: 18 }}>Pro Courses</span>
+          <span style={{ color: "rgba(255,255,255,0.3)", fontSize: 14 }}>|</span>
+          <span style={{ color: "rgba(255,255,255,0.7)", fontSize: 18 }}>Arabic Content</span>
+          <span style={{ color: "rgba(255,255,255,0.3)", fontSize: 14 }}>|</span>
+          <span style={{ color: "rgba(255,255,255,0.7)", fontSize: 18 }}>Certified</span>
+          <span style={{ color: "rgba(255,255,255,0.3)", fontSize: 14 }}>|</span>
+          <span style={{ color: "rgba(255,255,255,0.7)", fontSize: 18 }}>Full Protection</span>
         </div>
       </div>
     ),

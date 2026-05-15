@@ -14,7 +14,10 @@ import {
 } from "@tabler/icons-react";
 
 export const metadata: Metadata = {
-  title: "عن الأكاديمية",
+  title: "عن أكاديمية أمين",
+  description:
+    "تعرف على أكاديمية أمين — منصة تعليمية مصرية متخصصة في الجرافيك ديزاين والتصميم الاحترافي.",
+  alternates: { canonical: "/about" },
 };
 
 const values = [

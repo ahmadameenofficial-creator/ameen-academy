@@ -18,7 +18,19 @@ export default function robots(): MetadataRoute.Robots {
           "/reset-password",
         ],
       },
+      // السماح لـ Google بالوصول الكامل للصفحات العامة
+      {
+        userAgent: "Googlebot",
+        allow: "/",
+        disallow: ["/api/", "/dashboard/", "/admin/"],
+      },
+      // منع الـ bots اللي بتستهلك موارد
+      {
+        userAgent: ["AhrefsBot", "SemrushBot", "MJ12bot"],
+        disallow: "/",
+      },
     ],
     sitemap: `${BASE_URL}/sitemap.xml`,
+    host: BASE_URL,
   };
 }

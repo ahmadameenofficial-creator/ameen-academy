@@ -7,8 +7,17 @@ import { prisma } from "@/lib/prisma";
 export const revalidate = 60;
 
 export const metadata: Metadata = {
-  title: "الكورسات",
-  description: "تصفّح كورسات أكاديمية أمين في الجرافيك ديزاين والتصميم الاحترافي",
+  title: "كورسات جرافيك ديزاين احترافية بالعربي",
+  description:
+    "تصفّح كورسات أكاديمية أمين في الجرافيك ديزاين — فوتوشوب، الستريتور، تصميم شعارات، سوشيال ميديا. كورسات مسجلة بجودة عالية مع شهادة معتمدة.",
+  alternates: {
+    canonical: "/courses",
+  },
+  openGraph: {
+    title: "كورسات جرافيك ديزاين احترافية | أكاديمية أمين",
+    description: "اتعلم الجرافيك ديزاين مع أقوى الكورسات العربية",
+    type: "website",
+  },
 };
 import { formatPrice, formatDuration, getLevelLabel } from "@/lib/format";
 import { Card } from "@/components/ui/card";

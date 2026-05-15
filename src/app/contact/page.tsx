@@ -13,6 +13,8 @@ import {
 
 export const metadata: Metadata = {
   title: "تواصل معنا",
+  description: "تواصل مع فريق أكاديمية أمين — واتساب، إيميل، سوشيال ميديا. فريقنا جاهز يساعدك.",
+  alternates: { canonical: "/contact" },
 };
 
 const contactMethods = [

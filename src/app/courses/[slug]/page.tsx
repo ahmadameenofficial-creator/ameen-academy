@@ -1,4 +1,5 @@
 import { notFound } from "next/navigation";
+import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import { prisma } from "@/lib/prisma";
@@ -7,6 +8,8 @@ import { prisma } from "@/lib/prisma";
 export const revalidate = 60;
 import { auth } from "@/auth";
 import { formatPrice, formatDuration, getLevelLabel } from "@/lib/format";
+import { CourseSchema, BreadcrumbSchema } from "@/lib/structured-data";
+import { SITE_CONFIG } from "@/lib/constants";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
@@ -60,16 +63,53 @@ async function getEnrollment(userId: string, courseId: string) {
   });
 }
 
-export async function generateMetadata({ params }: Props) {
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
   const course = await prisma.course.findUnique({
     where: { slug },
-    select: { title: true, shortDescription: true },
+    select: {
+      title: true,
+      shortDescription: true,
+      description: true,
+      thumbnail: true,
+      price: true,
+      category: true,
+      instructor: { select: { name: true } },
+    },
   });
   if (!course) return { title: "كورس مش موجود" };
+
+  const description = course.shortDescription || course.description.slice(0, 160);
+  const priceEGP = `${(course.price / 100).toLocaleString()} جنيه`;
+
   return {
     title: course.title,
-    description: course.shortDescription || course.title,
+    description: `${description} | ${priceEGP} | ${course.category}`,
+    alternates: {
+      canonical: `/courses/${slug}`,
+    },
+    openGraph: {
+      type: "article",
+      title: course.title,
+      description,
+      url: `/courses/${slug}`,
+      siteName: "أكاديمية أمين",
+      locale: "ar_EG",
+      images: course.thumbnail
+        ? [{ url: course.thumbnail, width: 1200, height: 630, alt: course.title }]
+        : undefined,
+      authors: [course.instructor.name],
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: course.title,
+      description,
+      images: course.thumbnail ? [course.thumbnail] : undefined,
+    },
+    other: {
+      "product:price:amount": String(course.price / 100),
+      "product:price:currency": "EGP",
+    },
   };
 }
 
@@ -109,6 +149,33 @@ export default async function CourseDetailsPage({ params }: Props) {
 
   return (
     <div className="min-h-screen bg-background">
+      {/* JSON-LD: Course Schema */}
+      <CourseSchema
+        title={course.title}
+        description={course.shortDescription || course.description.slice(0, 300)}
+        slug={slug}
+        thumbnail={course.thumbnail}
+        price={course.price}
+        comparePrice={course.comparePrice}
+        duration={course.duration}
+        totalLessons={totalLessons}
+        rating={avgRating}
+        ratingCount={course._count.ratings}
+        enrollmentCount={course._count.enrollments}
+        instructorName={course.instructor.name}
+        category={course.category}
+        level={course.level}
+        publishedAt={course.publishedAt}
+        updatedAt={course.updatedAt}
+      />
+      <BreadcrumbSchema
+        items={[
+          { name: "الرئيسية", url: SITE_CONFIG.url },
+          { name: "الكورسات", url: `${SITE_CONFIG.url}/courses` },
+          { name: course.title, url: `${SITE_CONFIG.url}/courses/${slug}` },
+        ]}
+      />
+
       {/* ======= Hero Section ======= */}
       <section className="relative overflow-hidden">
         {/* Background */}
