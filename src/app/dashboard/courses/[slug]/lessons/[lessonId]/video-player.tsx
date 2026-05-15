@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button";
 interface VideoPlayerProps {
   lessonId: string;
   videoId: string | null;
+  signedEmbedUrl: string | null;
   lastPosition: number;
   isCompleted: boolean;
   userName: string;
@@ -15,6 +16,7 @@ interface VideoPlayerProps {
 export function VideoPlayer({
   lessonId,
   videoId,
+  signedEmbedUrl,
   lastPosition,
   isCompleted: initialCompleted,
   userName,
@@ -48,21 +50,31 @@ export function VideoPlayer({
     setMarking(false);
   }, [lessonId]);
 
-  const bunnyLibraryId = process.env.NEXT_PUBLIC_BUNNY_LIBRARY_ID;
+  // بناء رابط الـ embed مع الإعدادات
+  const embedUrl = signedEmbedUrl
+    ? `${signedEmbedUrl}&autoplay=false&preload=true${lastPosition > 0 ? `&t=${lastPosition}` : ""}`
+    : null;
 
   return (
     <div className="bg-black">
-      {videoId && bunnyLibraryId ? (
+      {videoId && embedUrl ? (
         <div className="relative max-w-5xl mx-auto">
           <div className="relative aspect-video">
             <iframe
-              src={`https://iframe.mediadelivery.net/embed/${bunnyLibraryId}/${videoId}?autoplay=false&preload=true&startTime=${lastPosition}`}
+              src={embedUrl}
               className="w-full h-full"
-              allow="accelerometer; gyroscope; autoplay; encrypted-media; picture-in-picture"
+              allow="accelerometer; gyroscope; autoplay; encrypted-media"
               allowFullScreen
+              style={{ border: 0 }}
             />
-            {/* Watermark */}
-            <div className="absolute top-4 right-4 pointer-events-none opacity-40 text-white text-xs bg-black/30 px-2 py-1 rounded">
+            {/* Watermark — اسم الطالب */}
+            <div className="absolute inset-0 pointer-events-none flex items-center justify-center">
+              <span className="text-white/[0.08] text-2xl md:text-3xl font-bold rotate-[-20deg] select-none">
+                {userName}
+              </span>
+            </div>
+            {/* Watermark صغير في الزاوية */}
+            <div className="absolute top-3 right-3 pointer-events-none text-white/30 text-[10px] bg-black/20 px-2 py-0.5 rounded">
               {userName}
             </div>
           </div>
@@ -74,13 +86,13 @@ export function VideoPlayer({
               <IconPlayerPlay className="h-10 w-10 text-white/60" />
             </div>
             <p className="text-white/60 text-sm">
-              الفيديو هيتضاف قريب
+              {videoId ? "جاري تحميل الفيديو..." : "الفيديو هيتضاف قريب"}
             </p>
           </div>
         </div>
       )}
 
-      {/* Mark Complete */}
+      {/* علّم كمكتمل */}
       <div className="max-w-5xl mx-auto px-4 py-3 flex items-center justify-between bg-zinc-900">
         <span className="text-sm text-zinc-400">
           {isCompleted ? "خلّصت الدرس ده" : "خلّصت الدرس؟"}

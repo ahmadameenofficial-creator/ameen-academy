@@ -1,6 +1,7 @@
 import { notFound, redirect } from "next/navigation";
 import { auth } from "@/auth";
 import { prisma } from "@/lib/prisma";
+import { getSignedEmbedUrl } from "@/lib/bunny";
 
 export const dynamic = "force-dynamic";
 import { VideoPlayer } from "./video-player";
@@ -63,6 +64,7 @@ export default async function LessonPage({ params }: Props) {
       <VideoPlayer
         lessonId={lesson.id}
         videoId={lesson.videoId}
+        signedEmbedUrl={lesson.videoId ? getSignedEmbedUrl(lesson.videoId, { expiresInSeconds: 7200 }) : null}
         lastPosition={progress?.lastPosition || 0}
         isCompleted={progress?.isCompleted || false}
         userName={session.user.name || ""}
