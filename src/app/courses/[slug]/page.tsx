@@ -3,7 +3,8 @@ import Image from "next/image";
 import Link from "next/link";
 import { prisma } from "@/lib/prisma";
 
-export const dynamic = "force-dynamic";
+// صفحة تفاصيل الكورس — بتتحدث كل 60 ثانية
+export const revalidate = 60;
 import { auth } from "@/auth";
 import { formatPrice, formatDuration, getLevelLabel } from "@/lib/format";
 import { Button } from "@/components/ui/button";

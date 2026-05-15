@@ -3,7 +3,8 @@ import Image from "next/image";
 import Link from "next/link";
 import { prisma } from "@/lib/prisma";
 
-export const dynamic = "force-dynamic";
+// الكورسات بتتحدث كل 60 ثانية — مش محتاجة تتجاب من الـ DB كل request
+export const revalidate = 60;
 
 export const metadata: Metadata = {
   title: "الكورسات",
