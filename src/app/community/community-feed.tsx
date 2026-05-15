@@ -4,8 +4,6 @@ import { useState, useEffect, useCallback } from "react";
 import { useSession } from "next-auth/react";
 import Link from "next/link";
 import {
-  IconHeart,
-  IconHeartFilled,
   IconMessageCircle,
   IconSend,
   IconLoader2,
@@ -16,10 +14,22 @@ import {
   IconEdit,
   IconX,
   IconCheck,
+  IconCornerDownLeft,
+  IconMoodSmile,
 } from "@tabler/icons-react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+
+// ============ Constants ============
+
+const REACTION_TYPES = [
+  { type: "like", emoji: "👍", label: "لايك" },
+  { type: "love", emoji: "❤️", label: "لاف" },
+  { type: "haha", emoji: "😂", label: "هاها" },
+  { type: "wow", emoji: "😮", label: "واو" },
+  { type: "sad", emoji: "😢", label: "حزين" },
+] as const;
 
 // ============ Types ============
 
@@ -33,8 +43,16 @@ interface UserInfo {
 interface CommentData {
   id: string;
   content: string;
+  parentId: string | null;
   user: UserInfo;
+  replies?: CommentData[];
   createdAt: string;
+}
+
+interface ReactionsSummary {
+  total: number;
+  byType: Record<string, number>;
+  myReaction: string | null;
 }
 
 interface Post {
@@ -45,11 +63,12 @@ interface Post {
   likesCount: number;
   commentsCount: number;
   comments: CommentData[];
-  _count: { comments: number; likes: number };
+  reactionsSummary: ReactionsSummary;
+  _count: { comments: number; likes: number; reactions: number };
   createdAt: string;
 }
 
-// ============ Main Page ============
+// ============ Main Feed ============
 
 export function CommunityFeed() {
   const { data: session } = useSession();
@@ -57,7 +76,6 @@ export function CommunityFeed() {
   const [loading, setLoading] = useState(true);
   const [newPost, setNewPost] = useState("");
   const [posting, setPosting] = useState(false);
-  const [likedPosts, setLikedPosts] = useState<Set<string>>(new Set());
 
   const fetchPosts = useCallback(async () => {
     try {
@@ -89,25 +107,7 @@ export function CommunityFeed() {
     setPosting(false);
   }
 
-  async function handleLike(postId: string) {
-    if (!session) return;
-    try {
-      const res = await fetch(`/api/posts/${postId}/like`, { method: "POST" });
-      const data = await res.json();
-      setLikedPosts((prev) => {
-        const next = new Set(prev);
-        data.liked ? next.add(postId) : next.delete(postId);
-        return next;
-      });
-      setPosts((prev) =>
-        prev.map((p) =>
-          p.id === postId ? { ...p, likesCount: p.likesCount + (data.liked ? 1 : -1) } : p
-        )
-      );
-    } catch {}
-  }
-
-  async function handleDelete(postId: string) {
+  async function handleDeletePost(postId: string) {
     if (!confirm("متأكد إنك عايز تحذف المنشور ده؟")) return;
     try {
       const res = await fetch(`/api/posts/${postId}`, { method: "DELETE" });
@@ -115,7 +115,7 @@ export function CommunityFeed() {
     } catch {}
   }
 
-  async function handleEdit(postId: string, content: string) {
+  async function handleEditPost(postId: string, content: string) {
     try {
       const res = await fetch(`/api/posts/${postId}`, {
         method: "PUT",
@@ -139,7 +139,7 @@ export function CommunityFeed() {
       </div>
 
       <div className="container mx-auto px-4 py-6 max-w-xl space-y-4">
-        {/* New Post Composer */}
+        {/* كتابة بوست جديد */}
         {session?.user ? (
           <Card className="overflow-hidden">
             <div className="p-4">
@@ -171,7 +171,7 @@ export function CommunityFeed() {
           </Card>
         )}
 
-        {/* Posts Feed */}
+        {/* البوستات */}
         {loading ? (
           <div className="flex justify-center py-10">
             <IconLoader2 className="h-8 w-8 animate-spin text-brand-500" />
@@ -191,12 +191,10 @@ export function CommunityFeed() {
                 currentUserRole={session?.user?.role}
                 currentUserName={session?.user?.name || ""}
                 currentUserImage={session?.user?.image}
-                isLiked={likedPosts.has(post.id)}
-                onLike={() => handleLike(post.id)}
-                onDelete={() => handleDelete(post.id)}
-                onEdit={(content) => handleEdit(post.id, content)}
+                onDelete={() => handleDeletePost(post.id)}
+                onEdit={(content) => handleEditPost(post.id, content)}
                 isLoggedIn={!!session}
-                onCommentAdded={fetchPosts}
+                onRefresh={fetchPosts}
               />
             ))}
           </div>
@@ -228,6 +226,61 @@ function Avatar({ name, image, size = "md" }: { name: string; image?: string | n
   );
 }
 
+// ============ Reactions Picker ============
+
+function ReactionPicker({
+  onReact,
+  onClose,
+}: {
+  onReact: (type: string) => void;
+  onClose: () => void;
+}) {
+  return (
+    <>
+      <div className="fixed inset-0 z-10" onClick={onClose} />
+      <div className="absolute bottom-full mb-2 right-0 bg-background border border-border rounded-full shadow-lg z-20 px-2 py-1.5 flex items-center gap-0.5 animate-in fade-in zoom-in-95 duration-150">
+        {REACTION_TYPES.map((r) => (
+          <button
+            key={r.type}
+            onClick={() => { onReact(r.type); onClose(); }}
+            className="h-9 w-9 rounded-full flex items-center justify-center hover:bg-muted hover:scale-125 transition-all text-lg"
+            title={r.label}
+          >
+            {r.emoji}
+          </button>
+        ))}
+      </div>
+    </>
+  );
+}
+
+// ============ Reactions Summary Display ============
+
+function ReactionsSummaryDisplay({ summary }: { summary: ReactionsSummary }) {
+  if (summary.total === 0) return null;
+
+  // أعلى 3 تفاعلات
+  const topReactions = Object.entries(summary.byType)
+    .sort((a, b) => b[1] - a[1])
+    .slice(0, 3);
+
+  return (
+    <div className="flex items-center gap-1">
+      <div className="flex -space-x-0.5">
+        {topReactions.map(([type]) => {
+          const emoji = REACTION_TYPES.find((r) => r.type === type)?.emoji;
+          return (
+            <span key={type} className="h-5 w-5 rounded-full bg-muted flex items-center justify-center text-xs border border-background">
+              {emoji}
+            </span>
+          );
+        })}
+      </div>
+      <span className="text-xs text-muted-foreground">{summary.total}</span>
+    </div>
+  );
+}
+
 // ============ Post Card ============
 
 function PostCard({
@@ -236,36 +289,54 @@ function PostCard({
   currentUserRole,
   currentUserName,
   currentUserImage,
-  isLiked,
-  onLike,
   onDelete,
   onEdit,
   isLoggedIn,
-  onCommentAdded,
+  onRefresh,
 }: {
   post: Post;
   currentUserId?: string;
   currentUserRole?: string;
   currentUserName: string;
   currentUserImage?: string | null;
-  isLiked: boolean;
-  onLike: () => void;
   onDelete: () => void;
   onEdit: (content: string) => void;
   isLoggedIn: boolean;
-  onCommentAdded: () => void;
+  onRefresh: () => void;
 }) {
   const [showComments, setShowComments] = useState(false);
   const [showMenu, setShowMenu] = useState(false);
+  const [showReactions, setShowReactions] = useState(false);
   const [editing, setEditing] = useState(false);
   const [editContent, setEditContent] = useState(post.content);
   const [newComment, setNewComment] = useState("");
   const [commenting, setCommenting] = useState(false);
+  const [replyTo, setReplyTo] = useState<{ id: string; name: string } | null>(null);
+  const [myReaction, setMyReaction] = useState(post.reactionsSummary?.myReaction || null);
+  const [reactionsSummary, setReactionsSummary] = useState(post.reactionsSummary || { total: 0, byType: {}, myReaction: null });
 
   const isOwner = currentUserId === post.user.id;
   const isAdmin = currentUserRole === "ADMIN";
   const canModify = isOwner || isAdmin;
   const timeAgo = getTimeAgo(post.createdAt);
+
+  async function handleReaction(type: string) {
+    if (!isLoggedIn) return;
+    try {
+      const res = await fetch(`/api/posts/${post.id}/reactions`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ type }),
+      });
+      const data = await res.json();
+      if (data.removed) {
+        setMyReaction(null);
+      } else {
+        setMyReaction(data.type);
+      }
+      setReactionsSummary(data.reactions);
+    } catch {}
+  }
 
   async function handleComment() {
     if (!newComment.trim() || commenting) return;
@@ -274,14 +345,37 @@ function PostCard({
       const res = await fetch(`/api/posts/${post.id}/comments`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ content: newComment }),
+        body: JSON.stringify({
+          content: newComment,
+          parentId: replyTo?.id || undefined,
+        }),
       });
       if (res.ok) {
         setNewComment("");
-        onCommentAdded();
+        setReplyTo(null);
+        onRefresh();
       }
     } catch {}
     setCommenting(false);
+  }
+
+  async function handleDeleteComment(commentId: string) {
+    if (!confirm("متأكد إنك عايز تحذف التعليق ده؟")) return;
+    try {
+      const res = await fetch(`/api/comments/${commentId}`, { method: "DELETE" });
+      if (res.ok) onRefresh();
+    } catch {}
+  }
+
+  async function handleEditComment(commentId: string, content: string) {
+    try {
+      const res = await fetch(`/api/comments/${commentId}`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ content }),
+      });
+      if (res.ok) onRefresh();
+    } catch {}
   }
 
   function handleSaveEdit() {
@@ -290,6 +384,10 @@ function PostCard({
     }
     setEditing(false);
   }
+
+  const currentReactionEmoji = myReaction
+    ? REACTION_TYPES.find((r) => r.type === myReaction)?.emoji
+    : null;
 
   return (
     <Card className="overflow-hidden">
@@ -374,19 +472,10 @@ function PostCard({
         )}
       </div>
 
-      {/* Reactions Count Bar */}
-      {(post.likesCount > 0 || post._count.comments > 0) && (
+      {/* Reactions Count */}
+      {(reactionsSummary.total > 0 || post._count.comments > 0) && (
         <div className="flex items-center justify-between px-4 py-1.5 text-xs text-muted-foreground">
-          <div className="flex items-center gap-1">
-            {post.likesCount > 0 && (
-              <>
-                <span className="h-5 w-5 rounded-full bg-red-100 flex items-center justify-center">
-                  <IconHeartFilled className="h-3 w-3 text-red-500" />
-                </span>
-                <span>{post.likesCount}</span>
-              </>
-            )}
-          </div>
+          <ReactionsSummaryDisplay summary={reactionsSummary} />
           {post._count.comments > 0 && (
             <button onClick={() => setShowComments(!showComments)} className="hover:underline">
               {post._count.comments} تعليق
@@ -397,15 +486,34 @@ function PostCard({
 
       {/* Action Buttons */}
       <div className="flex items-center border-t border-border mx-4">
-        <button
-          onClick={isLoggedIn ? onLike : undefined}
-          className={`flex-1 flex items-center justify-center gap-2 py-2.5 text-sm font-medium transition-colors ${
-            isLiked ? "text-red-500" : "text-muted-foreground hover:bg-muted/50"
-          }`}
-        >
-          {isLiked ? <IconHeartFilled className="h-5 w-5" /> : <IconHeart className="h-5 w-5" />}
-          <span>{isLiked ? "بحبه" : "إعجاب"}</span>
-        </button>
+        <div className="relative flex-1">
+          <button
+            onClick={() => isLoggedIn && (myReaction ? handleReaction(myReaction) : handleReaction("like"))}
+            onMouseEnter={() => isLoggedIn && setShowReactions(true)}
+            onMouseLeave={() => setShowReactions(false)}
+            className={`w-full flex items-center justify-center gap-2 py-2.5 text-sm font-medium transition-colors ${
+              myReaction ? "text-brand-600" : "text-muted-foreground hover:bg-muted/50"
+            }`}
+          >
+            {currentReactionEmoji ? (
+              <span className="text-lg leading-none">{currentReactionEmoji}</span>
+            ) : (
+              <IconMoodSmile className="h-5 w-5" />
+            )}
+            <span>{myReaction ? REACTION_TYPES.find((r) => r.type === myReaction)?.label : "تفاعل"}</span>
+          </button>
+          {showReactions && (
+            <div
+              onMouseEnter={() => setShowReactions(true)}
+              onMouseLeave={() => setShowReactions(false)}
+            >
+              <ReactionPicker
+                onReact={handleReaction}
+                onClose={() => setShowReactions(false)}
+              />
+            </div>
+          )}
+        </div>
         <div className="w-px h-6 bg-border" />
         <button
           onClick={() => setShowComments(!showComments)}
@@ -422,23 +530,16 @@ function PostCard({
           {post.comments.length > 0 && (
             <div className="px-4 py-2 space-y-3">
               {post.comments.map((comment) => (
-                <div key={comment.id} className="flex items-start gap-2.5">
-                  <Avatar name={comment.user.name} image={comment.user.image} size="sm" />
-                  <div className="flex-1">
-                    <div className="bg-muted/60 rounded-2xl px-3 py-2">
-                      <div className="flex items-center gap-1.5">
-                        <span className="text-xs font-semibold text-foreground">{comment.user.name}</span>
-                        {comment.user.role === "ADMIN" && (
-                          <Badge variant="solid" className="text-[9px] px-1 py-0">أدمن</Badge>
-                        )}
-                      </div>
-                      <p className="text-sm text-foreground mt-0.5">{comment.content}</p>
-                    </div>
-                    <span className="text-[11px] text-muted-foreground mr-3 mt-0.5 block">
-                      {getTimeAgo(comment.createdAt)}
-                    </span>
-                  </div>
-                </div>
+                <CommentItem
+                  key={comment.id}
+                  comment={comment}
+                  currentUserId={currentUserId}
+                  currentUserRole={currentUserRole}
+                  isLoggedIn={isLoggedIn}
+                  onReply={(id, name) => { setReplyTo({ id, name }); }}
+                  onDelete={handleDeleteComment}
+                  onEdit={handleEditComment}
+                />
               ))}
               {post._count.comments > post.comments.length && (
                 <p className="text-xs text-brand-600 cursor-pointer hover:underline text-center py-1">
@@ -448,31 +549,186 @@ function PostCard({
             </div>
           )}
 
+          {/* كتابة كومنت */}
           {isLoggedIn && (
-            <div className="flex items-center gap-2.5 px-4 py-3">
-              <Avatar name={currentUserName} image={currentUserImage} size="sm" />
-              <div className="flex-1 flex items-center gap-2 bg-muted/50 rounded-full pr-4 pl-1 py-1">
-                <input
-                  value={newComment}
-                  onChange={(e) => setNewComment(e.target.value)}
-                  placeholder="اكتب تعليق..."
-                  className="flex-1 bg-transparent text-sm placeholder:text-muted-foreground focus:outline-none"
-                  onKeyDown={(e) => e.key === "Enter" && !e.shiftKey && handleComment()}
-                  maxLength={1000}
-                />
-                <button
-                  onClick={handleComment}
-                  disabled={commenting || !newComment.trim()}
-                  className="p-1.5 rounded-full text-brand-500 hover:bg-brand-50 disabled:opacity-40 transition-colors"
-                >
-                  {commenting ? <IconLoader2 className="h-4 w-4 animate-spin" /> : <IconSend className="h-4 w-4" />}
-                </button>
+            <div className="px-4 py-3 space-y-2">
+              {replyTo && (
+                <div className="flex items-center gap-2 text-xs text-brand-600 bg-brand-50 rounded-lg px-3 py-1.5">
+                  <IconCornerDownLeft className="h-3.5 w-3.5" />
+                  <span>رد على {replyTo.name}</span>
+                  <button onClick={() => setReplyTo(null)} className="mr-auto hover:text-destructive">
+                    <IconX className="h-3.5 w-3.5" />
+                  </button>
+                </div>
+              )}
+              <div className="flex items-center gap-2.5">
+                <Avatar name={currentUserName} image={currentUserImage} size="sm" />
+                <div className="flex-1 flex items-center gap-2 bg-muted/50 rounded-full pr-4 pl-1 py-1">
+                  <input
+                    value={newComment}
+                    onChange={(e) => setNewComment(e.target.value)}
+                    placeholder={replyTo ? `رد على ${replyTo.name}...` : "اكتب تعليق..."}
+                    className="flex-1 bg-transparent text-sm placeholder:text-muted-foreground focus:outline-none"
+                    onKeyDown={(e) => e.key === "Enter" && !e.shiftKey && handleComment()}
+                    maxLength={1000}
+                  />
+                  <button
+                    onClick={handleComment}
+                    disabled={commenting || !newComment.trim()}
+                    className="p-1.5 rounded-full text-brand-500 hover:bg-brand-50 disabled:opacity-40 transition-colors"
+                  >
+                    {commenting ? <IconLoader2 className="h-4 w-4 animate-spin" /> : <IconSend className="h-4 w-4" />}
+                  </button>
+                </div>
               </div>
             </div>
           )}
         </div>
       )}
     </Card>
+  );
+}
+
+// ============ Comment Item (مع ردود) ============
+
+function CommentItem({
+  comment,
+  currentUserId,
+  currentUserRole,
+  isLoggedIn,
+  onReply,
+  onDelete,
+  onEdit,
+  isReply = false,
+}: {
+  comment: CommentData;
+  currentUserId?: string;
+  currentUserRole?: string;
+  isLoggedIn: boolean;
+  onReply: (id: string, name: string) => void;
+  onDelete: (id: string) => void;
+  onEdit: (id: string, content: string) => void;
+  isReply?: boolean;
+}) {
+  const [showMenu, setShowMenu] = useState(false);
+  const [editing, setEditing] = useState(false);
+  const [editContent, setEditContent] = useState(comment.content);
+
+  const isOwner = currentUserId === comment.user.id;
+  const isAdmin = currentUserRole === "ADMIN";
+  const canModify = isOwner || isAdmin;
+
+  function handleSave() {
+    if (editContent.trim() && editContent !== comment.content) {
+      onEdit(comment.id, editContent);
+    }
+    setEditing(false);
+  }
+
+  return (
+    <div className={isReply ? "mr-10" : ""}>
+      <div className="flex items-start gap-2.5">
+        <Avatar name={comment.user.name} image={comment.user.image} size="sm" />
+        <div className="flex-1 min-w-0">
+          <div className="bg-muted/60 rounded-2xl px-3 py-2 relative group">
+            <div className="flex items-center gap-1.5">
+              <span className="text-xs font-semibold text-foreground">{comment.user.name}</span>
+              {comment.user.role === "ADMIN" && (
+                <Badge variant="solid" className="text-[9px] px-1 py-0">أدمن</Badge>
+              )}
+            </div>
+
+            {editing ? (
+              <div className="mt-1 space-y-2">
+                <input
+                  value={editContent}
+                  onChange={(e) => setEditContent(e.target.value)}
+                  className="w-full bg-background rounded-lg border border-input px-2 py-1 text-sm focus:outline-none focus:ring-2 focus:ring-brand-500"
+                  maxLength={1000}
+                  autoFocus
+                  onKeyDown={(e) => e.key === "Enter" && handleSave()}
+                />
+                <div className="flex items-center gap-1 justify-end">
+                  <button onClick={() => { setEditing(false); setEditContent(comment.content); }} className="text-xs text-muted-foreground hover:text-foreground px-2 py-0.5">
+                    إلغاء
+                  </button>
+                  <button onClick={handleSave} className="text-xs text-brand-600 font-medium hover:underline px-2 py-0.5">
+                    حفظ
+                  </button>
+                </div>
+              </div>
+            ) : (
+              <p className="text-sm text-foreground mt-0.5">{comment.content}</p>
+            )}
+
+            {/* قائمة الخيارات */}
+            {canModify && !editing && (
+              <div className="absolute left-1 top-1 opacity-0 group-hover:opacity-100 transition-opacity">
+                <button
+                  onClick={() => setShowMenu(!showMenu)}
+                  className="p-1 rounded-full hover:bg-background/80 text-muted-foreground"
+                >
+                  <IconDots className="h-4 w-4" />
+                </button>
+                {showMenu && (
+                  <>
+                    <div className="fixed inset-0 z-10" onClick={() => setShowMenu(false)} />
+                    <div className="absolute left-0 top-full mt-1 bg-background border border-border rounded-xl shadow-lg z-20 py-1 w-28">
+                      {isOwner && (
+                        <button
+                          onClick={() => { setEditing(true); setShowMenu(false); }}
+                          className="flex items-center gap-2 w-full px-3 py-1.5 text-xs hover:bg-muted transition-colors"
+                        >
+                          <IconEdit className="h-3.5 w-3.5" /> تعديل
+                        </button>
+                      )}
+                      <button
+                        onClick={() => { onDelete(comment.id); setShowMenu(false); }}
+                        className="flex items-center gap-2 w-full px-3 py-1.5 text-xs text-destructive hover:bg-destructive/10 transition-colors"
+                      >
+                        <IconTrash className="h-3.5 w-3.5" /> حذف
+                      </button>
+                    </div>
+                  </>
+                )}
+              </div>
+            )}
+          </div>
+
+          {/* أزرار تحت الكومنت */}
+          <div className="flex items-center gap-3 mr-3 mt-0.5 text-[11px] text-muted-foreground">
+            <span>{getTimeAgo(comment.createdAt)}</span>
+            {isLoggedIn && (
+              <button
+                onClick={() => onReply(comment.id, comment.user.name)}
+                className="font-semibold hover:text-brand-600 transition-colors"
+              >
+                رد
+              </button>
+            )}
+          </div>
+        </div>
+      </div>
+
+      {/* الردود */}
+      {comment.replies && comment.replies.length > 0 && (
+        <div className="mt-2 space-y-2">
+          {comment.replies.map((reply) => (
+            <CommentItem
+              key={reply.id}
+              comment={reply}
+              currentUserId={currentUserId}
+              currentUserRole={currentUserRole}
+              isLoggedIn={isLoggedIn}
+              onReply={onReply}
+              onDelete={onDelete}
+              onEdit={onEdit}
+              isReply
+            />
+          ))}
+        </div>
+      )}
+    </div>
   );
 }
 

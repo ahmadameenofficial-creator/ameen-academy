@@ -20,20 +20,39 @@ export async function GET(req: Request) {
     ...(courseId && { courseId }),
   };
 
+  // جلب الـ session عشان نعرف تفاعل اليوزر الحالي
+  const session = await auth();
+
   const [posts, total] = await Promise.all([
     prisma.post.findMany({
       where,
       include: {
         user: { select: { id: true, name: true, image: true, role: true } },
         comments: {
-          where: { isDeleted: false },
+          where: { isDeleted: false, parentId: null }, // الكومنتات الرئيسية بس
           take: 3,
-          orderBy: { createdAt: "desc" },
+          orderBy: { createdAt: "asc" },
           include: {
             user: { select: { id: true, name: true, image: true, role: true } },
+            replies: {
+              where: { isDeleted: false },
+              orderBy: { createdAt: "asc" },
+              include: {
+                user: { select: { id: true, name: true, image: true, role: true } },
+              },
+            },
           },
         },
-        _count: { select: { comments: true, likes: true } },
+        reactions: {
+          select: { type: true, userId: true },
+        },
+        _count: {
+          select: {
+            comments: { where: { isDeleted: false } },
+            likes: true,
+            reactions: true,
+          },
+        },
       },
       orderBy: [{ isPinned: "desc" }, { createdAt: "desc" }],
       skip: (page - 1) * limit,
@@ -42,7 +61,31 @@ export async function GET(req: Request) {
     prisma.post.count({ where }),
   ]);
 
-  return NextResponse.json({ posts, total, pages: Math.ceil(total / limit) });
+  // تجهيز البيانات مع التفاعلات
+  const postsWithReactions = posts.map((post) => {
+    // حساب التفاعلات بالنوع
+    const reactionsByType: Record<string, number> = {};
+    post.reactions.forEach((r) => {
+      reactionsByType[r.type] = (reactionsByType[r.type] || 0) + 1;
+    });
+
+    // تفاعل اليوزر الحالي
+    const myReaction = session?.user
+      ? post.reactions.find((r) => r.userId === session.user.id)?.type || null
+      : null;
+
+    return {
+      ...post,
+      reactions: undefined, // مش هنبعت كل الـ reactions
+      reactionsSummary: {
+        total: post.reactions.length,
+        byType: reactionsByType,
+        myReaction,
+      },
+    };
+  });
+
+  return NextResponse.json({ posts: postsWithReactions, total, pages: Math.ceil(total / limit) });
 }
 
 export async function POST(req: Request) {

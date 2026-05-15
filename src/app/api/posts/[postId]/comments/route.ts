@@ -6,12 +6,14 @@ import { z } from "zod";
 
 const commentSchema = z.object({
   content: z.string().min(1, "التعليق فاضي").max(1000, "التعليق طويل أوي"),
+  parentId: z.string().optional(), // للرد على كومنت
 });
 
 interface RouteContext {
   params: Promise<{ postId: string }>;
 }
 
+// إضافة كومنت أو رد
 export async function POST(req: Request, context: RouteContext) {
   const session = await auth();
   if (!session?.user) {
@@ -33,9 +35,16 @@ export async function POST(req: Request, context: RouteContext) {
           postId,
           userId: session.user.id,
           content: result.data.content,
+          parentId: result.data.parentId || null,
         },
         include: {
           user: { select: { id: true, name: true, image: true, role: true } },
+          replies: {
+            where: { isDeleted: false },
+            include: {
+              user: { select: { id: true, name: true, image: true, role: true } },
+            },
+          },
         },
       }),
       prisma.post.update({
@@ -44,9 +53,21 @@ export async function POST(req: Request, context: RouteContext) {
       }),
     ]);
 
+    // إشعار لصاحب البوست
     const post = await prisma.post.findUnique({ where: { id: postId }, select: { userId: true } });
     if (post && post.userId !== session.user.id) {
       notifyNewComment(post.userId, session.user.name || "شخص");
+    }
+
+    // إشعار لصاحب الكومنت الأصلي (لو رد)
+    if (result.data.parentId) {
+      const parentComment = await prisma.comment.findUnique({
+        where: { id: result.data.parentId },
+        select: { userId: true },
+      });
+      if (parentComment && parentComment.userId !== session.user.id) {
+        notifyNewComment(parentComment.userId, session.user.name || "شخص");
+      }
     }
 
     return NextResponse.json(comment, { status: 201 });
