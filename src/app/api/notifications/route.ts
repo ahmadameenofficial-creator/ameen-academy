@@ -8,17 +8,22 @@ export async function GET() {
     return NextResponse.json({ error: "غير مصرّح" }, { status: 401 });
   }
 
-  const notifications = await prisma.notification.findMany({
-    where: { userId: session.user.id },
-    orderBy: { createdAt: "desc" },
-    take: 30,
-  });
+  try {
+    const [notifications, unreadCount] = await Promise.all([
+      prisma.notification.findMany({
+        where: { userId: session.user.id },
+        orderBy: { createdAt: "desc" },
+        take: 30,
+      }),
+      prisma.notification.count({
+        where: { userId: session.user.id, isRead: false },
+      }),
+    ]);
 
-  const unreadCount = await prisma.notification.count({
-    where: { userId: session.user.id, isRead: false },
-  });
-
-  return NextResponse.json({ notifications, unreadCount });
+    return NextResponse.json({ notifications, unreadCount });
+  } catch {
+    return NextResponse.json({ error: "حصل مشكلة" }, { status: 500 });
+  }
 }
 
 export async function PUT() {
@@ -27,10 +32,14 @@ export async function PUT() {
     return NextResponse.json({ error: "غير مصرّح" }, { status: 401 });
   }
 
-  await prisma.notification.updateMany({
-    where: { userId: session.user.id, isRead: false },
-    data: { isRead: true },
-  });
+  try {
+    await prisma.notification.updateMany({
+      where: { userId: session.user.id, isRead: false },
+      data: { isRead: true },
+    });
 
-  return NextResponse.json({ message: "تم" });
+    return NextResponse.json({ message: "تم" });
+  } catch {
+    return NextResponse.json({ error: "حصل مشكلة" }, { status: 500 });
+  }
 }

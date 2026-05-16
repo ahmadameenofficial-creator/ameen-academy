@@ -65,13 +65,13 @@ export async function POST(req: Request) {
 
     if (isCompleted) {
       const allLessons = await prisma.lesson.count({
-        where: { module: { courseId: lesson.courseId } },
+        where: { courseId: lesson.courseId },
       });
       const completedLessons = await prisma.lessonProgress.count({
         where: {
           userId: session.user.id,
           isCompleted: true,
-          lesson: { module: { courseId: lesson.courseId } },
+          lesson: { courseId: lesson.courseId },
         },
       });
 
@@ -88,26 +88,27 @@ export async function POST(req: Request) {
             select: { title: true },
           });
 
-          await prisma.certificate.create({
-            data: {
-              userId: session.user.id,
-              courseId: lesson.courseId,
-              certificateCode,
-            },
-          });
+          await prisma.$transaction([
+            prisma.certificate.create({
+              data: {
+                userId: session.user.id,
+                courseId: lesson.courseId,
+                certificateCode,
+              },
+            }),
+            prisma.enrollment.update({
+              where: { userId_courseId: { userId: session.user.id, courseId: lesson.courseId } },
+              data: { completedAt: new Date() },
+            }),
+          ]);
 
-          await prisma.enrollment.update({
-            where: { userId_courseId: { userId: session.user.id, courseId: lesson.courseId } },
-            data: { completedAt: new Date() },
-          });
-
-          await createNotification({
+          createNotification({
             userId: session.user.id,
             type: "CERTIFICATE",
             title: "مبروك! حصلت على شهادة",
             message: `خلصت كورس "${course?.title}" — شهادتك جاهزة للتحميل`,
             link: `/api/certificates/${certificateCode}`,
-          });
+          }).catch(() => {});
         }
       }
     }

@@ -18,12 +18,17 @@ export async function GET() {
   const session = await requireAdminApi();
   if (!session) return unauthorized();
 
-  const coupons = await prisma.coupon.findMany({
-    orderBy: { createdAt: "desc" },
-    include: { course: { select: { title: true } } },
-  });
+  try {
+    const coupons = await prisma.coupon.findMany({
+      orderBy: { createdAt: "desc" },
+      take: 200,
+      include: { course: { select: { title: true } } },
+    });
 
-  return NextResponse.json(coupons);
+    return NextResponse.json(coupons);
+  } catch {
+    return NextResponse.json({ error: "حصل مشكلة" }, { status: 500 });
+  }
 }
 
 export async function POST(req: Request) {
@@ -69,11 +74,15 @@ export async function DELETE(req: Request) {
   const session = await requireAdminApi();
   if (!session) return unauthorized();
 
-  const { id } = await req.json();
-  if (!id) {
-    return NextResponse.json({ error: "id مطلوب" }, { status: 400 });
-  }
+  try {
+    const { id } = await req.json();
+    if (!id) {
+      return NextResponse.json({ error: "id مطلوب" }, { status: 400 });
+    }
 
-  await prisma.coupon.delete({ where: { id } });
-  return NextResponse.json({ message: "تم الحذف" });
+    await prisma.coupon.delete({ where: { id } });
+    return NextResponse.json({ message: "تم الحذف" });
+  } catch {
+    return NextResponse.json({ error: "حصل مشكلة في الحذف" }, { status: 500 });
+  }
 }

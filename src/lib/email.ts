@@ -1,5 +1,9 @@
 import { Resend } from "resend";
 
+if (!process.env.RESEND_API_KEY) {
+  console.warn("[Email] RESEND_API_KEY مش موجود — الإيميلات مش هتتبعت");
+}
+
 const resend = new Resend(process.env.RESEND_API_KEY);
 const from = process.env.EMAIL_FROM || "Ameen Academy <onboarding@resend.dev>";
 const appUrl = process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000";
@@ -11,7 +15,7 @@ export async function sendPasswordResetEmail(
 ) {
   const resetUrl = `${appUrl}/reset-password?token=${token}`;
 
-  await resend.emails.send({
+  const { error } = await resend.emails.send({
     from,
     to: email,
     subject: "استعادة كلمة المرور — أكاديمية أمين",
@@ -41,10 +45,15 @@ export async function sendPasswordResetEmail(
       </div>
     `,
   });
+
+  if (error) {
+    console.error("[Email] فشل إرسال إيميل استعادة الباسورد:", error);
+    throw new Error(error.message);
+  }
 }
 
 export async function sendWelcomeEmail(email: string, name: string) {
-  await resend.emails.send({
+  const { error } = await resend.emails.send({
     from,
     to: email,
     subject: "أهلا بيك في أكاديمية أمين! 🎓",
@@ -74,6 +83,11 @@ export async function sendWelcomeEmail(email: string, name: string) {
       </div>
     `,
   });
+
+  if (error) {
+    console.error("[Email] فشل إرسال إيميل الترحيب:", error);
+    throw new Error(error.message);
+  }
 }
 
 export async function sendPaymentConfirmationEmail(
@@ -81,7 +95,7 @@ export async function sendPaymentConfirmationEmail(
   name: string,
   courseName: string
 ) {
-  await resend.emails.send({
+  const { error } = await resend.emails.send({
     from,
     to: email,
     subject: `تم تفعيل كورس "${courseName}" — أكاديمية أمين`,
@@ -116,4 +130,9 @@ export async function sendPaymentConfirmationEmail(
       </div>
     `,
   });
+
+  if (error) {
+    console.error("[Email] فشل إرسال إيميل تأكيد الدفع:", error);
+    throw new Error(error.message);
+  }
 }

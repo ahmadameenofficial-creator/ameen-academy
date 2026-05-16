@@ -42,29 +42,36 @@ export async function POST(_req: Request, context: RouteContext) {
 
   const { slug } = await context.params;
 
-  const post = await prisma.blogPost.findUnique({
-    where: { slug, isPublished: true },
-    select: { id: true },
-  });
+  try {
+    const post = await prisma.blogPost.findUnique({
+      where: { slug, isPublished: true },
+      select: { id: true },
+    });
 
-  if (!post) {
-    return NextResponse.json({ error: "مقال مش موجود" }, { status: 404 });
+    if (!post) {
+      return NextResponse.json({ error: "مقال مش موجود" }, { status: 404 });
+    }
+
+    const result = await prisma.$transaction(async (tx) => {
+      const existing = await tx.blogLike.findUnique({
+        where: { userId_postId: { userId: session.user.id, postId: post.id } },
+      });
+
+      if (existing) {
+        await tx.blogLike.delete({ where: { id: existing.id } });
+        const likesCount = await tx.blogLike.count({ where: { postId: post.id } });
+        return { isLiked: false, likesCount };
+      }
+
+      await tx.blogLike.create({
+        data: { postId: post.id, userId: session.user.id },
+      });
+      const likesCount = await tx.blogLike.count({ where: { postId: post.id } });
+      return { isLiked: true, likesCount };
+    });
+
+    return NextResponse.json(result);
+  } catch {
+    return NextResponse.json({ error: "حصل مشكلة" }, { status: 500 });
   }
-
-  const existing = await prisma.blogLike.findUnique({
-    where: { userId_postId: { userId: session.user.id, postId: post.id } },
-  });
-
-  if (existing) {
-    await prisma.blogLike.delete({ where: { id: existing.id } });
-    const likesCount = await prisma.blogLike.count({ where: { postId: post.id } });
-    return NextResponse.json({ isLiked: false, likesCount });
-  }
-
-  await prisma.blogLike.create({
-    data: { postId: post.id, userId: session.user.id },
-  });
-
-  const likesCount = await prisma.blogLike.count({ where: { postId: post.id } });
-  return NextResponse.json({ isLiked: true, likesCount });
 }

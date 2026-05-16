@@ -37,6 +37,7 @@ export async function GET(req: Request) {
             replies: {
               where: { isDeleted: false },
               orderBy: { createdAt: "asc" },
+              take: 10,
               include: {
                 user: { select: { id: true, name: true, image: true, role: true } },
               },

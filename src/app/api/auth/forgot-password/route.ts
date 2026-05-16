@@ -45,10 +45,9 @@ export async function POST(req: Request) {
         },
       });
 
-      await sendPasswordResetEmail(email, user.name || "مستخدم", token);
+      sendPasswordResetEmail(email, user.name || "مستخدم", token).catch(() => {});
     }
 
-    // نفس الرد دايماً (مش بنقول لو الإيميل موجود أو لا)
     return NextResponse.json({
       message: "لو الإيميل ده مسجل، هتوصلك رسالة",
     });

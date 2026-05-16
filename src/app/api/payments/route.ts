@@ -31,68 +31,79 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: "الكورس مش موجود" }, { status: 404 });
     }
 
-    const existingEnrollment = await prisma.enrollment.findUnique({
-      where: { userId_courseId: { userId: session.user.id, courseId } },
-    });
-    if (existingEnrollment) {
-      return NextResponse.json({ error: "انت مشترك في الكورس ده بالفعل" }, { status: 409 });
-    }
-
-    const existingPayment = await prisma.payment.findFirst({
-      where: { userId: session.user.id, courseId, status: "PENDING" },
-    });
-    if (existingPayment) {
-      return NextResponse.json({ error: "عندك طلب دفع قيد المراجعة بالفعل" }, { status: 409 });
-    }
-
-    let discount = 0;
-    let appliedCouponCode: string | null = null;
-
-    if (couponCode) {
-      const coupon = await prisma.coupon.findUnique({
-        where: { code: couponCode.toUpperCase().trim() },
+    // كل الـ checks والكوبون والدفع في transaction واحدة لمنع race conditions
+    const payment = await prisma.$transaction(async (tx) => {
+      const existingEnrollment = await tx.enrollment.findUnique({
+        where: { userId_courseId: { userId: session.user.id, courseId } },
       });
+      if (existingEnrollment) {
+        throw new Error("ENROLLED");
+      }
 
-      if (coupon && coupon.isActive) {
-        const isExpired = coupon.expiresAt && coupon.expiresAt < new Date();
-        const isMaxed = coupon.maxUses && coupon.usedCount >= coupon.maxUses;
-        const wrongCourse = coupon.courseId && coupon.courseId !== courseId;
-        const belowMin = coupon.minPrice && course.price < coupon.minPrice;
+      const existingPayment = await tx.payment.findFirst({
+        where: { userId: session.user.id, courseId, status: "PENDING" },
+      });
+      if (existingPayment) {
+        throw new Error("PENDING_EXISTS");
+      }
 
-        if (!isExpired && !isMaxed && !wrongCourse && !belowMin) {
-          if (coupon.discountType === "percentage") {
-            discount = Math.round((course.price * coupon.discountValue) / 100);
-          } else {
-            discount = coupon.discountValue;
+      let discount = 0;
+      let appliedCouponCode: string | null = null;
+
+      if (couponCode) {
+        const coupon = await tx.coupon.findUnique({
+          where: { code: couponCode.toUpperCase().trim() },
+        });
+
+        if (coupon && coupon.isActive) {
+          const isExpired = coupon.expiresAt && coupon.expiresAt < new Date();
+          const isMaxed = coupon.maxUses && coupon.usedCount >= coupon.maxUses;
+          const wrongCourse = coupon.courseId && coupon.courseId !== courseId;
+          const belowMin = coupon.minPrice && course.price < coupon.minPrice;
+
+          if (!isExpired && !isMaxed && !wrongCourse && !belowMin) {
+            if (coupon.discountType === "percentage") {
+              discount = Math.round((course.price * coupon.discountValue) / 100);
+            } else {
+              discount = coupon.discountValue;
+            }
+            discount = Math.min(discount, course.price);
+            appliedCouponCode = coupon.code;
+
+            await tx.coupon.update({
+              where: { id: coupon.id },
+              data: { usedCount: { increment: 1 } },
+            });
           }
-          discount = Math.min(discount, course.price);
-          appliedCouponCode = coupon.code;
-
-          await prisma.coupon.update({
-            where: { id: coupon.id },
-            data: { usedCount: { increment: 1 } },
-          });
         }
       }
-    }
 
-    const finalAmount = course.price - discount;
+      const finalAmount = course.price - discount;
 
-    const payment = await prisma.payment.create({
-      data: {
-        userId: session.user.id,
-        courseId,
-        amount: finalAmount,
-        method,
-        status: "PENDING",
-        couponCode: appliedCouponCode,
-        discount,
-        metadata: { transactionRef, senderPhone },
-      },
+      return tx.payment.create({
+        data: {
+          userId: session.user.id,
+          courseId,
+          amount: finalAmount,
+          method,
+          status: "PENDING",
+          couponCode: appliedCouponCode,
+          discount,
+          metadata: { transactionRef, senderPhone },
+        },
+      });
     });
 
     return NextResponse.json({ message: "تم استلام طلبك، هنراجعه وندخلك الكورس", id: payment.id }, { status: 201 });
-  } catch {
+  } catch (error) {
+    if (error instanceof Error) {
+      if (error.message === "ENROLLED") {
+        return NextResponse.json({ error: "انت مشترك في الكورس ده بالفعل" }, { status: 409 });
+      }
+      if (error.message === "PENDING_EXISTS") {
+        return NextResponse.json({ error: "عندك طلب دفع قيد المراجعة بالفعل" }, { status: 409 });
+      }
+    }
     return NextResponse.json({ error: "حصل مشكلة، جرّب تاني" }, { status: 500 });
   }
 }
