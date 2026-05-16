@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { revalidatePath } from "next/cache";
 import { prisma } from "@/lib/prisma";
 import { requireAdminApi, unauthorized, badRequest } from "@/lib/admin-api";
 import { z } from "zod";
@@ -38,6 +39,10 @@ export async function PUT(req: Request, context: RouteContext) {
     }
 
     const course = await prisma.course.update({ where: { id }, data });
+
+    revalidatePath("/admin/courses");
+    revalidatePath("/courses");
+
     return NextResponse.json(course);
   } catch {
     return NextResponse.json({ error: "حصل مشكلة" }, { status: 500 });
@@ -52,6 +57,10 @@ export async function DELETE(_req: Request, context: RouteContext) {
 
   try {
     await prisma.course.delete({ where: { id } });
+
+    revalidatePath("/admin/courses");
+    revalidatePath("/courses");
+
     return NextResponse.json({ message: "اتحذف" });
   } catch {
     return NextResponse.json({ error: "حصل مشكلة" }, { status: 500 });

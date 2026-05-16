@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { revalidatePath } from "next/cache";
 import { prisma } from "@/lib/prisma";
 import { requireAdminApi, unauthorized } from "@/lib/admin-api";
 import { notifyPaymentApproved } from "@/lib/notifications";
@@ -58,12 +59,18 @@ export async function PUT(req: Request, context: RouteContext) {
         payment.course.title
       ).catch(() => {});
 
+      revalidatePath("/admin/payments");
+      revalidatePath("/admin/students");
+      revalidatePath("/admin");
+
       return NextResponse.json({ message: "تم تأكيد الدفع وتسجيل الطالب" });
     } else {
       await prisma.payment.update({
         where: { id },
         data: { status: "FAILED" },
       });
+
+      revalidatePath("/admin/payments");
 
       return NextResponse.json({ message: "تم رفض الدفعة" });
     }

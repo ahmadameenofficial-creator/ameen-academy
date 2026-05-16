@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { revalidatePath } from "next/cache";
 import { prisma } from "@/lib/prisma";
 import { requireAdminApi, unauthorized, badRequest } from "@/lib/admin-api";
 import { z } from "zod";
@@ -36,6 +37,8 @@ export async function POST(req: Request, context: RouteContext) {
         order: (maxOrder._max.order || 0) + 1,
       },
     });
+
+    revalidatePath("/admin/courses");
 
     return NextResponse.json(module, { status: 201 });
   } catch {

@@ -2,7 +2,7 @@ import { prisma } from "@/lib/prisma";
 import { Card, CardContent } from "@/components/ui/card";
 import { IconBook, IconUsers, IconCreditCard, IconStar } from "@tabler/icons-react";
 
-export const dynamic = "force-dynamic";
+export const revalidate = 60;
 import { formatPrice } from "@/lib/format";
 
 async function getStats() {

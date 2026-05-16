@@ -6,16 +6,20 @@ interface RouteContext {
 }
 
 export async function GET(_req: Request, context: RouteContext) {
-  const { slug } = await context.params;
+  try {
+    const { slug } = await context.params;
 
-  const course = await prisma.course.findUnique({
-    where: { slug, isPublished: true },
-    select: { id: true, title: true, price: true, comparePrice: true },
-  });
+    const course = await prisma.course.findUnique({
+      where: { slug, isPublished: true },
+      select: { id: true, title: true, price: true, comparePrice: true },
+    });
 
-  if (!course) {
-    return NextResponse.json({ error: "مش موجود" }, { status: 404 });
+    if (!course) {
+      return NextResponse.json({ error: "مش موجود" }, { status: 404 });
+    }
+
+    return NextResponse.json(course);
+  } catch {
+    return NextResponse.json({ error: "حصل مشكلة" }, { status: 500 });
   }
-
-  return NextResponse.json(course);
 }

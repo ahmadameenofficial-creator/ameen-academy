@@ -1,7 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
-import { useRouter } from "next/navigation";
+import { useState } from "react";
 import Link from "next/link";
 import {
   IconLoader2,
@@ -35,10 +34,7 @@ interface CouponData {
   message: string;
 }
 
-export function CheckoutForm({ params }: { params: Promise<{ slug: string }> }) {
-  const router = useRouter();
-  const [course, setCourse] = useState<CourseData | null>(null);
-  const [loading, setLoading] = useState(true);
+export function CheckoutForm({ course }: { course: CourseData }) {
   const [submitting, setSubmitting] = useState(false);
   const [success, setSuccess] = useState(false);
   const [error, setError] = useState("");
@@ -49,22 +45,6 @@ export function CheckoutForm({ params }: { params: Promise<{ slug: string }> }) 
   const [couponLoading, setCouponLoading] = useState(false);
   const [couponError, setCouponError] = useState("");
   const [appliedCoupon, setAppliedCoupon] = useState<CouponData | null>(null);
-
-  useEffect(() => {
-    params.then(({ slug }) => {
-      fetch(`/api/courses/${slug}`)
-        .then((r) => r.json())
-        .then((data) => {
-          if (data.error) {
-            router.push("/courses");
-          } else {
-            setCourse(data);
-          }
-          setLoading(false);
-        })
-        .catch(() => setLoading(false));
-    });
-  }, [params, router]);
 
   async function handleApplyCoupon() {
     if (!couponCode.trim() || !course) return;
@@ -130,14 +110,6 @@ export function CheckoutForm({ params }: { params: Promise<{ slug: string }> }) 
     }
   }
 
-  if (loading) {
-    return (
-      <div className="min-h-screen flex items-center justify-center">
-        <IconLoader2 className="h-8 w-8 animate-spin text-brand-500" />
-      </div>
-    );
-  }
-
   if (success) {
     return (
       <div className="min-h-screen flex items-center justify-center px-4">
@@ -158,8 +130,6 @@ export function CheckoutForm({ params }: { params: Promise<{ slug: string }> }) 
       </div>
     );
   }
-
-  if (!course) return null;
 
   const selectedPayment = PAYMENT_CONFIG.methods.find((m) => m.id === selectedMethod)!;
   const finalPrice = appliedCoupon ? appliedCoupon.finalPrice : course.price;
@@ -257,6 +227,7 @@ export function CheckoutForm({ params }: { params: Promise<{ slug: string }> }) 
                   type="button"
                   onClick={removeCoupon}
                   className="text-green-600 hover:text-green-800"
+                  aria-label="إزالة كود الخصم"
                 >
                   <IconX className="h-4 w-4" />
                 </button>

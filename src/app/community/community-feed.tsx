@@ -1,8 +1,9 @@
 "use client";
 
-import { useState, useEffect, useCallback } from "react";
+import { useState, useCallback } from "react";
 import { useSession } from "next-auth/react";
 import Link from "next/link";
+import Image from "next/image";
 import {
   IconMessageCircle,
   IconSend,
@@ -70,10 +71,9 @@ interface Post {
 
 // ============ Main Feed ============
 
-export function CommunityFeed() {
+export function CommunityFeed({ initialPosts = [] }: { initialPosts?: Post[] }) {
   const { data: session } = useSession();
-  const [posts, setPosts] = useState<Post[]>([]);
-  const [loading, setLoading] = useState(true);
+  const [posts, setPosts] = useState<Post[]>(initialPosts);
   const [newPost, setNewPost] = useState("");
   const [posting, setPosting] = useState(false);
 
@@ -83,12 +83,7 @@ export function CommunityFeed() {
       const data = await res.json();
       setPosts(data.posts || []);
     } catch {}
-    setLoading(false);
   }, []);
-
-  useEffect(() => {
-    fetchPosts();
-  }, [fetchPosts]);
 
   async function handlePost() {
     if (!newPost.trim() || posting) return;
@@ -172,11 +167,7 @@ export function CommunityFeed() {
         )}
 
         {/* البوستات */}
-        {loading ? (
-          <div className="flex justify-center py-10">
-            <IconLoader2 className="h-8 w-8 animate-spin text-brand-500" />
-          </div>
-        ) : posts.length === 0 ? (
+        {posts.length === 0 ? (
           <Card className="p-12 text-center">
             <IconMessageCircle className="h-12 w-12 text-muted-foreground/30 mx-auto mb-3" />
             <p className="text-muted-foreground">مفيش منشورات لسه. كن أول واحد ينشر!</p>
@@ -214,8 +205,7 @@ function Avatar({ name, image, size = "md" }: { name: string; image?: string | n
 
   if (image) {
     return (
-      // eslint-disable-next-line @next/next/no-img-element
-      <img src={image} alt={name} className={`${sizeClass} rounded-full object-cover shrink-0`} />
+      <Image src={image} alt={name} width={40} height={40} className={`${sizeClass} rounded-full object-cover shrink-0`} />
     );
   }
 
@@ -415,6 +405,7 @@ function PostCard({
               <button
                 onClick={() => setShowMenu(!showMenu)}
                 className="p-1.5 rounded-full hover:bg-muted transition-colors text-muted-foreground"
+                aria-label="خيارات المنشور"
               >
                 <IconDots className="h-5 w-5" />
               </button>
@@ -667,6 +658,7 @@ function CommentItem({
                 <button
                   onClick={() => setShowMenu(!showMenu)}
                   className="p-1 rounded-full hover:bg-background/80 text-muted-foreground"
+                  aria-label="خيارات التعليق"
                 >
                   <IconDots className="h-4 w-4" />
                 </button>

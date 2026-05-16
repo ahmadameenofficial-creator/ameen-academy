@@ -1,7 +1,7 @@
 import { prisma } from "@/lib/prisma";
 import { Badge } from "@/components/ui/badge";
 
-export const dynamic = "force-dynamic";
+export const revalidate = 30;
 import {
   IconUser,
   IconMail,

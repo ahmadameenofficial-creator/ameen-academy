@@ -1,4 +1,5 @@
 import { notFound } from "next/navigation";
+import Image from "next/image";
 import { prisma } from "@/lib/prisma";
 
 export const dynamic = "force-dynamic";
@@ -72,10 +73,11 @@ export default async function UserProfilePage({ params }: PageProps) {
             <CardContent className="p-6 flex flex-col items-center text-center">
               {/* الصورة */}
               {user.image ? (
-                // eslint-disable-next-line @next/next/no-img-element
-                <img
+                <Image
                   src={user.image}
                   alt={user.name}
+                  width={96}
+                  height={96}
                   className="h-24 w-24 rounded-full object-cover border-4 border-brand-100"
                 />
               ) : (

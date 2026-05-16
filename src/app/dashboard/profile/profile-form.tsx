@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useRef } from "react";
+import Image from "next/image";
 import { useRouter } from "next/navigation";
 import {
   IconUser,
@@ -174,10 +175,11 @@ export function ProfileForm({ user }: { user: ProfileUser }) {
             {/* صورة البروفايل */}
             <div className="relative group">
               {image ? (
-                // eslint-disable-next-line @next/next/no-img-element
-                <img
+                <Image
                   src={image}
                   alt={name}
+                  width={112}
+                  height={112}
                   className="h-28 w-28 rounded-full object-cover border-4 border-brand-100"
                 />
               ) : (

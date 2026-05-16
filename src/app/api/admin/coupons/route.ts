@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { revalidatePath } from "next/cache";
 import { prisma } from "@/lib/prisma";
 import { requireAdminApi, unauthorized } from "@/lib/admin-api";
 import { z } from "zod";
@@ -64,6 +65,8 @@ export async function POST(req: Request) {
       },
     });
 
+    revalidatePath("/admin/coupons");
+
     return NextResponse.json(coupon, { status: 201 });
   } catch {
     return NextResponse.json({ error: "حصل مشكلة" }, { status: 500 });
@@ -81,6 +84,9 @@ export async function DELETE(req: Request) {
     }
 
     await prisma.coupon.delete({ where: { id } });
+
+    revalidatePath("/admin/coupons");
+
     return NextResponse.json({ message: "تم الحذف" });
   } catch {
     return NextResponse.json({ error: "حصل مشكلة في الحذف" }, { status: 500 });
