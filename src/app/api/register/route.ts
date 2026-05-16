@@ -3,6 +3,7 @@ import bcrypt from "bcryptjs";
 import { prisma } from "@/lib/prisma";
 import { registerSchema } from "@/lib/validations/auth";
 import { rateLimit, RATE_LIMITS } from "@/lib/rate-limit";
+import { sendWelcomeEmail } from "@/lib/email";
 
 export async function POST(req: Request) {
   // Rate limit بالـ IP
@@ -49,6 +50,8 @@ export async function POST(req: Request) {
         password: hashedPassword,
       },
     });
+
+    sendWelcomeEmail(normalizedEmail, name.trim()).catch(() => {});
 
     return NextResponse.json(
       { message: "الحساب اتعمل بنجاح" },

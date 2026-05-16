@@ -3,6 +3,7 @@ import { prisma } from "@/lib/prisma";
 import { randomBytes } from "crypto";
 import { z } from "zod";
 import { rateLimit, RATE_LIMITS } from "@/lib/rate-limit";
+import { sendPasswordResetEmail } from "@/lib/email";
 
 const schema = z.object({
   email: z.string().email(),
@@ -44,10 +45,7 @@ export async function POST(req: Request) {
         },
       });
 
-      // TODO: إرسال إيميل عبر Resend
-      // const resetUrl = `${process.env.AUTH_URL}/reset-password?token=${token}`;
-      // await sendResetEmail(email, user.name, resetUrl);
-      console.log(`[Reset Token] ${email}: ${token}`);
+      await sendPasswordResetEmail(email, user.name || "مستخدم", token);
     }
 
     // نفس الرد دايماً (مش بنقول لو الإيميل موجود أو لا)

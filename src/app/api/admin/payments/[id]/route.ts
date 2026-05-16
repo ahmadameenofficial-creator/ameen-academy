@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { requireAdminApi, unauthorized } from "@/lib/admin-api";
 import { notifyPaymentApproved } from "@/lib/notifications";
+import { sendPaymentConfirmationEmail } from "@/lib/email";
 
 interface RouteContext {
   params: Promise<{ id: string }>;
@@ -50,6 +51,12 @@ export async function PUT(req: Request, context: RouteContext) {
       ]);
 
       await notifyPaymentApproved(payment.userId, payment.course.title);
+
+      sendPaymentConfirmationEmail(
+        payment.user.email,
+        payment.user.name || "مستخدم",
+        payment.course.title
+      ).catch(() => {});
 
       return NextResponse.json({ message: "تم تأكيد الدفع وتسجيل الطالب" });
     } else {
