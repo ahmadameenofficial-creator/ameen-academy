@@ -55,3 +55,27 @@ export async function PUT(req: Request, context: RouteContext) {
     return NextResponse.json({ error: "حصل مشكلة" }, { status: 500 });
   }
 }
+
+export async function DELETE(_req: Request, context: RouteContext) {
+  const session = await requireAdminApi();
+  if (!session) return unauthorized();
+
+  const { id } = await context.params;
+
+  try {
+    const student = await prisma.user.findUnique({ where: { id } });
+    if (!student) {
+      return NextResponse.json({ error: "الطالب مش موجود" }, { status: 404 });
+    }
+
+    if (student.role === "ADMIN") {
+      return badRequest("مش ممكن تحذف حساب أدمن");
+    }
+
+    await prisma.user.delete({ where: { id } });
+
+    return NextResponse.json({ message: "تم حذف الحساب نهائيا" });
+  } catch {
+    return NextResponse.json({ error: "حصل مشكلة في الحذف" }, { status: 500 });
+  }
+}
