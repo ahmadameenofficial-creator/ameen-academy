@@ -151,6 +151,7 @@ model Course {
   ratings       Rating[]
   payments      Payment[]
   certificates  Certificate[]
+  coupons       Coupon[]
 
   @@index([isPublished, isFeatured])
   @@index([instructorId])
@@ -265,6 +266,8 @@ model Payment {
   method          String?       // card, wallet, fawry
   paymobOrderId   String?       @unique
   paymobTxnId     String?       @unique
+  couponCode      String?
+  discount        Int           @default(0) // مبلغ الخصم بالقرش
   metadata        Json?
   createdAt       DateTime      @default(now())
   paidAt          DateTime?
@@ -281,6 +284,22 @@ enum PaymentStatus {
   PAID
   FAILED
   REFUNDED
+}
+
+model Coupon {
+  id            String    @id @default(cuid())
+  code          String    @unique
+  discountType  String    @default("percentage") // percentage | fixed
+  discountValue Int       // نسبة مئوية أو مبلغ بالقرش
+  maxUses       Int?      // null = unlimited
+  usedCount     Int       @default(0)
+  minPrice      Int?      // أقل مبلغ للتطبيق (بالقرش)
+  courseId      String?   // null = ينطبق على كل الكورسات
+  expiresAt     DateTime?
+  isActive      Boolean   @default(true)
+  createdAt     DateTime  @default(now())
+
+  course Course? @relation(fields: [courseId], references: [id])
 }
 
 // ============ التقييمات ============

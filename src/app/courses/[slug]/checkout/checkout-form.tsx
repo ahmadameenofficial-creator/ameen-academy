@@ -10,6 +10,8 @@ import {
   IconPhone,
   IconReceipt,
   IconArrowRight,
+  IconTag,
+  IconX,
 } from "@tabler/icons-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -24,6 +26,15 @@ interface CourseData {
   comparePrice: number | null;
 }
 
+interface CouponData {
+  code: string;
+  discountType: string;
+  discountValue: number;
+  discount: number;
+  finalPrice: number;
+  message: string;
+}
+
 export function CheckoutForm({ params }: { params: Promise<{ slug: string }> }) {
   const router = useRouter();
   const [course, setCourse] = useState<CourseData | null>(null);
@@ -34,6 +45,10 @@ export function CheckoutForm({ params }: { params: Promise<{ slug: string }> }) 
   const [selectedMethod, setSelectedMethod] = useState<string>(PAYMENT_CONFIG.methods[0].id);
   const [transactionRef, setTransactionRef] = useState("");
   const [senderPhone, setSenderPhone] = useState("");
+  const [couponCode, setCouponCode] = useState("");
+  const [couponLoading, setCouponLoading] = useState(false);
+  const [couponError, setCouponError] = useState("");
+  const [appliedCoupon, setAppliedCoupon] = useState<CouponData | null>(null);
 
   useEffect(() => {
     params.then(({ slug }) => {
@@ -51,6 +66,37 @@ export function CheckoutForm({ params }: { params: Promise<{ slug: string }> }) 
     });
   }, [params, router]);
 
+  async function handleApplyCoupon() {
+    if (!couponCode.trim() || !course) return;
+    setCouponLoading(true);
+    setCouponError("");
+
+    try {
+      const res = await fetch(
+        `/api/coupons?code=${encodeURIComponent(couponCode.trim())}&courseId=${course.id}`
+      );
+      const data = await res.json();
+
+      if (!res.ok) {
+        setCouponError(data.error);
+        setAppliedCoupon(null);
+      } else {
+        setAppliedCoupon(data);
+        setCouponError("");
+      }
+    } catch {
+      setCouponError("حصل مشكلة، جرّب تاني");
+    } finally {
+      setCouponLoading(false);
+    }
+  }
+
+  function removeCoupon() {
+    setAppliedCoupon(null);
+    setCouponCode("");
+    setCouponError("");
+  }
+
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     if (!course) return;
@@ -66,6 +112,7 @@ export function CheckoutForm({ params }: { params: Promise<{ slug: string }> }) 
           method: selectedMethod,
           transactionRef,
           senderPhone,
+          couponCode: appliedCoupon?.code || undefined,
         }),
       });
 
@@ -115,7 +162,8 @@ export function CheckoutForm({ params }: { params: Promise<{ slug: string }> }) 
   if (!course) return null;
 
   const selectedPayment = PAYMENT_CONFIG.methods.find((m) => m.id === selectedMethod)!;
-  const priceInPounds = course.price / 100;
+  const finalPrice = appliedCoupon ? appliedCoupon.finalPrice : course.price;
+  const priceInPounds = finalPrice / 100;
 
   return (
     <div className="min-h-screen bg-muted/30 py-8 px-4">
@@ -135,20 +183,85 @@ export function CheckoutForm({ params }: { params: Promise<{ slug: string }> }) 
 
         {/* المبلغ */}
         <Card>
-          <CardContent className="p-5">
+          <CardContent className="p-5 space-y-4">
             <div className="flex items-center justify-between">
-              <span className="text-muted-foreground">المبلغ المطلوب</span>
+              <span className="text-muted-foreground">سعر الكورس</span>
               <div className="flex items-center gap-2">
                 {course.comparePrice && (
                   <span className="text-sm text-muted-foreground line-through">
                     {(course.comparePrice / 100).toLocaleString("ar-EG")} جنيه
                   </span>
                 )}
-                <span className="text-2xl font-bold text-brand-600">
-                  {priceInPounds.toLocaleString("ar-EG")} جنيه
+                <span className={`text-2xl font-bold ${appliedCoupon ? "text-muted-foreground line-through text-lg" : "text-brand-600"}`}>
+                  {(course.price / 100).toLocaleString("ar-EG")} جنيه
                 </span>
               </div>
             </div>
+
+            {appliedCoupon && (
+              <>
+                <div className="flex items-center justify-between text-green-600">
+                  <div className="flex items-center gap-2">
+                    <IconTag className="h-4 w-4" />
+                    <span className="text-sm">{appliedCoupon.message}</span>
+                  </div>
+                  <span className="text-sm font-medium">
+                    -{(appliedCoupon.discount / 100).toLocaleString("ar-EG")} جنيه
+                  </span>
+                </div>
+                <div className="border-t border-border pt-3 flex items-center justify-between">
+                  <span className="font-bold text-foreground">المبلغ المطلوب</span>
+                  <span className="text-2xl font-bold text-brand-600">
+                    {priceInPounds.toLocaleString("ar-EG")} جنيه
+                  </span>
+                </div>
+              </>
+            )}
+
+            {/* كود الخصم */}
+            {!appliedCoupon ? (
+              <div className="border-t border-border pt-4 space-y-2">
+                <label className="text-sm font-medium text-foreground">عندك كود خصم؟</label>
+                <div className="flex gap-2">
+                  <Input
+                    value={couponCode}
+                    onChange={(e) => setCouponCode(e.target.value.toUpperCase())}
+                    placeholder="اكتب الكود هنا"
+                    className="flex-1"
+                    dir="ltr"
+                  />
+                  <Button
+                    type="button"
+                    variant="outline"
+                    onClick={handleApplyCoupon}
+                    disabled={couponLoading || !couponCode.trim()}
+                  >
+                    {couponLoading ? (
+                      <IconLoader2 className="h-4 w-4 animate-spin" />
+                    ) : (
+                      "تطبيق"
+                    )}
+                  </Button>
+                </div>
+                {couponError && (
+                  <p className="text-sm text-destructive">{couponError}</p>
+                )}
+              </div>
+            ) : (
+              <div className="flex items-center justify-between rounded-lg bg-green-50 border border-green-200 px-3 py-2">
+                <div className="flex items-center gap-2 text-green-700">
+                  <IconCheck className="h-4 w-4" />
+                  <span className="text-sm font-medium">كود {appliedCoupon.code} مطبّق</span>
+                </div>
+                <button
+                  type="button"
+                  onClick={removeCoupon}
+                  className="text-green-600 hover:text-green-800"
+                >
+                  <IconX className="h-4 w-4" />
+                </button>
+              </div>
+            )}
           </CardContent>
         </Card>
 
@@ -192,6 +305,9 @@ export function CheckoutForm({ params }: { params: Promise<{ slug: string }> }) 
               </p>
               <p className="text-sm font-bold text-brand-800">
                 المبلغ: {priceInPounds.toLocaleString("ar-EG")} جنيه
+                {appliedCoupon && (
+                  <span className="text-green-600 mr-1">(بعد الخصم)</span>
+                )}
               </p>
             </div>
           </CardContent>

@@ -7,6 +7,7 @@ import {
   IconUsers,
   IconCreditCard,
   IconArticle,
+  IconTag,
   IconArrowRight,
 } from "@tabler/icons-react";
 
@@ -16,6 +17,7 @@ const navItems = [
   { href: "/admin/blog", label: "المدونة", icon: IconArticle },
   { href: "/admin/students", label: "الطلاب", icon: IconUsers },
   { href: "/admin/payments", label: "المدفوعات", icon: IconCreditCard },
+  { href: "/admin/coupons", label: "الأكواد", icon: IconTag },
 ];
 
 export default async function AdminLayout({
