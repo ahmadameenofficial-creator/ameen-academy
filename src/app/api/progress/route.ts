@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { auth } from "@/auth";
 import { prisma } from "@/lib/prisma";
 import { z } from "zod";
+import { createNotification } from "@/lib/notifications";
 
 const progressSchema = z.object({
   lessonId: z.string().min(1),
@@ -61,6 +62,55 @@ export async function POST(req: Request) {
         watchCount: { increment: 1 },
       },
     });
+
+    if (isCompleted) {
+      const allLessons = await prisma.lesson.count({
+        where: { module: { courseId: lesson.courseId } },
+      });
+      const completedLessons = await prisma.lessonProgress.count({
+        where: {
+          userId: session.user.id,
+          isCompleted: true,
+          lesson: { module: { courseId: lesson.courseId } },
+        },
+      });
+
+      if (completedLessons >= allLessons && allLessons > 0) {
+        const existingCert = await prisma.certificate.findUnique({
+          where: { userId_courseId: { userId: session.user.id, courseId: lesson.courseId } },
+        });
+
+        if (!existingCert) {
+          const { randomBytes } = await import("crypto");
+          const certificateCode = `AMN-${randomBytes(4).toString("hex").toUpperCase()}`;
+          const course = await prisma.course.findUnique({
+            where: { id: lesson.courseId },
+            select: { title: true },
+          });
+
+          await prisma.certificate.create({
+            data: {
+              userId: session.user.id,
+              courseId: lesson.courseId,
+              certificateCode,
+            },
+          });
+
+          await prisma.enrollment.update({
+            where: { userId_courseId: { userId: session.user.id, courseId: lesson.courseId } },
+            data: { completedAt: new Date() },
+          });
+
+          await createNotification({
+            userId: session.user.id,
+            type: "CERTIFICATE",
+            title: "مبروك! حصلت على شهادة",
+            message: `خلصت كورس "${course?.title}" — شهادتك جاهزة للتحميل`,
+            link: `/api/certificates/${certificateCode}`,
+          });
+        }
+      }
+    }
 
     return NextResponse.json(progress);
   } catch {
