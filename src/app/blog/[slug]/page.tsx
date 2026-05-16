@@ -29,7 +29,8 @@ interface Props {
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
-  const { slug } = await params;
+  const { slug: rawSlug } = await params;
+  const slug = decodeURIComponent(rawSlug);
   const post = await prisma.blogPost.findUnique({
     where: { slug },
     select: {
@@ -216,7 +217,8 @@ function applyInline(text: string) {
 }
 
 export default async function BlogPostPage({ params }: Props) {
-  const { slug } = await params;
+  const { slug: rawSlug } = await params;
+  const slug = decodeURIComponent(rawSlug);
 
   const post = await prisma.blogPost.findUnique({
     where: { slug, isPublished: true },
