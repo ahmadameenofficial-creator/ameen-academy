@@ -69,9 +69,9 @@ function CommentItem({
   }
 
   return (
-    <div className={`${isReply ? "mr-10 md:mr-14" : ""}`}>
-      <div className="flex gap-3">
-        <div className="h-8 w-8 rounded-full bg-brand-100 flex items-center justify-center shrink-0 mt-0.5">
+    <div className={`${isReply ? "mr-4 sm:mr-8 md:mr-14" : ""} overflow-hidden`}>
+      <div className="flex gap-2 sm:gap-3">
+        <div className="h-7 w-7 sm:h-8 sm:w-8 rounded-full bg-brand-100 flex items-center justify-center shrink-0 mt-0.5">
           {comment.user.image ? (
             <Image
               src={comment.user.image}
@@ -81,20 +81,20 @@ function CommentItem({
               className="rounded-full"
             />
           ) : (
-            <IconUser className="h-4 w-4 text-brand-500" />
+            <IconUser className="h-3.5 w-3.5 sm:h-4 sm:w-4 text-brand-500" />
           )}
         </div>
         <div className="flex-1 min-w-0">
-          <div className="rounded-xl bg-muted/60 px-4 py-3">
-            <div className="flex items-center gap-2 mb-1">
-              <span className="text-sm font-medium text-foreground">
+          <div className="rounded-xl bg-muted/60 px-3 sm:px-4 py-2.5 sm:py-3">
+            <div className="flex items-center gap-2 mb-1 flex-wrap">
+              <span className="text-xs sm:text-sm font-medium text-foreground">
                 {comment.user.name}
               </span>
-              <span className="text-[11px] text-muted-foreground">
+              <span className="text-[10px] sm:text-[11px] text-muted-foreground">
                 {timeAgo(comment.createdAt)}
               </span>
             </div>
-            <p className="text-sm text-muted-foreground leading-relaxed whitespace-pre-wrap">
+            <p className="text-xs sm:text-sm text-muted-foreground leading-relaxed whitespace-pre-wrap break-words">
               {comment.content}
             </p>
           </div>
@@ -116,13 +116,13 @@ function CommentItem({
                 onChange={(e) => setReplyText(e.target.value)}
                 onKeyDown={(e) => e.key === "Enter" && submitReply()}
                 placeholder="اكتب رد..."
-                className="flex-1 rounded-lg border border-border bg-background px-3 py-2 text-sm focus:border-brand-500 focus:ring-1 focus:ring-brand-500 outline-none"
+                className="flex-1 min-w-0 rounded-lg border border-border bg-background px-3 py-2 text-sm focus:border-brand-500 focus:ring-1 focus:ring-brand-500 outline-none"
                 autoFocus
               />
               <button
                 onClick={submitReply}
                 disabled={sending || !replyText.trim()}
-                className="rounded-lg bg-brand-500 text-white px-3 py-2 hover:bg-brand-600 disabled:opacity-50 transition-colors"
+                className="rounded-lg bg-brand-500 text-white px-3 py-2 hover:bg-brand-600 disabled:opacity-50 transition-colors shrink-0"
               >
                 {sending ? (
                   <IconLoader2 className="h-4 w-4 animate-spin" />
@@ -200,7 +200,7 @@ export function CommentsSection({ slug }: { slug: string }) {
   );
 
   return (
-    <section className="container mx-auto px-4 max-w-3xl pb-12">
+    <section className="container mx-auto px-4 max-w-3xl pb-12 overflow-hidden">
       <div className="border-t border-border pt-8">
         <h3 className="text-lg font-bold text-foreground mb-6 flex items-center gap-2">
           <IconMessageCircle className="h-5 w-5 text-brand-500" />
@@ -213,23 +213,23 @@ export function CommentsSection({ slug }: { slug: string }) {
         </h3>
 
         {/* صندوق كتابة كومنت */}
-        <div className="flex gap-3 mb-8">
-          <div className="h-9 w-9 rounded-full bg-brand-100 flex items-center justify-center shrink-0">
+        <div className="flex gap-2 sm:gap-3 mb-8">
+          <div className="h-8 w-8 sm:h-9 sm:w-9 rounded-full bg-brand-100 flex items-center justify-center shrink-0">
             <IconUser className="h-4 w-4 text-brand-500" />
           </div>
-          <div className="flex-1 flex gap-2">
+          <div className="flex-1 min-w-0 flex gap-2">
             <input
               type="text"
               value={text}
               onChange={(e) => setText(e.target.value)}
               onKeyDown={(e) => e.key === "Enter" && submitComment()}
               placeholder="اكتب تعليقك هنا..."
-              className="flex-1 rounded-xl border border-border bg-background px-4 py-2.5 text-sm focus:border-brand-500 focus:ring-1 focus:ring-brand-500 outline-none"
+              className="flex-1 min-w-0 rounded-xl border border-border bg-background px-3 sm:px-4 py-2.5 text-sm focus:border-brand-500 focus:ring-1 focus:ring-brand-500 outline-none"
             />
             <button
               onClick={submitComment}
               disabled={sending || !text.trim()}
-              className="rounded-xl bg-brand-500 text-white px-4 py-2.5 hover:bg-brand-600 disabled:opacity-50 transition-colors flex items-center gap-2 text-sm"
+              className="rounded-xl bg-brand-500 text-white px-3 sm:px-4 py-2.5 hover:bg-brand-600 disabled:opacity-50 transition-colors flex items-center gap-2 text-sm shrink-0"
             >
               {sending ? (
                 <IconLoader2 className="h-4 w-4 animate-spin" />

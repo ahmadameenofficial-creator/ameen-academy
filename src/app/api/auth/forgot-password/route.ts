@@ -45,7 +45,16 @@ export async function POST(req: Request) {
         },
       });
 
-      sendPasswordResetEmail(email, user.name || "مستخدم", token).catch(() => {});
+      // إرسال الإيميل — لو فشل نرجع خطأ
+      try {
+        await sendPasswordResetEmail(email, user.name || "مستخدم", token);
+      } catch (emailError) {
+        console.error("[ForgotPassword] فشل إرسال الإيميل:", emailError);
+        return NextResponse.json(
+          { error: "فشل إرسال الإيميل، جرّب تاني بعد شوية" },
+          { status: 500 }
+        );
+      }
     }
 
     return NextResponse.json({

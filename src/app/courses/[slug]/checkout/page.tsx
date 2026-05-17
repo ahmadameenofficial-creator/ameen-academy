@@ -9,7 +9,7 @@ export default async function CheckoutPage({ params }: { params: Promise<{ slug:
 
   const course = await prisma.course.findUnique({
     where: { slug, isPublished: true },
-    select: { id: true, title: true, price: true, comparePrice: true },
+    select: { id: true, title: true, slug: true, price: true, comparePrice: true },
   });
 
   if (!course) redirect("/courses");

@@ -21,6 +21,7 @@ import { PAYMENT_CONFIG } from "@/lib/constants";
 interface CourseData {
   id: string;
   title: string;
+  slug: string;
   price: number;
   comparePrice: number | null;
 }
@@ -139,7 +140,7 @@ export function CheckoutForm({ course }: { course: CourseData }) {
     <div className="min-h-screen bg-muted/30 py-8 px-4">
       <div className="max-w-lg mx-auto space-y-6">
         <Link
-          href={`/courses/${course.title}`}
+          href={`/courses/${course.slug}`}
           className="flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground"
         >
           <IconArrowRight className="h-4 w-4" />

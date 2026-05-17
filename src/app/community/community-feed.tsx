@@ -652,12 +652,12 @@ function CommentItem({
               <p className="text-sm text-foreground mt-0.5">{comment.content}</p>
             )}
 
-            {/* قائمة الخيارات */}
+            {/* قائمة الخيارات — ظاهرة دايماً على الموبايل */}
             {canModify && !editing && (
-              <div className="absolute left-1 top-1 opacity-0 group-hover:opacity-100 transition-opacity">
+              <div className="absolute left-1 top-1 opacity-100 sm:opacity-0 sm:group-hover:opacity-100 transition-opacity">
                 <button
                   onClick={() => setShowMenu(!showMenu)}
-                  className="p-1 rounded-full hover:bg-background/80 text-muted-foreground"
+                  className="p-1.5 rounded-full hover:bg-background/80 text-muted-foreground"
                   aria-label="خيارات التعليق"
                 >
                   <IconDots className="h-4 w-4" />
@@ -669,14 +669,14 @@ function CommentItem({
                       {isOwner && (
                         <button
                           onClick={() => { setEditing(true); setShowMenu(false); }}
-                          className="flex items-center gap-2 w-full px-3 py-1.5 text-xs hover:bg-muted transition-colors"
+                          className="flex items-center gap-2 w-full px-3 py-2 text-xs hover:bg-muted transition-colors"
                         >
                           <IconEdit className="h-3.5 w-3.5" /> تعديل
                         </button>
                       )}
                       <button
                         onClick={() => { onDelete(comment.id); setShowMenu(false); }}
-                        className="flex items-center gap-2 w-full px-3 py-1.5 text-xs text-destructive hover:bg-destructive/10 transition-colors"
+                        className="flex items-center gap-2 w-full px-3 py-2 text-xs text-destructive hover:bg-destructive/10 transition-colors"
                       >
                         <IconTrash className="h-3.5 w-3.5" /> حذف
                       </button>
