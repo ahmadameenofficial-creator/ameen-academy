@@ -11,7 +11,7 @@ export function GET() {
 - **Location:** Cairo, Egypt
 - **Language:** Arabic (Egyptian dialect)
 - **Founder:** Amr Ameen (عمرو أمين)
-- **Website:** https://ameenacademy.com
+- **Website:** https://ameen.academy
 - **Target Audience:** Arabic-speaking learners, primarily in Egypt and the Arab world
 
 ## What We Offer
@@ -59,7 +59,7 @@ export function GET() {
 - Twitter/X: https://twitter.com/ameenacademy
 
 ## Contact
-- Email: info@ameenacademy.com
+- Email: info@ameen.academy
 `;
 
   return new Response(content, {

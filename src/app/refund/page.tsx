@@ -142,7 +142,7 @@ export default function RefundPage() {
                   </Link>
                 </Button>
                 <Button variant="soft" asChild>
-                  <a href="mailto:info@ameenacademy.com">
+                  <a href="mailto:info@ameen.academy">
                     ابعت إيميل
                   </a>
                 </Button>

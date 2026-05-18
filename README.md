@@ -195,7 +195,7 @@ vercel
 
 ## 📞 الدعم
 
-لأي استفسارات تواصل عبر [info@ameenacademy.com](mailto:info@ameenacademy.com)
+لأي استفسارات تواصل عبر [info@ameen.academy](mailto:info@ameen.academy)
 
 ---
 

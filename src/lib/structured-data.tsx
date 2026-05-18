@@ -42,7 +42,7 @@ export function OrganizationSchema() {
     contactPoint: {
       "@type": "ContactPoint",
       contactType: "customer service",
-      email: "info@ameenacademy.com",
+      email: "info@ameen.academy",
       availableLanguage: ["Arabic", "English"],
     },
   };

@@ -86,9 +86,9 @@ export function Footer() {
             © {new Date().getFullYear()} Ameen Academy. جميع الحقوق محفوظة.
           </p>
           <div className="flex items-center gap-5 text-xs text-muted-foreground">
-            <a href="mailto:info@ameenacademy.com" className="flex items-center gap-1.5 transition-colors hover:text-brand-600">
+            <a href="mailto:info@ameen.academy" className="flex items-center gap-1.5 transition-colors hover:text-brand-600">
               <IconMail className="size-4" />
-              info@ameenacademy.com
+              info@ameen.academy
             </a>
           </div>
         </div>

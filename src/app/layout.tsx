@@ -83,7 +83,7 @@ export const metadata: Metadata = {
     title: "أكاديمية أمين | اتعلم المهارات اللي هتجيبلك فلوس في 2026",
     description:
       "كورسات تصميم، AI، فريلانس بالعربي. من الصفر للاحتراف مع شهادة معتمدة.",
-    creator: "@ameenacademy",
+    creator: "@ameen_academy",
     images: ["/opengraph-image"],
   },
   robots: {

@@ -5,7 +5,7 @@ if (!process.env.RESEND_API_KEY) {
 }
 
 const resend = new Resend(process.env.RESEND_API_KEY);
-const from = process.env.EMAIL_FROM || "Ameen Academy <onboarding@resend.dev>";
+const from = process.env.EMAIL_FROM || "Ameen Academy <noreply@ameen.academy>";
 const appUrl = process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000";
 
 export async function sendPasswordResetEmail(
