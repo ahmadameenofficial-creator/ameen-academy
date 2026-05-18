@@ -20,6 +20,7 @@ export async function POST(req: Request) {
     return NextResponse.json({
       videoId: video.guid,
       libraryId: process.env.BUNNY_STREAM_LIBRARY_ID,
+      apiKey: process.env.BUNNY_STREAM_API_KEY,
     });
   } catch (err) {
     console.error("Error creating video:", err);

@@ -166,7 +166,7 @@ export function ModulesManager({
       setUploadingFor(lessonId);
       setUploadProgress(0);
 
-      // 1. إنشاء الفيديو على Bunny
+      // 1. إنشاء الفيديو على Bunny (بيرجع الـ credentials للرفع المباشر)
       const createRes = await fetch("/api/admin/videos", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -174,17 +174,35 @@ export function ModulesManager({
       });
 
       if (!createRes.ok) throw new Error("فشل إنشاء الفيديو");
-      const { videoId } = await createRes.json();
+      const { videoId, libraryId, apiKey } = await createRes.json();
 
-      // 2. رفع الفيديو
-      setUploadProgress(10);
-      const uploadRes = await fetch(`/api/admin/videos/${videoId}/upload`, {
-        method: "PUT",
-        body: file,
+      // 2. رفع الفيديو مباشرة لـ Bunny (بدون ما يعدي على Vercel)
+      await new Promise<void>((resolve, reject) => {
+        const xhr = new XMLHttpRequest();
+        xhr.open("PUT", `https://video.bunnycdn.com/library/${libraryId}/videos/${videoId}`);
+        xhr.setRequestHeader("AccessKey", apiKey);
+        xhr.setRequestHeader("Content-Type", "application/octet-stream");
+
+        xhr.upload.onprogress = (e) => {
+          if (e.lengthComputable) {
+            const pct = Math.round((e.loaded / e.total) * 90);
+            setUploadProgress(pct);
+          }
+        };
+
+        xhr.onload = () => {
+          if (xhr.status >= 200 && xhr.status < 300) {
+            resolve();
+          } else {
+            reject(new Error(`فشل الرفع: ${xhr.status}`));
+          }
+        };
+
+        xhr.onerror = () => reject(new Error("فشل الاتصال"));
+        xhr.send(file);
       });
 
-      if (!uploadRes.ok) throw new Error("فشل رفع الفيديو");
-      setUploadProgress(80);
+      setUploadProgress(95);
 
       // 3. ربط الفيديو بالدرس
       await fetch(`/api/admin/lessons/${lessonId}`, {
