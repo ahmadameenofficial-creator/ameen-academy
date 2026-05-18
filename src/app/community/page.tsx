@@ -17,7 +17,7 @@ export default async function CommunityPage() {
         user: { select: { id: true, name: true, image: true, role: true } },
         comments: {
           where: { isDeleted: false, parentId: null },
-          take: 3,
+          take: 2,
           orderBy: { createdAt: "asc" },
           select: {
             id: true,
@@ -31,7 +31,7 @@ export default async function CommunityPage() {
             replies: {
               where: { isDeleted: false },
               orderBy: { createdAt: "asc" },
-              take: 5,
+              take: 2,
               select: {
                 id: true,
                 content: true,
@@ -57,7 +57,7 @@ export default async function CommunityPage() {
         },
       },
       orderBy: [{ isPinned: "desc" }, { createdAt: "desc" }],
-      take: 20,
+      take: 10,
     }),
   ]);
 

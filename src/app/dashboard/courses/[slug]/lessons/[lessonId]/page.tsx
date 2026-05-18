@@ -16,46 +16,53 @@ export default async function LessonPage({ params }: Props) {
   if (!session?.user) redirect("/login");
 
   const { slug, lessonId } = await params;
+  const userId = session.user.id;
 
-  const course = await prisma.course.findUnique({
-    where: { slug },
-    include: {
-      modules: {
-        orderBy: { order: "asc" },
-        include: {
-          lessons: {
-            orderBy: { order: "asc" },
-            select: { id: true, title: true, order: true, duration: true },
+  // تحميل البيانات بالتوازي عشان السرعة
+  const [course, lesson, progress, completedLessons] = await Promise.all([
+    prisma.course.findUnique({
+      where: { slug },
+      select: {
+        id: true,
+        slug: true,
+        modules: {
+          orderBy: { order: "asc" },
+          select: {
+            id: true,
+            title: true,
+            lessons: {
+              orderBy: { order: "asc" },
+              select: { id: true, title: true, order: true, duration: true },
+            },
           },
         },
       },
-    },
-  });
+    }),
+    prisma.lesson.findUnique({
+      where: { id: lessonId },
+    }),
+    prisma.lessonProgress.findUnique({
+      where: { userId_lessonId: { userId, lessonId } },
+    }),
+    prisma.lessonProgress.findMany({
+      where: { userId, isCompleted: true },
+      select: { lessonId: true },
+    }),
+  ]);
+
   if (!course) notFound();
-
-  const enrollment = await prisma.enrollment.findUnique({
-    where: { userId_courseId: { userId: session.user.id, courseId: course.id } },
-  });
-  if (!enrollment) redirect(`/courses/${slug}`);
-
-  const lesson = await prisma.lesson.findUnique({
-    where: { id: lessonId },
-  });
   if (!lesson || lesson.courseId !== course.id) notFound();
 
-  const progress = await prisma.lessonProgress.findUnique({
-    where: { userId_lessonId: { userId: session.user.id, lessonId } },
+  // التحقق من الاشتراك
+  const enrollment = await prisma.enrollment.findUnique({
+    where: { userId_courseId: { userId, courseId: course.id } },
   });
+  if (!enrollment) redirect(`/courses/${slug}`);
 
   const allLessons = course.modules.flatMap((m) => m.lessons);
   const currentIndex = allLessons.findIndex((l) => l.id === lessonId);
   const prevLesson = currentIndex > 0 ? allLessons[currentIndex - 1] : null;
   const nextLesson = currentIndex < allLessons.length - 1 ? allLessons[currentIndex + 1] : null;
-
-  const completedLessons = await prisma.lessonProgress.findMany({
-    where: { userId: session.user.id, isCompleted: true },
-    select: { lessonId: true },
-  });
   const completedSet = new Set(completedLessons.map((l) => l.lessonId));
 
   return (

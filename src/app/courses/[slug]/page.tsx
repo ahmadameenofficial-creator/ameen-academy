@@ -4,8 +4,8 @@ import Image from "next/image";
 import Link from "next/link";
 import { prisma } from "@/lib/prisma";
 
-// صفحة تفاصيل الكورس — بتتحدث كل 60 ثانية
-export const revalidate = 60;
+// صفحة تفاصيل الكورس — ديناميكية عشان حالة الاشتراك تبان صح
+export const dynamic = "force-dynamic";
 import { auth } from "@/auth";
 import { formatPrice, formatDuration, getLevelLabel } from "@/lib/format";
 import { CourseSchema, BreadcrumbSchema } from "@/lib/structured-data";
@@ -448,32 +448,32 @@ export default async function CourseDetailsPage({ params }: Props) {
 
       {/* ======= Mobile Sticky CTA ======= */}
       <div className="md:hidden fixed bottom-0 inset-x-0 bg-background/95 backdrop-blur-md border-t border-border p-4 z-50 safe-area-pb">
-        <div className="flex items-center justify-between gap-4">
-          <div className="flex items-baseline gap-2">
-            <span className="text-xl font-bold text-brand-600">
-              {formatPrice(course.price)}
-            </span>
-            {course.comparePrice && (
-              <span className="text-sm text-muted-foreground line-through">
-                {formatPrice(course.comparePrice)}
+        {isEnrolled ? (
+          <Button variant="gradient" size="lg" className="w-full" asChild>
+            <Link href="/dashboard">كمّل تعلّم</Link>
+          </Button>
+        ) : (
+          <div className="flex items-center justify-between gap-4">
+            <div className="flex items-baseline gap-2">
+              <span className="text-xl font-bold text-brand-600">
+                {formatPrice(course.price)}
               </span>
-            )}
-            {discount > 0 && (
-              <Badge variant="success" className="text-[10px]">-{discount}%</Badge>
-            )}
-          </div>
-          {isEnrolled ? (
-            <Button variant="gradient" size="lg" asChild>
-              <Link href="/dashboard">كمّل تعلّم</Link>
-            </Button>
-          ) : (
+              {course.comparePrice && (
+                <span className="text-sm text-muted-foreground line-through">
+                  {formatPrice(course.comparePrice)}
+                </span>
+              )}
+              {discount > 0 && (
+                <Badge variant="success" className="text-[10px]">-{discount}%</Badge>
+              )}
+            </div>
             <Button variant="gradient" size="lg" asChild>
               <Link href={session ? `/courses/${slug}/checkout` : "/login"}>
                 اشتري دلوقتي
               </Link>
             </Button>
-          )}
-        </div>
+          </div>
+        )}
       </div>
 
       {/* Spacer للموبايل */}
