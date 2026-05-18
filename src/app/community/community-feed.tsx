@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useCallback } from "react";
+import { useState, useCallback, useEffect } from "react";
 import { useSession } from "next-auth/react";
 import Link from "next/link";
 import Image from "next/image";
@@ -71,11 +71,12 @@ interface Post {
 
 // ============ Main Feed ============
 
-export function CommunityFeed({ initialPosts = [] }: { initialPosts?: Post[] }) {
+export function CommunityFeed({ initialPosts }: { initialPosts?: Post[] }) {
   const { data: session } = useSession();
-  const [posts, setPosts] = useState<Post[]>(initialPosts);
+  const [posts, setPosts] = useState<Post[]>(initialPosts || []);
   const [newPost, setNewPost] = useState("");
   const [posting, setPosting] = useState(false);
+  const [loading, setLoading] = useState(!initialPosts);
 
   const fetchPosts = useCallback(async () => {
     try {
@@ -83,7 +84,15 @@ export function CommunityFeed({ initialPosts = [] }: { initialPosts?: Post[] }) 
       const data = await res.json();
       setPosts(data.posts || []);
     } catch {}
+    setLoading(false);
   }, []);
+
+  // تحميل البوستات عند فتح الصفحة
+  useEffect(() => {
+    if (!initialPosts) {
+      fetchPosts();
+    }
+  }, [initialPosts, fetchPosts]);
 
   async function handlePost() {
     if (!newPost.trim() || posting) return;
@@ -167,7 +176,11 @@ export function CommunityFeed({ initialPosts = [] }: { initialPosts?: Post[] }) 
         )}
 
         {/* البوستات */}
-        {posts.length === 0 ? (
+        {loading ? (
+          <div className="flex justify-center py-12">
+            <IconLoader2 className="h-8 w-8 animate-spin text-brand-500" />
+          </div>
+        ) : posts.length === 0 ? (
           <Card className="p-12 text-center">
             <IconMessageCircle className="h-12 w-12 text-muted-foreground/30 mx-auto mb-3" />
             <p className="text-muted-foreground">مفيش منشورات لسه. كن أول واحد ينشر!</p>
