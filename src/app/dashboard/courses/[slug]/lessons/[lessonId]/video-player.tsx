@@ -67,16 +67,7 @@ export function VideoPlayer({
               allowFullScreen
               style={{ border: 0 }}
             />
-            {/* Watermark — اسم الطالب */}
-            <div className="absolute inset-0 pointer-events-none flex items-center justify-center">
-              <span className="text-white/[0.08] text-2xl md:text-3xl font-bold rotate-[-20deg] select-none">
-                {userName}
-              </span>
-            </div>
-            {/* Watermark صغير في الزاوية */}
-            <div className="absolute top-3 right-3 pointer-events-none text-white/30 text-[10px] bg-black/20 px-2 py-0.5 rounded">
-              {userName}
-            </div>
+            {/* Watermark بيتعامل معاه Bunny نفسه — بيظهر على الفيديو حتى في fullscreen */}
           </div>
         </div>
       ) : (

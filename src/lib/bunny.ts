@@ -139,6 +139,7 @@ export function getSignedEmbedUrl(
   videoId: string,
   options?: {
     expiresInSeconds?: number;
+    watermarkText?: string;
   }
 ) {
   const expiresIn = options?.expiresInSeconds || 7200;
@@ -153,7 +154,14 @@ export function getSignedEmbedUrl(
     .update(hashableBase)
     .digest("hex");
 
-  return `${baseUrl}?token=${token}&expires=${expires}`;
+  let url = `${baseUrl}?token=${token}&expires=${expires}`;
+
+  // Watermark — اسم الطالب بيظهر على الفيديو (حتى في fullscreen)
+  if (options?.watermarkText) {
+    url += `&token_hdnea_watermark=${encodeURIComponent(options.watermarkText)}`;
+  }
+
+  return url;
 }
 
 // ============ Thumbnail ============

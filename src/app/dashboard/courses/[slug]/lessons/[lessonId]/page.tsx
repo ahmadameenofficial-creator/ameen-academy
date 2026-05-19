@@ -71,7 +71,7 @@ export default async function LessonPage({ params }: Props) {
       <VideoPlayer
         lessonId={lesson.id}
         videoId={lesson.videoId}
-        signedEmbedUrl={lesson.videoId ? getSignedEmbedUrl(lesson.videoId, { expiresInSeconds: 7200 }) : null}
+        signedEmbedUrl={lesson.videoId ? getSignedEmbedUrl(lesson.videoId, { expiresInSeconds: 7200, watermarkText: session.user.name || session.user.email || "" }) : null}
         lastPosition={progress?.lastPosition || 0}
         isCompleted={progress?.isCompleted || false}
         userName={session.user.name || ""}
