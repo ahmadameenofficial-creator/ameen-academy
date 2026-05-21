@@ -1,45 +1,32 @@
 import { NextResponse } from "next/server";
 import { auth } from "@/auth";
-import { prisma } from "@/lib/prisma";
+import { notificationsDb } from "@/lib/db";
+import { handleApiError, UnauthorizedError } from "@/lib/errors";
 
 export async function GET() {
-  const session = await auth();
-  if (!session?.user) {
-    return NextResponse.json({ error: "غير مصرّح" }, { status: 401 });
-  }
-
   try {
+    const session = await auth();
+    if (!session?.user) throw new UnauthorizedError();
+
     const [notifications, unreadCount] = await Promise.all([
-      prisma.notification.findMany({
-        where: { userId: session.user.id },
-        orderBy: { createdAt: "desc" },
-        take: 30,
-      }),
-      prisma.notification.count({
-        where: { userId: session.user.id, isRead: false },
-      }),
+      notificationsDb.findUserNotifications(session.user.id),
+      notificationsDb.countUnreadNotifications(session.user.id),
     ]);
 
     return NextResponse.json({ notifications, unreadCount });
-  } catch {
-    return NextResponse.json({ error: "حصل مشكلة" }, { status: 500 });
+  } catch (error) {
+    return handleApiError(error);
   }
 }
 
 export async function PUT() {
-  const session = await auth();
-  if (!session?.user) {
-    return NextResponse.json({ error: "غير مصرّح" }, { status: 401 });
-  }
-
   try {
-    await prisma.notification.updateMany({
-      where: { userId: session.user.id, isRead: false },
-      data: { isRead: true },
-    });
+    const session = await auth();
+    if (!session?.user) throw new UnauthorizedError();
 
+    await notificationsDb.markAllNotificationsRead(session.user.id);
     return NextResponse.json({ message: "تم" });
-  } catch {
-    return NextResponse.json({ error: "حصل مشكلة" }, { status: 500 });
+  } catch (error) {
+    return handleApiError(error);
   }
 }

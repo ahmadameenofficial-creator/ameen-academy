@@ -7,45 +7,18 @@ export const dynamic = "force-dynamic";
 export const metadata: Metadata = {
   title: "لوحتي",
 };
-import { prisma } from "@/lib/prisma";
+import { enrollmentService } from "@/lib/services";
 import { formatPrice, formatDuration } from "@/lib/format";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { IconBook, IconClock, IconCheck, IconPlayerPlay } from "@tabler/icons-react";
 
-async function getEnrolledCourses(userId: string) {
-  return prisma.enrollment.findMany({
-    where: { userId },
-    include: {
-      course: {
-        include: {
-          lessons: { select: { id: true } },
-          _count: { select: { lessons: true } },
-        },
-      },
-    },
-    orderBy: { enrolledAt: "desc" },
-  });
-}
-
-async function getProgress(userId: string) {
-  return prisma.lessonProgress.findMany({
-    where: { userId, isCompleted: true },
-    select: { lessonId: true },
-  });
-}
-
 export default async function DashboardPage() {
   const session = await auth();
   if (!session?.user) return null;
 
-  const [enrollments, completedLessons] = await Promise.all([
-    getEnrolledCourses(session.user.id),
-    getProgress(session.user.id),
-  ]);
-
-  const completedSet = new Set(completedLessons.map((l) => l.lessonId));
+  const enrollments = await enrollmentService.getDashboardData(session.user.id);
 
   return (
     <div className="space-y-6">
@@ -75,15 +48,7 @@ export default async function DashboardPage() {
         <div className="grid gap-4 sm:grid-cols-2">
           {enrollments.map((enrollment) => {
             const course = enrollment.course;
-            const totalLessons = course._count.lessons;
-            const completedCount = course.lessons.filter((l) =>
-              completedSet.has(l.id)
-            ).length;
-            const progress =
-              totalLessons > 0
-                ? Math.round((completedCount / totalLessons) * 100)
-                : 0;
-            const isCompleted = progress === 100;
+            const { totalLessons, completedCount, progress, isCompleted } = enrollment;
 
             return (
               <Card

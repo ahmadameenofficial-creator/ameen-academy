@@ -1,4 +1,4 @@
-import { prisma } from "@/lib/prisma";
+import { adminService } from "@/lib/services";
 import { Badge } from "@/components/ui/badge";
 
 export const revalidate = 30;
@@ -17,43 +17,6 @@ import {
 } from "@tabler/icons-react";
 import { StudentActions } from "./student-actions";
 
-async function getStudents() {
-  return prisma.user.findMany({
-    where: { role: "STUDENT" },
-    select: {
-      id: true,
-      name: true,
-      email: true,
-      phone: true,
-      image: true,
-      bio: true,
-      isBanned: true,
-      bannedReason: true,
-      createdAt: true,
-      lastLoginAt: true,
-      _count: {
-        select: {
-          enrollments: true,
-          payments: true,
-          posts: { where: { isDeleted: false } },
-          certificates: true,
-          blogComments: true,
-        },
-      },
-      payments: {
-        where: { status: "PAID" },
-        select: { amount: true },
-      },
-      enrollments: {
-        select: {
-          course: { select: { title: true } },
-          completedAt: true,
-        },
-      },
-    },
-    orderBy: { createdAt: "desc" },
-  });
-}
 
 function formatDate(date: Date | null) {
   if (!date) return "—";
@@ -82,14 +45,7 @@ function timeAgo(date: Date | null) {
 }
 
 export default async function AdminStudentsPage() {
-  const students = await getStudents();
-
-  const bannedCount = students.filter((s) => s.isBanned).length;
-  const totalRevenue = students.reduce(
-    (sum, s) => sum + s.payments.reduce((ps, p) => ps + p.amount, 0),
-    0
-  );
-  const totalEnrolled = students.reduce((sum, s) => sum + s._count.enrollments, 0);
+  const { students, stats } = await adminService.getStudentsData();
 
   return (
     <div className="space-y-6">
@@ -98,10 +54,10 @@ export default async function AdminStudentsPage() {
         <div className="flex items-center justify-between">
           <h1 className="text-2xl font-bold text-foreground">الطلاب</h1>
           <div className="flex items-center gap-2">
-            <Badge variant="soft">{students.length} طالب</Badge>
-            <Badge variant="soft">{totalEnrolled} اشتراك</Badge>
-            {bannedCount > 0 && (
-              <Badge variant="danger">{bannedCount} محظور</Badge>
+            <Badge variant="soft">{stats.totalStudents} طالب</Badge>
+            <Badge variant="soft">{stats.totalEnrollments} اشتراك</Badge>
+            {stats.bannedCount > 0 && (
+              <Badge variant="danger">{stats.bannedCount} محظور</Badge>
             )}
           </div>
         </div>
@@ -109,20 +65,20 @@ export default async function AdminStudentsPage() {
         {/* Quick stats */}
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
           <div className="rounded-xl border border-border bg-background p-4 text-center">
-            <p className="text-2xl font-bold text-foreground">{students.length}</p>
+            <p className="text-2xl font-bold text-foreground">{stats.totalStudents}</p>
             <p className="text-xs text-muted-foreground mt-1">إجمالي الطلاب</p>
           </div>
           <div className="rounded-xl border border-border bg-background p-4 text-center">
-            <p className="text-2xl font-bold text-brand-600">{totalEnrolled}</p>
+            <p className="text-2xl font-bold text-brand-600">{stats.totalEnrollments}</p>
             <p className="text-xs text-muted-foreground mt-1">إجمالي الاشتراكات</p>
           </div>
           <div className="rounded-xl border border-border bg-background p-4 text-center">
-            <p className="text-2xl font-bold text-green-600">{formatMoney(totalRevenue)}</p>
+            <p className="text-2xl font-bold text-green-600">{formatMoney(stats.totalRevenue)}</p>
             <p className="text-xs text-muted-foreground mt-1">إجمالي الإيرادات</p>
           </div>
           <div className="rounded-xl border border-border bg-background p-4 text-center">
             <p className="text-2xl font-bold text-foreground">
-              {students.reduce((sum, s) => sum + s._count.certificates, 0)}
+              {stats.totalCertificates}
             </p>
             <p className="text-xs text-muted-foreground mt-1">شهادات صادرة</p>
           </div>
@@ -137,7 +93,7 @@ export default async function AdminStudentsPage() {
       ) : (
         <div className="space-y-4">
           {students.map((student) => {
-            const totalPaid = student.payments.reduce((s, p) => s + p.amount, 0);
+            const totalPaid = student.totalPaid;
             const completedCourses = student.enrollments.filter((e) => e.completedAt).length;
 
             return (

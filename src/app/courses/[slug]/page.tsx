@@ -1,3 +1,4 @@
+import { cache } from "react";
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 import Image from "next/image";
@@ -32,7 +33,7 @@ interface Props {
   params: Promise<{ slug: string }>;
 }
 
-async function getCourse(slug: string) {
+const getCourse = cache(async (slug: string) => {
   return prisma.course.findUnique({
     where: { slug, isPublished: true },
     include: {
@@ -55,7 +56,7 @@ async function getCourse(slug: string) {
       },
     },
   });
-}
+});
 
 async function getEnrollment(userId: string, courseId: string) {
   return prisma.enrollment.findUnique({
@@ -65,18 +66,7 @@ async function getEnrollment(userId: string, courseId: string) {
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
-  const course = await prisma.course.findUnique({
-    where: { slug },
-    select: {
-      title: true,
-      shortDescription: true,
-      description: true,
-      thumbnail: true,
-      price: true,
-      category: true,
-      instructor: { select: { name: true } },
-    },
-  });
+  const course = await getCourse(slug);
   if (!course) return { title: "كورس مش موجود" };
 
   const description = course.shortDescription || course.description.slice(0, 160);

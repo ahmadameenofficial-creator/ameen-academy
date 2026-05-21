@@ -1,9 +1,8 @@
 import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
-import { prisma } from "@/lib/prisma";
+import { courseService } from "@/lib/services";
 
-// الكورسات بتتحدث كل 60 ثانية — مش محتاجة تتجاب من الـ DB كل request
 export const revalidate = 60;
 
 export const metadata: Metadata = {
@@ -30,25 +29,8 @@ import {
   IconStar,
 } from "@tabler/icons-react";
 
-async function getCourses() {
-  return prisma.course.findMany({
-    where: { isPublished: true },
-    include: {
-      instructor: { select: { name: true, image: true } },
-      _count: { select: { enrollments: true, lessons: true, ratings: true } },
-      ratings: { select: { rating: true } },
-    },
-    orderBy: [{ isFeatured: "desc" }, { publishedAt: "desc" }],
-  });
-}
-
-function getAverageRating(ratings: { rating: number }[]) {
-  if (ratings.length === 0) return 0;
-  return ratings.reduce((sum, r) => sum + r.rating, 0) / ratings.length;
-}
-
 export default async function CoursesPage() {
-  const courses = await getCourses();
+  const courses = await courseService.getCatalog();
 
   return (
     <div className="min-h-screen bg-background">
@@ -77,7 +59,7 @@ export default async function CoursesPage() {
         ) : (
           <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
             {courses.map((course) => {
-              const avgRating = getAverageRating(course.ratings);
+              const avgRating = course.avgRating;
               return (
                 <Link key={course.id} href={`/courses/${course.slug}`}>
                   <Card className="group overflow-hidden hover:shadow-lg hover:shadow-brand-500/5 hover:border-brand-200 transition-all h-full flex flex-col">

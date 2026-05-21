@@ -1,0 +1,10 @@
+export * as coursesDb from "./courses.db";
+export * as ratingsDb from "./ratings.db";
+export * as enrollmentsDb from "./enrollments.db";
+export * as progressDb from "./progress.db";
+export * as paymentsDb from "./payments.db";
+export * as communityDb from "./community.db";
+export * as usersDb from "./users.db";
+export * as blogDb from "./blog.db";
+export * as notificationsDb from "./notifications.db";
+export * as certificatesDb from "./certificates.db";

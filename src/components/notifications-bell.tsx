@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useCallback } from "react";
+import { useState } from "react";
 import {
   IconBell,
   IconBellFilled,
@@ -10,49 +10,12 @@ import {
 } from "@tabler/icons-react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
-
-interface Notification {
-  id: string;
-  type: string;
-  title: string;
-  message: string | null;
-  link: string | null;
-  isRead: boolean;
-  createdAt: string;
-}
+import { useNotifications } from "@/hooks/use-notifications";
+import { getTimeAgo } from "@/lib/format";
 
 export function NotificationsBell() {
-  const [notifications, setNotifications] = useState<Notification[]>([]);
-  const [unreadCount, setUnreadCount] = useState(0);
+  const { notifications, unreadCount, loading, markAllRead } = useNotifications();
   const [isOpen, setIsOpen] = useState(false);
-  const [loading, setLoading] = useState(false);
-
-  const fetchNotifications = useCallback(async () => {
-    try {
-      const res = await fetch("/api/notifications");
-      if (res.ok) {
-        const data = await res.json();
-        setNotifications(data.notifications);
-        setUnreadCount(data.unreadCount);
-      }
-    } catch {}
-  }, []);
-
-  useEffect(() => {
-    fetchNotifications();
-    const interval = setInterval(fetchNotifications, 30000);
-    return () => clearInterval(interval);
-  }, [fetchNotifications]);
-
-  async function markAllRead() {
-    setLoading(true);
-    try {
-      await fetch("/api/notifications", { method: "PUT" });
-      setUnreadCount(0);
-      setNotifications((prev) => prev.map((n) => ({ ...n, isRead: true })));
-    } catch {}
-    setLoading(false);
-  }
 
   return (
     <div className="relative">
@@ -138,15 +101,4 @@ export function NotificationsBell() {
       )}
     </div>
   );
-}
-
-function getTimeAgo(dateStr: string): string {
-  const seconds = Math.floor((Date.now() - new Date(dateStr).getTime()) / 1000);
-  if (seconds < 60) return "دلوقتي";
-  const minutes = Math.floor(seconds / 60);
-  if (minutes < 60) return `من ${minutes} دقيقة`;
-  const hours = Math.floor(minutes / 60);
-  if (hours < 24) return `من ${hours} ساعة`;
-  const days = Math.floor(hours / 24);
-  return `من ${days} يوم`;
 }

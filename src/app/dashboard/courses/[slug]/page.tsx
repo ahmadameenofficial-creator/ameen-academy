@@ -1,7 +1,8 @@
 import { notFound, redirect } from "next/navigation";
 import Link from "next/link";
 import { auth } from "@/auth";
-import { prisma } from "@/lib/prisma";
+import { coursesDb } from "@/lib/db";
+import { enrollmentsDb, progressDb } from "@/lib/db";
 
 export const dynamic = "force-dynamic";
 import { formatDuration } from "@/lib/format";
@@ -25,29 +26,15 @@ export default async function CourseContentPage({ params }: Props) {
 
   const { slug } = await params;
 
-  const course = await prisma.course.findUnique({
-    where: { slug },
-    include: {
-      modules: {
-        orderBy: { order: "asc" },
-        include: {
-          lessons: { orderBy: { order: "asc" } },
-        },
-      },
-      _count: { select: { lessons: true } },
-    },
-  });
+  const course = await coursesDb.findCourseWithModules(slug);
   if (!course) notFound();
 
-  const enrollment = await prisma.enrollment.findUnique({
-    where: { userId_courseId: { userId: session.user.id, courseId: course.id } },
-  });
+  const [enrollment, progress] = await Promise.all([
+    enrollmentsDb.findEnrollment(session.user.id, course.id),
+    progressDb.findProgressForCourse(session.user.id, course.id),
+  ]);
   if (!enrollment) redirect(`/courses/${slug}`);
 
-  const progress = await prisma.lessonProgress.findMany({
-    where: { userId: session.user.id },
-    select: { lessonId: true, isCompleted: true },
-  });
   const completedSet = new Set(progress.filter((p) => p.isCompleted).map((p) => p.lessonId));
 
   const totalLessons = course._count.lessons;

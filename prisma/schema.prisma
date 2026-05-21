@@ -238,6 +238,7 @@ model LessonProgress {
 
   @@unique([userId, lessonId])
   @@index([userId])
+  @@index([userId, isCompleted])
   @@index([lessonId])
 }
 
@@ -280,6 +281,7 @@ model Payment {
 
   @@index([userId])
   @@index([status])
+  @@index([status, createdAt])
   @@index([userId, courseId, status])
 }
 
@@ -403,6 +405,7 @@ model Reaction {
   @@unique([userId, postId])
   @@unique([userId, commentId])
   @@index([postId])
+  @@index([postId, type])
   @@index([commentId])
 }
 
@@ -473,7 +476,7 @@ model BlogPost {
   comments     BlogComment[]
   likes        BlogLike[]
 
-  @@index([isPublished, publishedAt])
+  @@index([isPublished, isFeatured, publishedAt])
   @@index([category])
   @@index([slug])
 }
