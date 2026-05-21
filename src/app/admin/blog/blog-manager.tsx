@@ -16,6 +16,8 @@ import {
   IconClock,
   IconLoader2,
 } from "@tabler/icons-react";
+import { apiClient, apiPost, apiPut, apiDelete, API } from "@/lib/api";
+import { useToast } from "@/components/ui/toast";
 
 interface BlogPost {
   id: string;
@@ -39,34 +41,42 @@ export function BlogManager({ initialPosts }: { initialPosts: BlogPost[] }) {
   const [posts, setPosts] = useState<BlogPost[]>(initialPosts);
   const [showEditor, setShowEditor] = useState(false);
   const [editingPost, setEditingPost] = useState<BlogPost | null>(null);
+  const { error } = useToast();
 
   async function fetchPosts() {
-    const res = await fetch("/api/admin/blog");
-    if (res.ok) setPosts(await res.json());
+    try {
+      setPosts(await apiClient<BlogPost[]>(API.admin.blog.list));
+    } catch {
+      error("معرفناش نحمّل المقالات");
+    }
   }
 
   async function deletePost(id: string) {
     if (!confirm("متأكد إنك عايز تحذف المقال ده؟")) return;
-    const res = await fetch(`/api/admin/blog/${id}`, { method: "DELETE" });
-    if (res.ok) setPosts(posts.filter((p) => p.id !== id));
+    try {
+      await apiDelete(API.admin.blog.delete(id));
+      setPosts(posts.filter((p) => p.id !== id));
+    } catch {
+      error("معرفناش نحذف المقال، جرّب تاني");
+    }
   }
 
   async function togglePublish(post: BlogPost) {
-    const res = await fetch(`/api/admin/blog/${post.id}`, {
-      method: "PUT",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ isPublished: !post.isPublished }),
-    });
-    if (res.ok) fetchPosts();
+    try {
+      await apiPut(API.admin.blog.update(post.id), { isPublished: !post.isPublished });
+      fetchPosts();
+    } catch {
+      error("معرفناش نغيّر حالة النشر، جرّب تاني");
+    }
   }
 
   async function toggleFeatured(post: BlogPost) {
-    const res = await fetch(`/api/admin/blog/${post.id}`, {
-      method: "PUT",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ isFeatured: !post.isFeatured }),
-    });
-    if (res.ok) fetchPosts();
+    try {
+      await apiPut(API.admin.blog.update(post.id), { isFeatured: !post.isFeatured });
+      fetchPosts();
+    } catch {
+      error("معرفناش نغيّر التمييز، جرّب تاني");
+    }
   }
 
   if (showEditor || editingPost) {
@@ -207,6 +217,7 @@ function BlogEditor({
   onCancel: () => void;
 }) {
   const [saving, setSaving] = useState(false);
+  const { error } = useToast();
   const [form, setForm] = useState({
     title: post?.title || "",
     slug: post?.slug || "",
@@ -237,18 +248,15 @@ function BlogEditor({
       tags: form.tags.split(",").map((t) => t.trim()).filter(Boolean),
     };
 
-    const url = post ? `/api/admin/blog/${post.id}` : "/api/admin/blog";
-    const method = post ? "PUT" : "POST";
-
-    const res = await fetch(url, {
-      method,
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(body),
-    });
-
-    setSaving(false);
-    if (res.ok) onSave();
-    else alert("حصل مشكلة — حاول تاني");
+    try {
+      if (post) await apiPut(API.admin.blog.update(post.id), body);
+      else await apiPost(API.admin.blog.create, body);
+      onSave();
+    } catch {
+      error("حصل مشكلة — حاول تاني");
+    } finally {
+      setSaving(false);
+    }
   }
 
   const categories = ["مهارات", "AI", "فريلانس", "تصميم", "أدوات"];

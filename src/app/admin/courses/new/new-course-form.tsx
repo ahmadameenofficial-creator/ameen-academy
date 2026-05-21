@@ -6,6 +6,7 @@ import { IconLoader2 } from "@tabler/icons-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent } from "@/components/ui/card";
+import { apiPost, ApiError, API } from "@/lib/api";
 
 export function NewCourseForm() {
   const router = useRouter();
@@ -49,25 +50,14 @@ export function NewCourseForm() {
     setError("");
 
     try {
-      const res = await fetch("/api/admin/courses", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          ...form,
-          price: form.price * 100,
-          comparePrice: form.comparePrice > 0 ? form.comparePrice * 100 : null,
-        }),
+      const data = await apiPost<{ id: string }>(API.admin.courses.create, {
+        ...form,
+        price: form.price * 100,
+        comparePrice: form.comparePrice > 0 ? form.comparePrice * 100 : null,
       });
-
-      const data = await res.json();
-      if (!res.ok) {
-        setError(data.error);
-        return;
-      }
-
       router.push(`/admin/courses/${data.id}`);
-    } catch {
-      setError("حصل مشكلة، جرّب تاني");
+    } catch (e) {
+      setError(e instanceof ApiError ? e.message : "حصل مشكلة، جرّب تاني");
     } finally {
       setIsLoading(false);
     }

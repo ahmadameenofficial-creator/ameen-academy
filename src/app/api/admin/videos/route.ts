@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { auth } from "@/auth";
-import { createVideo, listVideos } from "@/lib/bunny";
+import { createVideo, listVideos, getTusUploadCredentials } from "@/lib/bunny";
 
 // إنشاء فيديو جديد (الخطوة الأولى — بيرجع الـ ID للرفع)
 export async function POST(req: Request) {
@@ -17,11 +17,8 @@ export async function POST(req: Request) {
 
     const video = await createVideo(title);
 
-    return NextResponse.json({
-      videoId: video.guid,
-      libraryId: process.env.BUNNY_STREAM_LIBRARY_ID,
-      apiKey: process.env.BUNNY_STREAM_API_KEY,
-    });
+    // بنرجّع بيانات رفع TUS موقّعة — من غير ما المفتاح يخرج للمتصفح إطلاقاً
+    return NextResponse.json(getTusUploadCredentials(video.guid));
   } catch (err) {
     console.error("Error creating video:", err);
     return NextResponse.json({ error: "حصل مشكلة في إنشاء الفيديو" }, { status: 500 });

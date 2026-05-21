@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import Image from "next/image";
 import { IconUser, IconSend, IconLoader2, IconCornerDownLeft, IconMessageCircle } from "@tabler/icons-react";
+import { apiClient, apiPost, ApiError, API } from "@/lib/api";
 
 interface CommentUser {
   id: string;
@@ -49,21 +50,16 @@ function CommentItem({
     if (!replyText.trim() || sending) return;
     setSending(true);
 
-    const res = await fetch(`/api/blog/${slug}/comments`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ content: replyText, parentId: comment.id }),
-    });
-
-    if (res.status === 401) {
-      window.location.href = "/login";
-      return;
-    }
-
-    if (res.ok) {
+    try {
+      await apiPost(API.blog.comments(slug), { content: replyText, parentId: comment.id });
       setReplyText("");
       setShowReply(false);
       onReplyAdded();
+    } catch (e) {
+      if (e instanceof ApiError && e.status === 401) {
+        window.location.href = "/login";
+        return;
+      }
     }
     setSending(false);
   }
@@ -159,8 +155,7 @@ export function CommentsSection({ slug }: { slug: string }) {
   const [sending, setSending] = useState(false);
 
   function fetchComments() {
-    fetch(`/api/blog/${slug}/comments`)
-      .then((r) => r.json())
+    apiClient<Comment[]>(API.blog.comments(slug))
       .then((data) => {
         if (Array.isArray(data)) setComments(data);
         setLoading(false);
@@ -176,20 +171,15 @@ export function CommentsSection({ slug }: { slug: string }) {
     if (!text.trim() || sending) return;
     setSending(true);
 
-    const res = await fetch(`/api/blog/${slug}/comments`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ content: text }),
-    });
-
-    if (res.status === 401) {
-      window.location.href = "/login";
-      return;
-    }
-
-    if (res.ok) {
+    try {
+      await apiPost(API.blog.comments(slug), { content: text });
       setText("");
       fetchComments();
+    } catch (e) {
+      if (e instanceof ApiError && e.status === 401) {
+        window.location.href = "/login";
+        return;
+      }
     }
     setSending(false);
   }

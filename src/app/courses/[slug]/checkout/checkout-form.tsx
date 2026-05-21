@@ -17,6 +17,7 @@ import { Input } from "@/components/ui/input";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { PAYMENT_CONFIG } from "@/lib/constants";
+import { apiClient, apiPost, ApiError, API } from "@/lib/api";
 
 interface CourseData {
   id: string;
@@ -53,20 +54,14 @@ export function CheckoutForm({ course }: { course: CourseData }) {
     setCouponError("");
 
     try {
-      const res = await fetch(
-        `/api/coupons?code=${encodeURIComponent(couponCode.trim())}&courseId=${course.id}`
+      const data = await apiClient<CouponData>(
+        API.coupons.validate({ code: couponCode.trim(), courseId: course.id }),
       );
-      const data = await res.json();
-
-      if (!res.ok) {
-        setCouponError(data.error);
-        setAppliedCoupon(null);
-      } else {
-        setAppliedCoupon(data);
-        setCouponError("");
-      }
-    } catch {
-      setCouponError("حصل مشكلة، جرّب تاني");
+      setAppliedCoupon(data);
+      setCouponError("");
+    } catch (e) {
+      setCouponError(e instanceof ApiError ? e.message : "حصل مشكلة، جرّب تاني");
+      setAppliedCoupon(null);
     } finally {
       setCouponLoading(false);
     }
@@ -85,27 +80,16 @@ export function CheckoutForm({ course }: { course: CourseData }) {
     setError("");
 
     try {
-      const res = await fetch("/api/payments", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          courseId: course.id,
-          method: selectedMethod,
-          transactionRef,
-          senderPhone,
-          couponCode: appliedCoupon?.code || undefined,
-        }),
+      await apiPost(API.payments.create, {
+        courseId: course.id,
+        method: selectedMethod,
+        transactionRef,
+        senderPhone,
+        couponCode: appliedCoupon?.code || undefined,
       });
-
-      const data = await res.json();
-      if (!res.ok) {
-        setError(data.error);
-        return;
-      }
-
       setSuccess(true);
-    } catch {
-      setError("حصل مشكلة، جرّب تاني");
+    } catch (e) {
+      setError(e instanceof ApiError ? e.message : "حصل مشكلة، جرّب تاني");
     } finally {
       setSubmitting(false);
     }

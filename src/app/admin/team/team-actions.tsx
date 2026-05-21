@@ -10,6 +10,8 @@ import {
   IconArrowsExchange,
 } from "@tabler/icons-react";
 import { Button } from "@/components/ui/button";
+import { useToast } from "@/components/ui/toast";
+import { apiPut, apiDelete, ApiError, API } from "@/lib/api";
 
 interface TeamActionsProps {
   memberId: string;
@@ -20,6 +22,7 @@ interface TeamActionsProps {
 export function TeamActions({ memberId, memberName, currentRole }: TeamActionsProps) {
   const router = useRouter();
   const [loading, setLoading] = useState<"role" | "remove" | null>(null);
+  const { success, error } = useToast();
 
   // تبديل بين أدمن ومدرس
   async function handleToggleRole() {
@@ -30,20 +33,11 @@ export function TeamActions({ memberId, memberName, currentRole }: TeamActionsPr
 
     setLoading("role");
     try {
-      const res = await fetch(`/api/admin/team/${memberId}`, {
-        method: "PUT",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ role: newRole }),
-      });
-
-      if (res.ok) {
-        router.refresh();
-      } else {
-        const data = await res.json();
-        alert(data.error || "حصل مشكلة");
-      }
-    } catch {
-      alert("حصل مشكلة، جرّب تاني");
+      await apiPut(API.admin.team.update(memberId), { role: newRole });
+      success(`تم تغيير الصلاحية لـ ${newLabel}`);
+      router.refresh();
+    } catch (e) {
+      error(e instanceof ApiError ? e.message : "حصل مشكلة، جرّب تاني");
     }
     setLoading(null);
   }
@@ -59,18 +53,11 @@ export function TeamActions({ memberId, memberName, currentRole }: TeamActionsPr
 
     setLoading("remove");
     try {
-      const res = await fetch(`/api/admin/team/${memberId}`, {
-        method: "DELETE",
-      });
-
-      if (res.ok) {
-        router.refresh();
-      } else {
-        const data = await res.json();
-        alert(data.error || "حصل مشكلة");
-      }
-    } catch {
-      alert("حصل مشكلة، جرّب تاني");
+      await apiDelete(API.admin.team.remove(memberId));
+      success("تم إزالة العضو من الفريق");
+      router.refresh();
+    } catch (e) {
+      error(e instanceof ApiError ? e.message : "حصل مشكلة، جرّب تاني");
     }
     setLoading(null);
   }

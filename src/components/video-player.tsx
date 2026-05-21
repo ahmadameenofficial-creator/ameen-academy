@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { IconLoader2, IconLock } from "@tabler/icons-react";
+import { apiClient, ApiError, API } from "@/lib/api";
 
 interface VideoPlayerProps {
   videoId: string;
@@ -17,17 +18,13 @@ export function VideoPlayer({ videoId, title }: VideoPlayerProps) {
   useEffect(() => {
     async function fetchUrl() {
       try {
-        const res = await fetch(`/api/videos/${videoId}`);
-        if (!res.ok) {
-          const data = await res.json();
-          setError(data.error || "مش مسموح");
-          return;
-        }
-        const data = await res.json();
+        const data = await apiClient<{ embedUrl: string; watermark?: string }>(
+          API.videos.get(videoId),
+        );
         setEmbedUrl(data.embedUrl);
         setWatermark(data.watermark || "");
-      } catch {
-        setError("حصل مشكلة في تحميل الفيديو");
+      } catch (e) {
+        setError(e instanceof ApiError ? e.message : "حصل مشكلة في تحميل الفيديو");
       } finally {
         setLoading(false);
       }

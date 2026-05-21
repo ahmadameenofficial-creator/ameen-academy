@@ -18,6 +18,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent } from "@/components/ui/card";
+import { apiPut, ApiError, API } from "@/lib/api";
 
 interface ProfileUser {
   id: string;
@@ -104,22 +105,17 @@ export function ProfileForm({ user }: { user: ProfileUser }) {
     setSuccess(false);
 
     try {
-      const res = await fetch("/api/profile", {
-        method: "PUT",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ name: name.trim(), phone: phone.trim(), bio: bio.trim(), image }),
+      await apiPut(API.profile.update, {
+        name: name.trim(),
+        phone: phone.trim(),
+        bio: bio.trim(),
+        image,
       });
-
-      if (res.ok) {
-        setSuccess(true);
-        router.refresh();
-        setTimeout(() => setSuccess(false), 3000);
-      } else {
-        const data = await res.json();
-        setError(data.error || "حصل مشكلة");
-      }
-    } catch {
-      setError("حصل مشكلة");
+      setSuccess(true);
+      router.refresh();
+      setTimeout(() => setSuccess(false), 3000);
+    } catch (e) {
+      setError(e instanceof ApiError ? e.message : "حصل مشكلة");
     }
     setSaving(false);
   }
@@ -143,25 +139,15 @@ export function ProfileForm({ user }: { user: ProfileUser }) {
     setPasswordSuccess(false);
 
     try {
-      const res = await fetch("/api/profile/password", {
-        method: "PUT",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ currentPassword, newPassword }),
-      });
-
-      if (res.ok) {
-        setPasswordSuccess(true);
-        setCurrentPassword("");
-        setNewPassword("");
-        setConfirmPassword("");
-        setShowPassword(false);
-        setTimeout(() => setPasswordSuccess(false), 3000);
-      } else {
-        const data = await res.json();
-        setPasswordError(data.error || "حصل مشكلة");
-      }
-    } catch {
-      setPasswordError("حصل مشكلة");
+      await apiPut(API.profile.password, { currentPassword, newPassword });
+      setPasswordSuccess(true);
+      setCurrentPassword("");
+      setNewPassword("");
+      setConfirmPassword("");
+      setShowPassword(false);
+      setTimeout(() => setPasswordSuccess(false), 3000);
+    } catch (e) {
+      setPasswordError(e instanceof ApiError ? e.message : "حصل مشكلة");
     }
     setPasswordSaving(false);
   }

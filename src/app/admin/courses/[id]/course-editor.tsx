@@ -6,6 +6,7 @@ import { IconLoader2, IconTrash } from "@tabler/icons-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent } from "@/components/ui/card";
+import { apiPut, apiDelete, ApiError, API } from "@/lib/api";
 
 interface Course {
   id: string;
@@ -45,26 +46,15 @@ export function CourseEditor({ course }: { course: Course }) {
     setMessage("");
 
     try {
-      const res = await fetch(`/api/admin/courses/${course.id}`, {
-        method: "PUT",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          ...form,
-          price: form.price * 100,
-          comparePrice: form.comparePrice > 0 ? form.comparePrice * 100 : null,
-        }),
+      await apiPut(API.admin.courses.update(course.id), {
+        ...form,
+        price: form.price * 100,
+        comparePrice: form.comparePrice > 0 ? form.comparePrice * 100 : null,
       });
-
-      if (!res.ok) {
-        const data = await res.json();
-        setMessage(data.error);
-        return;
-      }
-
       setMessage("اتحفظ بنجاح");
       router.refresh();
-    } catch {
-      setMessage("حصل مشكلة");
+    } catch (e) {
+      setMessage(e instanceof ApiError ? e.message : "حصل مشكلة");
     } finally {
       setIsLoading(false);
     }
@@ -75,8 +65,8 @@ export function CourseEditor({ course }: { course: Course }) {
 
     setIsDeleting(true);
     try {
-      const res = await fetch(`/api/admin/courses/${course.id}`, { method: "DELETE" });
-      if (res.ok) router.push("/admin/courses");
+      await apiDelete(API.admin.courses.delete(course.id));
+      router.push("/admin/courses");
     } catch {
       setMessage("مقدرتش أحذف");
     } finally {

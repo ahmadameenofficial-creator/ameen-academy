@@ -6,6 +6,7 @@ import { IconSend, IconLoader2 } from "@tabler/icons-react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Avatar } from "@/components/shared/avatar";
+import { useToast } from "@/components/ui/toast";
 
 interface PostComposerProps {
   userName: string;
@@ -17,6 +18,7 @@ interface PostComposerProps {
 export function PostComposer({ userName, userImage, isLoggedIn, onPost }: PostComposerProps) {
   const [content, setContent] = useState("");
   const [posting, setPosting] = useState(false);
+  const { error } = useToast();
 
   async function handlePost() {
     if (!content.trim() || posting) return;
@@ -24,7 +26,9 @@ export function PostComposer({ userName, userImage, isLoggedIn, onPost }: PostCo
     try {
       await onPost(content);
       setContent("");
-    } catch {}
+    } catch {
+      error("معرفناش ننشر المنشور، جرّب تاني");
+    }
     setPosting(false);
   }
 

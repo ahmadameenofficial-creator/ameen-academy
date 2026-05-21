@@ -10,6 +10,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Logo } from "@/components/shared/logo";
 import { registerSchema, type RegisterInput } from "@/lib/validations/auth";
+import { apiPost, ApiError, API } from "@/lib/api";
 
 export function RegisterForm() {
   const router = useRouter();
@@ -31,22 +32,10 @@ export function RegisterForm() {
     setError("");
 
     try {
-      const res = await fetch("/api/register", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(data),
-      });
-
-      const result = await res.json();
-
-      if (!res.ok) {
-        setError(result.error);
-        return;
-      }
-
+      await apiPost(API.auth.register, data);
       router.push("/login?registered=1");
-    } catch {
-      setError("حصل مشكلة، جرّب تاني");
+    } catch (e) {
+      setError(e instanceof ApiError ? e.message : "حصل مشكلة، جرّب تاني");
     } finally {
       setIsLoading(false);
     }

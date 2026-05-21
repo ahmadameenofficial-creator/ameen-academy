@@ -11,6 +11,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent } from "@/components/ui/card";
+import { apiPost, ApiError, API } from "@/lib/api";
 
 export function AddTeamMember() {
   const router = useRouter();
@@ -29,25 +30,17 @@ export function AddTeamMember() {
     setSuccess("");
 
     try {
-      const res = await fetch("/api/admin/team", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email: email.trim(), role }),
+      const data = await apiPost<{ message: string }>(API.admin.team.add, {
+        email: email.trim(),
+        role,
       });
-
-      const data = await res.json();
-
-      if (!res.ok) {
-        setError(data.error);
-      } else {
-        setSuccess(data.message);
-        setEmail("");
-        router.refresh();
-        // نخفي رسالة النجاح بعد 3 ثواني
-        setTimeout(() => setSuccess(""), 3000);
-      }
-    } catch {
-      setError("حصل مشكلة، جرّب تاني");
+      setSuccess(data.message);
+      setEmail("");
+      router.refresh();
+      // نخفي رسالة النجاح بعد 3 ثواني
+      setTimeout(() => setSuccess(""), 3000);
+    } catch (e) {
+      setError(e instanceof ApiError ? e.message : "حصل مشكلة، جرّب تاني");
     } finally {
       setLoading(false);
     }

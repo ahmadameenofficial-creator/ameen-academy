@@ -4,24 +4,25 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { IconCheck, IconX, IconLoader2 } from "@tabler/icons-react";
 import { Button } from "@/components/ui/button";
+import { useToast } from "@/components/ui/toast";
+import { apiPut, API } from "@/lib/api";
 
 export function PaymentActions({ paymentId }: { paymentId: string }) {
   const router = useRouter();
   const [loading, setLoading] = useState<string | null>(null);
+  const { success, error } = useToast();
 
   async function handleAction(action: "approve" | "reject") {
     if (action === "reject" && !confirm("متأكد إنك عايز ترفض الدفعة دي؟")) return;
     setLoading(action);
 
     try {
-      const res = await fetch(`/api/admin/payments/${paymentId}`, {
-        method: "PUT",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ action }),
-      });
-
-      if (res.ok) router.refresh();
-    } catch {}
+      await apiPut(API.admin.payments.update(paymentId), { action });
+      success(action === "approve" ? "تم تأكيد الدفعة" : "تم رفض الدفعة");
+      router.refresh();
+    } catch {
+      error("معرفناش ننفّذ العملية، جرّب تاني");
+    }
     setLoading(null);
   }
 

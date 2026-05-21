@@ -2,6 +2,12 @@
 
 import { useState, useEffect } from "react";
 import { IconHeart, IconHeartFilled } from "@tabler/icons-react";
+import { apiClient, apiPost, ApiError, API } from "@/lib/api";
+
+interface LikeState {
+  isLiked: boolean;
+  likesCount: number;
+}
 
 export function LikeButton({ slug }: { slug: string }) {
   const [isLiked, setIsLiked] = useState(false);
@@ -9,8 +15,7 @@ export function LikeButton({ slug }: { slug: string }) {
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    fetch(`/api/blog/${slug}/like`)
-      .then((r) => r.json())
+    apiClient<LikeState>(API.blog.like(slug))
       .then((data) => {
         setIsLiked(data.isLiked);
         setCount(data.likesCount);
@@ -22,16 +27,15 @@ export function LikeButton({ slug }: { slug: string }) {
     if (loading) return;
     setLoading(true);
 
-    const res = await fetch(`/api/blog/${slug}/like`, { method: "POST" });
-    if (res.status === 401) {
-      window.location.href = "/login";
-      return;
-    }
-
-    if (res.ok) {
-      const data = await res.json();
+    try {
+      const data = await apiPost<LikeState>(API.blog.like(slug), {});
       setIsLiked(data.isLiked);
       setCount(data.likesCount);
+    } catch (e) {
+      if (e instanceof ApiError && e.status === 401) {
+        window.location.href = "/login";
+        return;
+      }
     }
     setLoading(false);
   }

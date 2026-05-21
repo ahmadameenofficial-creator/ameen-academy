@@ -20,6 +20,8 @@ import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Avatar } from "@/components/shared/avatar";
+import { useToast } from "@/components/ui/toast";
+import { apiPost, apiPut, apiDelete, API } from "@/lib/api";
 import { getTimeAgo } from "@/lib/format";
 import { ReactionPicker } from "./reaction-picker";
 import { ReactionsSummaryDisplay } from "./reactions-summary";
@@ -66,56 +68,56 @@ export function PostCard({
   const isAdmin = currentUserRole === "ADMIN";
   const canModify = isOwner || isAdmin;
   const timeAgo = getTimeAgo(post.createdAt);
+  const { error } = useToast();
 
   async function handleReaction(type: string) {
     if (!isLoggedIn) return;
     try {
-      const res = await fetch(`/api/posts/${post.id}/reactions`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ type }),
-      });
-      const data = await res.json();
+      const data = await apiPost<{ removed: boolean; type: string; reactions: typeof reactionsSummary }>(
+        API.posts.react(post.id),
+        { type },
+      );
       setMyReaction(data.removed ? null : data.type);
       setReactionsSummary(data.reactions);
-    } catch {}
+    } catch {
+      error("معرفناش نسجّل التفاعل، جرّب تاني");
+    }
   }
 
   async function handleComment() {
     if (!newComment.trim() || commenting) return;
     setCommenting(true);
     try {
-      const res = await fetch(`/api/posts/${post.id}/comments`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ content: newComment, parentId: replyTo?.id || undefined }),
+      await apiPost(API.posts.comments(post.id), {
+        content: newComment,
+        parentId: replyTo?.id || undefined,
       });
-      if (res.ok) {
-        setNewComment("");
-        setReplyTo(null);
-        onRefresh();
-      }
-    } catch {}
+      setNewComment("");
+      setReplyTo(null);
+      onRefresh();
+    } catch {
+      error("معرفناش نضيف التعليق، جرّب تاني");
+    }
     setCommenting(false);
   }
 
   async function handleDeleteComment(commentId: string) {
     if (!confirm("متأكد إنك عايز تحذف التعليق ده؟")) return;
     try {
-      const res = await fetch(`/api/comments/${commentId}`, { method: "DELETE" });
-      if (res.ok) onRefresh();
-    } catch {}
+      await apiDelete(API.comments.delete(commentId));
+      onRefresh();
+    } catch {
+      error("معرفناش نحذف التعليق، جرّب تاني");
+    }
   }
 
   async function handleEditComment(commentId: string, content: string) {
     try {
-      const res = await fetch(`/api/comments/${commentId}`, {
-        method: "PUT",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ content }),
-      });
-      if (res.ok) onRefresh();
-    } catch {}
+      await apiPut(API.comments.update(commentId), { content });
+      onRefresh();
+    } catch {
+      error("معرفناش نعدّل التعليق، جرّب تاني");
+    }
   }
 
   function handleSaveEdit() {

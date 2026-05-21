@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { auth } from "@/auth";
 import { prisma } from "@/lib/prisma";
+import { rateLimit, RATE_LIMITS } from "@/lib/rate-limit";
 
 interface RouteContext {
   params: Promise<{ slug: string }>;
@@ -46,6 +47,15 @@ export async function POST(req: Request, context: RouteContext) {
   const session = await auth();
   if (!session?.user) {
     return NextResponse.json({ error: "لازم تسجل دخول الأول" }, { status: 401 });
+  }
+
+  // حماية من السبام: 20 تعليق كل 10 دقايق للمستخدم الواحد
+  const rl = rateLimit(`blog-comment:${session.user.id}`, RATE_LIMITS.comment);
+  if (!rl.success) {
+    return NextResponse.json(
+      { error: "استنى شوية قبل ما تعلّق تاني" },
+      { status: 429 },
+    );
   }
 
   const { slug } = await context.params;

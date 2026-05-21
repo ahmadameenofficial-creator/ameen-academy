@@ -7,7 +7,10 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card } from "@/components/ui/card";
 import { ModuleCard } from "@/components/admin/modules";
-import type { Module } from "@/components/admin/modules";
+import type { Module, Lesson } from "@/components/admin/modules";
+import { uploadVideoViaTus, type TusUploadCredentials } from "@/lib/upload";
+import { useToast } from "@/components/ui/toast";
+import { apiPost, apiPut, apiDelete, API } from "@/lib/api";
 
 export function ModulesManager({
   courseId,
@@ -24,6 +27,7 @@ export function ModulesManager({
   const [loading, setLoading] = useState<string | null>(null);
   const [uploadingFor, setUploadingFor] = useState<string | null>(null);
   const [uploadProgress, setUploadProgress] = useState(0);
+  const { success, error } = useToast();
 
   // ============ Modules ============
 
@@ -31,18 +35,16 @@ export function ModulesManager({
     if (!newModuleTitle.trim()) return;
     setAddingModule(true);
     try {
-      const res = await fetch(`/api/admin/courses/${courseId}/modules`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ title: newModuleTitle }),
-      });
-      if (res.ok) {
-        const module = await res.json();
-        setModules((prev) => [...prev, { ...module, lessons: [] }]);
-        setNewModuleTitle("");
-        router.refresh();
-      }
-    } catch {}
+      const module = await apiPost<{ id: string; title: string; order: number }>(
+        API.admin.courses.modules(courseId),
+        { title: newModuleTitle },
+      );
+      setModules((prev) => [...prev, { ...module, lessons: [] }]);
+      setNewModuleTitle("");
+      router.refresh();
+    } catch {
+      error("معرفناش نضيف الموديول، جرّب تاني");
+    }
     setAddingModule(false);
   }
 
@@ -50,12 +52,12 @@ export function ModulesManager({
     if (!confirm("متأكد من حذف الموديول ده وكل الدروس اللي فيه؟")) return;
     setLoading(moduleId);
     try {
-      const res = await fetch(`/api/admin/courses/${courseId}/modules/${moduleId}`, { method: "DELETE" });
-      if (res.ok) {
-        setModules((prev) => prev.filter((m) => m.id !== moduleId));
-        router.refresh();
-      }
-    } catch {}
+      await apiDelete(API.admin.courses.module(courseId, moduleId));
+      setModules((prev) => prev.filter((m) => m.id !== moduleId));
+      router.refresh();
+    } catch {
+      error("معرفناش نحذف الموديول، جرّب تاني");
+    }
     setLoading(null);
   }
 
@@ -64,22 +66,21 @@ export function ModulesManager({
   async function addLesson(moduleId: string, data: { title: string; duration: number; isFree: boolean; video: File | null }) {
     setLoading(`lesson-${moduleId}`);
     try {
-      const res = await fetch(`/api/admin/courses/${courseId}/modules/${moduleId}/lessons`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ title: data.title, duration: data.duration * 60, isFree: data.isFree }),
-      });
-      if (res.ok) {
-        const lesson = await res.json();
-        if (data.video) {
-          const videoId = await uploadVideoForLesson(lesson.id, data.title, data.video);
-          if (videoId) lesson.videoId = videoId;
-        }
-        setModules((prev) => prev.map((m) => m.id === moduleId ? { ...m, lessons: [...m.lessons, lesson] } : m));
-        setAddingLessonTo(null);
-        router.refresh();
+      const lesson = await apiPost<Lesson>(
+        API.admin.courses.lessons(courseId, moduleId),
+        { title: data.title, duration: data.duration * 60, isFree: data.isFree },
+      );
+      if (data.video) {
+        const videoId = await uploadVideoForLesson(lesson.id, data.title, data.video);
+        if (videoId) lesson.videoId = videoId;
+        else error("الدرس اتضاف بس رفع الفيديو فشل — جرّب ترفعه تاني");
       }
-    } catch {}
+      setModules((prev) => prev.map((m) => m.id === moduleId ? { ...m, lessons: [...m.lessons, lesson] } : m));
+      setAddingLessonTo(null);
+      router.refresh();
+    } catch {
+      error("معرفناش نضيف الدرس، جرّب تاني");
+    }
     setLoading(null);
   }
 
@@ -87,14 +88,14 @@ export function ModulesManager({
     if (!confirm("متأكد من حذف الدرس ده؟")) return;
     setLoading(lessonId);
     try {
-      const res = await fetch(`/api/admin/lessons/${lessonId}`, { method: "DELETE" });
-      if (res.ok) {
-        setModules((prev) =>
-          prev.map((m) => m.id === moduleId ? { ...m, lessons: m.lessons.filter((l) => l.id !== lessonId) } : m),
-        );
-        router.refresh();
-      }
-    } catch {}
+      await apiDelete(API.admin.lessons.delete(lessonId));
+      setModules((prev) =>
+        prev.map((m) => m.id === moduleId ? { ...m, lessons: m.lessons.filter((l) => l.id !== lessonId) } : m),
+      );
+      router.refresh();
+    } catch {
+      error("معرفناش نحذف الدرس, جرّب تاني");
+    }
     setLoading(null);
   }
 
@@ -105,37 +106,20 @@ export function ModulesManager({
       setUploadingFor(lessonId);
       setUploadProgress(0);
 
-      const createRes = await fetch("/api/admin/videos", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ title }),
-      });
-      if (!createRes.ok) throw new Error("فشل إنشاء الفيديو");
-      const { videoId, libraryId, apiKey } = await createRes.json();
+      // (1) إنشاء الفيديو + الحصول على توقيع رفع مؤقت (المفتاح بيفضل على السيرفر)
+      const creds = await apiPost<TusUploadCredentials>(API.admin.videos.create, { title });
 
-      await new Promise<void>((resolve, reject) => {
-        const xhr = new XMLHttpRequest();
-        xhr.open("PUT", `https://video.bunnycdn.com/library/${libraryId}/videos/${videoId}`);
-        xhr.setRequestHeader("AccessKey", apiKey);
-        xhr.setRequestHeader("Content-Type", "application/octet-stream");
-        xhr.upload.onprogress = (e) => {
-          if (e.lengthComputable) setUploadProgress(Math.round((e.loaded / e.total) * 90));
-        };
-        xhr.onload = () => (xhr.status >= 200 && xhr.status < 300 ? resolve() : reject(new Error(`فشل الرفع: ${xhr.status}`)));
-        xhr.onerror = () => reject(new Error("فشل الاتصال"));
-        xhr.send(file);
-      });
+      // (2) الرفع المباشر للـ Bunny عبر TUS — التوقيع بييجي من السيرفر والمفتاح مبيخرجش
+      await uploadVideoViaTus(creds, file, (pct) => setUploadProgress(Math.round(pct * 0.9)));
 
+      // (3) ربط الفيديو بالدرس
       setUploadProgress(95);
-      await fetch(`/api/admin/lessons/${lessonId}`, {
-        method: "PUT",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ videoId }),
-      });
+      await apiPut(API.admin.lessons.update(lessonId), { videoId: creds.videoId });
       setUploadProgress(100);
-      return videoId;
-    } catch (err) {
-      console.error("Video upload failed:", err);
+      success("تم رفع الفيديو بنجاح");
+      return creds.videoId;
+    } catch {
+      error("فشل رفع الفيديو، جرّب تاني");
       return null;
     } finally {
       setTimeout(() => { setUploadingFor(null); setUploadProgress(0); }, 1500);

@@ -9,6 +9,7 @@ import { IconLoader2, IconMail, IconCheck } from "@tabler/icons-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Logo } from "@/components/shared/logo";
+import { apiPost, ApiError, API } from "@/lib/api";
 
 const forgotSchema = z.object({
   email: z.string().email("إيميل مش صحيح"),
@@ -34,20 +35,10 @@ export function ForgotForm() {
     setError("");
 
     try {
-      const res = await fetch("/api/auth/forgot-password", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(data),
-      });
-
-      if (res.ok) {
-        setSent(true);
-      } else {
-        const body = await res.json();
-        setError(body.error || "حصل مشكلة");
-      }
-    } catch {
-      setError("حصل مشكلة، جرّب تاني");
+      await apiPost(API.auth.forgotPassword, data);
+      setSent(true);
+    } catch (e) {
+      setError(e instanceof ApiError ? e.message : "حصل مشكلة، جرّب تاني");
     } finally {
       setIsLoading(false);
     }

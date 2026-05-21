@@ -6,52 +6,53 @@ import { IconMessageCircle, IconLoader2 } from "@tabler/icons-react";
 import { Card } from "@/components/ui/card";
 import { PostComposer } from "@/components/community/post-composer";
 import { PostCard } from "@/components/community/post-card";
+import { useToast } from "@/components/ui/toast";
+import { apiClient, apiPost, apiPut, apiDelete, API } from "@/lib/api";
 import type { Post } from "@/components/community/types";
 
 export function CommunityFeed({ initialPosts }: { initialPosts?: Post[] }) {
   const { data: session } = useSession();
   const [posts, setPosts] = useState<Post[]>(initialPosts || []);
   const [loading, setLoading] = useState(!initialPosts);
+  const { error } = useToast();
 
   const fetchPosts = useCallback(async () => {
     try {
-      const res = await fetch("/api/posts");
-      const data = await res.json();
+      const data = await apiClient<{ posts: Post[] }>(API.posts.list());
       setPosts(data.posts || []);
-    } catch {}
+    } catch {
+      error("معرفناش نحمّل المنشورات، حدّث الصفحة");
+    }
     setLoading(false);
-  }, []);
+  }, [error]);
 
   useEffect(() => {
     if (!initialPosts) fetchPosts();
   }, [initialPosts, fetchPosts]);
 
   async function handlePost(content: string) {
-    const res = await fetch("/api/posts", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ content }),
-    });
-    if (res.ok) fetchPosts();
+    // بنخلّي الخطأ يطلع عشان PostComposer يمسكه ويعرض toast
+    await apiPost(API.posts.create, { content });
+    fetchPosts();
   }
 
   async function handleDeletePost(postId: string) {
     if (!confirm("متأكد إنك عايز تحذف المنشور ده؟")) return;
     try {
-      const res = await fetch(`/api/posts/${postId}`, { method: "DELETE" });
-      if (res.ok) setPosts((prev) => prev.filter((p) => p.id !== postId));
-    } catch {}
+      await apiDelete(API.posts.delete(postId));
+      setPosts((prev) => prev.filter((p) => p.id !== postId));
+    } catch {
+      error("معرفناش نحذف المنشور، جرّب تاني");
+    }
   }
 
   async function handleEditPost(postId: string, content: string) {
     try {
-      const res = await fetch(`/api/posts/${postId}`, {
-        method: "PUT",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ content }),
-      });
-      if (res.ok) setPosts((prev) => prev.map((p) => (p.id === postId ? { ...p, content } : p)));
-    } catch {}
+      await apiPut(API.posts.update(postId), { content });
+      setPosts((prev) => prev.map((p) => (p.id === postId ? { ...p, content } : p)));
+    } catch {
+      error("معرفناش نعدّل المنشور، جرّب تاني");
+    }
   }
 
   return (

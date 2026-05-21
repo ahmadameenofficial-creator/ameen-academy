@@ -3,6 +3,8 @@
 import { useState, useCallback } from "react";
 import { IconPlayerPlay, IconCheck, IconLoader2 } from "@tabler/icons-react";
 import { Button } from "@/components/ui/button";
+import { useToast } from "@/components/ui/toast";
+import { apiPost, API } from "@/lib/api";
 
 interface VideoPlayerProps {
   lessonId: string;
@@ -23,32 +25,29 @@ export function VideoPlayer({
 }: VideoPlayerProps) {
   const [isCompleted, setIsCompleted] = useState(initialCompleted);
   const [marking, setMarking] = useState(false);
+  const { error } = useToast();
 
   const markComplete = useCallback(async () => {
     setMarking(true);
     try {
-      const res = await fetch("/api/progress", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ lessonId, isCompleted: true }),
-      });
-      if (res.ok) setIsCompleted(true);
-    } catch {}
+      await apiPost(API.progress.track, { lessonId, isCompleted: true });
+      setIsCompleted(true);
+    } catch {
+      error("معرفناش نحفظ تقدّمك، جرّب تاني");
+    }
     setMarking(false);
-  }, [lessonId]);
+  }, [lessonId, error]);
 
   const markIncomplete = useCallback(async () => {
     setMarking(true);
     try {
-      const res = await fetch("/api/progress", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ lessonId, isCompleted: false }),
-      });
-      if (res.ok) setIsCompleted(false);
-    } catch {}
+      await apiPost(API.progress.track, { lessonId, isCompleted: false });
+      setIsCompleted(false);
+    } catch {
+      error("معرفناش نحفظ تقدّمك، جرّب تاني");
+    }
     setMarking(false);
-  }, [lessonId]);
+  }, [lessonId, error]);
 
   // بناء رابط الـ embed مع الإعدادات
   const embedUrl = signedEmbedUrl

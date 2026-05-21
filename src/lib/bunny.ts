@@ -76,29 +76,30 @@ export async function listVideos(page = 1, perPage = 100) {
   return bunnyFetch(`/videos?page=${page}&itemsPerPage=${perPage}`);
 }
 
-// ============ رابط TUS للرفع المباشر من البراوزر ============
-// الطالب/الأدمن يرفع مباشرة بدون المرور بالسيرفر
+// ============ بيانات رفع TUS موقّعة — الأدمن يرفع مباشرة للـ Bunny ============
+// مهم: الـ API_KEY مبيخرجش للمتصفح أبداً. بنوقّع توقيع SHA256 مؤقت بدلاً منه.
+// التوقيع = sha256(libraryId + apiKey + expiration + videoId) — والـ apiKey
+// بيفضل على السيرفر بس، اللي بيوصل للمتصفح هو التوقيع الجاهز فقط.
 
-export function getTusUploadUrl(videoId: string) {
-  return `https://video.bunnycdn.com/tusupload`;
-}
+export function getTusUploadCredentials(videoId: string, expiresInSeconds = 3600) {
+  // مهم: نحسب الـ expiration مرة واحدة ونستخدمه في التوقيع والهيدر بنفس القيمة
+  // (الـ bug القديم كان بيحسبه مرتين منفصلتين فالتوقيع كان ممكن يبقى غير صالح)
+  const expirationTime = Math.floor(Date.now() / 1000) + expiresInSeconds;
+  const signature = crypto
+    .createHash("sha256")
+    .update(LIBRARY_ID + API_KEY + expirationTime + videoId)
+    .digest("hex");
 
-export function getTusUploadHeaders(videoId: string) {
   return {
-    AuthorizationSignature: generateTusSignature(videoId),
-    AuthorizationExpire: String(Math.floor(Date.now() / 1000) + 3600), // ساعة
-    VideoId: videoId,
-    LibraryId: LIBRARY_ID,
+    endpoint: "https://video.bunnycdn.com/tusupload",
+    videoId,
+    libraryId: LIBRARY_ID,
+    signature,
+    expirationTime,
   };
 }
 
-function generateTusSignature(videoId: string) {
-  const expiration = Math.floor(Date.now() / 1000) + 3600;
-  return crypto
-    .createHash("sha256")
-    .update(LIBRARY_ID + API_KEY + expiration + videoId)
-    .digest("hex");
-}
+export type TusUploadCredentials = ReturnType<typeof getTusUploadCredentials>;
 
 // ============ Signed URL — رابط محمي بتوقيع ووقت محدد ============
 

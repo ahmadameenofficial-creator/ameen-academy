@@ -14,6 +14,8 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import { useToast } from "@/components/ui/toast";
+import { apiClient, apiPost, ApiError, API } from "@/lib/api";
 
 interface CouponItem {
   id: string;
@@ -48,6 +50,7 @@ export function CouponManager({
   const [submitting, setSubmitting] = useState(false);
   const [deleting, setDeleting] = useState<string | null>(null);
   const [error, setError] = useState("");
+  const { success, error: toastError } = useToast();
 
   const [code, setCode] = useState("");
   const [discountType, setDiscountType] = useState<"percentage" | "fixed">("percentage");
@@ -74,25 +77,15 @@ export function CouponManager({
     setError("");
 
     try {
-      const res = await fetch("/api/admin/coupons", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          code: code.trim(),
-          discountType,
-          discountValue: Number(discountValue),
-          maxUses: maxUses ? Number(maxUses) : null,
-          minPrice: minPrice ? Number(minPrice) * 100 : null,
-          courseId: courseId || null,
-          expiresAt: expiresAt || null,
-        }),
+      const data = await apiPost<CouponItem>(API.admin.coupons.create, {
+        code: code.trim(),
+        discountType,
+        discountValue: Number(discountValue),
+        maxUses: maxUses ? Number(maxUses) : null,
+        minPrice: minPrice ? Number(minPrice) * 100 : null,
+        courseId: courseId || null,
+        expiresAt: expiresAt || null,
       });
-
-      const data = await res.json();
-      if (!res.ok) {
-        setError(data.error);
-        return;
-      }
 
       resetForm();
       setShowForm(false);
@@ -106,8 +99,8 @@ export function CouponManager({
         },
         ...prev,
       ]);
-    } catch {
-      setError("حصل مشكلة");
+    } catch (e) {
+      setError(e instanceof ApiError ? e.message : "حصل مشكلة");
     } finally {
       setSubmitting(false);
     }
@@ -118,16 +111,15 @@ export function CouponManager({
     setDeleting(id);
 
     try {
-      const res = await fetch("/api/admin/coupons", {
+      await apiClient(API.admin.coupons.delete, {
         method: "DELETE",
-        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ id }),
       });
-
-      if (res.ok) {
-        setCoupons((prev) => prev.filter((c) => c.id !== id));
-      }
-    } catch {}
+      setCoupons((prev) => prev.filter((c) => c.id !== id));
+      success("تم حذف الكود");
+    } catch {
+      toastError("معرفناش نحذف الكود، جرّب تاني");
+    }
     setDeleting(null);
   }
 

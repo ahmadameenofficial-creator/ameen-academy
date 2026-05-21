@@ -28,7 +28,10 @@ export function useNotifications(interval = 30000) {
       const data = await apiClient<NotificationsData>(API.notifications.list);
       setNotifications(data.notifications);
       setUnreadCount(data.unreadCount);
-    } catch {}
+    } catch {
+      // صمت متعمّد: ده polling في الخلفية كل 30 ثانية — مش هنزعج المستخدم
+      // بإشعار خطأ كل مرة النت يقطع. الـ poll الجاي هيصلّح نفسه.
+    }
   }, []);
 
   useEffect(() => {
@@ -43,7 +46,9 @@ export function useNotifications(interval = 30000) {
       await apiPut(API.notifications.markRead, {});
       setUnreadCount(0);
       setNotifications((prev) => prev.map((n) => ({ ...n, isRead: true })));
-    } catch {}
+    } catch {
+      // فشل تعليم الكل كمقروء — بنرجّع الحالة زي ما هي بصمت (مش حرجة)
+    }
     setLoading(false);
   }, []);
 

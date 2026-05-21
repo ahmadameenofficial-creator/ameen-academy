@@ -4,6 +4,8 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { IconBan, IconCheck, IconLoader2, IconTrash } from "@tabler/icons-react";
 import { Button } from "@/components/ui/button";
+import { useToast } from "@/components/ui/toast";
+import { apiPut, apiDelete, ApiError, API } from "@/lib/api";
 
 interface StudentActionsProps {
   studentId: string;
@@ -16,6 +18,7 @@ export function StudentActions({ studentId, studentName, isBanned }: StudentActi
   const [loading, setLoading] = useState<"ban" | "delete" | null>(null);
   const [showReason, setShowReason] = useState(false);
   const [reason, setReason] = useState("");
+  const { success, error } = useToast();
 
   async function handleToggleBan() {
     if (!isBanned && !showReason) {
@@ -29,21 +32,17 @@ export function StudentActions({ studentId, studentName, isBanned }: StudentActi
 
     setLoading("ban");
     try {
-      const res = await fetch(`/api/admin/students/${studentId}`, {
-        method: "PUT",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          action: isBanned ? "unban" : "ban",
-          reason: reason || undefined,
-        }),
+      await apiPut(API.admin.students.update(studentId), {
+        action: isBanned ? "unban" : "ban",
+        reason: reason || undefined,
       });
-
-      if (res.ok) {
-        setShowReason(false);
-        setReason("");
-        router.refresh();
-      }
-    } catch {}
+      setShowReason(false);
+      setReason("");
+      success(isBanned ? "تم فك الحظر" : "تم حظر الطالب");
+      router.refresh();
+    } catch {
+      error("معرفناش ننفّذ العملية، جرّب تاني");
+    }
     setLoading(null);
   }
 
@@ -57,17 +56,12 @@ export function StudentActions({ studentId, studentName, isBanned }: StudentActi
 
     setLoading("delete");
     try {
-      const res = await fetch(`/api/admin/students/${studentId}`, {
-        method: "DELETE",
-      });
-
-      if (res.ok) {
-        router.refresh();
-      } else {
-        const data = await res.json();
-        alert(data.error || "حصل مشكلة");
-      }
-    } catch {}
+      await apiDelete(API.admin.students.delete(studentId));
+      success("تم حذف الحساب");
+      router.refresh();
+    } catch (e) {
+      error(e instanceof ApiError ? e.message : "معرفناش نحذف الحساب، جرّب تاني");
+    }
     setLoading(null);
   }
 

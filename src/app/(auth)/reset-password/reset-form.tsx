@@ -10,6 +10,7 @@ import { IconLoader2, IconLock, IconCheck, IconEye, IconEyeOff } from "@tabler/i
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Logo } from "@/components/shared/logo";
+import { apiPost, ApiError, API } from "@/lib/api";
 
 const resetSchema = z
   .object({
@@ -71,20 +72,10 @@ export function ResetForm() {
     setError("");
 
     try {
-      const res = await fetch("/api/auth/reset-password", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ token, password: data.password }),
-      });
-
-      if (res.ok) {
-        setDone(true);
-      } else {
-        const body = await res.json();
-        setError(body.error || "حصل مشكلة");
-      }
-    } catch {
-      setError("حصل مشكلة، جرّب تاني");
+      await apiPost(API.auth.resetPassword, { token, password: data.password });
+      setDone(true);
+    } catch (e) {
+      setError(e instanceof ApiError ? e.message : "حصل مشكلة، جرّب تاني");
     } finally {
       setIsLoading(false);
     }

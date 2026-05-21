@@ -5,6 +5,12 @@ function qs(params?: Record<string, string | number | undefined>): string {
 }
 
 export const API = {
+  auth: {
+    register: "/api/register",
+    forgotPassword: "/api/auth/forgot-password",
+    resetPassword: "/api/auth/reset-password",
+  },
+  upload: "/api/upload",
   posts: {
     list: (params?: { courseId?: string; page?: number }) =>
       `/api/posts${qs(params)}`,
