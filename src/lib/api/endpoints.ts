@@ -79,6 +79,9 @@ export const API = {
     payments: {
       update: (id: string) => `/api/admin/payments/${id}`,
     },
+    commissions: {
+      pay: (id: string) => `/api/admin/commissions/${id}`,
+    },
     blog: {
       list: "/api/admin/blog",
       create: "/api/admin/blog",

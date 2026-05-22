@@ -11,6 +11,7 @@ import { Input } from "@/components/ui/input";
 import { Logo } from "@/components/shared/logo";
 import { registerSchema, type RegisterInput } from "@/lib/validations/auth";
 import { apiPost, ApiError, API } from "@/lib/api";
+import { REFERRAL_STORAGE_KEY } from "@/components/referral-capture";
 
 export function RegisterForm() {
   const router = useRouter();
@@ -32,7 +33,16 @@ export function RegisterForm() {
     setError("");
 
     try {
-      await apiPost(API.auth.register, data);
+      // كود الإحالة المحفوظ (لو المستخدم جه عن طريق لينك إحالة)
+      let ref: string | undefined;
+      try {
+        ref = localStorage.getItem(REFERRAL_STORAGE_KEY) || undefined;
+      } catch {}
+
+      await apiPost(API.auth.register, { ...data, ref });
+      try {
+        localStorage.removeItem(REFERRAL_STORAGE_KEY);
+      } catch {}
       router.push("/login?registered=1");
     } catch (e) {
       setError(e instanceof ApiError ? e.message : "حصل مشكلة، جرّب تاني");

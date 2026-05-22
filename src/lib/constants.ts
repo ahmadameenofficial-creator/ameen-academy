@@ -28,6 +28,13 @@ export const PAYMENT_CONFIG = {
   ],
 } as const;
 
+export const REFERRAL_CONFIG = {
+  // نسبة عمولة الإحالة من صافي المبلغ المدفوع
+  commissionRate: 20, // %
+  // اسم الـ query parameter في لينك الإحالة
+  param: "ref",
+} as const;
+
 export const ROUTES = {
   home: "/",
   courses: "/courses",

@@ -8,3 +8,4 @@ export * as usersDb from "./users.db";
 export * as blogDb from "./blog.db";
 export * as notificationsDb from "./notifications.db";
 export * as certificatesDb from "./certificates.db";
+export * as referralsDb from "./referrals.db";

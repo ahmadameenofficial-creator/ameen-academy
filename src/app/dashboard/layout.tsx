@@ -9,6 +9,7 @@ import {
   IconShield,
   IconUsers,
   IconUser,
+  IconGift,
 } from "@tabler/icons-react";
 import { NotificationsBell } from "@/components/notifications-bell";
 
@@ -32,6 +33,7 @@ export default async function DashboardLayout({
               <NavLink href="/dashboard" icon={IconHome} label="الرئيسية" />
               <NavLink href="/courses" icon={IconBook} label="الكورسات" />
               <NavLink href="/community" icon={IconUsers} label="المجتمع" />
+              <NavLink href="/dashboard/referrals" icon={IconGift} label="اربح معانا" />
               <NavLink href="/dashboard/profile" icon={IconUser} label="حسابي" />
               {isAdmin && (
                 <NavLink href="/admin" icon={IconShield} label="لوحة التحكم" />
@@ -65,6 +67,7 @@ export default async function DashboardLayout({
           <NavLink href="/dashboard" icon={IconHome} label="الرئيسية" mobile />
           <NavLink href="/courses" icon={IconBook} label="الكورسات" mobile />
           <NavLink href="/community" icon={IconUsers} label="المجتمع" mobile />
+          <NavLink href="/dashboard/referrals" icon={IconGift} label="اربح معانا" mobile />
           <NavLink href="/dashboard/profile" icon={IconUser} label="حسابي" mobile />
           {isAdmin && (
             <NavLink href="/admin" icon={IconShield} label="الأدمن" mobile />

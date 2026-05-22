@@ -10,6 +10,7 @@ import {
   IconTag,
   IconShieldCheck,
   IconArrowRight,
+  IconGift,
 } from "@tabler/icons-react";
 
 const navItems = [
@@ -18,6 +19,7 @@ const navItems = [
   { href: "/admin/blog", label: "المدونة", icon: IconArticle },
   { href: "/admin/students", label: "الطلاب", icon: IconUsers },
   { href: "/admin/payments", label: "المدفوعات", icon: IconCreditCard },
+  { href: "/admin/commissions", label: "العمولات", icon: IconGift },
   { href: "/admin/coupons", label: "الأكواد", icon: IconTag },
   { href: "/admin/team", label: "الفريق", icon: IconShieldCheck },
 ];

@@ -29,6 +29,10 @@ model User {
   createdAt       DateTime  @default(now())
   updatedAt       DateTime  @updatedAt
 
+  // نظام الإحالة (Affiliate)
+  referralCode    String?   @unique // كود الإحالة الخاص بالمستخدم
+  referredById    String? // مين أحاله للمنصة
+
   // العلاقات
   accounts        Account[]
   sessions        Session[]
@@ -49,8 +53,14 @@ model User {
   blogComments    BlogComment[]    @relation("BlogCommentAuthor")
   blogLikes       BlogLike[]       @relation("BlogLikeUser")
 
+  // علاقات الإحالة
+  referredBy      User?            @relation("UserReferrals", fields: [referredById], references: [id], onDelete: SetNull)
+  referrals       User[]           @relation("UserReferrals")
+  commissions     Commission[]     @relation("CommissionReferrer")
+
   @@index([email])
   @@index([role])
+  @@index([referredById])
 }
 
 enum Role {
@@ -279,10 +289,37 @@ model Payment {
   user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
   course Course @relation(fields: [courseId], references: [id], onDelete: Cascade)
 
+  commission Commission?
+
   @@index([userId])
   @@index([status])
   @@index([status, createdAt])
   @@index([userId, courseId, status])
+}
+
+// ============ عمولات الإحالة (Affiliate Commissions) ============
+model Commission {
+  id             String           @id @default(cuid())
+  referrerId     String // المستخدم اللي بياخد العمولة
+  referredUserId String // المستخدم اللي اشترى
+  paymentId      String           @unique // عمولة واحدة لكل دفعة (يمنع الازدواج)
+  amount         Int // العمولة بالقرش
+  rate           Int // نسبة العمولة وقت التسجيل (%)
+  status         CommissionStatus @default(PENDING)
+  createdAt      DateTime         @default(now())
+  paidAt         DateTime?
+
+  referrer User    @relation("CommissionReferrer", fields: [referrerId], references: [id], onDelete: Cascade)
+  payment  Payment @relation(fields: [paymentId], references: [id], onDelete: Cascade)
+
+  @@index([referrerId, status])
+  @@index([status, createdAt])
+}
+
+enum CommissionStatus {
+  PENDING // مستحقة
+  PAID // اتدفعت
+  CANCELLED // اتلغت (مثلاً استرجاع)
 }
 
 enum PaymentStatus {

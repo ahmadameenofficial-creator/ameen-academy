@@ -4,6 +4,7 @@ import { SITE_CONFIG } from "@/lib/constants";
 import { Providers } from "@/components/providers";
 import { GoogleAnalytics } from "@/components/analytics/google-analytics";
 import { OrganizationSchema, WebsiteSchema } from "@/lib/structured-data";
+import { ReferralCapture } from "@/components/referral-capture";
 import "./globals.css";
 
 const ibmPlex = IBM_Plex_Sans_Arabic({
@@ -132,6 +133,7 @@ export default function RootLayout({
         <GoogleAnalytics />
       </head>
       <body className={`${ibmPlex.variable} font-sans`}>
+        <ReferralCapture />
         <Providers>{children}</Providers>
       </body>
     </html>

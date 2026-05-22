@@ -4,6 +4,7 @@ import { prisma } from "@/lib/prisma";
 import { registerSchema } from "@/lib/validations/auth";
 import { rateLimit, RATE_LIMITS } from "@/lib/rate-limit";
 import { sendWelcomeEmail } from "@/lib/email";
+import { referralService } from "@/lib/services";
 
 export async function POST(req: Request) {
   // Rate limit بالـ IP
@@ -43,13 +44,18 @@ export async function POST(req: Request) {
 
     const hashedPassword = await bcrypt.hash(password, 12);
 
-    await prisma.user.create({
+    const user = await prisma.user.create({
       data: {
         name: name.trim(),
         email: normalizedEmail,
         password: hashedPassword,
       },
     });
+
+    // ربط المُحيل لو جه عن طريق لينك إحالة (مبيكسرش التسجيل لو الكود غلط)
+    if (typeof body.ref === "string") {
+      await referralService.attachReferral(user.id, body.ref).catch(() => {});
+    }
 
     sendWelcomeEmail(normalizedEmail, name.trim()).catch(() => {});
 

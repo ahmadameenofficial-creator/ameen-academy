@@ -4,6 +4,7 @@ import { prisma } from "@/lib/prisma";
 import { requireAdminApi, unauthorized } from "@/lib/admin-api";
 import { notifyPaymentApproved } from "@/lib/notifications";
 import { sendPaymentConfirmationEmail } from "@/lib/email";
+import { referralService } from "@/lib/services";
 
 interface RouteContext {
   params: Promise<{ id: string }>;
@@ -50,6 +51,15 @@ export async function PUT(req: Request, context: RouteContext) {
           },
         }),
       ]);
+
+      // عمولة الإحالة للمُحيل (لو الطالب جه عن طريق لينك إحالة) — Idempotent
+      await referralService
+        .awardCommissionForPayment({
+          id: payment.id,
+          userId: payment.userId,
+          amount: payment.amount,
+        })
+        .catch(() => {});
 
       await notifyPaymentApproved(payment.userId, payment.course.title);
 
