@@ -42,7 +42,7 @@ export function GuaranteeSection() {
                 <div className="max-w-xl mx-auto space-y-4">
                   <p className="text-foreground text-lg leading-relaxed font-medium">
                     لو طبّقت اللي في الكورس لمدة 90 يوم ومقدرتش تجيب أول 5,000
-                    جنيه من التصميم — هرجعلك كل فلوسك.
+                    جنيه — هرجعلك كل فلوسك. بدون أسئلة.
                   </p>
 
                   <div className="h-px bg-border max-w-xs mx-auto" />

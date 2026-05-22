@@ -6,6 +6,7 @@ import {
   useInView,
   useScroll,
   useTransform,
+  useReducedMotion,
   type Variant,
   type Transition,
 } from "framer-motion";
@@ -87,7 +88,10 @@ export function FadeIn({
   threshold = 0.2,
 }: FadeInProps) {
   const ref = useRef(null);
+  const prefersReduced = useReducedMotion();
   const isInView = useInViewSafe(ref, { once, amount: threshold });
+
+  if (prefersReduced) return <div className={className}>{children}</div>;
 
   const dir = directionMap[direction];
   const initial = {

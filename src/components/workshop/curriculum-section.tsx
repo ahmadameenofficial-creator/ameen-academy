@@ -56,7 +56,7 @@ const MODULES = [
     ],
   },
   {
-    title: "أدوات AI للمصممين (متحدث باستمرار)",
+    title: "أدوات AI للتصميم (متحدث باستمرار)",
     lessons: 8,
     duration: "4 ساعات",
     topics: [

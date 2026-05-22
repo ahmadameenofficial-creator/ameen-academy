@@ -1,42 +1,44 @@
 import type { Metadata } from "next";
+import dynamic from "next/dynamic";
 import { Navbar } from "@/components/layout/navbar";
 import { Footer } from "@/components/layout/footer";
 import { WorkshopHero } from "@/components/workshop/hero";
 import { PainSection } from "@/components/workshop/pain-section";
-import { SolutionSection } from "@/components/workshop/solution-section";
-import { InstructorSection } from "@/components/workshop/instructor-section";
-import { CurriculumSection } from "@/components/workshop/curriculum-section";
-import { CaseStudiesSection } from "@/components/workshop/case-studies-section";
-import { OfferStackSection } from "@/components/workshop/offer-stack-section";
-import { GuaranteeSection } from "@/components/workshop/guarantee-section";
-import { FaqSection } from "@/components/workshop/faq-section";
-import { FinalCtaSection } from "@/components/workshop/final-cta-section";
+
+const SolutionSection = dynamic(() => import("@/components/workshop/solution-section").then(m => ({ default: m.SolutionSection })));
+const InstructorSection = dynamic(() => import("@/components/workshop/instructor-section").then(m => ({ default: m.InstructorSection })));
+const CurriculumSection = dynamic(() => import("@/components/workshop/curriculum-section").then(m => ({ default: m.CurriculumSection })));
+const CaseStudiesSection = dynamic(() => import("@/components/workshop/case-studies-section").then(m => ({ default: m.CaseStudiesSection })));
+const OfferStackSection = dynamic(() => import("@/components/workshop/offer-stack-section").then(m => ({ default: m.OfferStackSection })));
+const GuaranteeSection = dynamic(() => import("@/components/workshop/guarantee-section").then(m => ({ default: m.GuaranteeSection })));
+const FaqSection = dynamic(() => import("@/components/workshop/faq-section").then(m => ({ default: m.FaqSection })));
+const FinalCtaSection = dynamic(() => import("@/components/workshop/final-cta-section").then(m => ({ default: m.FinalCtaSection })));
 
 export const metadata: Metadata = {
-  title: "كورس ورشة أمين | أول 5,000 جنيه من الجرافيك ديزاين في 90 يوم",
+  title: "كورس ورشة أمين | اتعلم أقوى مهارة في 2026 واكسب أول 5,000 جنيه",
   description:
-    "كورس مسجّل 30+ ساعة — تصميم جرافيك + AI Tools + تسويق شخصي + LinkedIn. أكتر من 300 طالب بدأوا يكسبوا. سعر الإطلاق 1,500 جنيه بدل 3,000.",
+    "كورس مسجّل 30+ ساعة — من الصفر تماماً. تصميم + AI + تسويق + LinkedIn. مش محتاج خبرة سابقة. 300+ شخص بدأوا يكسبوا. سعر الإطلاق 1,500 جنيه.",
   openGraph: {
     type: "website",
-    title: "كورس ورشة أمين | أول 5,000 جنيه من التصميم في 90 يوم",
+    title: "كورس ورشة أمين | اتعلم أقوى مهارة في 2026 واكسب دخل إضافي",
     description:
-      "30+ ساعة تعليم عملي — من الصفر لمصمم بيكسب. تصميم + AI + تسويق + LinkedIn. ضمان كامل.",
+      "30+ ساعة تعليم عملي — من الصفر للكسب. تصميم + AI + تسويق + LinkedIn. مش محتاج خبرة. ضمان كامل.",
     locale: "ar_EG",
     siteName: "أكاديمية أمين",
   },
   twitter: {
     card: "summary_large_image",
-    title: "كورس ورشة أمين | أول 5,000 جنيه من التصميم في 90 يوم",
-    description: "30+ ساعة — تصميم + AI + تسويق. أكتر من 300 خريج. ضمان كامل.",
+    title: "كورس ورشة أمين | اتعلم أقوى مهارة في 2026",
+    description: "30+ ساعة — من الصفر للكسب. تصميم + AI + تسويق. 300+ بدأوا يكسبوا. ضمان كامل.",
   },
 };
 
 const courseJsonLd = {
   "@context": "https://schema.org",
   "@type": "Course",
-  name: "كورس ورشة أمين — أول 5,000 جنيه من الجرافيك ديزاين",
+  name: "كورس ورشة أمين — اتعلم أقوى مهارة في 2026 واكسب دخل إضافي",
   description:
-    "كورس مسجّل 30+ ساعة — تصميم جرافيك + AI Tools + تسويق شخصي + LinkedIn. نظام كامل من الصفر لمصمم بيكسب.",
+    "كورس مسجّل 30+ ساعة — تصميم + AI + تسويق + LinkedIn. من الصفر تماماً. نظام كامل يوديك لأول 5,000 جنيه.",
   provider: {
     "@type": "Organization",
     name: "أكاديمية أمين",

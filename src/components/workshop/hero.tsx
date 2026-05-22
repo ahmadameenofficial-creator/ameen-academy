@@ -48,7 +48,7 @@ export function WorkshopHero() {
             <FloatingElement amplitude={5} duration={5}>
               <Badge className="bg-brand-500/20 text-brand-200 border border-brand-400/30 px-4 py-2 text-sm">
                 <IconStar className="size-4 ml-1" />
-                أكتر من 300 طالب بدأوا يكسبوا من التصميم
+                أكتر من 300 شخص بدأوا يكسبوا دخل إضافي
               </Badge>
             </FloatingElement>
           </FadeIn>
@@ -57,11 +57,11 @@ export function WorkshopHero() {
           <div>
             <SlideReveal delay={0.2}>
               <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-white leading-[1.2] tracking-tight">
-                أول{" "}
+                اتعلم{" "}
                 <span className="bg-gradient-to-l from-brand-300 to-brand-400 bg-clip-text text-transparent">
-                  5,000 جنيه
+                  أقوى مهارة في 2026
                 </span>{" "}
-                من الجرافيك ديزاين
+                واكسب أول 5,000 جنيه
               </h1>
             </SlideReveal>
             <SlideReveal delay={0.35}>
@@ -78,8 +78,8 @@ export function WorkshopHero() {
           {/* Sub-headline */}
           <FadeIn direction="up" delay={0.5}>
             <p className="text-lg md:text-xl text-white/60 max-w-2xl mx-auto leading-relaxed">
-              كورس مسجّل 30+ ساعة — هتتعلم تصميم جرافيك + أدوات AI + تسويق شخصي
-              + LinkedIn. حتى لو عمرك ما فتحت فوتوشوب.
+              كورس مسجّل 30+ ساعة — من الصفر تماماً. هتتعلم تصميم + AI + تسويق +
+              LinkedIn. مش محتاج خبرة سابقة ولا شهادة معينة.
             </p>
           </FadeIn>
 

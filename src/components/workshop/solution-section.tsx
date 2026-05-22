@@ -24,7 +24,7 @@ export function SolutionSection() {
               كورس ورشة أمين —
               <br />
               <span className="text-brand-500">
-                نظام كامل من الصفر لمصمم بيكسب
+                نظام كامل يحوّلك من صفر لحد ما تكسب
               </span>
             </h2>
           </FadeIn>
@@ -35,8 +35,8 @@ export function SolutionSection() {
           </FadeIn>
           <FadeIn direction="up" delay={0.2}>
             <p className="mt-4 text-muted-foreground text-lg max-w-2xl mx-auto">
-              مش كورس تصميم عادي. ده نظام متكامل بيحولك من حد مش فاهم حاجة —
-              لمصمم جرافيك عنده شغل، عنده clients، وعنده دخل حقيقي.
+              مش كورس تصميم عادي. ده نظام متكامل بيوديك من إنك متعرفش حاجة —
+              لحد ما يكون عندك مهارة، شغل، وفلوس بتدخل.
             </p>
           </FadeIn>
         </div>
@@ -55,7 +55,7 @@ export function SolutionSection() {
             <HoverLift>
               <PillarCard
                 icon={<IconRobot className="size-6 text-brand-500" />}
-                title="أدوات AI للمصممين"
+                title="أدوات AI للتصميم"
                 description="أحدث أدوات الذكاء الاصطناعي اللي هتخليك تشتغل أسرع 3 مرات. والجزء ده بيتحدث باستمرار."
               />
             </HoverLift>
@@ -83,7 +83,7 @@ export function SolutionSection() {
               <PillarCard
                 icon={<IconUserStar className="size-6 text-brand-500" />}
                 title="بناء Personal Brand"
-                description="شخصية واقعية + قصة حقيقية + هوية بصرية = مصمم الناس بتثق فيه وبتدفعله."
+                description="شخصية واقعية + قصة حقيقية + هوية بصرية = شخص الناس بتثق فيه وبتدفعله."
               />
             </HoverLift>
           </StaggerItem>
