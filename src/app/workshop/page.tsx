@@ -3,18 +3,18 @@ import dynamic from "next/dynamic";
 import { Navbar } from "@/components/layout/navbar";
 import { Footer } from "@/components/layout/footer";
 import { WorkshopHero } from "@/components/workshop/hero";
-import { PainSection } from "@/components/workshop/pain-section";
 import { SocialProofTicker } from "@/components/workshop/social-proof-ticker";
+import { PainSection } from "@/components/workshop/pain-section";
+import { SolutionSection } from "@/components/workshop/solution-section";
+import { CaseStudiesSection } from "@/components/workshop/case-studies-section";
 
-const SolutionSection = dynamic(() => import("@/components/workshop/solution-section").then(m => ({ default: m.SolutionSection })));
-const StickyCta = dynamic(() => import("@/components/workshop/sticky-cta").then(m => ({ default: m.StickyCta })));
-const InstructorSection = dynamic(() => import("@/components/workshop/instructor-section").then(m => ({ default: m.InstructorSection })));
 const CurriculumSection = dynamic(() => import("@/components/workshop/curriculum-section").then(m => ({ default: m.CurriculumSection })));
-const CaseStudiesSection = dynamic(() => import("@/components/workshop/case-studies-section").then(m => ({ default: m.CaseStudiesSection })));
+const InstructorSection = dynamic(() => import("@/components/workshop/instructor-section").then(m => ({ default: m.InstructorSection })));
 const OfferStackSection = dynamic(() => import("@/components/workshop/offer-stack-section").then(m => ({ default: m.OfferStackSection })));
 const GuaranteeSection = dynamic(() => import("@/components/workshop/guarantee-section").then(m => ({ default: m.GuaranteeSection })));
 const FaqSection = dynamic(() => import("@/components/workshop/faq-section").then(m => ({ default: m.FaqSection })));
 const FinalCtaSection = dynamic(() => import("@/components/workshop/final-cta-section").then(m => ({ default: m.FinalCtaSection })));
+const StickyCta = dynamic(() => import("@/components/workshop/sticky-cta").then(m => ({ default: m.StickyCta })));
 
 export const metadata: Metadata = {
   title: "كورس ورشة أمين | اكسب أول 5,000 جنيه من مهارة حقيقية في 90 يوم",
@@ -38,18 +38,15 @@ export const metadata: Metadata = {
 const courseJsonLd = {
   "@context": "https://schema.org",
   "@type": "Course",
-  name: "كورس ورشة أمين — اتعلم مهارة بتجيب فلوس وابني بيزنسك",
+  name: "كورس ورشة أمين — اكسب أول 5,000 جنيه من مهارة حقيقية",
   description:
-    "كورس مسجّل 30+ ساعة — تصميم + AI + موقع يبيعلك + تسويق + LinkedIn. من الصفر لأول 5,000 جنيه.",
+    "كورس مسجّل 30+ ساعة — تصميم + AI + موقع + تسويق + LinkedIn. من الصفر لأول 5,000 جنيه في 90 يوم.",
   provider: {
     "@type": "Organization",
     name: "أكاديمية أمين",
     url: "https://ameen.academy",
   },
-  instructor: {
-    "@type": "Person",
-    name: "أحمد أمين",
-  },
+  instructor: { "@type": "Person", name: "أحمد أمين" },
   inLanguage: "ar",
   offers: {
     "@type": "Offer",

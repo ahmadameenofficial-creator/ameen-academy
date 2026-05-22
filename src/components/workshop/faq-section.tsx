@@ -1,112 +1,88 @@
 "use client";
 
 import { useState } from "react";
-import { IconChevronDown } from "@tabler/icons-react";
-import { FadeIn, StaggerContainer, StaggerItem } from "@/components/ui/motion";
+import { IconPlus, IconMinus } from "@tabler/icons-react";
 
 const FAQS = [
   {
-    question: "أنا مش مصمم ومعنديش أي خبرة — ينفع أبدأ؟",
-    answer:
-      "الكورس اتعمل عشان الناس اللي بتبدأ من صفر. مش محتاج خلفية في التصميم ولا خبرة سابقة. هنمشي معاك من أول ما تفتح البرنامج لحد ما تكسب أول فلوسك.",
+    q: "أنا مش مصمم ومعنديش أي خبرة — ينفع أبدأ؟",
+    a: "الكورس اتعمل عشان الناس اللي بتبدأ من صفر. مش محتاج خلفية في التصميم. هنمشي معاك من أول ما تفتح البرنامج لحد ما تكسب.",
   },
   {
-    question: "ليه التصميم بالذات؟ مش فيه مهارات تانية؟",
-    answer:
-      "التصميم من أكتر المهارات طلباً — كل بيزنس محتاج تصميمات. ومع AI بقى أسرع وأسهل. الفرق إن الكورس ده مش بيعلمك أدوات بس — بيعلمك تبني بيزنس كامل: مهارة + portfolio + موقع + clients.",
+    q: "ليه التصميم بالذات؟",
+    a: "التصميم من أكتر المهارات طلباً — كل بيزنس محتاج تصميمات. ومع AI بقى أسرع وأسهل. الكورس بيعلمك تبني بيزنس كامل مش بس أدوات.",
   },
   {
-    question: "هتعلموني أعمل موقع فعلاً؟",
-    answer:
-      "أيوه. فيه module كامل عن بناء موقعك الشخصي اللي يعرض خدماتك ويبيعلك. مش محتاج تكون مبرمج — هنستخدم أدوات سهلة والنتيجة هتكون موقع احترافي يشتغل 24/7.",
+    q: "هتعلموني أعمل موقع فعلاً؟",
+    a: "أيوه. module كامل عن بناء موقعك الشخصي. مش محتاج تكون مبرمج — هنستخدم أدوات سهلة والنتيجة هتكون موقع احترافي.",
   },
   {
-    question: "أنا شغال في وظيفة — هلحق أذاكر؟",
-    answer:
-      "الكورس مسجّل بالكامل — مفيش مواعيد ثابتة. ساعة واحدة في اليوم بعد الشغل كفاية. في 90 يوم هتكون بدأت تكسب دخل إضافي جنب وظيفتك.",
+    q: "أنا شغال في وظيفة — هلحق؟",
+    a: "الكورس مسجّل. ساعة واحدة في اليوم بعد الشغل كفاية. في 90 يوم هتكون بدأت تكسب دخل إضافي.",
   },
   {
-    question: "أنا طالب — هقدر أكسب وأنا لسه في الكلية؟",
-    answer:
-      "أيوه. محمد خالد كان طالب في هندسة وبدأ يكسب 6,000 جنيه/شهر وهو لسه في الكلية. التصميم شغل من البيت — مش محتاج تسيب حاجة.",
+    q: "إيه الفرق بين ده وأي كورس تصميم تاني؟",
+    a: "أغلب الكورسات بتعلمك أدوات وبتسيبك. ده بيعلمك: تصميم + AI + موقع + تسويق + تسعير + LinkedIn + إزاي تجيب clients.",
   },
   {
-    question: "إيه الفرق بين الكورس ده وأي كورس تصميم تاني؟",
-    answer:
-      "أغلب الكورسات بتعلمك أدوات وبتسيبك. الكورس ده بيعلمك: تصميم + AI + موقع يبيعلك + تسويق + تسعير + LinkedIn + إزاي تجيب clients. يعني نظام كامل — من الصفر لحد ما الفلوس تدخل.",
+    q: "لو مكنتش مناسبني هرجع فلوسي؟",
+    a: "طبعاً. ضمان كامل — طبّق 90 يوم ولو مكسبتش، فلوسك ترجع. المخاطرة = صفر.",
   },
   {
-    question: "محتاج لابتوب غالي؟",
-    answer:
-      "لا. أي لابتوب عادي يشغّل فوتوشوب يكفي. مش محتاج Mac أو جهاز غالي. وكانفا بتشتغل من الموبايل كمان.",
+    q: "إيه طرق الدفع؟",
+    a: "فودافون كاش أو إنستاباي. بعد التحويل ابعتلنا رقم العملية وهنفعّلك الكورس في نفس اليوم.",
   },
   {
-    question: "لو مكنتش مناسبني هقدر أرجع فلوسي؟",
-    answer:
-      "طبعاً. عندك ضمان كامل — لو طبّقت اللي في الكورس 90 يوم ومكسبتش، فلوسك ترجع. المخاطرة = صفر.",
-  },
-  {
-    question: "إيه طرق الدفع المتاحة؟",
-    answer:
-      "تقدر تدفع عن طريق فودافون كاش أو إنستاباي. بعد التحويل ابعتلنا رقم العملية وهنفعّلك الكورس في نفس اليوم.",
-  },
-  {
-    question: "ليه السعر 1,500 جنيه؟",
-    answer:
-      "عشان 1,500 جنيه أقل من أول شغلانة هتجيبها بعد الكورس. ده مش مصروف — ده استثمار بيرجع أضعاف. ولو مرجعش — فلوسك ترجع.",
+    q: "ليه 1,500 جنيه؟",
+    a: "عشان 1,500 أقل من أول شغلانة هتجيبها. ده استثمار بيرجع أضعاف. ولو مرجعش — فلوسك ترجع.",
   },
 ];
 
 export function FaqSection() {
-  const [openIndex, setOpenIndex] = useState<number | null>(null);
+  const [open, setOpen] = useState<number | null>(null);
 
   return (
-    <section className="py-16 md:py-24 bg-muted/30">
+    <section className="py-24 md:py-32 bg-muted/40">
       <div className="container">
-        <FadeIn direction="up" className="max-w-3xl mx-auto text-center mb-12">
-          <p className="text-brand-500 font-semibold text-sm mb-3">
-            أسئلة شائعة
-          </p>
-          <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-foreground">
-            عندك سؤال؟ غالباً الإجابة هنا
+        <div className="max-w-2xl mx-auto">
+          <p className="text-sm font-medium text-brand-500 mb-6">أسئلة شائعة</p>
+          <h2 className="text-3xl sm:text-4xl font-bold text-foreground leading-[1.1] mb-14">
+            عندك سؤال؟
+            <br />
+            <span className="text-muted-foreground/50">غالباً الإجابة هنا.</span>
           </h2>
-        </FadeIn>
 
-        <StaggerContainer className="max-w-3xl mx-auto space-y-3" staggerDelay={0.05}>
-          {FAQS.map((faq, index) => {
-            const isOpen = openIndex === index;
-            return (
-              <StaggerItem key={faq.question}>
-              <div className="rounded-2xl border border-border bg-card overflow-hidden">
-                <button
-                  onClick={() => setOpenIndex(isOpen ? null : index)}
-                  aria-expanded={isOpen}
-                  aria-controls={`faq-answer-${index}`}
-                  className="flex items-center justify-between w-full p-5 text-right hover:bg-muted/50 transition-colors gap-4"
-                >
-                  <h3 className="font-semibold text-foreground text-sm md:text-base">
-                    {faq.question}
-                  </h3>
-                  <IconChevronDown
-                    className={`size-5 text-muted-foreground transition-transform shrink-0 ${
-                      isOpen ? "rotate-180" : ""
-                    }`}
-                  />
-                </button>
-                {isOpen && (
-                  <div id={`faq-answer-${index}`} role="region" aria-labelledby={`faq-q-${index}`} className="px-5 pb-5 pt-0">
-                    <div className="border-t border-border pt-4">
-                      <p className="text-sm text-muted-foreground leading-relaxed">
-                        {faq.answer}
+          <div className="space-y-0">
+            {FAQS.map((faq, i) => {
+              const isOpen = open === i;
+              return (
+                <div key={faq.q} className="border-b border-border">
+                  <button
+                    onClick={() => setOpen(isOpen ? null : i)}
+                    aria-expanded={isOpen}
+                    className="flex items-center justify-between w-full py-6 text-right gap-6 group"
+                  >
+                    <span className="text-[15px] font-medium text-foreground group-hover:text-brand-500 transition-colors">
+                      {faq.q}
+                    </span>
+                    {isOpen ? (
+                      <IconMinus className="size-4 text-brand-500 shrink-0" />
+                    ) : (
+                      <IconPlus className="size-4 text-muted-foreground shrink-0" />
+                    )}
+                  </button>
+                  {isOpen && (
+                    <div className="pb-6 pr-0">
+                      <p className="text-sm text-muted-foreground leading-relaxed max-w-lg">
+                        {faq.a}
                       </p>
                     </div>
-                  </div>
-                )}
-              </div>
-              </StaggerItem>
-            );
-          })}
-        </StaggerContainer>
+                  )}
+                </div>
+              );
+            })}
+          </div>
+        </div>
       </div>
     </section>
   );
