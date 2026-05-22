@@ -33,7 +33,6 @@ export function WorkshopHero() {
           backgroundSize: "40px 40px",
         }}
       />
-      {/* Animated glow effects */}
       <Parallax speed={-0.4} className="absolute top-1/4 right-0 w-[500px] h-[500px]">
         <div className="w-full h-full bg-brand-500/15 rounded-full blur-[150px]" />
       </Parallax>
@@ -43,47 +42,43 @@ export function WorkshopHero() {
 
       <div className="container relative">
         <div className="max-w-4xl mx-auto text-center space-y-5 md:space-y-8">
-          {/* Top badge */}
           <FadeIn direction="down" delay={0.1}>
             <FloatingElement amplitude={5} duration={5}>
               <Badge className="bg-brand-500/20 text-brand-200 border border-brand-400/30 px-4 py-2 text-sm">
                 <IconStar className="size-4 ml-1" />
-                أكتر من 300 شخص بدأوا يكسبوا دخل إضافي
+                +300 شخص عادي بدأوا يكسبوا فلوس حقيقية من المهارة دي
               </Badge>
             </FloatingElement>
           </FadeIn>
 
-          {/* Main headline */}
           <div>
             <SlideReveal delay={0.2}>
               <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-white leading-[1.2] tracking-tight">
-                اتعلم{" "}
+                اتعلم مهارة بتجيب{" "}
                 <span className="bg-gradient-to-l from-brand-300 to-brand-400 bg-clip-text text-transparent">
-                  أقوى مهارة في 2026
-                </span>{" "}
-                واكسب أول 5,000 جنيه
+                  فلوس حقيقية
+                </span>
               </h1>
             </SlideReveal>
             <SlideReveal delay={0.35}>
               <p className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-white leading-[1.2] tracking-tight mt-2 sm:mt-3">
-                في{" "}
+                وابني{" "}
                 <span className="bg-gradient-to-l from-brand-300 to-brand-400 bg-clip-text text-transparent">
-                  90 يوم
+                  بيزنس
                 </span>{" "}
-                — أو فلوسك ترجع
+                يشتغل وإنت نايم
               </p>
             </SlideReveal>
           </div>
 
-          {/* Sub-headline */}
           <FadeIn direction="up" delay={0.5}>
             <p className="text-lg md:text-xl text-white/60 max-w-2xl mx-auto leading-relaxed">
-              كورس مسجّل 30+ ساعة — من الصفر تماماً. هتتعلم تصميم + AI + تسويق +
-              LinkedIn. مش محتاج خبرة سابقة ولا شهادة معينة.
+              تصميم + AI + موقع يبيعلك خدماتك 24/7. من الصفر — حتى لو عمرك ما
+              فتحت برنامج تصميم. في 90 يوم هتكون عندك مهارة، portfolio، موقع،
+              وأول client بيدفع.
             </p>
           </FadeIn>
 
-          {/* CTA */}
           <ScaleIn delay={0.65}>
             <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
               <Button
@@ -105,7 +100,6 @@ export function WorkshopHero() {
             </div>
           </ScaleIn>
 
-          {/* Trust indicators */}
           <FadeIn direction="up" delay={0.8}>
             <div className="flex flex-wrap items-center justify-center gap-6 pt-4 text-sm text-white/50">
               <div className="flex items-center gap-2">
@@ -114,11 +108,11 @@ export function WorkshopHero() {
               </div>
               <div className="flex items-center gap-2">
                 <IconUsers className="size-5 text-brand-400" />
-                <span>+300 خريج</span>
+                <span>+300 بدأوا يكسبوا</span>
               </div>
               <div className="flex items-center gap-2">
                 <IconClock className="size-5 text-brand-400" />
-                <span>30+ ساعة محتوى مسجّل</span>
+                <span>30+ ساعة عملي من الصفر</span>
               </div>
             </div>
           </FadeIn>

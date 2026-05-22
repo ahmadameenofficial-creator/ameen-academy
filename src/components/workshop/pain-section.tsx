@@ -17,13 +17,12 @@ export function PainSection() {
         <FadeIn direction="up" className="max-w-3xl mx-auto text-center mb-12 md:mb-16">
           <p className="text-red-500 font-semibold text-sm mb-3">المشكلة</p>
           <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-foreground leading-tight">
-            لو ده حالك…
+            لو أي حاجة من دول حصلت معاك…
             <br />
-            <span className="text-brand-500">يبقى الكورس ده اتعمل عشانك</span>
+            <span className="text-brand-500">يبقى إنت في المكان الصح</span>
           </h2>
           <p className="mt-4 text-muted-foreground text-lg">
-            مش لازم تكون مصمم عشان تبدأ. أغلب الناس اللي بتدور على دخل إضافي
-            بتعدّي على نفس المشاكل دي.
+            مش لازم تكون مصمم. مش لازم تكون خبير. لازم بس تكون زهقت من الوضع اللي إنت فيه.
           </p>
         </FadeIn>
 
@@ -31,18 +30,18 @@ export function PainSection() {
           <StaggerItem>
             <HoverLift>
               <PainCard
-                icon={<IconBrandYoutube className="size-5 text-red-600 dark:text-red-400" />}
-                title="بتتفرج على YouTube ومش بتبدأ"
-                description="فيديوهات كتير ومفيش خطة واضحة. المعلومات متبعترة ومش عارف تبدأ منين."
+                icon={<IconCurrencyDollarOff className="size-5 text-red-600 dark:text-red-400" />}
+                title="مرتبك بيخلص قبل الشهر ما يخلص"
+                description="سواء طالب أو موظف — الفلوس مش كفاية. ومفيش مصدر دخل تاني واقعي."
               />
             </HoverLift>
           </StaggerItem>
           <StaggerItem>
             <HoverLift>
               <PainCard
-                icon={<IconCurrencyDollarOff className="size-5 text-red-600 dark:text-red-400" />}
-                title="عايز دخل إضافي ومش لاقي طريقة"
-                description="جربت حاجات كتير ومفيش حاجة نفعت. محتاج مهارة حقيقية تكسب منها مش مجرد كلام."
+                icon={<IconBrandYoutube className="size-5 text-red-600 dark:text-red-400" />}
+                title="بتتفرج وبتتعلم ومش بتكسب"
+                description="YouTube و كورسات كتير ومفيش نتيجة. بتتعلم أدوات بس محدش علّمك تجيب بيها فلوس."
               />
             </HoverLift>
           </StaggerItem>
@@ -50,8 +49,8 @@ export function PainSection() {
             <HoverLift>
               <PainCard
                 icon={<IconUserQuestion className="size-5 text-red-600 dark:text-red-400" />}
-                title="مفيش حد بيرشدك"
-                description="بتدور لوحدك، بتغلط لوحدك، وبتحبط لوحدك. مفيش mentor يقولك إنت فين غلطان."
+                title="مش عارف تبدأ منين"
+                description="كل يوم بتقول بكرة هبدأ. بس بكرة مش بتيجي عشان مفيش خطة واضحة."
               />
             </HoverLift>
           </StaggerItem>
@@ -59,8 +58,8 @@ export function PainSection() {
             <HoverLift>
               <PainCard
                 icon={<IconMoodSad className="size-5 text-red-600 dark:text-red-400" />}
-                title="حاسس إن الفرص مش ليك"
-                description="بتشوف ناس بتكسب أونلاين وبتقول دول عندهم حاجة أنا مش عندها. الحقيقة: هما بس اتعلموا الصح."
+                title="جربت حاجات كتير ومفيش نتيجة"
+                description="Dropshipping، أفلييت، ريزن — كل حاجة بتبدأ بحماس وبتنتهي بخسارة. محتاج مهارة حقيقية."
               />
             </HoverLift>
           </StaggerItem>
@@ -68,8 +67,8 @@ export function PainSection() {
             <HoverLift>
               <PainCard
                 icon={<IconTrendingDown className="size-5 text-red-600 dark:text-red-400" />}
-                title="مرتبك مش كفاية"
-                description="سواء طالب أو موظف — الدخل الحالي مش بيكفي. محتاج مصدر تاني تقدر تبنيه جنب حياتك."
+                title="عندك مهارة بس محدش عارف بيها"
+                description="ممكن تعرف تصمم شوية بس مفيش portfolio ولا موقع ولا حد بيشوف شغلك. يعني كأنك مش موجود."
               />
             </HoverLift>
           </StaggerItem>

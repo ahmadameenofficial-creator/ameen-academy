@@ -14,44 +14,44 @@ const CASE_STUDIES = [
   {
     name: "سارة محمد",
     age: 23,
-    badge: "خريجة فنون تطبيقية",
+    badge: "خريجة — كانت مش لاقية شغل",
     badgeIcon: <IconSchool className="size-3 ml-1" />,
     before:
-      "كانت خريجة ومش لاقية شغل في مجالها. حاسة إن السنين اللي فاتت راحت على الفاضي وعايزة تتعلم حاجة تكسب منها.",
+      "كانت خريجة ومش لاقية فرصة في مجالها. كل يوم بتبعت CVs ومفيش رد. حاسة إن مفيش مكان ليها في السوق.",
     after:
-      "بعد شهرين من الكورس، بنت portfolio قوي وبدأت تاخد شغل سوشيال ميديا من 3 clients ثابتين. دلوقتي بتكسب 4,000+ جنيه شهرياً.",
+      "اتعلمت تصميم + بنت موقع يعرض خدماتها. بعد شهرين بدأت تاخد شغل سوشيال ميديا من 3 clients ثابتين. دلوقتي بتكسب 4,000+ جنيه شهرياً.",
     income: "4,000+ جنيه/شهر",
     timeToFirstClient: "5 أسابيع",
     quote:
-      "الكورس فهّمني إن المشكلة مكنتش في مهارتي — كانت في إني مش عارفة أعرض نفسي صح.",
+      "المشكلة مكنتش إني مش شاطرة — كانت إن محدش كان شايفني. الموقع والـ portfolio غيّروا كل حاجة.",
   },
   {
     name: "محمد خالد",
     age: 20,
-    badge: "طالب جامعي",
+    badge: "طالب — عايز دخل جنب الكلية",
     badgeIcon: <IconSchool className="size-3 ml-1" />,
     before:
-      "طالب في سنة تالتة هندسة، عايز دخل إضافي جنب الكلية. جرب يتعلم من YouTube بس مكنش عارف يحول اللي اتعلمه لفلوس.",
+      "طالب في هندسة ومحتاج فلوس. جرب يشتغل في كافيه بس الوقت مكنش بيسمح. عايز حاجة يعملها من البيت وتكسّبه.",
     after:
-      "استخدم LinkedIn Playbook من الكورس وبعد 3 أسابيع جاب أول client بـ 1,500 جنيه. دلوقتي بيعمل 6,000 شهرياً وهو لسه في الكلية.",
+      "اتعلم تصميم وبنى بروفايل LinkedIn قوي. بعد 3 أسابيع جاب أول client بـ 1,500 جنيه. دلوقتي بيعمل 6,000 شهرياً وهو لسه في الكلية.",
     income: "6,000 جنيه/شهر",
     timeToFirstClient: "3 أسابيع",
     quote:
-      "أول مرة حد يعلمني إزاي أكسب من التصميم مش بس إزاي أصمم.",
+      "أول مرة أحس إن عندي مهارة حقيقية بتجيب فلوس. مش شغل كافيه — ده بيزنس.",
   },
   {
     name: "نورهان عادل",
     age: 27,
-    badge: "موظفة + فريلانسر",
+    badge: "موظفة — مرتبها مكنش كفاية",
     badgeIcon: <IconBriefcase className="size-3 ml-1" />,
     before:
-      "موظفة بمرتب 4,500 جنيه ومش كفاية. كانت عايزة مهارة تكسب منها جنب شغلها من غير ما تسيب الوظيفة.",
+      "موظفة بمرتب 4,500 جنيه ومش كفاية. كانت عايزة مصدر دخل تاني بس مش عارفة تبدأ منين. جربت حاجات كتير ومنفعتش.",
     after:
-      "اتعلمت تصميم براندينج في الكورس وبدأت تاخد مشاريع هوية بصرية. أول مشروع كامل كان بـ 5,000 جنيه. دلوقتي الدخل الإضافي بتاعها 7,000+ شهرياً.",
+      "اتعلمت براندينج + بنت موقعها + بدأت تاخد مشاريع هوية بصرية. أول مشروع كامل كان بـ 5,000 جنيه. دلوقتي الدخل الإضافي 7,000+ شهرياً.",
     income: "7,000+ جنيه إضافي",
     timeToFirstClient: "6 أسابيع",
     quote:
-      "كنت فاكرة التصميم حاجة صعبة ومحتاجة سنين. الكورس ده اختصرلي الطريق.",
+      "كنت فاكرة إني محتاجة سنين عشان أتعلم. الكورس ده اختصرلي الطريق وفتحلي باب فلوس جديد.",
   },
 ];
 
@@ -61,12 +61,11 @@ export function CaseStudiesSection() {
       <div className="container">
         <FadeIn direction="up" className="max-w-3xl mx-auto text-center mb-12 md:mb-16">
           <p className="text-brand-500 font-semibold text-sm mb-3">
-            قصص حقيقية
+            ناس حقيقية، نتايج حقيقية
           </p>
           <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-foreground leading-tight">
-            ناس زيّك بدأت من الصفر
-            <br />
-            <span className="text-brand-500">ودلوقتي عندهم دخل إضافي حقيقي</span>
+            مكانوش مصممين.{" "}
+            <span className="text-brand-500">بدأوا من صفر ودلوقتي بيكسبوا.</span>
           </h2>
         </FadeIn>
 
@@ -74,11 +73,8 @@ export function CaseStudiesSection() {
           {CASE_STUDIES.map((study) => (
             <StaggerItem key={study.name}>
             <HoverLift lift={-5} scale={1.02}>
-            <Card
-              className="overflow-hidden border-border hover:border-brand-200 transition-all hover:shadow-lg hover:shadow-brand-100/10 dark:hover:border-brand-800/40 h-full"
-            >
+            <Card className="overflow-hidden border-border hover:border-brand-200 transition-all hover:shadow-lg hover:shadow-brand-100/10 dark:hover:border-brand-800/40 h-full">
               <CardContent className="p-0">
-                {/* Header */}
                 <div className="bg-gradient-to-l from-brand-700 to-brand-500 p-5 text-white">
                   <div className="flex items-center justify-between mb-3">
                     <div>
@@ -93,9 +89,7 @@ export function CaseStudiesSection() {
                   <div className="flex items-center gap-4">
                     <div className="text-center">
                       <p className="text-2xl font-bold">{study.income}</p>
-                      <p className="text-[10px] text-white/60 mt-0.5">
-                        الدخل الحالي
-                      </p>
+                      <p className="text-[10px] text-white/60 mt-0.5">الدخل دلوقتي</p>
                     </div>
                     <div className="h-8 w-px bg-white/20" />
                     <div className="text-center">
@@ -103,30 +97,19 @@ export function CaseStudiesSection() {
                         <IconClock className="size-4" />
                         {study.timeToFirstClient}
                       </p>
-                      <p className="text-[10px] text-white/60 mt-0.5">
-                        لأول client
-                      </p>
+                      <p className="text-[10px] text-white/60 mt-0.5">لأول client</p>
                     </div>
                   </div>
                 </div>
 
-                {/* Body */}
                 <div className="p-5 space-y-4">
                   <div>
-                    <p className="text-xs font-semibold text-red-500 mb-1.5">
-                      قبل الكورس
-                    </p>
-                    <p className="text-sm text-muted-foreground leading-relaxed">
-                      {study.before}
-                    </p>
+                    <p className="text-xs font-semibold text-red-500 mb-1.5">قبل الكورس</p>
+                    <p className="text-sm text-muted-foreground leading-relaxed">{study.before}</p>
                   </div>
                   <div>
-                    <p className="text-xs font-semibold text-green-600 mb-1.5">
-                      بعد الكورس
-                    </p>
-                    <p className="text-sm text-muted-foreground leading-relaxed">
-                      {study.after}
-                    </p>
+                    <p className="text-xs font-semibold text-green-600 mb-1.5">بعد الكورس</p>
+                    <p className="text-sm text-muted-foreground leading-relaxed">{study.after}</p>
                   </div>
                   <div className="rounded-xl bg-brand-50/50 dark:bg-brand-900/10 p-4 border border-brand-100/50 dark:border-brand-800/20">
                     <IconQuote className="size-4 text-brand-400 mb-2" />

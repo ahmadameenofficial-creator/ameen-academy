@@ -15,14 +15,14 @@ import { FadeIn, ScaleIn, StaggerContainer, StaggerItem, Parallax, FloatingEleme
 const COURSE_SLUG = "warshit-ameen";
 
 const QUICK_WINS = [
-  "30+ ساعة محتوى مسجّل (تصميم + AI + تسويق)",
+  "30+ ساعة محتوى عملي (تصميم + AI + تسويق + بيع)",
+  "موقع شخصي يعرض خدماتك ويبيعلك 24/7",
   "Portfolio Kit — 5 templates جاهزة",
   "10 رسائل جاهزة تجيبلك أول client",
   "أداة تسعير شغلك باحتراف",
-  "AI Toolkit متحدث مدى الحياة",
+  "AI Toolkit بيتحدث مدى الحياة",
   "مجتمع أكاديمية أمين + فرص شغل",
-  "LinkedIn Profile Makeover + خطة 30 يوم",
-  "ضمان كامل — فلوسك ترجع لو مكسبتش",
+  "ضمان كامل — لو مكسبتش فلوسك ترجع",
 ];
 
 export function FinalCtaSection() {
@@ -32,7 +32,6 @@ export function FinalCtaSection() {
         <div className="max-w-4xl mx-auto">
           <ScaleIn scale={0.9}>
           <div className="rounded-3xl bg-gradient-to-br from-brand-950 via-brand-900 to-[#0d0020] p-8 md:p-12 lg:p-16 text-white relative overflow-hidden">
-            {/* Decorative */}
             <Parallax speed={-0.4} className="absolute top-0 right-0">
               <div className="w-[400px] h-[400px] bg-brand-500/10 rounded-full blur-[150px]" />
             </Parallax>
@@ -53,23 +52,22 @@ export function FinalCtaSection() {
 
                 <FadeIn direction="up" delay={0.2}>
                   <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold leading-tight">
-                    القرار بسيط:
+                    عندك اختيارين:
                     <br />
                     <span className="text-brand-300">
-                      تفضل زي ما إنت — أو تبدأ تكسب
+                      تفضل زي ما إنت — أو تبني دخل حقيقي
                     </span>
                   </h2>
                 </FadeIn>
 
                 <FadeIn direction="up" delay={0.3}>
                   <p className="text-white/60 text-lg max-w-xl mx-auto">
-                    لو كنت بتدور على إشارة تبدأ — دي هي. 1,500 جنيه بس،
-                    وإنت هتكسب أضعافها في أول 90 يوم.
+                    بعد 90 يوم من دلوقتي — إما هتكون بدأت تكسب فعلاً،
+                    أو هتكون لسه بتتفرج على YouTube وبتقول &ldquo;بكرة هبدأ&rdquo;.
                   </p>
                 </FadeIn>
               </div>
 
-              {/* What you get list */}
               <StaggerContainer className="grid sm:grid-cols-2 gap-3 max-w-2xl mx-auto mb-10" staggerDelay={0.06}>
                 {QUICK_WINS.map((item) => (
                   <StaggerItem key={item}>
@@ -83,7 +81,6 @@ export function FinalCtaSection() {
                 ))}
               </StaggerContainer>
 
-              {/* Price + CTA */}
               <ScaleIn delay={0.2}>
               <div className="text-center space-y-5">
                 <div className="flex items-center justify-center gap-4">
@@ -106,7 +103,6 @@ export function FinalCtaSection() {
                   </Link>
                 </Button>
 
-                {/* Trust row */}
                 <div className="flex flex-wrap items-center justify-center gap-6 text-sm text-white/40 pt-2">
                   <span className="flex items-center gap-2">
                     <IconShieldCheck className="size-4 text-brand-400" />

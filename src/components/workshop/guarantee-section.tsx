@@ -10,13 +10,11 @@ export function GuaranteeSection() {
         <div className="max-w-3xl mx-auto">
           <ScaleIn scale={0.92}>
           <div className="rounded-3xl border-2 border-brand-200 dark:border-brand-800/40 bg-brand-50/30 dark:bg-brand-950/10 p-8 md:p-12 text-center relative overflow-hidden">
-            {/* Subtle glow */}
             <Parallax speed={-0.3} className="absolute top-0 left-1/2 -translate-x-1/2">
               <div className="w-[300px] h-[150px] bg-brand-500/5 rounded-full blur-[80px]" />
             </Parallax>
 
             <div className="relative space-y-6">
-              {/* Icon */}
               <FadeIn direction="down" delay={0.1}>
                 <div className="flex justify-center">
                   <div className="flex h-16 w-16 items-center justify-center rounded-2xl bg-brand-500 shadow-lg shadow-brand-500/30">
@@ -25,7 +23,6 @@ export function GuaranteeSection() {
                 </div>
               </FadeIn>
 
-              {/* Title */}
               <FadeIn direction="up" delay={0.2}>
                 <div>
                   <h2 className="text-2xl sm:text-3xl font-bold text-foreground">
@@ -37,32 +34,30 @@ export function GuaranteeSection() {
                 </div>
               </FadeIn>
 
-              {/* Guarantee text */}
               <FadeIn direction="up" delay={0.3}>
                 <div className="max-w-xl mx-auto space-y-4">
                   <p className="text-foreground text-lg leading-relaxed font-medium">
-                    لو طبّقت اللي في الكورس لمدة 90 يوم ومقدرتش تجيب أول 5,000
-                    جنيه — هرجعلك كل فلوسك. بدون أسئلة.
+                    طبّق اللي في الكورس لمدة 90 يوم. لو مكسبتش أول 5,000 جنيه —
+                    هرجعلك كل فلوسك. بدون أسئلة. بدون مشاكل.
                   </p>
 
                   <div className="h-px bg-border max-w-xs mx-auto" />
 
                   <p className="text-muted-foreground leading-relaxed">
-                    يعني المخاطرة = صفر. إنت بتستثمر 1,500 جنيه في نفسك — ولو
-                    الاستثمار ده مجابش نتيجة، فلوسك ترجع. مفيش أسهل من كده.
+                    المخاطرة = صفر. إنت بتستثمر 1,500 جنيه في نفسك — ولو
+                    الاستثمار ده مجابش نتيجة، فلوسك كاملة ترجع. أنا اللي شايل الـ risk كله.
                   </p>
                 </div>
               </FadeIn>
 
-              {/* Why this works */}
               <StaggerContainer className="max-w-md mx-auto pt-4 space-y-3 text-right" staggerDelay={0.1}>
                 <p className="text-sm font-semibold text-foreground text-center mb-4">
                   ليه واثق أقدم الضمان ده؟
                 </p>
                 {[
-                  "عشان 300+ طالب قبلك عملوها وبدأوا يكسبوا",
-                  "عشان اللي بيطبّق فعلاً — النتيجة مضمونة",
-                  "عشان 1,500 جنيه أقل من نص أول شغلانة هتجيبها",
+                  "عشان 300+ شخص قبلك بدأوا من صفر ودلوقتي بيكسبوا",
+                  "عشان النظام مجرّب — اللي بيطبّق بيجيب نتيجة",
+                  "عشان 1,500 جنيه أقل من أول شغلانة هتجيبها بعد الكورس",
                 ].map((reason) => (
                   <StaggerItem key={reason}>
                     <div className="flex items-center gap-3">

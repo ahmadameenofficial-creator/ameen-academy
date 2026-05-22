@@ -12,6 +12,7 @@ import {
   IconUsers,
   IconBrandLinkedin,
   IconFlame,
+  IconWorldWww,
 } from "@tabler/icons-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -24,23 +25,31 @@ const OFFER_ITEMS = [
     icon: <IconBook className="size-5 text-white" />,
     iconBg: "bg-brand-500 text-white",
     title: "الكورس الأساسي — 30+ ساعة",
-    description: "تصميم جرافيك + AI Tools + تسويق شخصي + Soft Skills + Personal Brand + LinkedIn",
+    description: "تصميم من الصفر + AI Tools + تسويق + بيع + LinkedIn — كل حاجة تحتاجها عشان تكسب",
     value: "3,000",
     highlight: true,
+  },
+  {
+    icon: <IconWorldWww className="size-5 text-brand-500" />,
+    iconBg: "bg-brand-50 dark:bg-brand-900/30",
+    title: "Website Kit — موقعك الشخصي جاهز",
+    description: "Template موقع احترافي يعرض خدماتك ويبيعلك 24/7. عدّل عليه وخلاص.",
+    value: "2,000",
+    highlight: false,
   },
   {
     icon: <IconTemplate className="size-5 text-brand-500" />,
     iconBg: "bg-brand-50 dark:bg-brand-900/30",
     title: "Portfolio Kit — 5 Templates جاهزة",
-    description: "عدّل عليها وخلاص — portfolio احترافي تقدر تعرضه لأي client فوراً",
+    description: "portfolio احترافي تقدر تعرضه لأي client أو شركة فوراً",
     value: "1,500",
     highlight: false,
   },
   {
     icon: <IconMessage className="size-5 text-brand-500" />,
     iconBg: "bg-brand-50 dark:bg-brand-900/30",
-    title: "Client Outreach Templates — 10 رسائل",
-    description: "رسائل جاهزة تبعتها على LinkedIn و WhatsApp وتجيب بيها أول client",
+    title: "Client Outreach — 10 رسائل جاهزة",
+    description: "رسائل مجربة تبعتها على LinkedIn و WhatsApp وتجيب بيها أول client",
     value: "1,000",
     highlight: false,
   },
@@ -55,8 +64,8 @@ const OFFER_ITEMS = [
   {
     icon: <IconRobot className="size-5 text-brand-500" />,
     iconBg: "bg-brand-50 dark:bg-brand-900/30",
-    title: "AI Design Toolkit (متحدث دورياً)",
-    description: "أحدث أدوات الـ AI للتصميم — بيتحدث كل فترة بأدوات جديدة مدى الحياة",
+    title: "AI Design Toolkit (بيتحدث مدى الحياة)",
+    description: "أحدث أدوات الـ AI للتصميم — بيتحدث كل فترة بأدوات جديدة ومش هتدفع تاني",
     value: "1,500",
     highlight: false,
   },
@@ -64,7 +73,7 @@ const OFFER_ITEMS = [
     icon: <IconUsers className="size-5 text-brand-500" />,
     iconBg: "bg-brand-50 dark:bg-brand-900/30",
     title: "مجتمع أكاديمية أمين",
-    description: "جروب خاص فيه تقييم شغلك + فرص شغل + networking مع مصممين تانيين",
+    description: "جروب خاص فيه تقييم شغلك + فرص شغل حقيقية + networking مع ناس بتكسب",
     value: "2,000",
     highlight: false,
   },
@@ -72,7 +81,7 @@ const OFFER_ITEMS = [
     icon: <IconBrandLinkedin className="size-5 text-brand-500" />,
     iconBg: "bg-brand-50 dark:bg-brand-900/30",
     title: "LinkedIn Profile Makeover",
-    description: "Template بروفايل + خطة محتوى 30 يوم تخليك visible لأي HR أو client",
+    description: "Template بروفايل + خطة 30 يوم تخليك visible لأي شركة أو client بيدور",
     value: "800",
     highlight: false,
   },
@@ -85,10 +94,11 @@ export function OfferStackSection() {
         <FadeIn direction="up" className="max-w-3xl mx-auto text-center mb-12 md:mb-16">
           <p className="text-brand-500 font-semibold text-sm mb-3">العرض الكامل</p>
           <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-foreground leading-tight">
-            كل ده بسعر واحد
+            كل ده هتاخده{" "}
+            <span className="text-brand-500">بسعر أقل من أول شغلانة هتجيبها</span>
           </h2>
           <p className="mt-4 text-muted-foreground text-lg">
-            مش بس كورس — ده نظام كامل فيه كل حاجة محتاجها عشان تبدأ تكسب.
+            مش بس كورس — ده نظام كامل: مهارة + أدوات + موقع + طريقة تكسب.
           </p>
         </FadeIn>
 
@@ -125,16 +135,15 @@ export function OfferStackSection() {
           ))}
         </StaggerContainer>
 
-        {/* Total + Price */}
         <ScaleIn delay={0.2} className="max-w-3xl mx-auto mt-10">
           <div className="rounded-3xl bg-gradient-to-br from-brand-900 via-brand-800 to-[#1a0033] p-8 md:p-10 text-center text-white relative overflow-hidden">
             <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[400px] h-[200px] bg-brand-500/20 rounded-full blur-[100px]" />
 
             <div className="relative space-y-6">
               <div>
-                <p className="text-white/60 text-sm">إجمالي القيمة الحقيقية</p>
+                <p className="text-white/60 text-sm">لو اشتريت كل حاجة لوحدها</p>
                 <p className="text-4xl md:text-5xl font-bold mt-1 line-through text-white/40">
-                  <CountUp target={10300} suffix=" جنيه" duration={1.5} />
+                  <CountUp target={12300} suffix=" جنيه" duration={1.5} />
                 </p>
               </div>
 
@@ -151,7 +160,7 @@ export function OfferStackSection() {
                   عرض لأول 50 مشترك
                 </Badge>
                 <p className="text-5xl md:text-6xl font-bold text-white">1,500 جنيه</p>
-                <p className="text-white/50 text-sm mt-2">يعني بتدفع 14% بس من القيمة الحقيقية</p>
+                <p className="text-white/50 text-sm mt-2">أقل من سعر أول شغلانة هتجيبها</p>
               </div>
 
               <div className="pt-2">

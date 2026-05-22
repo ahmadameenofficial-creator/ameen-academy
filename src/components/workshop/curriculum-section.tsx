@@ -12,36 +12,36 @@ import { FadeIn, StaggerContainer, StaggerItem, ScaleIn } from "@/components/ui/
 
 const MODULES = [
   {
-    title: "أساسيات التصميم وفكر المصمم",
+    title: "أساسيات التصميم — العقلية قبل الأداة",
     lessons: 8,
     duration: "4 ساعات",
     topics: [
-      "مبادئ التصميم الأساسية (التباين، التوازن، الهيراركي)",
-      "نظرية الألوان وتطبيقها العملي",
-      "الطباعة والتايبوجرافي العربي",
-      "عقلية المصمم اللي بيتطور في شهور بدل سنين",
+      "مبادئ التصميم اللي بتفرق بين هاوي ومحترف",
+      "نظرية الألوان — إزاي تختار ألوان بتبيع",
+      "التايبوجرافي العربي — الخط اللي بيتكلم",
+      "عقلية المحترف: إزاي تفكر كمصمم بيكسب مش بيرسم",
     ],
   },
   {
-    title: "فوتوشوب — من الصفر للاحتراف",
+    title: "فوتوشوب — من أول ما تفتحه لأول شغلانة",
     lessons: 12,
     duration: "7 ساعات",
     topics: [
-      "واجهة البرنامج والأدوات الأساسية",
-      "التعامل مع الطبقات والماسكات",
-      "تعديل الصور وتصميم السوشيال ميديا",
-      "مشاريع عملية حقيقية تضيفها للـ portfolio",
+      "الواجهة والأدوات — من الصفر بدون افتراضات",
+      "الطبقات والماسكات — سر الشغل الاحترافي",
+      "تصميم سوشيال ميديا يجيب engagement",
+      "مشاريع حقيقية تحطها في portfolio فوراً",
     ],
   },
   {
-    title: "إليستريتور — التصميم الاحترافي",
+    title: "إليستريتور — اللوجوهات والبراندينج",
     lessons: 10,
     duration: "6 ساعات",
     topics: [
-      "أساسيات الفيكتور والأشكال",
-      "تصميم اللوجوهات والهوية البصرية",
-      "أسرار تصميم الـ Brand Identity",
-      "مشاريع لوجوهات وهويات كاملة",
+      "الفيكتور والأشكال — أساس كل لوجو احترافي",
+      "تصميم لوجوهات الشركات بتدفع فيها آلاف",
+      "الهوية البصرية الكاملة — Brand Identity",
+      "مشاريع هويات كاملة تضيفها لشغلك",
     ],
   },
   {
@@ -49,43 +49,43 @@ const MODULES = [
     lessons: 6,
     duration: "3 ساعات",
     topics: [
-      "إزاي تستخدم كانفا كمحترف مش مبتدئ",
-      "Templates وتعديلها بسرعة",
-      "تصميم محتوى سوشيال ميديا يومي",
-      "كانفا للعروض التقديمية والـ Branding",
+      "كانفا كأداة إنتاج سريعة مش لعبة",
+      "Templates احترافية تعدّل عليها في دقايق",
+      "محتوى سوشيال ميديا يومي بجودة عالية",
+      "عروض تقديمية وبراندينج من كانفا",
     ],
   },
   {
-    title: "أدوات AI للتصميم (متحدث باستمرار)",
+    title: "أدوات AI — السلاح السري في 2026",
     lessons: 8,
     duration: "4 ساعات",
     topics: [
-      "أحدث أدوات الـ AI في التصميم",
-      "توليد الصور والأفكار بالـ AI",
-      "إزاي الـ AI يخليك أسرع 3 مرات",
-      "الجزء ده بيتحدث كل فترة بأحدث الأدوات",
+      "أدوات AI اللي بتخليك أسرع 10 مرات من أي مصمم تاني",
+      "توليد أفكار وصور بالـ AI في ثواني",
+      "إزاي تستخدم AI ومحدش يعرف — الشغل يطلع طبيعي 100%",
+      "الجزء ده بيتحدث كل فترة بأحدث الأدوات مدى الحياة",
     ],
   },
   {
-    title: "التسويق الشخصي والبيع",
+    title: "ابني موقعك — واجهة تبيعلك 24/7",
     lessons: 7,
     duration: "3.5 ساعات",
     topics: [
-      "مفهوم التسويق الصحيح — مش مجرد إعلان ممول",
-      "إزاي تبيع شغلك بدون ما تحس إنك بتتسول",
-      "إزاي تكلم client وتقنعه",
-      "تسعير شغلك صح وتفاوض باحتراف",
+      "إزاي تبني موقع شخصي احترافي يعرض خدماتك",
+      "صفحة Portfolio تخلي الـ client يقول عايزك فوراً",
+      "صفحة خدمات + أسعار تبيع نفسها",
+      "الموقع كـ salesman — يشتغل وإنت نايم",
     ],
   },
   {
-    title: "Personal Brand وLinkedIn",
-    lessons: 6,
-    duration: "3 ساعات",
+    title: "التسويق + البيع + LinkedIn",
+    lessons: 8,
+    duration: "4 ساعات",
     topics: [
-      "بناء شخصية حقيقية الناس بتثق فيها",
-      "القصة بتاعتك — إزاي تحكيها صح",
-      "بروفايل LinkedIn قوي يجيبلك شغل",
-      "خطة محتوى 30 يوم على LinkedIn",
+      "إزاي تبيع شغلك بدون ما تحس إنك بتشحت",
+      "تسعير شغلك صح — تاخد حقك من أول شغلانة",
+      "بروفايل LinkedIn يخلي الشركات هي اللي تيجي تكلمك",
+      "خطة محتوى 30 يوم تخليك visible لأي HR أو client",
     ],
   },
 ];
@@ -100,13 +100,15 @@ export function CurriculumSection() {
       <div className="container">
         <FadeIn direction="up" className="max-w-3xl mx-auto text-center mb-12">
           <p className="text-brand-500 font-semibold text-sm mb-3">
-            المحتوى التعليمي
+            اللي هتتعلمه
           </p>
           <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-foreground leading-tight">
-            30+ ساعة محتوى مسجّل
-            <br />
-            <span className="text-brand-500">+ تحديثات مستمرة مدى الحياة</span>
+            30+ ساعة عملي —{" "}
+            <span className="text-brand-500">من الصفر لحد ما تكسب</span>
           </h2>
+          <p className="mt-4 text-muted-foreground">
+            مش محاضرات مملة. كل درس فيه تطبيق عملي تقدر تحطه في portfolio وتكسب بيه.
+          </p>
           <div className="flex items-center justify-center gap-6 mt-6 text-sm text-muted-foreground">
             <span className="flex items-center gap-2">
               <IconBook className="size-4 text-brand-500" />
@@ -128,9 +130,7 @@ export function CurriculumSection() {
             const isOpen = openIndex === index;
             return (
               <StaggerItem key={module.title}>
-              <div
-                className="rounded-2xl border border-border bg-card overflow-hidden transition-all"
-              >
+              <div className="rounded-2xl border border-border bg-card overflow-hidden transition-all">
                 <button
                   onClick={() => setOpenIndex(isOpen ? null : index)}
                   aria-expanded={isOpen}

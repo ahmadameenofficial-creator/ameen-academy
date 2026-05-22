@@ -7,7 +7,7 @@ import {
   IconSpeakerphone,
   IconBrandLinkedin,
   IconUserStar,
-  IconHeartHandshake,
+  IconWorldWww,
 } from "@tabler/icons-react";
 import { FadeIn, StaggerContainer, StaggerItem, HoverLift, DrawLine } from "@/components/ui/motion";
 
@@ -21,10 +21,9 @@ export function SolutionSection() {
           </FadeIn>
           <FadeIn direction="up" delay={0.1}>
             <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-foreground leading-tight">
-              كورس ورشة أمين —
-              <br />
+              مش كورس — ده{" "}
               <span className="text-brand-500">
-                نظام كامل يحوّلك من صفر لحد ما تكسب
+                نظام كامل يحوّلك لحد بيكسب
               </span>
             </h2>
           </FadeIn>
@@ -35,8 +34,8 @@ export function SolutionSection() {
           </FadeIn>
           <FadeIn direction="up" delay={0.2}>
             <p className="mt-4 text-muted-foreground text-lg max-w-2xl mx-auto">
-              مش كورس تصميم عادي. ده نظام متكامل بيوديك من إنك متعرفش حاجة —
-              لحد ما يكون عندك مهارة، شغل، وفلوس بتدخل.
+              هتتعلم مهارة الشركات بتدفع فيها آلاف. هتبني portfolio وموقع يبيعلك.
+              وهتعرف تجيب clients وتكسب — مش بعد سنة، في أول 90 يوم.
             </p>
           </FadeIn>
         </div>
@@ -46,8 +45,8 @@ export function SolutionSection() {
             <HoverLift>
               <PillarCard
                 icon={<IconBrush className="size-6 text-brand-500" />}
-                title="تصميم جرافيك بعمق"
-                description="فوتوشوب + إليستريتور + كانفا — مش مجرد أدوات، لكن فكر التصميم اللي يخلي شغلك يفرق."
+                title="تصميم من الصفر للاحتراف"
+                description="فوتوشوب + إليستريتور + كانفا. مش مجرد أدوات — هتفهم فكر التصميم اللي يخلي شغلك يساوي فلوس."
               />
             </HoverLift>
           </StaggerItem>
@@ -55,8 +54,17 @@ export function SolutionSection() {
             <HoverLift>
               <PillarCard
                 icon={<IconRobot className="size-6 text-brand-500" />}
-                title="أدوات AI للتصميم"
-                description="أحدث أدوات الذكاء الاصطناعي اللي هتخليك تشتغل أسرع 3 مرات. والجزء ده بيتحدث باستمرار."
+                title="AI يخليك أسرع 10 مرات"
+                description="أدوات ذكاء اصطناعي هتخلّيك تعمل في ساعة اللي غيرك بيعمله في يوم. والجزء ده بيتحدث باستمرار."
+              />
+            </HoverLift>
+          </StaggerItem>
+          <StaggerItem>
+            <HoverLift>
+              <PillarCard
+                icon={<IconWorldWww className="size-6 text-brand-500" />}
+                title="موقع يبيعلك 24/7"
+                description="هتبني موقع شخصي احترافي يعرض خدماتك ويجيبلك clients وإنت نايم. ده الـ salesman بتاعك اللي مبيتعبش."
               />
             </HoverLift>
           </StaggerItem>
@@ -64,17 +72,8 @@ export function SolutionSection() {
             <HoverLift>
               <PillarCard
                 icon={<IconSpeakerphone className="size-6 text-brand-500" />}
-                title="تسويق شخصي حقيقي"
-                description="مش إعلان ممول — هتتعلم إزاي تبيع شغلك، تكلم clients، وتقنعهم يدفعوا."
-              />
-            </HoverLift>
-          </StaggerItem>
-          <StaggerItem>
-            <HoverLift>
-              <PillarCard
-                icon={<IconHeartHandshake className="size-6 text-brand-500" />}
-                title="مهارات الإقناع والتفاوض"
-                description="إزاي تسعّر صح، تتفاوض مع العميل، وتقفل الـ deal من غير ما تبيع نفسك رخيص."
+                title="تسويق وبيع بدون ما تتسول"
+                description="هتتعلم تبيع شغلك باحتراف. تكلم client، تقنعه، وتقفل الـ deal بسعر يحترمك."
               />
             </HoverLift>
           </StaggerItem>
@@ -82,8 +81,8 @@ export function SolutionSection() {
             <HoverLift>
               <PillarCard
                 icon={<IconUserStar className="size-6 text-brand-500" />}
-                title="بناء Personal Brand"
-                description="شخصية واقعية + قصة حقيقية + هوية بصرية = شخص الناس بتثق فيه وبتدفعله."
+                title="تبقى الخيار الأول للشركات"
+                description="هتتعلم تقدم نفسك كمحترف الشركات بتدور عليه. مش مجرد مصمم — أنت حل لمشاكلهم."
               />
             </HoverLift>
           </StaggerItem>
@@ -92,7 +91,7 @@ export function SolutionSection() {
               <PillarCard
                 icon={<IconBrandLinkedin className="size-6 text-brand-500" />}
                 title="LinkedIn يجيبلك شغل"
-                description="هتبني بروفايل قوي + خطة محتوى 30 يوم عشان تقدر تاخد وظيفة أو فريلانس بفلوس كبيرة."
+                description="بروفايل قوي + خطة محتوى 30 يوم. الشركات والـ HR هما اللي هييجوا يكلموك."
               />
             </HoverLift>
           </StaggerItem>
