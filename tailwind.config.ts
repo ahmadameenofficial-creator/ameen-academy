@@ -80,11 +80,36 @@ const config: Config = {
           "0%": { transform: "translateX(0)" },
           "100%": { transform: "translateX(50%)" },
         },
+        "float": {
+          "0%, 100%": { transform: "translateY(0)" },
+          "50%": { transform: "translateY(-20px)" },
+        },
+        "float-delayed": {
+          "0%, 100%": { transform: "translateY(0) rotate(0deg)" },
+          "50%": { transform: "translateY(-15px) rotate(3deg)" },
+        },
+        "pulse-glow": {
+          "0%, 100%": { opacity: "0.4", transform: "scale(1)" },
+          "50%": { opacity: "0.8", transform: "scale(1.15)" },
+        },
+        "spin-slow": {
+          "0%": { transform: "rotate(0deg)" },
+          "100%": { transform: "rotate(360deg)" },
+        },
+        "shimmer": {
+          "0%": { backgroundPosition: "200% 0" },
+          "100%": { backgroundPosition: "-200% 0" },
+        },
       },
       animation: {
         "fade-up": "fade-up 0.6s ease-out forwards",
         "fade-in": "fade-in 0.4s ease-out forwards",
         "scroll-rtl": "scroll-rtl 30s linear infinite",
+        "float": "float 6s ease-in-out infinite",
+        "float-delayed": "float-delayed 8s ease-in-out infinite",
+        "pulse-glow": "pulse-glow 4s ease-in-out infinite",
+        "spin-slow": "spin-slow 20s linear infinite",
+        "shimmer": "shimmer 3s ease-in-out infinite",
       },
     },
   },

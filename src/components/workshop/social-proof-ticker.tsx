@@ -13,13 +13,17 @@ const PROOFS = [
 
 export function SocialProofTicker() {
   return (
-    <div className="relative overflow-hidden border-y border-brand-100/50 dark:border-brand-900/30 bg-brand-50/50 dark:bg-brand-950/20 py-3">
+    <div className="relative overflow-hidden border-y border-brand-500/10 bg-[#080014] py-3.5">
+      {/* Side fades */}
+      <div className="absolute inset-y-0 right-0 w-20 bg-gradient-to-l from-[#080014] to-transparent z-10" />
+      <div className="absolute inset-y-0 left-0 w-20 bg-gradient-to-r from-[#080014] to-transparent z-10" />
+
       <div className="flex animate-scroll-rtl gap-8 whitespace-nowrap">
         {[...PROOFS, ...PROOFS].map((proof, i) => (
-          <div key={i} className="flex items-center gap-2 text-sm text-brand-700 dark:text-brand-300 shrink-0">
-            <IconTrendingUp className="size-4 text-brand-500 shrink-0" />
+          <div key={i} className="flex items-center gap-2 text-sm text-brand-300/70 shrink-0">
+            <IconTrendingUp className="size-4 text-brand-500/60 shrink-0" />
             <span>{proof}</span>
-            <span className="text-brand-300 dark:text-brand-700 mx-2">·</span>
+            <span className="text-brand-500/20 mx-2">·</span>
           </div>
         ))}
       </div>
