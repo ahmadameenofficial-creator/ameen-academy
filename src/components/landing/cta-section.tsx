@@ -25,16 +25,16 @@ export function CtaSection() {
           <div className="relative mx-auto max-w-2xl">
             <div className="inline-flex items-center gap-2 rounded-full bg-white/15 px-4 py-1.5 text-sm font-medium backdrop-blur-md">
               <IconSparkles className="size-4" />
-              عرض خاص للمشتركين الجدد
+              ابدأ ببلاش — زكاة علم
             </div>
 
             <h2 className="mt-6 text-balance text-3xl font-bold leading-tight tracking-tight sm:text-4xl lg:text-5xl">
-              جاهز تبدأ رحلتك التعليمية؟
+              مستني إيه؟ ابدأ بالكورس المجاني دلوقتي
             </h2>
 
             <p className="mt-5 text-balance text-base leading-relaxed opacity-90 sm:text-lg">
-              انضم لآلاف الطلاب وابدأ تعلم المهارات اللي هتغير مسارك المهني،
-              بمحتوى احترافي ومجتمع داعم.
+              كورس قيمته 1500 جنيه، بتاخده ببلاش بدون ولا جنيه. هيحطك على الطريق
+              الصح وتفهم يعني إيه تصميم في 2026. خده دلوقتي قبل ما يتغيّر سعره.
             </p>
 
             <div className="mt-9 flex flex-col items-center justify-center gap-3 sm:flex-row">
@@ -43,8 +43,8 @@ export function CtaSection() {
                 size="xl"
                 className="w-full bg-white text-brand-700 hover:bg-white/90 sm:w-auto"
               >
-                <Link href={ROUTES.register}>
-                  أنشئ حسابك مجاناً
+                <Link href="/free">
+                  ابدأ دلوقتي ببلاش
                   <IconArrowLeft className="size-5" />
                 </Link>
               </Button>
@@ -54,12 +54,12 @@ export function CtaSection() {
                 variant="ghost"
                 className="w-full text-white hover:bg-white/10 sm:w-auto"
               >
-                <Link href={ROUTES.courses}>تصفح الكورسات</Link>
+                <Link href={ROUTES.courses}>شوف باقي الكورسات</Link>
               </Button>
             </div>
 
             <p className="mt-6 text-xs opacity-75">
-              بدون رسوم خفية · يمكنك الإلغاء في أي وقت
+              مفيش رسوم خفية · الكورس المجاني هيفضل مجاني للأبد
             </p>
           </div>
         </div>

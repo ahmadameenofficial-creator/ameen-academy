@@ -11,6 +11,24 @@ export function findPublishedCourses() {
   });
 }
 
+// الكورس المجاني (الـ lead magnet) — أحدث كورس منشور بسعر 0
+export function findPublishedFreeCourse() {
+  return prisma.course.findFirst({
+    where: { isPublished: true, price: 0 },
+    orderBy: { publishedAt: "desc" },
+    select: {
+      id: true,
+      slug: true,
+      title: true,
+      shortDescription: true,
+      description: true,
+      thumbnail: true,
+      duration: true,
+      _count: { select: { lessons: true, enrollments: true } },
+    },
+  });
+}
+
 export function findCourseBySlug(slug: string, publishedOnly = false) {
   return prisma.course.findUnique({
     where: { slug, ...(publishedOnly && { isPublished: true }) },

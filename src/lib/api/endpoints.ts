@@ -32,6 +32,9 @@ export const API = {
   progress: {
     track: "/api/progress",
   },
+  enrollments: {
+    free: "/api/enrollments/free",
+  },
   profile: {
     update: "/api/profile",
     password: "/api/profile/password",

@@ -3,13 +3,12 @@ import Link from "next/link";
 import {
   IconSparkles,
   IconArrowLeft,
-  IconPlayerPlayFilled,
-  IconShieldCheck,
-  IconUsers,
   IconStar,
   IconBrush,
   IconVideo,
   IconRobot,
+  IconGift,
+  IconClock,
 } from "@tabler/icons-react";
 import { Button } from "@/components/ui/button";
 import { ROUTES } from "@/lib/constants";
@@ -79,35 +78,35 @@ export function HeroSection() {
               style={{ animationDelay: "0.2s" }}
             >
               <Button asChild variant="gradient" size="xl" className="w-full sm:w-auto">
+                <Link href="/free">
+                  <IconGift className="size-5" />
+                  ابدأ بالكورس المجاني
+                </Link>
+              </Button>
+              <Button asChild variant="outline" size="xl" className="w-full sm:w-auto">
                 <Link href={ROUTES.courses}>
                   استكشف الكورسات
                   <IconArrowLeft className="size-5" />
                 </Link>
               </Button>
-              <Button asChild variant="outline" size="xl" className="w-full sm:w-auto">
-                <Link href={ROUTES.register}>
-                  <IconPlayerPlayFilled className="size-5" />
-                  سجّل مجاناً
-                </Link>
-              </Button>
             </div>
 
-            {/* Trust indicators */}
+            {/* Trust indicators — قيمة حقيقية بدون أرقام مضخّمة */}
             <div
               className="mt-10 flex animate-fade-up flex-wrap items-center justify-center gap-6 text-sm text-muted-foreground lg:justify-start"
               style={{ animationDelay: "0.3s" }}
             >
               <div className="flex items-center gap-2">
-                <IconShieldCheck className="size-5 text-brand-500" />
-                <span>ضمان 14 يوم</span>
+                <IconGift className="size-5 text-brand-500" />
+                <span>كورس مجاني تبدأ بيه</span>
               </div>
               <div className="flex items-center gap-2">
-                <IconUsers className="size-5 text-brand-500" />
-                <span>+1000 طالب</span>
+                <IconBrush className="size-5 text-brand-500" />
+                <span>محتوى عملي بالعربي</span>
               </div>
               <div className="flex items-center gap-2">
-                <IconStar className="size-5 text-brand-500" />
-                <span>4.9 تقييم</span>
+                <IconClock className="size-5 text-brand-500" />
+                <span>وصول مدى الحياة</span>
               </div>
             </div>
           </div>

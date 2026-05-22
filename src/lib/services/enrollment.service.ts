@@ -1,4 +1,25 @@
-import { enrollmentsDb, progressDb } from "@/lib/db";
+import { enrollmentsDb, progressDb, coursesDb } from "@/lib/db";
+import { NotFoundError } from "@/lib/errors";
+
+// جلب الكورس المجاني (lead magnet) لو موجود
+export function getFreeCourse() {
+  return coursesDb.findPublishedFreeCourse();
+}
+
+/**
+ * اشتراك فوري في الكورس المجاني — من غير دفع ولا مراجعة أدمن.
+ * بيتأكد إن الكورس فعلاً سعره 0 ومنشور. Idempotent.
+ */
+export async function claimFreeCourse(userId: string) {
+  const course = await coursesDb.findPublishedFreeCourse();
+  if (!course) throw new NotFoundError("مفيش كورس مجاني متاح دلوقتي");
+
+  const existing = await enrollmentsDb.findEnrollment(userId, course.id);
+  if (!existing) {
+    await enrollmentsDb.createEnrollment(userId, course.id);
+  }
+  return { slug: course.slug };
+}
 
 export async function getDashboardData(userId: string) {
   const enrollments = await enrollmentsDb.findUserEnrollments(userId);
