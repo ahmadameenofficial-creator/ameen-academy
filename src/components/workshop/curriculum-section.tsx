@@ -7,8 +7,6 @@ import {
   IconClock,
   IconBook,
 } from "@tabler/icons-react";
-import { Badge } from "@/components/ui/badge";
-import { FadeIn, StaggerContainer, StaggerItem, ScaleIn } from "@/components/ui/motion";
 
 const MODULES = [
   {
@@ -96,20 +94,19 @@ export function CurriculumSection() {
   const [openIndex, setOpenIndex] = useState<number | null>(0);
 
   return (
-    <section className="py-16 md:py-24 bg-background">
+    <section className="py-24 md:py-32 bg-background">
       <div className="container">
-        <FadeIn direction="up" className="max-w-3xl mx-auto text-center mb-12">
-          <p className="text-brand-500 font-semibold text-sm mb-3">
-            اللي هتتعلمه
-          </p>
-          <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-foreground leading-tight">
+        <div className="max-w-2xl mx-auto mb-16">
+          <p className="text-sm font-medium text-brand-500 mb-6">اللي هتتعلمه</p>
+          <h2 className="text-3xl sm:text-4xl font-bold text-foreground leading-[1.1] mb-4">
             30+ ساعة عملي —{" "}
-            <span className="text-brand-500">من الصفر لحد ما تكسب</span>
+            <br />
+            <span className="text-muted-foreground/50">من الصفر لحد ما تكسب.</span>
           </h2>
-          <p className="mt-4 text-muted-foreground">
+          <p className="text-muted-foreground leading-relaxed">
             مش محاضرات مملة. كل درس فيه تطبيق عملي تقدر تحطه في portfolio وتكسب بيه.
           </p>
-          <div className="flex items-center justify-center gap-6 mt-6 text-sm text-muted-foreground">
+          <div className="flex items-center gap-6 mt-6 text-sm text-muted-foreground">
             <span className="flex items-center gap-2">
               <IconBook className="size-4 text-brand-500" />
               {totalLessons} درس
@@ -120,51 +117,50 @@ export function CurriculumSection() {
             </span>
             <span className="flex items-center gap-2">
               <IconPlayerPlay className="size-4 text-brand-500" />
-              مسجّل — اتعلم بإيقاعك
+              مسجّل
             </span>
           </div>
-        </FadeIn>
+        </div>
 
-        <StaggerContainer className="max-w-3xl mx-auto space-y-3" staggerDelay={0.06}>
+        <div className="max-w-2xl mx-auto">
           {MODULES.map((module, index) => {
             const isOpen = openIndex === index;
             return (
-              <StaggerItem key={module.title}>
-              <div className="rounded-2xl border border-border bg-card overflow-hidden transition-all">
+              <div key={module.title} className="border-b border-border">
                 <button
                   onClick={() => setOpenIndex(isOpen ? null : index)}
                   aria-expanded={isOpen}
                   aria-controls={`module-content-${index}`}
-                  className="flex items-center justify-between w-full p-5 text-right hover:bg-muted/50 transition-colors"
+                  className="flex items-center justify-between w-full py-6 text-right gap-6 group"
                 >
-                  <div className="flex items-center gap-4">
-                    <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-brand-50 dark:bg-brand-900/30 text-sm font-bold text-brand-600">
-                      {index + 1}
-                    </div>
+                  <div className="flex items-center gap-5">
+                    <span className="font-mono text-xs text-muted-foreground/40 tabular-nums w-6 shrink-0">
+                      {String(index + 1).padStart(2, "0")}
+                    </span>
                     <div>
-                      <h3 className="font-bold text-foreground text-sm md:text-base">
+                      <h3 className="text-[15px] font-medium text-foreground group-hover:text-brand-500 transition-colors">
                         {module.title}
                       </h3>
-                      <p className="text-xs text-muted-foreground mt-0.5">
+                      <p className="text-xs text-muted-foreground mt-1">
                         {module.lessons} درس · {module.duration}
                       </p>
                     </div>
                   </div>
                   <IconChevronDown
-                    className={`size-5 text-muted-foreground transition-transform shrink-0 ${
+                    className={`size-4 text-muted-foreground transition-transform shrink-0 ${
                       isOpen ? "rotate-180" : ""
                     }`}
                   />
                 </button>
                 {isOpen && (
-                  <div id={`module-content-${index}`} role="region" className="px-5 pb-5 pt-0">
-                    <div className="border-t border-border pt-4 space-y-2.5">
+                  <div id={`module-content-${index}`} role="region" className="pb-6 pr-11">
+                    <div className="space-y-3">
                       {module.topics.map((topic) => (
                         <div
                           key={topic}
                           className="flex items-start gap-3 text-sm text-muted-foreground"
                         >
-                          <IconPlayerPlay className="size-4 text-brand-500 mt-0.5 shrink-0" />
+                          <IconPlayerPlay className="size-3.5 text-brand-500 mt-0.5 shrink-0" />
                           <span>{topic}</span>
                         </div>
                       ))}
@@ -172,16 +168,13 @@ export function CurriculumSection() {
                   </div>
                 )}
               </div>
-              </StaggerItem>
             );
           })}
-        </StaggerContainer>
+        </div>
 
-        <ScaleIn delay={0.15} className="text-center mt-8">
-          <Badge className="bg-brand-50 text-brand-700 px-4 py-2 text-sm dark:bg-brand-900/30 dark:text-brand-300">
-            الكورس مسجّل بالكامل — ابدأ في أي وقت واتعلم بإيقاعك
-          </Badge>
-        </ScaleIn>
+        <p className="text-center text-sm text-muted-foreground/60 mt-10">
+          الكورس مسجّل بالكامل — ابدأ في أي وقت واتعلم بإيقاعك
+        </p>
       </div>
     </section>
   );
