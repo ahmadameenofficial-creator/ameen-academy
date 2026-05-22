@@ -4,8 +4,10 @@ import { Navbar } from "@/components/layout/navbar";
 import { Footer } from "@/components/layout/footer";
 import { WorkshopHero } from "@/components/workshop/hero";
 import { PainSection } from "@/components/workshop/pain-section";
+import { SocialProofTicker } from "@/components/workshop/social-proof-ticker";
 
 const SolutionSection = dynamic(() => import("@/components/workshop/solution-section").then(m => ({ default: m.SolutionSection })));
+const StickyCta = dynamic(() => import("@/components/workshop/sticky-cta").then(m => ({ default: m.StickyCta })));
 const InstructorSection = dynamic(() => import("@/components/workshop/instructor-section").then(m => ({ default: m.InstructorSection })));
 const CurriculumSection = dynamic(() => import("@/components/workshop/curriculum-section").then(m => ({ default: m.CurriculumSection })));
 const CaseStudiesSection = dynamic(() => import("@/components/workshop/case-studies-section").then(m => ({ default: m.CaseStudiesSection })));
@@ -15,14 +17,14 @@ const FaqSection = dynamic(() => import("@/components/workshop/faq-section").the
 const FinalCtaSection = dynamic(() => import("@/components/workshop/final-cta-section").then(m => ({ default: m.FinalCtaSection })));
 
 export const metadata: Metadata = {
-  title: "كورس ورشة أمين | اتعلم مهارة بتجيب فلوس وابني بيزنسك",
+  title: "كورس ورشة أمين | اكسب أول 5,000 جنيه من مهارة حقيقية في 90 يوم",
   description:
-    "كورس مسجّل 30+ ساعة — تصميم + AI + موقع يبيعلك خدماتك + تسويق. من الصفر تماماً. 300+ شخص بدأوا يكسبوا. ضمان كامل. 1,500 جنيه بس.",
+    "تصميم + AI + موقع + تسويق — 30+ ساعة عملي من الصفر. 300+ شخص بدأوا يكسبوا فعلاً. ضمان كامل. 1,500 جنيه.",
   openGraph: {
     type: "website",
-    title: "كورس ورشة أمين | اتعلم مهارة حقيقية وابني دخل من الصفر",
+    title: "كورس ورشة أمين | اكسب أول 5,000 جنيه في 90 يوم",
     description:
-      "تصميم + AI + موقع شخصي + تسويق. 30+ ساعة عملي. مش محتاج خبرة. 300+ بدأوا يكسبوا. ضمان كامل.",
+      "تصميم + AI + موقع + تسويق. 30+ ساعة عملي من الصفر. 300+ بدأوا يكسبوا. ضمان كامل.",
     locale: "ar_EG",
     siteName: "أكاديمية أمين",
   },
@@ -73,6 +75,7 @@ export default function WorkshopPage() {
       <Navbar />
       <main className="flex-1 overflow-x-hidden">
         <WorkshopHero />
+        <SocialProofTicker />
         <PainSection />
         <SolutionSection />
         <CurriculumSection />
@@ -83,6 +86,7 @@ export default function WorkshopPage() {
         <FaqSection />
         <FinalCtaSection />
       </main>
+      <StickyCta />
       <Footer />
     </>
   );

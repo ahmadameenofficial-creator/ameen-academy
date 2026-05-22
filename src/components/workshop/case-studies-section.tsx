@@ -2,125 +2,104 @@
 
 import {
   IconQuote,
-  IconBriefcase,
   IconClock,
-  IconSchool,
 } from "@tabler/icons-react";
-import { Card, CardContent } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
-import { FadeIn, StaggerContainer, StaggerItem, HoverLift } from "@/components/ui/motion";
+import { FadeIn, StaggerContainer, StaggerItem } from "@/components/ui/motion";
 
-const CASE_STUDIES = [
+const CASES = [
   {
     name: "سارة محمد",
     age: 23,
-    badge: "خريجة — كانت مش لاقية شغل",
-    badgeIcon: <IconSchool className="size-3 ml-1" />,
-    before:
-      "كانت خريجة ومش لاقية فرصة في مجالها. كل يوم بتبعت CVs ومفيش رد. حاسة إن مفيش مكان ليها في السوق.",
-    after:
-      "اتعلمت تصميم + بنت موقع يعرض خدماتها. بعد شهرين بدأت تاخد شغل سوشيال ميديا من 3 clients ثابتين. دلوقتي بتكسب 4,000+ جنيه شهرياً.",
-    income: "4,000+ جنيه/شهر",
-    timeToFirstClient: "5 أسابيع",
-    quote:
-      "المشكلة مكنتش إني مش شاطرة — كانت إن محدش كان شايفني. الموقع والـ portfolio غيّروا كل حاجة.",
+    tag: "خريجة — كانت مش لاقية شغل",
+    income: "4,000+",
+    time: "5 أسابيع",
+    quote: "المشكلة مكنتش إني مش شاطرة — كانت إن محدش كان شايفني.",
+    before: "خريجة ومش لاقية فرصة. بتبعت CVs ومفيش رد.",
+    after: "بنت portfolio + موقع. دلوقتي 3 clients ثابتين.",
   },
   {
     name: "محمد خالد",
     age: 20,
-    badge: "طالب — عايز دخل جنب الكلية",
-    badgeIcon: <IconSchool className="size-3 ml-1" />,
-    before:
-      "طالب في هندسة ومحتاج فلوس. جرب يشتغل في كافيه بس الوقت مكنش بيسمح. عايز حاجة يعملها من البيت وتكسّبه.",
-    after:
-      "اتعلم تصميم وبنى بروفايل LinkedIn قوي. بعد 3 أسابيع جاب أول client بـ 1,500 جنيه. دلوقتي بيعمل 6,000 شهرياً وهو لسه في الكلية.",
-    income: "6,000 جنيه/شهر",
-    timeToFirstClient: "3 أسابيع",
-    quote:
-      "أول مرة أحس إن عندي مهارة حقيقية بتجيب فلوس. مش شغل كافيه — ده بيزنس.",
+    tag: "طالب — عايز دخل جنب الكلية",
+    income: "6,000",
+    time: "3 أسابيع",
+    quote: "أول مرة أحس إن عندي مهارة حقيقية بتجيب فلوس.",
+    before: "طالب هندسة. محتاج فلوس ومش عارف يبدأ منين.",
+    after: "أول client بـ 1,500 جنيه. دلوقتي 6,000/شهر وهو في الكلية.",
   },
   {
     name: "نورهان عادل",
     age: 27,
-    badge: "موظفة — مرتبها مكنش كفاية",
-    badgeIcon: <IconBriefcase className="size-3 ml-1" />,
-    before:
-      "موظفة بمرتب 4,500 جنيه ومش كفاية. كانت عايزة مصدر دخل تاني بس مش عارفة تبدأ منين. جربت حاجات كتير ومنفعتش.",
-    after:
-      "اتعلمت براندينج + بنت موقعها + بدأت تاخد مشاريع هوية بصرية. أول مشروع كامل كان بـ 5,000 جنيه. دلوقتي الدخل الإضافي 7,000+ شهرياً.",
-    income: "7,000+ جنيه إضافي",
-    timeToFirstClient: "6 أسابيع",
-    quote:
-      "كنت فاكرة إني محتاجة سنين عشان أتعلم. الكورس ده اختصرلي الطريق وفتحلي باب فلوس جديد.",
+    tag: "موظفة — مرتبها مكنش كفاية",
+    income: "7,000+",
+    time: "6 أسابيع",
+    quote: "الكورس اختصرلي الطريق وفتحلي باب فلوس جديد.",
+    before: "موظفة بـ 4,500 جنيه. عايزة مصدر تاني ومش عارفة.",
+    after: "أول مشروع هوية بصرية بـ 5,000. دلوقتي +7,000 إضافي/شهر.",
   },
 ];
 
 export function CaseStudiesSection() {
   return (
-    <section className="py-16 md:py-24 bg-background">
+    <section className="py-20 md:py-28">
       <div className="container">
-        <FadeIn direction="up" className="max-w-3xl mx-auto text-center mb-12 md:mb-16">
-          <p className="text-brand-500 font-semibold text-sm mb-3">
-            ناس حقيقية، نتايج حقيقية
-          </p>
-          <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-foreground leading-tight">
-            مكانوش مصممين.{" "}
-            <span className="text-brand-500">بدأوا من صفر ودلوقتي بيكسبوا.</span>
+        <FadeIn direction="up" className="max-w-3xl mx-auto text-center mb-14 md:mb-20">
+          <p className="text-sm font-semibold text-brand-500 tracking-wide mb-4">ناس حقيقية، نتايج حقيقية</p>
+          <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold text-foreground leading-[1.15]">
+            مكانوش مصممين.
+            <br />
+            <span className="text-muted-foreground">بدأوا من صفر ودلوقتي بيكسبوا.</span>
           </h2>
         </FadeIn>
 
-        <StaggerContainer className="grid gap-6 lg:grid-cols-3 max-w-6xl mx-auto" staggerDelay={0.12}>
-          {CASE_STUDIES.map((study) => (
-            <StaggerItem key={study.name}>
-            <HoverLift lift={-5} scale={1.02}>
-            <Card className="overflow-hidden border-border hover:border-brand-200 transition-all hover:shadow-lg hover:shadow-brand-100/10 dark:hover:border-brand-800/40 h-full">
-              <CardContent className="p-0">
-                <div className="bg-gradient-to-l from-brand-700 to-brand-500 p-5 text-white">
-                  <div className="flex items-center justify-between mb-3">
+        <StaggerContainer className="max-w-5xl mx-auto space-y-6" staggerDelay={0.12}>
+          {CASES.map((c, i) => (
+            <StaggerItem key={c.name}>
+              <div className="group rounded-2xl border border-border hover:border-brand-200 dark:hover:border-brand-800/40 bg-card transition-all duration-300 overflow-hidden">
+                <div className="grid md:grid-cols-3">
+                  {/* Info column */}
+                  <div className="bg-brand-950 text-white p-6 md:p-8 flex flex-col justify-between">
                     <div>
-                      <h3 className="font-bold text-lg">{study.name}</h3>
-                      <p className="text-white/70 text-sm">{study.age} سنة</p>
+                      <p className="text-xs text-brand-400 mb-1">{c.tag}</p>
+                      <h3 className="text-xl font-bold">{c.name}</h3>
+                      <p className="text-white/40 text-sm">{c.age} سنة</p>
                     </div>
-                    <Badge className="bg-white/20 text-white border-0 text-xs">
-                      {study.badgeIcon}
-                      {study.badge}
-                    </Badge>
-                  </div>
-                  <div className="flex items-center gap-4">
-                    <div className="text-center">
-                      <p className="text-2xl font-bold">{study.income}</p>
-                      <p className="text-[10px] text-white/60 mt-0.5">الدخل دلوقتي</p>
-                    </div>
-                    <div className="h-8 w-px bg-white/20" />
-                    <div className="text-center">
-                      <p className="text-lg font-bold flex items-center gap-1">
-                        <IconClock className="size-4" />
-                        {study.timeToFirstClient}
-                      </p>
-                      <p className="text-[10px] text-white/60 mt-0.5">لأول client</p>
+                    <div className="flex gap-6 mt-6">
+                      <div>
+                        <p className="text-2xl font-bold text-brand-400">{c.income}</p>
+                        <p className="text-[10px] text-white/30">جنيه/شهر</p>
+                      </div>
+                      <div>
+                        <p className="text-lg font-bold text-white/70 flex items-center gap-1.5">
+                          <IconClock className="size-4" />
+                          {c.time}
+                        </p>
+                        <p className="text-[10px] text-white/30">لأول client</p>
+                      </div>
                     </div>
                   </div>
-                </div>
 
-                <div className="p-5 space-y-4">
-                  <div>
-                    <p className="text-xs font-semibold text-red-500 mb-1.5">قبل الكورس</p>
-                    <p className="text-sm text-muted-foreground leading-relaxed">{study.before}</p>
-                  </div>
-                  <div>
-                    <p className="text-xs font-semibold text-green-600 mb-1.5">بعد الكورس</p>
-                    <p className="text-sm text-muted-foreground leading-relaxed">{study.after}</p>
-                  </div>
-                  <div className="rounded-xl bg-brand-50/50 dark:bg-brand-900/10 p-4 border border-brand-100/50 dark:border-brand-800/20">
-                    <IconQuote className="size-4 text-brand-400 mb-2" />
-                    <p className="text-sm text-foreground font-medium italic leading-relaxed">
-                      &ldquo;{study.quote}&rdquo;
-                    </p>
+                  {/* Story column */}
+                  <div className="md:col-span-2 p-6 md:p-8 flex flex-col justify-between">
+                    <div className="grid sm:grid-cols-2 gap-6 mb-6">
+                      <div>
+                        <p className="text-xs font-semibold text-red-500 mb-2">قبل</p>
+                        <p className="text-sm text-muted-foreground leading-relaxed">{c.before}</p>
+                      </div>
+                      <div>
+                        <p className="text-xs font-semibold text-green-600 mb-2">بعد</p>
+                        <p className="text-sm text-muted-foreground leading-relaxed">{c.after}</p>
+                      </div>
+                    </div>
+                    <div className="flex items-start gap-3 pt-4 border-t border-border">
+                      <IconQuote className="size-5 text-brand-400 shrink-0 mt-0.5" />
+                      <p className="text-sm text-foreground font-medium italic leading-relaxed">
+                        &ldquo;{c.quote}&rdquo;
+                      </p>
+                    </div>
                   </div>
                 </div>
-              </CardContent>
-            </Card>
-            </HoverLift>
+              </div>
             </StaggerItem>
           ))}
         </StaggerContainer>
