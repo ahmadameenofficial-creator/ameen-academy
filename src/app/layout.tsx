@@ -5,6 +5,7 @@ import { Providers } from "@/components/providers";
 import { GoogleAnalytics } from "@/components/analytics/google-analytics";
 import { OrganizationSchema, WebsiteSchema } from "@/lib/structured-data";
 import { ReferralCapture } from "@/components/referral-capture";
+import { PwaRegister } from "@/components/pwa-register";
 import "./globals.css";
 
 const ibmPlex = IBM_Plex_Sans_Arabic({
@@ -30,6 +31,11 @@ export const metadata: Metadata = {
   },
   description:
     "أكاديمية أمين — اتعلم المهارات اللي السوق محتاجها في 2026: تصميم جرافيك، ذكاء اصطناعي، فريلانس، ومهارات حديثة. كورسات عملية بالعربي من الصفر للاحتراف مع شهادة معتمدة.",
+  appleWebApp: {
+    capable: true,
+    statusBarStyle: "default",
+    title: "أكاديمية أمين",
+  },
   keywords: [
     "كورسات اونلاين",
     "تعلم مهارات جديدة",
@@ -134,6 +140,7 @@ export default function RootLayout({
       </head>
       <body className={`${ibmPlex.variable} font-sans`}>
         <ReferralCapture />
+        <PwaRegister />
         <Providers>{children}</Providers>
       </body>
     </html>

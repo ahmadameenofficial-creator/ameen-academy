@@ -38,11 +38,10 @@ export function HeroSection() {
             </div>
 
             {/* Heading */}
-            <h1 className="mt-6 animate-fade-up text-balance text-3xl font-bold leading-[1.15] tracking-tight text-foreground sm:text-4xl lg:text-5xl">
+            <h1 className="mt-6 animate-fade-up text-balance text-3xl font-bold leading-[1.35] tracking-tight text-foreground sm:text-4xl lg:text-5xl">
               اتعلّم المهارات اللي{" "}
-              <span className="text-gradient-brand">هتجيبلك فلوس</span>
-              <br />
-              <span className="mt-2 inline-block">في 2026</span>
+              <span className="text-gradient-brand inline-block pb-1">هتجيبلك فلوس</span>{" "}
+              في 2026
             </h1>
 
             {/* Subheading */}

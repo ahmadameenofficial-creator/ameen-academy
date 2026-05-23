@@ -35,6 +35,7 @@ export const API = {
   enrollments: {
     free: "/api/enrollments/free",
   },
+  leads: "/api/leads",
   profile: {
     update: "/api/profile",
     password: "/api/profile/password",

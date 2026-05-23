@@ -26,10 +26,11 @@ export function FreeCourseSection() {
                 زكاة علم — مجاني للأبد
               </div>
 
-              <h2 className="mt-5 text-balance text-2xl font-bold leading-tight text-foreground sm:text-3xl lg:text-4xl">
+              <h2 className="mt-5 text-balance text-2xl font-bold leading-[1.4] text-foreground sm:text-3xl lg:text-4xl">
                 ابدأ دلوقتي بالكورس المجاني
-                <br />
-                <span className="text-gradient-brand">قيمته 1500 جنيه — ببلاش</span>
+                <span className="mt-2 block text-gradient-brand pb-1 leading-[1.4]">
+                  قيمته 1500 جنيه — ببلاش
+                </span>
               </h2>
 
               <p className="mt-4 text-balance leading-relaxed text-muted-foreground">
@@ -56,7 +57,7 @@ export function FreeCourseSection() {
                   </Link>
                 </Button>
                 <span className="text-sm text-muted-foreground">
-                  ممكن يتغيّر سعره في أي وقت — الحق استفيد
+                  مفيش أي مقابل — مجاني للأبد
                 </span>
               </div>
             </div>

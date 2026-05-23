@@ -28,6 +28,11 @@ export const PAYMENT_CONFIG = {
   ],
 } as const;
 
+export const FREE_COURSE = {
+  // ميعاد نزول الكورس المجاني (عدّاد 30 يوم) — عدّلها وقت ما تحب
+  launchDate: "2026-06-22T20:00:00+02:00",
+} as const;
+
 export const REFERRAL_CONFIG = {
   // نسبة عمولة الإحالة من صافي المبلغ المدفوع
   commissionRate: 20, // %

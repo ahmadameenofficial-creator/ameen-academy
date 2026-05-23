@@ -12,6 +12,20 @@ datasource db {
   directUrl = env("DATABASE_URL_UNPOOLED")
 }
 
+// ============ Leads (المهتمين بالكورس المجاني) ============
+model Lead {
+  id        String   @id @default(cuid())
+  name      String
+  phone     String? // واتساب
+  email     String?
+  source    String   @default("free-course") // مصدر الـ lead
+  createdAt DateTime @default(now())
+
+  @@index([createdAt])
+  @@index([email])
+  @@index([phone])
+}
+
 // ============ المستخدمين ============
 model User {
   id              String    @id @default(cuid())
