@@ -152,13 +152,13 @@ export function WorkshopHero() {
           className="flex items-center justify-center w-[100vw] min-h-[100svh] shrink-0 px-6"
         >
           <div className="text-center space-y-6 max-w-3xl">
-            <p className="text-brand-400/60 text-sm font-medium uppercase tracking-[0.2em]">
+            <p className="text-brand-400 text-sm font-medium uppercase tracking-[0.2em]">
               الحالة الحالية
             </p>
             <h1 className="text-[clamp(2.5rem,8vw,6rem)] font-bold text-white leading-[1] tracking-tight">
               بتتفرج
               <br />
-              <span className="text-white/20">ومش بتكسب</span>
+              <span className="text-white/50">ومش بتكسب</span>
             </h1>
 
             {/* الخط الفاصل البنفسجي */}
@@ -177,7 +177,7 @@ export function WorkshopHero() {
         <div className="flex items-center justify-center w-[80vw] min-h-[100svh] shrink-0">
           <div className="text-center">
             <p
-              className="text-[clamp(1rem,3vw,1.5rem)] font-semibold text-white/10 uppercase tracking-[0.3em]"
+              className="text-[clamp(1rem,3vw,1.5rem)] font-semibold text-white/30 uppercase tracking-[0.3em]"
             >
               في 90 يوم
             </p>
@@ -190,7 +190,7 @@ export function WorkshopHero() {
           className="flex items-center justify-center w-[100vw] min-h-[100svh] shrink-0 px-6 opacity-0"
         >
           <div className="text-center space-y-8 max-w-3xl">
-            <p className="text-brand-400/60 text-sm font-medium uppercase tracking-[0.2em]">
+            <p className="text-brand-400 text-sm font-medium uppercase tracking-[0.2em]">
               بعد ورشة أمين
             </p>
             <h1 className="text-[clamp(2.5rem,8vw,6rem)] font-bold text-white leading-[1] tracking-tight">
@@ -198,7 +198,7 @@ export function WorkshopHero() {
               <br />
               <span className="text-brand-400">5,000 جنيه</span>
             </h1>
-            <p className="text-white/30 text-lg md:text-xl max-w-xl mx-auto leading-relaxed">
+            <p className="text-white/60 text-lg md:text-xl max-w-xl mx-auto leading-relaxed">
               تصميم + AI + موقع + تسويق
               <br />
               من الصفر لأول دخل حقيقي
@@ -216,13 +216,13 @@ export function WorkshopHero() {
                   <IconArrowLeft className="size-5" />
                 </Link>
               </Button>
-              <p className="text-white/20 text-sm">
+              <p className="text-white/50 text-sm">
                 بدل <span className="line-through">3,000</span> — عرض لأول 50
                 مشترك
               </p>
 
               {/* Trust signals */}
-              <div className="flex flex-wrap items-center justify-center gap-6 pt-2 text-[13px] text-white/25">
+              <div className="flex flex-wrap items-center justify-center gap-6 pt-2 text-[13px] text-white/50">
                 <span className="flex items-center gap-2">
                   <IconShieldCheck className="size-4" />
                   ضمان استرداد كامل

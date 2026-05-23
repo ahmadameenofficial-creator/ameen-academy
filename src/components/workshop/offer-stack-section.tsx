@@ -101,7 +101,7 @@ export function OfferStackSection() {
             <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold text-white leading-[1.1]">
               كل ده بسعر أقل
               <br />
-              <span className="text-white/20">من أول شغلانة هتجيبها.</span>
+              <span className="text-white/40">من أول شغلانة هتجيبها.</span>
             </h2>
           </div>
 
@@ -120,7 +120,7 @@ export function OfferStackSection() {
                     {item.title}
                   </span>
                 </div>
-                <span className="text-sm text-white/15 line-through shrink-0">
+                <span className="text-sm text-white/35 line-through shrink-0">
                   {item.value} ج
                 </span>
               </div>
@@ -139,13 +139,13 @@ export function OfferStackSection() {
           >
             <div className="space-y-6 relative z-10">
               <div>
-                <p className="text-white/25 text-sm">القيمة الحقيقية</p>
-                <p className="text-4xl font-bold text-white/10 line-through mt-1">
+                <p className="text-white/50 text-sm">القيمة الحقيقية</p>
+                <p className="text-4xl font-bold text-white/30 line-through mt-1">
                   12,300 جنيه
                 </p>
               </div>
 
-              <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/5 border border-white/10">
+              <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/5 border border-white/15">
                 <IconFlame className="size-4 text-orange-400" />
                 <p className="text-sm text-white/40">عرض لأول 50 مشترك</p>
               </div>
@@ -154,7 +154,7 @@ export function OfferStackSection() {
                 <p className="text-7xl md:text-8xl font-bold tracking-tight text-white">
                   1,500
                 </p>
-                <p className="text-white/20 text-sm mt-1">جنيه مصري</p>
+                <p className="text-white/45 text-sm mt-1">جنيه مصري</p>
               </div>
 
               <Button
@@ -168,7 +168,7 @@ export function OfferStackSection() {
                 </Link>
               </Button>
 
-              <p className="text-white/15 text-xs">
+              <p className="text-white/40 text-xs">
                 ضمان كامل — فلوسك ترجع لو مكسبتش
               </p>
             </div>

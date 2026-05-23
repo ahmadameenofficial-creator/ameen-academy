@@ -155,7 +155,7 @@ export function CurriculumSection() {
           <h2 className="text-3xl sm:text-4xl font-bold text-white leading-[1.1] mb-4">
             30+ ساعة عملي —
             <br />
-            <span className="text-white/20">من الصفر لحد ما تكسب.</span>
+            <span className="text-white/40">من الصفر لحد ما تكسب.</span>
           </h2>
           <p className="text-white/35 leading-relaxed">
             مش محاضرات مملة. كل درس فيه تطبيق عملي تقدر تحطه في portfolio
@@ -195,7 +195,7 @@ export function CurriculumSection() {
                   <div className="flex items-center gap-5">
                     <span
                       className={`font-mono text-xs tabular-nums w-6 shrink-0 transition-colors duration-300 ${
-                        isOpen ? "text-brand-400" : "text-white/15"
+                        isOpen ? "text-brand-400" : "text-white/35"
                       }`}
                     >
                       {String(index + 1).padStart(2, "0")}
@@ -210,7 +210,7 @@ export function CurriculumSection() {
                       >
                         {module.title}
                       </h3>
-                      <p className="text-xs text-white/25 mt-1">
+                      <p className="text-xs text-white/45 mt-1">
                         {module.lessons} درس · {module.duration}
                       </p>
                     </div>
@@ -261,7 +261,7 @@ export function CurriculumSection() {
           })}
         </div>
 
-        <p className="text-center text-sm text-white/20 mt-10">
+        <p className="text-center text-sm text-white/45 mt-10">
           الكورس مسجّل بالكامل — ابدأ في أي وقت واتعلم بإيقاعك
         </p>
       </div>

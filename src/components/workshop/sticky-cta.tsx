@@ -36,11 +36,11 @@ export function StickyCta() {
           <div className="hidden sm:block">
             <p className="text-sm font-bold text-white">
               1,500 جنيه{" "}
-              <span className="text-white/20 font-normal line-through text-xs mr-1">
+              <span className="text-white/40 font-normal line-through text-xs mr-1">
                 3,000
               </span>
             </p>
-            <p className="text-xs text-white/25">عرض لأول 50 مشترك</p>
+            <p className="text-xs text-white/50">عرض لأول 50 مشترك</p>
           </div>
           <Button
             asChild

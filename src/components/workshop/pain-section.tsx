@@ -82,7 +82,7 @@ export function PainSection() {
               <br />
               حصلت معاك —
               <br />
-              <span className="text-white/20">يبقى إنت في المكان الصح.</span>
+              <span className="text-white/40">يبقى إنت في المكان الصح.</span>
             </h2>
           </div>
 
@@ -92,7 +92,7 @@ export function PainSection() {
                 key={pain}
                 className="pain-item group flex items-center gap-6 py-5 border-b border-white/5 last:border-0"
               >
-                <span className="text-[13px] font-mono text-white/15 shrink-0 w-6 tabular-nums">
+                <span className="text-[13px] font-mono text-white/35 shrink-0 w-6 tabular-nums">
                   0{i + 1}
                 </span>
                 <span className="text-lg md:text-xl text-white/60 font-medium group-hover:text-brand-400 transition-colors duration-300">

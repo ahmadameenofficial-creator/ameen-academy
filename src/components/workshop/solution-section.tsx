@@ -110,7 +110,7 @@ export function SolutionSection() {
           <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold text-white leading-[1.1]">
             مش كورس.
             <br />
-            <span className="text-white/20">نظام كامل يحوّلك لحد بيكسب.</span>
+            <span className="text-white/40">نظام كامل يحوّلك لحد بيكسب.</span>
           </h2>
 
           {/* Stats */}

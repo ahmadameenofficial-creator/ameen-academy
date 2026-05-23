@@ -102,7 +102,7 @@ export function FaqSection() {
             <h2 className="text-3xl sm:text-4xl font-bold text-white leading-[1.1] mb-14">
               عندك سؤال؟
               <br />
-              <span className="text-white/20">غالباً الإجابة هنا.</span>
+              <span className="text-white/40">غالباً الإجابة هنا.</span>
             </h2>
           </div>
 

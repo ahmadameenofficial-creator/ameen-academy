@@ -72,18 +72,18 @@ export function FinalCtaSection() {
             عندك اختيارين.
           </h2>
 
-          <p className="text-white/25 text-lg max-w-md mx-auto leading-relaxed">
+          <p className="text-white/50 text-lg max-w-md mx-auto leading-relaxed">
             بعد 90 يوم — إما هتكون بدأت تكسب فعلاً، أو هتكون لسه بتقول
             &ldquo;بكرة هبدأ&rdquo;.
           </p>
 
           <div className="final-price pt-4">
             <div className="flex items-center justify-center gap-4 mb-6">
-              <span className="text-white/10 line-through text-lg">3,000</span>
+              <span className="text-white/30 line-through text-lg">3,000</span>
               <span className="text-6xl md:text-7xl font-bold text-white">
                 1,500
               </span>
-              <span className="text-white/20 text-sm self-end mb-2">جنيه</span>
+              <span className="text-white/45 text-sm self-end mb-2">جنيه</span>
             </div>
 
             <Button
@@ -98,7 +98,7 @@ export function FinalCtaSection() {
             </Button>
           </div>
 
-          <div className="flex items-center justify-center gap-6 text-xs text-white/20 pt-4">
+          <div className="flex items-center justify-center gap-6 text-xs text-white/45 pt-4">
             <span className="flex items-center gap-2">
               <IconShieldCheck className="size-4" />
               ضمان كامل

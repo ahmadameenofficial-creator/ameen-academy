@@ -95,7 +95,7 @@ export function CaseStudiesSection() {
           <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold text-white leading-[1.1]">
             مكانوش مصممين.
             <br />
-            <span className="text-white/20">
+            <span className="text-white/40">
               بدأوا من صفر ودلوقتي بيكسبوا.
             </span>
           </h2>
@@ -123,7 +123,7 @@ export function CaseStudiesSection() {
                   <span className="text-xs text-white/30 font-medium px-3 py-1 rounded-full bg-white/5 border border-white/5">
                     {c.tag}
                   </span>
-                  <IconQuote className="size-5 text-white/10 group-hover:text-brand-400/30 transition-colors duration-300" />
+                  <IconQuote className="size-5 text-white/25 group-hover:text-brand-400/50 transition-colors duration-300" />
                 </div>
                 <h3 className="text-xl font-bold text-white mb-4">{c.name}</h3>
                 <p className="text-sm text-white/35 leading-relaxed italic">
@@ -136,9 +136,9 @@ export function CaseStudiesSection() {
                   <p className="text-3xl font-bold text-brand-400">
                     {c.result}
                   </p>
-                  <span className="text-sm text-white/25">{c.unit}</span>
+                  <span className="text-sm text-white/50">{c.unit}</span>
                 </div>
-                <p className="text-xs text-white/20 mt-1">{c.time}</p>
+                <p className="text-xs text-white/40 mt-1">{c.time}</p>
               </div>
             </div>
           ))}

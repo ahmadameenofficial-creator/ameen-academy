@@ -142,7 +142,7 @@ export function InstructorSection() {
                     <p className="text-2xl font-bold text-white">
                       {cred.value}
                     </p>
-                    <p className="text-xs text-white/25 mt-1">{cred.label}</p>
+                    <p className="text-xs text-white/45 mt-1">{cred.label}</p>
                   </div>
                 ))}
               </div>
