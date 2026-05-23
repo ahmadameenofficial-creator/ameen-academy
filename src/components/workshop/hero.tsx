@@ -35,7 +35,6 @@ export function WorkshopHero() {
     if (!section || !wrap || !panel1 || !panel3 || !divider || !cta) return;
 
     const ctx = gsap.context(() => {
-      // الحاوية الأفقية — 3 panels
       const totalWidth = wrap.scrollWidth;
       const viewportWidth = window.innerWidth;
       const translateX = totalWidth - viewportWidth;
@@ -52,7 +51,7 @@ export function WorkshopHero() {
         },
       });
 
-      // حركة الـ wrap أفقياً (RTL = موجب لأن الاتجاه معكوس)
+      // حركة الـ wrap أفقياً
       tl.to(wrap, {
         x: translateX,
         ease: "none",
@@ -129,13 +128,13 @@ export function WorkshopHero() {
       ref={sectionRef}
       className="relative overflow-hidden bg-[#0a0a0a] min-h-[100svh]"
     >
-      {/* الـ glow الخلفي — بنفسجي خافت */}
+      {/* الـ glow الخلفي */}
       <div
         className="absolute inset-0 pointer-events-none"
         style={{
           background: `
-            radial-gradient(ellipse 60% 50% at 70% 40%, rgba(160,2,255,0.06), transparent 70%),
-            radial-gradient(ellipse 40% 40% at 20% 80%, rgba(109,1,176,0.04), transparent 60%)
+            radial-gradient(ellipse 60% 50% at 70% 40%, rgba(160,2,255,0.08), transparent 70%),
+            radial-gradient(ellipse 40% 40% at 20% 80%, rgba(109,1,176,0.05), transparent 60%)
           `,
         }}
       />
@@ -152,13 +151,13 @@ export function WorkshopHero() {
           className="flex items-center justify-center w-[100vw] min-h-[100svh] shrink-0 px-6"
         >
           <div className="text-center space-y-6 max-w-3xl">
-            <p className="text-brand-400 text-sm font-medium uppercase tracking-[0.2em]">
+            <p className="text-brand-400 text-base font-semibold uppercase tracking-[0.2em]">
               الحالة الحالية
             </p>
-            <h1 className="text-[clamp(2.5rem,8vw,6rem)] font-bold text-white leading-[1] tracking-tight">
+            <h1 className="text-[clamp(3rem,9vw,7rem)] font-bold text-white leading-[0.95] tracking-tight">
               بتتفرج
               <br />
-              <span className="text-white/50">ومش بتكسب</span>
+              <span className="text-white/70">ومش بتكسب</span>
             </h1>
 
             {/* الخط الفاصل البنفسجي */}
@@ -173,12 +172,10 @@ export function WorkshopHero() {
           </div>
         </div>
 
-        {/* ── Panel 2: الفراغ / الانتقال ── */}
+        {/* ── Panel 2: الانتقال ── */}
         <div className="flex items-center justify-center w-[80vw] min-h-[100svh] shrink-0">
           <div className="text-center">
-            <p
-              className="text-[clamp(1rem,3vw,1.5rem)] font-semibold text-white/30 uppercase tracking-[0.3em]"
-            >
+            <p className="text-[clamp(1.5rem,4vw,2.5rem)] font-bold text-white/40 uppercase tracking-[0.3em]">
               في 90 يوم
             </p>
           </div>
@@ -190,15 +187,15 @@ export function WorkshopHero() {
           className="flex items-center justify-center w-[100vw] min-h-[100svh] shrink-0 px-6 opacity-0"
         >
           <div className="text-center space-y-8 max-w-3xl">
-            <p className="text-brand-400 text-sm font-medium uppercase tracking-[0.2em]">
+            <p className="text-brand-400 text-base font-semibold uppercase tracking-[0.2em]">
               بعد ورشة أمين
             </p>
-            <h1 className="text-[clamp(2.5rem,8vw,6rem)] font-bold text-white leading-[1] tracking-tight">
+            <h1 className="text-[clamp(3rem,9vw,7rem)] font-bold text-white leading-[0.95] tracking-tight">
               أول
               <br />
               <span className="text-brand-400">5,000 جنيه</span>
             </h1>
-            <p className="text-white/60 text-lg md:text-xl max-w-xl mx-auto leading-relaxed">
+            <p className="text-white/70 text-xl md:text-2xl max-w-xl mx-auto leading-relaxed">
               تصميم + AI + موقع + تسويق
               <br />
               من الصفر لأول دخل حقيقي
@@ -209,20 +206,20 @@ export function WorkshopHero() {
               <Button
                 asChild
                 size="xl"
-                className="workshop-btn-glow text-base px-12 py-4 rounded-full border border-brand-300/30 bg-transparent text-white font-semibold"
+                className="workshop-btn-glow text-lg px-14 py-5 rounded-full border border-brand-300/40 bg-brand-500/10 text-white font-bold"
               >
                 <Link href={`/courses/${COURSE_SLUG}/checkout`}>
                   ابدأ دلوقتي بـ 1,500 جنيه
                   <IconArrowLeft className="size-5" />
                 </Link>
               </Button>
-              <p className="text-white/50 text-sm">
+              <p className="text-white/50 text-base">
                 بدل <span className="line-through">3,000</span> — عرض لأول 50
                 مشترك
               </p>
 
               {/* Trust signals */}
-              <div className="flex flex-wrap items-center justify-center gap-6 pt-2 text-[13px] text-white/50">
+              <div className="flex flex-wrap items-center justify-center gap-6 pt-2 text-sm text-white/50">
                 <span className="flex items-center gap-2">
                   <IconShieldCheck className="size-4" />
                   ضمان استرداد كامل
