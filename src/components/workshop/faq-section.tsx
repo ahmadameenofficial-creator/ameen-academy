@@ -1,8 +1,11 @@
 "use client";
 
-import { useState, useRef } from "react";
-import { motion, useInView, AnimatePresence } from "framer-motion";
+import { useState, useEffect, useRef } from "react";
+import gsap from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { IconPlus, IconMinus } from "@tabler/icons-react";
+
+gsap.registerPlugin(ScrollTrigger);
 
 const FAQS = [
   {
@@ -41,77 +44,112 @@ const FAQS = [
 
 export function FaqSection() {
   const [open, setOpen] = useState<number | null>(null);
-  const ref = useRef(null);
-  const inView = useInView(ref, { once: true, amount: 0.2 });
+  const sectionRef = useRef<HTMLElement>(null);
+
+  useEffect(() => {
+    const section = sectionRef.current;
+    if (!section) return;
+
+    const ctx = gsap.context(() => {
+      gsap.fromTo(
+        ".faq-header",
+        { opacity: 0, y: 40 },
+        {
+          opacity: 1,
+          y: 0,
+          duration: 1,
+          ease: "power3.out",
+          scrollTrigger: {
+            trigger: section,
+            start: "top 70%",
+            toggleActions: "play none none none",
+          },
+        }
+      );
+
+      const items = section.querySelectorAll(".faq-item");
+      items.forEach((item, i) => {
+        gsap.fromTo(
+          item,
+          { opacity: 0, y: 15 },
+          {
+            opacity: 1,
+            y: 0,
+            duration: 0.5,
+            ease: "power2.out",
+            scrollTrigger: {
+              trigger: item,
+              start: "top 90%",
+              toggleActions: "play none none none",
+            },
+            delay: i * 0.04,
+          }
+        );
+      });
+    }, section);
+
+    return () => ctx.revert();
+  }, []);
 
   return (
-    <section className="py-24 md:py-32 bg-neutral-50" ref={ref}>
+    <section ref={sectionRef} className="py-28 md:py-36 bg-[#0a0a0a]">
       <div className="container">
         <div className="max-w-2xl mx-auto">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={inView ? { opacity: 1, y: 0 } : {}}
-            transition={{ duration: 0.5 }}
-          >
-            <p className="text-sm font-semibold text-brand-500 uppercase tracking-wider mb-4">أسئلة شائعة</p>
-            <h2 className="text-3xl sm:text-4xl font-bold text-neutral-900 leading-[1.1] mb-14">
+          <div className="faq-header">
+            <p className="text-sm font-semibold text-brand-400/80 uppercase tracking-[0.15em] mb-5">
+              أسئلة شائعة
+            </p>
+            <h2 className="text-3xl sm:text-4xl font-bold text-white leading-[1.1] mb-14">
               عندك سؤال؟
               <br />
-              <span className="text-neutral-400">غالباً الإجابة هنا.</span>
+              <span className="text-white/20">غالباً الإجابة هنا.</span>
             </h2>
-          </motion.div>
+          </div>
 
           <div className="space-y-0">
             {FAQS.map((faq, i) => {
               const isOpen = open === i;
               return (
-                <motion.div
-                  key={faq.q}
-                  initial={{ opacity: 0, y: 10 }}
-                  animate={inView ? { opacity: 1, y: 0 } : {}}
-                  transition={{ delay: 0.05 + i * 0.03, duration: 0.35 }}
-                  className="border-b border-neutral-200"
-                >
+                <div key={faq.q} className="faq-item border-b border-white/5">
                   <button
                     onClick={() => setOpen(isOpen ? null : i)}
                     aria-expanded={isOpen}
                     className="flex items-center justify-between w-full py-6 text-right gap-6 group"
                   >
-                    <span className="text-[15px] font-medium text-neutral-800 group-hover:text-brand-500 transition-colors">
+                    <span className="text-[15px] font-medium text-white/60 group-hover:text-brand-400 transition-colors duration-300">
                       {faq.q}
                     </span>
                     <div
-                      className={`flex h-7 w-7 shrink-0 items-center justify-center rounded-full transition-all duration-200 ${
+                      className={`flex h-7 w-7 shrink-0 items-center justify-center rounded-full transition-all duration-300 ${
                         isOpen
-                          ? "bg-brand-500"
-                          : "bg-neutral-100 group-hover:bg-brand-50"
+                          ? "bg-brand-500 shadow-[0_0_15px_rgba(160,2,255,0.4)]"
+                          : "bg-white/5 group-hover:bg-white/10"
                       }`}
                     >
                       {isOpen ? (
                         <IconMinus className="size-3.5 text-white" />
                       ) : (
-                        <IconPlus className="size-3.5 text-neutral-400 group-hover:text-brand-500 transition-colors" />
+                        <IconPlus className="size-3.5 text-white/30 group-hover:text-brand-400 transition-colors duration-300" />
                       )}
                     </div>
                   </button>
-                  <AnimatePresence>
-                    {isOpen && (
-                      <motion.div
-                        initial={{ height: 0, opacity: 0 }}
-                        animate={{ height: "auto", opacity: 1 }}
-                        exit={{ height: 0, opacity: 0 }}
-                        transition={{ duration: 0.25, ease: "easeInOut" }}
-                        className="overflow-hidden"
-                      >
-                        <div className="pb-6">
-                          <p className="text-sm text-neutral-500 leading-relaxed max-w-lg">
-                            {faq.a}
-                          </p>
-                        </div>
-                      </motion.div>
-                    )}
-                  </AnimatePresence>
-                </motion.div>
+
+                  <div
+                    className="grid transition-all duration-300 ease-in-out"
+                    style={{
+                      gridTemplateRows: isOpen ? "1fr" : "0fr",
+                      opacity: isOpen ? 1 : 0,
+                    }}
+                  >
+                    <div className="overflow-hidden">
+                      <div className="pb-6">
+                        <p className="text-sm text-white/35 leading-relaxed max-w-lg">
+                          {faq.a}
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
               );
             })}
           </div>

@@ -179,6 +179,64 @@
   font-size: 0.9em;
 }
 
+/* ============================================
+   Workshop — Glow System + Motion
+   مستوحى من SOM بس بالهوية البنفسجية
+   ============================================ */
+
+/* الـ Glow Button — زي SOM بس بنفسجي */
+.workshop-btn-glow {
+  box-shadow:
+    rgba(198, 144, 255, 0.3) -1px 3px 6px 0px inset,
+    rgba(109, 1, 176, 0.6) 4px 1px 19px 0px;
+  transition: box-shadow 0.3s ease, transform 0.2s ease;
+}
+.workshop-btn-glow:hover {
+  box-shadow:
+    rgba(198, 144, 255, 0.5) -1px 3px 12px 0px inset,
+    rgba(160, 2, 255, 0.7) 4px 1px 30px 0px;
+  transform: translateY(-2px);
+}
+
+/* X-Marquee Stripes */
+.workshop-stripe {
+  height: 56px;
+  display: flex;
+  align-items: center;
+  overflow: hidden;
+  width: 120%;
+  margin-right: -10%;
+  padding: 0 20px;
+  background: #0a0a0a;
+}
+
+.workshop-stripe-brand {
+  border-top: 2px solid rgba(160, 2, 255, 0.4);
+  border-bottom: 2px solid rgba(160, 2, 255, 0.4);
+}
+
+.workshop-stripe-deep {
+  border-top: 2px solid rgba(109, 1, 176, 0.3);
+  border-bottom: 2px solid rgba(109, 1, 176, 0.3);
+}
+
+/* Marquee Animations — RTL و LTR */
+@keyframes marquee-rtl {
+  from { transform: translateX(0); }
+  to   { transform: translateX(50%); }
+}
+@keyframes marquee-ltr {
+  from { transform: translateX(50%); }
+  to   { transform: translateX(0); }
+}
+
+.animate-marquee-rtl {
+  animation: marquee-rtl 40s linear infinite;
+}
+.animate-marquee-ltr {
+  animation: marquee-ltr 40s linear infinite;
+}
+
 /* تحسينات الأداء */
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after {

@@ -24,20 +24,28 @@ export function StickyCta() {
         visible ? "translate-y-0" : "translate-y-full"
       }`}
     >
-      <div className="border-t border-neutral-200 bg-white/90 backdrop-blur-xl shadow-[0_-2px_20px_rgba(0,0,0,0.05)]">
+      {/* Glassmorphism dark — مش أبيض */}
+      <div
+        className="border-t border-white/5 backdrop-blur-2xl"
+        style={{
+          background: "rgba(10,10,10,0.85)",
+          boxShadow: "0 -4px 30px rgba(0,0,0,0.3)",
+        }}
+      >
         <div className="container flex items-center justify-between gap-4 py-3">
           <div className="hidden sm:block">
-            <p className="text-sm font-bold text-neutral-900">
+            <p className="text-sm font-bold text-white">
               1,500 جنيه{" "}
-              <span className="text-neutral-400 font-normal line-through text-xs mr-1">3,000</span>
+              <span className="text-white/20 font-normal line-through text-xs mr-1">
+                3,000
+              </span>
             </p>
-            <p className="text-xs text-neutral-400">عرض لأول 50 مشترك</p>
+            <p className="text-xs text-white/25">عرض لأول 50 مشترك</p>
           </div>
           <Button
             asChild
-            variant="gradient"
             size="lg"
-            className="w-full sm:w-auto text-sm px-8"
+            className="workshop-btn-glow w-full sm:w-auto text-sm px-8 py-3 rounded-full border border-brand-300/30 bg-transparent text-white font-semibold"
           >
             <Link href={`/courses/${COURSE_SLUG}/checkout`}>
               ابدأ دلوقتي

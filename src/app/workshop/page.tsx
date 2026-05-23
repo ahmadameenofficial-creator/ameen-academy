@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import dynamic from "next/dynamic";
 import { Navbar } from "@/components/layout/navbar";
 import { Footer } from "@/components/layout/footer";
+import { LenisProvider } from "@/components/workshop/lenis-provider";
 import { WorkshopHero } from "@/components/workshop/hero";
 import { SocialProofTicker } from "@/components/workshop/social-proof-ticker";
 import { PainSection } from "@/components/workshop/pain-section";
@@ -69,22 +70,24 @@ export default function WorkshopPage() {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(courseJsonLd) }}
       />
-      <Navbar />
-      <main className="flex-1 overflow-x-hidden">
-        <WorkshopHero />
-        <SocialProofTicker />
-        <PainSection />
-        <SolutionSection />
-        <CurriculumSection />
-        <InstructorSection />
-        <CaseStudiesSection />
-        <OfferStackSection />
-        <GuaranteeSection />
-        <FaqSection />
-        <FinalCtaSection />
-      </main>
-      <StickyCta />
-      <Footer />
+      <LenisProvider>
+        <Navbar />
+        <main className="flex-1 overflow-x-hidden">
+          <WorkshopHero />
+          <SocialProofTicker />
+          <PainSection />
+          <SolutionSection />
+          <CurriculumSection />
+          <InstructorSection />
+          <CaseStudiesSection />
+          <OfferStackSection />
+          <GuaranteeSection />
+          <FaqSection />
+          <FinalCtaSection />
+        </main>
+        <StickyCta />
+        <Footer />
+      </LenisProvider>
     </>
   );
 }

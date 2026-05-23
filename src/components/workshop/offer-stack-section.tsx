@@ -1,14 +1,13 @@
 "use client";
 
-import { useRef } from "react";
+import { useEffect, useRef } from "react";
 import Link from "next/link";
-import { motion, useInView } from "framer-motion";
-import {
-  IconCheck,
-  IconArrowLeft,
-  IconFlame,
-} from "@tabler/icons-react";
+import gsap from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { IconCheck, IconArrowLeft, IconFlame } from "@tabler/icons-react";
 import { Button } from "@/components/ui/button";
+
+gsap.registerPlugin(ScrollTrigger);
 
 const COURSE_SLUG = "warshit-ameen";
 
@@ -24,78 +23,144 @@ const ITEMS = [
 ];
 
 export function OfferStackSection() {
-  const ref = useRef(null);
-  const inView = useInView(ref, { once: true, amount: 0.15 });
+  const sectionRef = useRef<HTMLElement>(null);
+
+  useEffect(() => {
+    const section = sectionRef.current;
+    if (!section) return;
+
+    const ctx = gsap.context(() => {
+      gsap.fromTo(
+        ".offer-header",
+        { opacity: 0, y: 40 },
+        {
+          opacity: 1,
+          y: 0,
+          duration: 1,
+          ease: "power3.out",
+          scrollTrigger: {
+            trigger: section,
+            start: "top 70%",
+            toggleActions: "play none none none",
+          },
+        }
+      );
+
+      // كل صف في الـ stack
+      const rows = section.querySelectorAll(".offer-row");
+      rows.forEach((row, i) => {
+        gsap.fromTo(
+          row,
+          { opacity: 0, x: 20 },
+          {
+            opacity: 1,
+            x: 0,
+            duration: 0.5,
+            ease: "power2.out",
+            scrollTrigger: {
+              trigger: row,
+              start: "top 90%",
+              toggleActions: "play none none none",
+            },
+            delay: i * 0.06,
+          }
+        );
+      });
+
+      // الـ price card
+      gsap.fromTo(
+        ".price-card",
+        { opacity: 0, y: 50, scale: 0.96 },
+        {
+          opacity: 1,
+          y: 0,
+          scale: 1,
+          duration: 0.8,
+          ease: "power3.out",
+          scrollTrigger: {
+            trigger: ".price-card",
+            start: "top 85%",
+            toggleActions: "play none none none",
+          },
+        }
+      );
+    }, section);
+
+    return () => ctx.revert();
+  }, []);
 
   return (
-    <section className="py-24 md:py-32 bg-neutral-50" ref={ref}>
+    <section ref={sectionRef} className="py-28 md:py-36 bg-[#0a0a0a]">
       <div className="container">
         <div className="max-w-4xl mx-auto">
           {/* Header */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={inView ? { opacity: 1, y: 0 } : {}}
-            transition={{ duration: 0.5 }}
-            className="text-center mb-14"
-          >
-            <p className="text-sm font-semibold text-brand-500 uppercase tracking-wider mb-4">العرض الكامل</p>
-            <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold text-neutral-900 leading-[1.1]">
+          <div className="offer-header text-center mb-14">
+            <p className="text-sm font-semibold text-brand-400/80 uppercase tracking-[0.15em] mb-5">
+              العرض الكامل
+            </p>
+            <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold text-white leading-[1.1]">
               كل ده بسعر أقل
               <br />
-              <span className="text-neutral-400">من أول شغلانة هتجيبها.</span>
+              <span className="text-white/20">من أول شغلانة هتجيبها.</span>
             </h2>
-          </motion.div>
+          </div>
 
           {/* Stack */}
-          <div className="mb-12 bg-white rounded-2xl border border-neutral-100 overflow-hidden">
+          <div className="mb-12 rounded-2xl border border-white/5 overflow-hidden bg-white/[0.02]">
             {ITEMS.map((item, i) => (
-              <motion.div
+              <div
                 key={item.title}
-                initial={{ opacity: 0, x: 15 }}
-                animate={inView ? { opacity: 1, x: 0 } : {}}
-                transition={{ delay: 0.15 + i * 0.05, duration: 0.35 }}
-                className="flex items-center justify-between py-5 px-6 md:px-8 border-b border-neutral-50 last:border-0 group hover:bg-brand-50/30 transition-colors"
+                className="offer-row flex items-center justify-between py-5 px-6 md:px-8 border-b border-white/5 last:border-0 group hover:bg-brand-500/5 transition-colors duration-300"
               >
                 <div className="flex items-center gap-4">
-                  <div className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-brand-50">
-                    <IconCheck className="size-3.5 text-brand-500" />
+                  <div className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-brand-500/10 group-hover:bg-brand-500/20 transition-colors duration-300">
+                    <IconCheck className="size-3.5 text-brand-400" />
                   </div>
-                  <span className="text-[15px] text-neutral-800">{item.title}</span>
+                  <span className="text-[15px] text-white/70">
+                    {item.title}
+                  </span>
                 </div>
-                <span className="text-sm text-neutral-300 line-through shrink-0">
+                <span className="text-sm text-white/15 line-through shrink-0">
                   {item.value} ج
                 </span>
-              </motion.div>
+              </div>
             ))}
           </div>
 
-          {/* Price card — dark contrast */}
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            animate={inView ? { opacity: 1, y: 0 } : {}}
-            transition={{ delay: 0.4, duration: 0.6 }}
-            className="rounded-3xl bg-[#0a0a0a] text-white p-10 md:p-14 text-center"
+          {/* Price card — الـ glow الرئيسي */}
+          <div
+            className="price-card rounded-3xl p-10 md:p-14 text-center border border-brand-500/20 relative overflow-hidden"
+            style={{
+              background:
+                "radial-gradient(ellipse 80% 60% at 50% 0%, rgba(160,2,255,0.08), #0a0a0a 70%)",
+              boxShadow:
+                "0 0 80px -20px rgba(160,2,255,0.15), inset 0 1px 0 0 rgba(160,2,255,0.1)",
+            }}
           >
-            <div className="space-y-6">
+            <div className="space-y-6 relative z-10">
               <div>
-                <p className="text-white/30 text-sm">القيمة الحقيقية</p>
-                <p className="text-4xl font-bold text-white/15 line-through mt-1">12,300 جنيه</p>
+                <p className="text-white/25 text-sm">القيمة الحقيقية</p>
+                <p className="text-4xl font-bold text-white/10 line-through mt-1">
+                  12,300 جنيه
+                </p>
               </div>
 
               <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/5 border border-white/10">
                 <IconFlame className="size-4 text-orange-400" />
-                <p className="text-sm text-white/50">عرض لأول 50 مشترك</p>
+                <p className="text-sm text-white/40">عرض لأول 50 مشترك</p>
               </div>
 
               <div>
-                <p className="text-7xl md:text-8xl font-bold tracking-tight">1,500</p>
-                <p className="text-white/25 text-sm mt-1">جنيه مصري</p>
+                <p className="text-7xl md:text-8xl font-bold tracking-tight text-white">
+                  1,500
+                </p>
+                <p className="text-white/20 text-sm mt-1">جنيه مصري</p>
               </div>
 
               <Button
                 asChild
                 size="xl"
-                className="bg-white text-neutral-900 hover:bg-neutral-100 font-bold px-12"
+                className="workshop-btn-glow text-base px-12 py-4 rounded-full border border-brand-300/30 bg-transparent text-white font-bold"
               >
                 <Link href={`/courses/${COURSE_SLUG}/checkout`}>
                   ابدأ دلوقتي
@@ -103,9 +168,11 @@ export function OfferStackSection() {
                 </Link>
               </Button>
 
-              <p className="text-white/20 text-xs">ضمان كامل — فلوسك ترجع لو مكسبتش</p>
+              <p className="text-white/15 text-xs">
+                ضمان كامل — فلوسك ترجع لو مكسبتش
+              </p>
             </div>
-          </motion.div>
+          </div>
         </div>
       </div>
     </section>

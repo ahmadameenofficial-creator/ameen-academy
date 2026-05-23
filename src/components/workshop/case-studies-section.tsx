@@ -1,8 +1,11 @@
 "use client";
 
-import { useRef } from "react";
-import { motion, useInView } from "framer-motion";
+import { useEffect, useRef } from "react";
+import gsap from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { IconQuote } from "@tabler/icons-react";
+
+gsap.registerPlugin(ScrollTrigger);
 
 const CASES = [
   {
@@ -32,56 +35,112 @@ const CASES = [
 ];
 
 export function CaseStudiesSection() {
-  const ref = useRef(null);
-  const inView = useInView(ref, { once: true, amount: 0.2 });
+  const sectionRef = useRef<HTMLElement>(null);
+
+  useEffect(() => {
+    const section = sectionRef.current;
+    if (!section) return;
+
+    const ctx = gsap.context(() => {
+      // العنوان
+      gsap.fromTo(
+        ".case-header",
+        { opacity: 0, y: 40 },
+        {
+          opacity: 1,
+          y: 0,
+          duration: 1,
+          ease: "power3.out",
+          scrollTrigger: {
+            trigger: section,
+            start: "top 70%",
+            toggleActions: "play none none none",
+          },
+        }
+      );
+
+      // الكروت — stagger
+      const cards = section.querySelectorAll(".case-card");
+      cards.forEach((card, i) => {
+        gsap.fromTo(
+          card,
+          { opacity: 0, y: 50, scale: 0.96 },
+          {
+            opacity: 1,
+            y: 0,
+            scale: 1,
+            duration: 0.8,
+            ease: "power3.out",
+            scrollTrigger: {
+              trigger: card,
+              start: "top 85%",
+              toggleActions: "play none none none",
+            },
+            delay: i * 0.12,
+          }
+        );
+      });
+    }, section);
+
+    return () => ctx.revert();
+  }, []);
 
   return (
-    <section className="py-24 md:py-32 bg-white" ref={ref}>
+    <section ref={sectionRef} className="py-28 md:py-36 bg-[#0a0a0a]">
       <div className="container">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={inView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.5 }}
-          className="max-w-2xl mb-16"
-        >
-          <p className="text-sm font-semibold text-brand-500 uppercase tracking-wider mb-4">نتايج حقيقية</p>
-          <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold text-neutral-900 leading-[1.1]">
+        <div className="case-header max-w-2xl mb-16">
+          <p className="text-sm font-semibold text-brand-400/80 uppercase tracking-[0.15em] mb-5">
+            نتايج حقيقية
+          </p>
+          <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold text-white leading-[1.1]">
             مكانوش مصممين.
             <br />
-            <span className="text-neutral-400">بدأوا من صفر ودلوقتي بيكسبوا.</span>
+            <span className="text-white/20">
+              بدأوا من صفر ودلوقتي بيكسبوا.
+            </span>
           </h2>
-        </motion.div>
+        </div>
 
         <div className="grid md:grid-cols-3 gap-5">
-          {CASES.map((c, i) => (
-            <motion.div
+          {CASES.map((c) => (
+            <div
               key={c.name}
-              initial={{ opacity: 0, y: 25 }}
-              animate={inView ? { opacity: 1, y: 0 } : {}}
-              transition={{ delay: 0.15 + i * 0.1, duration: 0.5 }}
-              className="bg-neutral-50 rounded-2xl p-8 md:p-10 flex flex-col justify-between border border-neutral-100 hover:border-brand-200 hover:shadow-lg hover:shadow-brand-500/5 transition-all duration-300 group"
+              className="case-card group relative rounded-2xl p-8 md:p-10 flex flex-col justify-between bg-[#0a0a0a] border border-white/5 hover:border-brand-500/30 transition-all duration-500"
+              style={{
+                boxShadow: "0 0 0 0 rgba(160,2,255,0)",
+              }}
+              onMouseEnter={(e) => {
+                (e.currentTarget as HTMLDivElement).style.boxShadow =
+                  "0 8px 50px -12px rgba(160,2,255,0.2)";
+              }}
+              onMouseLeave={(e) => {
+                (e.currentTarget as HTMLDivElement).style.boxShadow =
+                  "0 0 0 0 rgba(160,2,255,0)";
+              }}
             >
               <div>
                 <div className="flex items-center justify-between mb-5">
-                  <span className="text-xs text-neutral-400 font-medium px-3 py-1 rounded-full bg-white border border-neutral-100">
+                  <span className="text-xs text-white/30 font-medium px-3 py-1 rounded-full bg-white/5 border border-white/5">
                     {c.tag}
                   </span>
-                  <IconQuote className="size-5 text-neutral-200 group-hover:text-brand-200 transition-colors" />
+                  <IconQuote className="size-5 text-white/10 group-hover:text-brand-400/30 transition-colors duration-300" />
                 </div>
-                <h3 className="text-xl font-bold text-neutral-900 mb-4">{c.name}</h3>
-                <p className="text-sm text-neutral-500 leading-relaxed italic">
+                <h3 className="text-xl font-bold text-white mb-4">{c.name}</h3>
+                <p className="text-sm text-white/35 leading-relaxed italic">
                   &ldquo;{c.quote}&rdquo;
                 </p>
               </div>
 
-              <div className="mt-8 pt-6 border-t border-neutral-200">
+              <div className="mt-8 pt-6 border-t border-white/5">
                 <div className="flex items-baseline gap-2">
-                  <p className="text-3xl font-bold text-brand-500">{c.result}</p>
-                  <span className="text-sm text-neutral-400">{c.unit}</span>
+                  <p className="text-3xl font-bold text-brand-400">
+                    {c.result}
+                  </p>
+                  <span className="text-sm text-white/25">{c.unit}</span>
                 </div>
-                <p className="text-xs text-neutral-400 mt-1">{c.time}</p>
+                <p className="text-xs text-white/20 mt-1">{c.time}</p>
               </div>
-            </motion.div>
+            </div>
           ))}
         </div>
       </div>
