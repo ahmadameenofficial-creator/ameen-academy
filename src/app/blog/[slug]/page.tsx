@@ -106,7 +106,7 @@ function ArticleSchema({
       "@type": "EducationalOrganization",
       name: "أكاديمية أمين",
       url: SITE_CONFIG.url,
-      logo: { "@type": "ImageObject", url: `${SITE_CONFIG.url}/images/logo.svg` },
+      logo: { "@type": "ImageObject", url: `${SITE_CONFIG.url}/images/icon-512.png` },
     },
     inLanguage: "ar",
     wordCount: post.content.split(/\s+/).length,

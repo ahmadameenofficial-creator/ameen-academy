@@ -25,7 +25,7 @@ async function main() {
     create: {
       slug: "workshop-ameen-2026",
       title: "ورشة أمين 2026 — تصميم + بيع + تسويق",
-      thumbnail: "/images/06.png",
+      thumbnail: "/images/fullcourse.png",
       shortDescription: "برنامج شامل هيعلمك التصميم الجرافيكي وإزاي تبيع شغلك وتسوّق لنفسك. مش مجرد برامج، ده تجهيز للسوق الحقيقي.",
       description: `ورشة أمين مش كورس عادي — ده برنامج كامل هيأهلك تنزل السوق كمصمم محترف.
 
@@ -118,7 +118,90 @@ async function main() {
     }
   }
 
+  // ============ الكورس المجاني (Lead Magnet) ============
+  const freeCourse = await prisma.course.upsert({
+    where: { slug: "free-design-roadmap-2026" },
+    update: {
+      thumbnail: "/images/freecourse.png",
+    },
+    create: {
+      slug: "free-design-roadmap-2026",
+      title: "من صفر لأول شغلانة تصميم — خريطة طريق 2026",
+      thumbnail: "/images/freecourse.png",
+      shortDescription:
+        "كراش كورس مجاني — 4 محاضرات هتفهّمك يعني إيه تصميم وإزاي AI غيّر اللعبة وإزاي تبدأ تكسب فعلاً.",
+      description: `الكورس ده مش مقدمة مملة ومش كلام نظري.
+
+4 محاضرات مركّزة هيخلّوك تفهم:
+- يعني إيه تصميم جرافيك فعلاً في 2026
+- إزاي AI بقى جزء أساسي من شغل المصمم
+- إيه خريطة الطريق اللي تمشي عليها عشان توصل لأول شغلانة
+- إزاي ناس عادية بدأت تكسب فلوس حقيقية من التصميم
+
+زكاة علم — مجاني للأبد.`,
+      category: "تصميم جرافيك",
+      level: "BEGINNER",
+      price: 0,
+      comparePrice: 150000, // قيمته 1500 جنيه
+      duration: 5400, // ~90 دقيقة
+      isPublished: true,
+      isFeatured: false,
+      publishedAt: new Date(),
+      instructorId: admin.id,
+    },
+  });
+
+  const freeLessons = [
+    {
+      title: "يعني إيه تصميم جرافيك في 2026؟",
+      description: "هنكسر كل الأفكار الغلط عن التصميم ونفهم السوق الحقيقي.",
+      order: 1,
+      duration: 1200,
+      isFree: true,
+    },
+    {
+      title: "AI غيّر اللعبة — المصمم الذكي بيكسب أكتر",
+      description: "إزاي تستخدم AI عشان تبقى أسرع 10 مرات من أي مصمم تاني.",
+      order: 2,
+      duration: 1500,
+      isFree: true,
+    },
+    {
+      title: "خريطة الطريق — من صفر لأول شغلانة",
+      description: "خطوة بخطوة: إيه اللي تتعلمه، إمتى، وإزاي تلاقي أول client.",
+      order: 3,
+      duration: 1500,
+      isFree: true,
+    },
+    {
+      title: "ناس عادية بدأت تكسب — وإنت كمان تقدر",
+      description: "قصص حقيقية لناس بدأت من صفر ودلوقتي بتكسب من التصميم.",
+      order: 4,
+      duration: 1200,
+      isFree: true,
+    },
+  ];
+
+  // نضيف الدروس لو الكورس لسه جديد (مفيهوش دروس)
+  const existingLessons = await prisma.lesson.count({ where: { courseId: freeCourse.id } });
+  if (existingLessons === 0) {
+    for (const lesson of freeLessons) {
+      await prisma.lesson.create({
+        data: {
+          courseId: freeCourse.id,
+          title: lesson.title,
+          description: lesson.description,
+          order: lesson.order,
+          duration: lesson.duration,
+          isFree: lesson.isFree,
+        },
+      });
+    }
+  }
+
   console.log("Seed done! Admin: admin@ameen.academy / Admin@2026");
+  console.log(`Free course: ${freeCourse.slug} (${freeLessons.length} lessons)`);
+  console.log(`Paid course thumbnail updated to /images/fullcourse.png`);
 }
 
 main()

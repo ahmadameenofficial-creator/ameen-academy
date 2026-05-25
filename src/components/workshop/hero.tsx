@@ -37,87 +37,33 @@ export function WorkshopHero() {
     const ctx = gsap.context(() => {
       const totalWidth = wrap.scrollWidth;
       const viewportWidth = window.innerWidth;
-      const translateX = totalWidth - viewportWidth;
+      const distance = totalWidth - viewportWidth;
 
-      // الـ horizontal scroll الأساسي
+      const scrollLength = distance * 2.5;
+
       const tl = gsap.timeline({
         scrollTrigger: {
           trigger: section,
           start: "top top",
-          end: () => `+=${translateX * 2.5}`,
+          end: () => `+=${scrollLength}`,
           pin: true,
           scrub: 1,
           anticipatePin: 1,
         },
       });
 
-      // حركة الـ wrap أفقياً
-      tl.to(wrap, {
-        x: translateX,
-        ease: "none",
-      });
+      tl
+        // الـ divider بيظهر أول حاجة
+        .fromTo(divider, { scaleX: 0 }, { scaleX: 1, ease: "power2.out", duration: 0.3 }, 0)
+        // Panel 1 بيختفي
+        .to(panel1, { opacity: 0.1, scale: 0.9, duration: 0.3 }, 0.15)
+        // الـ horizontal scroll الكامل
+        .fromTo(wrap, { x: -distance }, { x: 0, ease: "none", duration: 1 }, 0)
+        // Panel 3 بيظهر
+        .fromTo(panel3, { opacity: 0, y: 40 }, { opacity: 1, y: 0, ease: "power2.out", duration: 0.3 }, 0.55)
+        // CTA بيظهر
+        .fromTo(cta, { opacity: 0, y: 30 }, { opacity: 1, y: 0, ease: "power3.out", duration: 0.25 }, 0.7);
 
-      // الـ divider البنفسجي بيكبر مع السكرول
-      gsap.fromTo(
-        divider,
-        { scaleX: 0 },
-        {
-          scaleX: 1,
-          ease: "power2.out",
-          scrollTrigger: {
-            trigger: section,
-            start: "top top",
-            end: () => `+=${translateX * 0.8}`,
-            scrub: 1,
-          },
-        }
-      );
-
-      // Panel 1 — fade out عند السكرول
-      gsap.to(panel1, {
-        opacity: 0.15,
-        scale: 0.92,
-        scrollTrigger: {
-          trigger: section,
-          start: () => `+=${translateX * 0.5}`,
-          end: () => `+=${translateX * 1.5}`,
-          scrub: 1,
-        },
-      });
-
-      // Panel 3 — fade in
-      gsap.fromTo(
-        panel3,
-        { opacity: 0, y: 40 },
-        {
-          opacity: 1,
-          y: 0,
-          ease: "power2.out",
-          scrollTrigger: {
-            trigger: section,
-            start: () => `+=${translateX * 1.2}`,
-            end: () => `+=${translateX * 2}`,
-            scrub: 1,
-          },
-        }
-      );
-
-      // CTA — يظهر في الأخير
-      gsap.fromTo(
-        cta,
-        { opacity: 0, y: 30 },
-        {
-          opacity: 1,
-          y: 0,
-          ease: "power3.out",
-          scrollTrigger: {
-            trigger: section,
-            start: () => `+=${translateX * 1.8}`,
-            end: () => `+=${translateX * 2.3}`,
-            scrub: 1,
-          },
-        }
-      );
     }, section);
 
     return () => ctx.revert();
@@ -127,6 +73,7 @@ export function WorkshopHero() {
     <section
       ref={sectionRef}
       className="relative overflow-hidden bg-[#0a0a0a] min-h-[100svh]"
+      dir="ltr"
     >
       {/* الـ glow الخلفي */}
       <div
@@ -144,26 +91,23 @@ export function WorkshopHero() {
         ref={wrapRef}
         className="flex flex-row items-center min-h-[100svh]"
         style={{ width: "280vw" }}
+        dir="rtl"
       >
-        {/* ── Panel 1: الحالة الحالية ── */}
+        {/* ── Panel 1: هنخليك مصمم جرافيك ── */}
         <div
           ref={panel1Ref}
           className="flex items-center justify-center w-[100vw] min-h-[100svh] shrink-0 px-6"
         >
           <div className="text-center space-y-6 max-w-3xl">
-            <p className="text-brand-400 text-base font-semibold uppercase tracking-[0.2em]">
-              الحالة الحالية
-            </p>
             <h1 className="text-[clamp(3rem,9vw,7rem)] font-bold text-white leading-[0.95] tracking-tight">
-              بتتفرج
+              هنخليك
               <br />
-              <span className="text-white/70">ومش بتكسب</span>
+              <span className="text-brand-400">مصمم جرافيك</span>
             </h1>
 
-            {/* الخط الفاصل البنفسجي */}
             <div
               ref={dividerRef}
-              className="mx-auto h-[3px] w-full max-w-md origin-right"
+              className="mx-auto h-[3px] w-full max-w-md origin-center"
               style={{
                 background:
                   "linear-gradient(90deg, transparent, #A002FF, transparent)",
@@ -172,37 +116,32 @@ export function WorkshopHero() {
           </div>
         </div>
 
-        {/* ── Panel 2: الانتقال ── */}
+        {/* ── Panel 2: بقواعد لعب 2026 ── */}
         <div className="flex items-center justify-center w-[80vw] min-h-[100svh] shrink-0">
           <div className="text-center">
-            <p className="text-[clamp(1.5rem,4vw,2.5rem)] font-bold text-white/40 uppercase tracking-[0.3em]">
-              في 90 يوم
+            <p className="text-[clamp(3rem,8vw,6rem)] font-bold text-white leading-[0.95] tracking-tight">
+              بقواعد لعب
+              <br />
+              <span className="text-brand-400">2026</span>
             </p>
           </div>
         </div>
 
-        {/* ── Panel 3: النتيجة ── */}
+        {/* ── Panel 3: بسيستم عملي واقعي ── */}
         <div
           ref={panel3Ref}
-          className="flex items-center justify-center w-[100vw] min-h-[100svh] shrink-0 px-6 opacity-0"
+          className="flex items-center justify-center w-[100vw] min-h-[100svh] shrink-0 px-6"
+          style={{ opacity: 0 }}
         >
           <div className="text-center space-y-8 max-w-3xl">
-            <p className="text-brand-400 text-base font-semibold uppercase tracking-[0.2em]">
-              بعد ورشة أمين
-            </p>
-            <h1 className="text-[clamp(3rem,9vw,7rem)] font-bold text-white leading-[0.95] tracking-tight">
-              أول
+            <h1 className="text-[clamp(2.5rem,7vw,5.5rem)] font-bold text-white leading-[1.1] tracking-tight">
+              بسيستم عملي واقعي
               <br />
-              <span className="text-brand-400">5,000 جنيه</span>
+              <span className="text-brand-400">يناسبك 100%</span>
             </h1>
-            <p className="text-white/70 text-xl md:text-2xl max-w-xl mx-auto leading-relaxed">
-              تصميم + AI + موقع + تسويق
-              <br />
-              من الصفر لأول دخل حقيقي
-            </p>
 
             {/* CTA */}
-            <div ref={ctaRef} className="opacity-0 space-y-5 pt-4">
+            <div ref={ctaRef} style={{ opacity: 0 }} className="space-y-5 pt-4">
               <Button
                 asChild
                 size="xl"
@@ -218,7 +157,6 @@ export function WorkshopHero() {
                 مشترك
               </p>
 
-              {/* Trust signals */}
               <div className="flex flex-wrap items-center justify-center gap-6 pt-2 text-sm text-white/50">
                 <span className="flex items-center gap-2">
                   <IconShieldCheck className="size-4" />

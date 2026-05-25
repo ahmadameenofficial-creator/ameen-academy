@@ -13,7 +13,7 @@ export function OrganizationSchema() {
     name: "Ameen Academy",
     alternateName: "أكاديمية أمين",
     url: BASE_URL,
-    logo: `${BASE_URL}/images/logo.svg`,
+    logo: `${BASE_URL}/images/icon-512.png`,
     description: "منصة تعليمية عربية تعلمك المهارات اللي تجيبلك فلوس — تصميم جرافيك، ذكاء اصطناعي، فريلانس، ومهارات حديثة مطلوبة في سوق العمل 2026",
     foundingDate: "2026",
     founder: {

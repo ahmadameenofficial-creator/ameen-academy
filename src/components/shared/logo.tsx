@@ -10,23 +10,18 @@ interface LogoProps {
 
 export function Logo({ variant = "full", className, href = "/" }: LogoProps) {
   const content = (
-    <div className={cn("flex items-center gap-2.5", className)}>
+    <div className={cn("flex items-center", className)}>
       <Image
-        src="/images/logo.svg"
+        src="/images/academy-logo.png"
         alt="أكاديمية أمين"
-        width={40}
+        width={120}
         height={44}
-        className="h-10 w-auto"
+        className={cn(
+          "w-auto",
+          variant === "icon" ? "h-9" : "h-11"
+        )}
         priority
       />
-      {variant === "full" && (
-        <div className="flex flex-col leading-tight">
-          <span className="text-lg font-bold text-foreground">Ameen Academy</span>
-          <span className="text-[11px] font-light text-muted-foreground">
-            أكاديمية أمين
-          </span>
-        </div>
-      )}
     </div>
   );
 

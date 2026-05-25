@@ -15,6 +15,9 @@ import {
   IconArticle,
   IconClock,
   IconLoader2,
+  IconPhoto,
+  IconUpload,
+  IconX,
 } from "@tabler/icons-react";
 import { apiClient, apiPost, apiPut, apiDelete, API } from "@/lib/api";
 import { useToast } from "@/components/ui/toast";
@@ -128,6 +131,17 @@ export function BlogManager({ initialPosts }: { initialPosts: BlogPost[] }) {
             <Card key={post.id}>
               <CardContent className="p-4">
                 <div className="flex items-start justify-between gap-4">
+                  {post.thumbnail ? (
+                    <img
+                      src={post.thumbnail}
+                      alt=""
+                      className="size-14 rounded-lg object-cover shrink-0"
+                    />
+                  ) : (
+                    <div className="size-14 rounded-lg bg-muted/50 flex items-center justify-center shrink-0">
+                      <IconPhoto className="size-5 text-muted-foreground/40" />
+                    </div>
+                  )}
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center gap-2 mb-1">
                       <h3 className="font-semibold text-foreground truncate">
@@ -217,6 +231,7 @@ function BlogEditor({
   onCancel: () => void;
 }) {
   const [saving, setSaving] = useState(false);
+  const [uploading, setUploading] = useState(false);
   const { error } = useToast();
   const [form, setForm] = useState({
     title: post?.title || "",
@@ -229,6 +244,30 @@ function BlogEditor({
     isPublished: post?.isPublished || false,
     isFeatured: post?.isFeatured || false,
   });
+
+  async function handleThumbnailUpload(e: React.ChangeEvent<HTMLInputElement>) {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    if (file.size > 5 * 1024 * 1024) {
+      error("الصورة لازم تكون أقل من 5 ميجا");
+      return;
+    }
+
+    setUploading(true);
+    try {
+      const formData = new FormData();
+      formData.append("file", file);
+      const res = await fetch("/api/upload", { method: "POST", body: formData });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error);
+      setForm((prev) => ({ ...prev, thumbnail: data.url }));
+    } catch {
+      error("معرفناش نرفع الصورة — جرّب تاني");
+    } finally {
+      setUploading(false);
+    }
+  }
 
   function generateSlug(title: string) {
     return title
@@ -357,16 +396,47 @@ function BlogEditor({
 
             <div>
               <label className="text-sm font-medium text-foreground block mb-1.5">
-                رابط صورة الغلاف
+                صورة الغلاف
               </label>
-              <input
-                type="url"
-                value={form.thumbnail}
-                onChange={(e) => setForm({ ...form, thumbnail: e.target.value })}
-                className="w-full rounded-lg border border-border bg-background px-4 py-2.5 text-foreground focus:border-brand-500 focus:ring-1 focus:ring-brand-500 outline-none"
-                dir="ltr"
-                placeholder="https://..."
-              />
+              {form.thumbnail ? (
+                <div className="relative rounded-lg overflow-hidden border border-border">
+                  <img
+                    src={form.thumbnail}
+                    alt="صورة الغلاف"
+                    className="w-full h-48 object-cover"
+                  />
+                  <button
+                    type="button"
+                    onClick={() => setForm({ ...form, thumbnail: "" })}
+                    className="absolute top-2 left-2 rounded-full bg-black/60 p-1.5 text-white hover:bg-black/80 transition"
+                  >
+                    <IconX className="size-4" />
+                  </button>
+                </div>
+              ) : (
+                <label className="flex flex-col items-center justify-center gap-3 rounded-lg border-2 border-dashed border-border bg-muted/30 py-10 cursor-pointer hover:border-brand-400 hover:bg-brand-50/5 transition">
+                  {uploading ? (
+                    <IconLoader2 className="size-8 text-brand-500 animate-spin" />
+                  ) : (
+                    <IconPhoto className="size-8 text-muted-foreground" />
+                  )}
+                  <div className="text-center">
+                    <p className="text-sm font-medium text-foreground">
+                      {uploading ? "جاري الرفع..." : "اضغط أو اسحب صورة هنا"}
+                    </p>
+                    <p className="text-xs text-muted-foreground mt-1">
+                      JPG, PNG, WebP — أقصى حجم 5 ميجا
+                    </p>
+                  </div>
+                  <input
+                    type="file"
+                    accept="image/jpeg,image/png,image/webp"
+                    onChange={handleThumbnailUpload}
+                    className="hidden"
+                    disabled={uploading}
+                  />
+                </label>
+              )}
             </div>
 
             <div>
