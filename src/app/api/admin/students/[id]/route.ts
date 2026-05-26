@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { requireAdminApi, unauthorized, badRequest } from "@/lib/admin-api";
 import { prisma } from "@/lib/prisma";
 import { z } from "zod";
+import { auditLog } from "@/lib/audit";
 
 interface RouteContext {
   params: Promise<{ id: string }>;
@@ -42,6 +43,12 @@ export async function PUT(req: Request, context: RouteContext) {
         where: { id },
         data: { isBanned: true, bannedReason: reason || null },
       });
+      auditLog({
+        userId: session.user.id,
+        action: "student.ban",
+        target: id,
+        details: `${student.name || student.email}${reason ? ` — السبب: ${reason}` : ""}`,
+      });
       return NextResponse.json({ message: "تم الحظر" });
     }
 
@@ -49,6 +56,12 @@ export async function PUT(req: Request, context: RouteContext) {
     await prisma.user.update({
       where: { id },
       data: { isBanned: false, bannedReason: null },
+    });
+    auditLog({
+      userId: session.user.id,
+      action: "student.unban",
+      target: id,
+      details: student.name || student.email,
     });
     return NextResponse.json({ message: "تم فك الحظر" });
   } catch {
@@ -73,6 +86,13 @@ export async function DELETE(_req: Request, context: RouteContext) {
     }
 
     await prisma.user.delete({ where: { id } });
+
+    auditLog({
+      userId: session.user.id,
+      action: "student.delete",
+      target: id,
+      details: `حذف نهائي: ${student.name || student.email}`,
+    });
 
     return NextResponse.json({ message: "تم حذف الحساب نهائيا" });
   } catch {

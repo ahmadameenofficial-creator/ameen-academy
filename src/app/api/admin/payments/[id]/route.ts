@@ -5,6 +5,7 @@ import { requireAdminApi, unauthorized } from "@/lib/admin-api";
 import { notifyPaymentApproved } from "@/lib/notifications";
 import { sendPaymentConfirmationEmail } from "@/lib/email";
 import { referralService } from "@/lib/services";
+import { auditLog } from "@/lib/audit";
 
 interface RouteContext {
   params: Promise<{ id: string }>;
@@ -69,6 +70,13 @@ export async function PUT(req: Request, context: RouteContext) {
         payment.course.title
       ).catch(() => {});
 
+      auditLog({
+        userId: session.user.id,
+        action: "payment.approve",
+        target: id,
+        details: `${payment.user.name} — ${payment.course.title} — ${payment.amount} قرش`,
+      });
+
       revalidatePath("/admin/payments");
       revalidatePath("/admin/students");
       revalidatePath("/admin");
@@ -78,6 +86,13 @@ export async function PUT(req: Request, context: RouteContext) {
       await prisma.payment.update({
         where: { id },
         data: { status: "FAILED" },
+      });
+
+      auditLog({
+        userId: session.user.id,
+        action: "payment.reject",
+        target: id,
+        details: `${payment.user.name} — ${payment.course.title}`,
       });
 
       revalidatePath("/admin/payments");

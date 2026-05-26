@@ -563,3 +563,17 @@ model BlogLike {
   @@unique([userId, postId])
   @@index([postId])
 }
+
+// ============ سجل أفعال الأدمن (Audit Log) ============
+model AuditLog {
+  id        String   @id @default(cuid())
+  userId    String // الأدمن اللي عمل الفعل
+  action    String // مثلاً: "payment.approve", "student.ban", "course.delete"
+  target    String? // ID الحاجة اللي اتأثرت
+  details   String? @db.Text // تفاصيل إضافية (JSON أو نص)
+  ipAddress String?
+  createdAt DateTime @default(now())
+
+  @@index([userId, createdAt])
+  @@index([action, createdAt])
+}

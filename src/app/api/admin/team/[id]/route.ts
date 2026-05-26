@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { requireAdminApi, unauthorized, badRequest } from "@/lib/admin-api";
 import { z } from "zod";
+import { auditLog } from "@/lib/audit";
 
 const updateSchema = z.object({
   role: z.enum(["ADMIN", "INSTRUCTOR", "STUDENT"]),
@@ -48,6 +49,13 @@ export async function PUT(
 
     const roleLabel = role === "ADMIN" ? "أدمن" : role === "INSTRUCTOR" ? "مدرس" : "طالب";
 
+    auditLog({
+      userId: session.user.id,
+      action: "team.role_change",
+      target: updated.id,
+      details: `${updated.name || updated.email} → ${roleLabel}`,
+    });
+
     return NextResponse.json({
       message: `تم تغيير صلاحية ${updated.name || updated.email} لـ ${roleLabel}`,
       user: updated,
@@ -88,6 +96,13 @@ export async function DELETE(
     await prisma.user.update({
       where: { id },
       data: { role: "STUDENT" },
+    });
+
+    auditLog({
+      userId: session.user.id,
+      action: "team.remove",
+      target: id,
+      details: `${target.name || target.email} (كان ${target.role})`,
     });
 
     return NextResponse.json({

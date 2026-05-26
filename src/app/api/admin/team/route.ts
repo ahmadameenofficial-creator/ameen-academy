@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { requireAdminApi, unauthorized, badRequest } from "@/lib/admin-api";
 import { z } from "zod";
+import { auditLog } from "@/lib/audit";
 
 // جلب كل الأدمنز والمدرسين
 export async function GET() {
@@ -71,6 +72,13 @@ export async function POST(req: Request) {
       where: { id: user.id },
       data: { role },
       select: { id: true, name: true, email: true, role: true },
+    });
+
+    auditLog({
+      userId: session.user.id,
+      action: "team.promote",
+      target: updated.id,
+      details: `${updated.name || updated.email} → ${role}`,
     });
 
     return NextResponse.json({

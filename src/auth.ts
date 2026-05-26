@@ -4,6 +4,25 @@ import { PrismaAdapter } from "@auth/prisma-adapter";
 import bcrypt from "bcryptjs";
 import { prisma } from "@/lib/prisma";
 
+// ============ حماية من Brute Force — حظر بعد 5 محاولات فاشلة ============
+const LOCKOUT_THRESHOLD = 5; // عدد المحاولات الفاشلة
+const LOCKOUT_WINDOW_MINUTES = 15; // الفترة اللي بنعدّ فيها المحاولات
+
+async function isAccountLocked(email: string): Promise<boolean> {
+  const since = new Date(Date.now() - LOCKOUT_WINDOW_MINUTES * 60 * 1000);
+  const failedAttempts = await prisma.loginAttempt.count({
+    where: { email, success: false, createdAt: { gte: since } },
+  });
+  return failedAttempts >= LOCKOUT_THRESHOLD;
+}
+
+async function recordLoginAttempt(email: string, success: boolean, userId?: string) {
+  // بنسجل في الخلفية — لو فشل مش هيأثر على الـ login
+  prisma.loginAttempt.create({
+    data: { email, success, userId },
+  }).catch(() => {});
+}
+
 export const { handlers, auth, signIn, signOut } = NextAuth({
   adapter: PrismaAdapter(prisma),
   session: { strategy: "jwt" },
@@ -23,16 +42,35 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
         const email = (credentials.email as string).toLowerCase().trim();
         const password = credentials.password as string;
 
+        // تشييك الحظر التلقائي — 5 محاولات فاشلة = حظر 15 دقيقة
+        const locked = await isAccountLocked(email);
+        if (locked) {
+          recordLoginAttempt(email, false);
+          return null;
+        }
+
         const user = await prisma.user.findUnique({
           where: { email },
         });
 
-        if (!user || !user.password) return null;
+        if (!user || !user.password) {
+          recordLoginAttempt(email, false);
+          return null;
+        }
 
-        if (user.isBanned) return null;
+        if (user.isBanned) {
+          recordLoginAttempt(email, false, user.id);
+          return null;
+        }
 
         const isValid = await bcrypt.compare(password, user.password);
-        if (!isValid) return null;
+        if (!isValid) {
+          recordLoginAttempt(email, false, user.id);
+          return null;
+        }
+
+        // دخول ناجح — سجّل وحدّث آخر دخول
+        recordLoginAttempt(email, true, user.id);
 
         await prisma.user.update({
           where: { id: user.id },
