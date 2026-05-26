@@ -63,16 +63,21 @@ export default async function DashboardLayout({
           </div>
         </div>
 
-        <nav className="md:hidden flex items-center gap-1 px-4 pb-3 overflow-x-auto">
-          <NavLink href="/dashboard" icon={IconHome} label="الرئيسية" mobile />
-          <NavLink href="/courses" icon={IconBook} label="الكورسات" mobile />
-          <NavLink href="/community" icon={IconUsers} label="المجتمع" mobile />
-          <NavLink href="/dashboard/referrals" icon={IconGift} label="اربح معانا" mobile />
-          <NavLink href="/dashboard/profile" icon={IconUser} label="حسابي" mobile />
-          {isAdmin && (
-            <NavLink href="/admin" icon={IconShield} label="الأدمن" mobile />
-          )}
-        </nav>
+        {/* موبايل nav — مع fade على الأطراف عشان يبيّن إنه scrollable */}
+        <div className="md:hidden relative">
+          <div className="absolute left-0 top-0 bottom-0 w-6 bg-gradient-to-r from-background to-transparent z-10 pointer-events-none" />
+          <nav className="flex items-center gap-1 px-4 pb-3 overflow-x-auto scrollbar-hide">
+            <NavLink href="/dashboard" icon={IconHome} label="الرئيسية" mobile />
+            <NavLink href="/courses" icon={IconBook} label="الكورسات" mobile />
+            <NavLink href="/community" icon={IconUsers} label="المجتمع" mobile />
+            <NavLink href="/dashboard/referrals" icon={IconGift} label="اربح معانا" mobile />
+            <NavLink href="/dashboard/profile" icon={IconUser} label="حسابي" mobile />
+            {isAdmin && (
+              <NavLink href="/admin" icon={IconShield} label="الأدمن" mobile />
+            )}
+          </nav>
+          <div className="absolute right-0 top-0 bottom-0 w-6 bg-gradient-to-l from-background to-transparent z-10 pointer-events-none" />
+        </div>
       </header>
 
       <main className="p-4 md:p-6 max-w-6xl mx-auto">{children}</main>

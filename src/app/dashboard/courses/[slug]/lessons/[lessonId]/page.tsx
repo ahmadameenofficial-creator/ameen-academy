@@ -4,6 +4,7 @@ import { prisma } from "@/lib/prisma";
 import { getSignedEmbedUrl } from "@/lib/bunny";
 
 export const dynamic = "force-dynamic";
+import { IconChevronDown } from "@tabler/icons-react";
 import { VideoPlayer } from "./video-player";
 import { LessonNav } from "./lesson-nav";
 
@@ -94,39 +95,42 @@ export default async function LessonPage({ params }: Props) {
           isCompleted={progress?.isCompleted || false}
         />
 
-        {/* Sidebar: Course Content */}
-        <div className="border border-border rounded-xl overflow-hidden">
-          <div className="bg-muted/50 px-4 py-3 font-medium text-sm text-foreground border-b border-border">
-            محتوى الكورس
-          </div>
-          {course.modules.map((module) => (
-            <div key={module.id}>
-              <div className="px-4 py-2 bg-muted/30 text-xs font-medium text-muted-foreground border-b border-border">
-                {module.title}
+        {/* Sidebar: Course Content — collapsible على الموبايل */}
+        <details className="border border-border rounded-xl overflow-hidden group md:[open]" open>
+          <summary className="bg-muted/50 px-4 py-3 font-medium text-sm text-foreground border-b border-border cursor-pointer flex items-center justify-between md:pointer-events-none">
+            <span>محتوى الكورس</span>
+            <IconChevronDown className="h-4 w-4 text-muted-foreground transition-transform group-open:rotate-180 md:hidden" />
+          </summary>
+          <div>
+            {course.modules.map((module) => (
+              <div key={module.id}>
+                <div className="px-4 py-2 bg-muted/30 text-xs font-medium text-muted-foreground border-b border-border">
+                  {module.title}
+                </div>
+                {module.lessons.map((l) => {
+                  const isCurrent = l.id === lessonId;
+                  const done = completedSet.has(l.id);
+                  return (
+                    <a
+                      key={l.id}
+                      href={`/dashboard/courses/${slug}/lessons/${l.id}`}
+                      className={`flex items-center justify-between px-4 py-2.5 text-sm border-b border-border last:border-0 transition-colors ${
+                        isCurrent
+                          ? "bg-brand-50 text-brand-700 font-medium"
+                          : "hover:bg-muted/30"
+                      }`}
+                    >
+                      <span className={done && !isCurrent ? "text-muted-foreground" : ""}>
+                        {done && !isCurrent ? "✓ " : ""}
+                        {l.title}
+                      </span>
+                    </a>
+                  );
+                })}
               </div>
-              {module.lessons.map((l) => {
-                const isCurrent = l.id === lessonId;
-                const done = completedSet.has(l.id);
-                return (
-                  <a
-                    key={l.id}
-                    href={`/dashboard/courses/${slug}/lessons/${l.id}`}
-                    className={`flex items-center justify-between px-4 py-2.5 text-sm border-b border-border last:border-0 transition-colors ${
-                      isCurrent
-                        ? "bg-brand-50 text-brand-700 font-medium"
-                        : "hover:bg-muted/30"
-                    }`}
-                  >
-                    <span className={done && !isCurrent ? "text-muted-foreground" : ""}>
-                      {done && !isCurrent ? "✓ " : ""}
-                      {l.title}
-                    </span>
-                  </a>
-                );
-              })}
-            </div>
-          ))}
-        </div>
+            ))}
+          </div>
+        </details>
       </div>
     </div>
   );

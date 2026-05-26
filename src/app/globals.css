@@ -140,6 +140,15 @@
   }
 }
 
+/* إخفاء scrollbar مع السماح بالـ scroll */
+.scrollbar-hide {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
+
 /* تنسيق المقالات */
 .prose-custom {
   font-size: 1.05rem;
