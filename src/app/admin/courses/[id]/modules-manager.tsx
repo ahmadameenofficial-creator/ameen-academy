@@ -72,18 +72,36 @@ export function ModulesManager({
         API.admin.courses.lessons(courseId, moduleId),
         { title: data.title, duration: data.duration * 60, isFree: data.isFree },
       );
-      if (data.video) {
-        const videoId = await uploadVideoForLesson(lesson.id, data.title, data.video);
-        if (videoId) lesson.videoId = videoId;
-        else error("الدرس اتضاف بس رفع الفيديو فشل — جرّب ترفعه تاني");
-      }
+
+      // أضف الدرس للقائمة أولاً (حتى لو الفيديو لسه)
       setModules((prev) => prev.map((m) => m.id === moduleId ? { ...m, lessons: [...m.lessons, lesson] } : m));
       setAddingLessonTo(null);
+      setLoading(null);
+
+      // لو في فيديو — ارفعه بعد إضافة الدرس (مش هيبلوك الـ UI)
+      if (data.video) {
+        try {
+          const videoId = await uploadVideoForLesson(lesson.id, data.title, data.video);
+          if (videoId) {
+            setModules((prev) =>
+              prev.map((m) => m.id === moduleId
+                ? { ...m, lessons: m.lessons.map((l) => l.id === lesson.id ? { ...l, videoId } : l) }
+                : m
+              ),
+            );
+          }
+        } catch (err) {
+          console.error("[Upload] فشل رفع الفيديو مع الدرس:", err);
+          error("الدرس اتضاف بنجاح بس رفع الفيديو فشل — جرّب ترفعه تاني من زرار الرفع");
+        }
+      }
+
       router.refresh();
-    } catch {
+    } catch (err) {
+      console.error("[Lesson] فشل إضافة الدرس:", err);
       error("معرفناش نضيف الدرس، جرّب تاني");
+      setLoading(null);
     }
-    setLoading(null);
   }
 
   async function deleteLesson(lessonId: string, moduleId: string) {
@@ -105,25 +123,65 @@ export function ModulesManager({
 
   async function uploadVideoForLesson(lessonId: string, title: string, file: File): Promise<string | null> {
     try {
+      // فحص الملف قبل الرفع
+      if (!file || file.size === 0) {
+        error("الملف فاضي أو مش صالح");
+        return null;
+      }
+
+      const fileSizeMB = (file.size / (1024 * 1024)).toFixed(0);
+      console.log(`[Upload] بدء رفع: ${file.name} (${fileSizeMB} MB)`);
+
       setUploadingFor(lessonId);
       setUploadProgress(0);
       setUploadFileName(file.name);
       setUploadFileSize(file.size);
 
-      // (1) إنشاء الفيديو + الحصول على توقيع رفع مؤقت (المفتاح بيفضل على السيرفر)
-      const creds = await apiPost<TusUploadCredentials>(API.admin.videos.create, { title });
+      // (1) إنشاء الفيديو + الحصول على توقيع رفع مؤقت
+      setUploadProgress(1);
+      let creds: TusUploadCredentials;
+      try {
+        creds = await apiPost<TusUploadCredentials>(API.admin.videos.create, { title });
+      } catch (err) {
+        console.error("[Upload] فشل إنشاء الفيديو على Bunny:", err);
+        error("فشل إنشاء الفيديو — تأكد إن إعدادات Bunny مظبوطة في الـ environment variables");
+        return null;
+      }
 
-      // (2) الرفع المباشر للـ Bunny عبر TUS — بنظام chunks مع دعم الاستئناف
-      await uploadVideoViaTus(creds, file, (pct) => setUploadProgress(Math.round(pct * 0.95)));
+      if (!creds || !creds.videoId || !creds.signature) {
+        console.error("[Upload] بيانات الرفع مش كاملة:", creds);
+        error("بيانات الرفع مش كاملة — تأكد من إعدادات Bunny");
+        return null;
+      }
+
+      console.log(`[Upload] جلسة رفع تم إنشاؤها: videoId=${creds.videoId}`);
+
+      // (2) الرفع المباشر للـ Bunny عبر TUS — بنظام chunks
+      try {
+        await uploadVideoViaTus(creds, file, (pct) => setUploadProgress(Math.max(2, Math.round(pct * 0.95))));
+      } catch (err) {
+        console.error("[Upload] فشل رفع الفيديو:", err);
+        error(`فشل رفع الفيديو: ${err instanceof Error ? err.message : "خطأ غير معروف"}`);
+        return null;
+      }
 
       // (3) ربط الفيديو بالدرس
       setUploadProgress(98);
-      await apiPut(API.admin.lessons.update(lessonId), { videoId: creds.videoId });
+      try {
+        await apiPut(API.admin.lessons.update(lessonId), { videoId: creds.videoId });
+      } catch (err) {
+        console.error("[Upload] فشل ربط الفيديو بالدرس:", err);
+        error("الفيديو اترفع بس فشل ربطه بالدرس — جرّب تاني من زرار الرفع");
+        return null;
+      }
+
       setUploadProgress(100);
-      success(`تم رفع الفيديو بنجاح (${(file.size / (1024 * 1024)).toFixed(0)} MB)`);
+      success(`تم رفع الفيديو بنجاح (${fileSizeMB} MB)`);
+      console.log(`[Upload] تم بنجاح: ${file.name}`);
       return creds.videoId;
-    } catch {
-      error("فشل رفع الفيديو، جرّب تاني");
+    } catch (err) {
+      console.error("[Upload] خطأ غير متوقع:", err);
+      error("حصل مشكلة غير متوقعة — افتح Console في المتصفح وابعتلي الـ error");
       return null;
     } finally {
       setTimeout(() => { setUploadingFor(null); setUploadProgress(0); setUploadFileName(""); setUploadFileSize(0); }, 2000);
@@ -135,19 +193,27 @@ export function ModulesManager({
     input.type = "file";
     input.accept = "video/*";
     input.onchange = async (e) => {
-      const file = (e.target as HTMLInputElement).files?.[0];
-      if (!file) return;
-      const lesson = modules.find((m) => m.id === moduleId)?.lessons.find((l) => l.id === lessonId);
-      const videoId = await uploadVideoForLesson(lessonId, lesson?.title || "فيديو", file);
-      if (videoId) {
-        setModules((prev) =>
-          prev.map((m) =>
-            m.id === moduleId
-              ? { ...m, lessons: m.lessons.map((l) => (l.id === lessonId ? { ...l, videoId } : l)) }
-              : m,
-          ),
-        );
-        router.refresh();
+      try {
+        const file = (e.target as HTMLInputElement).files?.[0];
+        if (!file) return;
+
+        console.log(`[Upload] تم اختيار ملف: ${file.name} (${(file.size / (1024 * 1024)).toFixed(0)} MB)`);
+
+        const lesson = modules.find((m) => m.id === moduleId)?.lessons.find((l) => l.id === lessonId);
+        const videoId = await uploadVideoForLesson(lessonId, lesson?.title || "فيديو", file);
+        if (videoId) {
+          setModules((prev) =>
+            prev.map((m) =>
+              m.id === moduleId
+                ? { ...m, lessons: m.lessons.map((l) => (l.id === lessonId ? { ...l, videoId } : l)) }
+                : m,
+            ),
+          );
+          router.refresh();
+        }
+      } catch (err) {
+        console.error("[Upload] خطأ في handleUploadForExisting:", err);
+        error("حصل مشكلة في رفع الفيديو — شوف Console");
       }
     };
     input.click();
