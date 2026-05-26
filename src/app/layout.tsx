@@ -105,8 +105,7 @@ export const metadata: Metadata = {
     },
   },
   verification: {
-    // هتحطه لما تاخد الكود من Google Search Console
-    // google: "YOUR_GOOGLE_VERIFICATION_CODE",
+    google: "google909baf3e6be2df80",
   },
   category: "education",
   other: {
