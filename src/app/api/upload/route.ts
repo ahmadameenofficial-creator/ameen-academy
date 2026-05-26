@@ -3,6 +3,7 @@ import { auth } from "@/auth";
 import { writeFile, mkdir } from "fs/promises";
 import { join } from "path";
 import { randomBytes } from "crypto";
+import { rateLimit, RATE_LIMITS } from "@/lib/rate-limit";
 
 // الحد الأقصى: 5 ميجا للصور، 50 ميجا للفيديو
 const MAX_IMAGE_SIZE = 5 * 1024 * 1024;
@@ -15,6 +16,12 @@ export async function POST(req: Request) {
   const session = await auth();
   if (!session?.user) {
     return NextResponse.json({ error: "غير مصرّح" }, { status: 401 });
+  }
+
+  // حماية من سبام الرفع: 10 ملفات كل 10 دقائق
+  const rl = rateLimit(`upload:${session.user.id}`, RATE_LIMITS.upload);
+  if (!rl.success) {
+    return NextResponse.json({ error: "رفعت ملفات كتير، استنى شوية" }, { status: 429 });
   }
 
   try {

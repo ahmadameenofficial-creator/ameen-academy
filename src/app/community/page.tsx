@@ -17,5 +17,8 @@ export default async function CommunityPage() {
     userId: session?.user?.id,
   });
 
-  return <CommunityFeed initialPosts={posts} />;
+  // تحويل Date لـ string عشان يتوافق مع الـ client component types
+  const serialized = JSON.parse(JSON.stringify(posts));
+
+  return <CommunityFeed initialPosts={serialized} />;
 }

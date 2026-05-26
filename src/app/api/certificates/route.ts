@@ -2,7 +2,6 @@ import { NextResponse } from "next/server";
 import { auth } from "@/auth";
 import { prisma } from "@/lib/prisma";
 import { randomBytes } from "crypto";
-import { generateCertificatePDF } from "@/lib/certificate";
 
 export async function POST(req: Request) {
   const session = await auth();
@@ -75,21 +74,13 @@ export async function POST(req: Request) {
 
     const certificateCode = `AMN-${randomBytes(4).toString("hex").toUpperCase()}`;
 
-    const pdfBytes = await generateCertificatePDF({
-      studentName: session.user.name || "طالب",
-      courseName: enrollment.course.title,
-      certificateCode,
-      issuedAt: new Date(),
-    });
-
-    const pdfBase64 = Buffer.from(pdfBytes).toString("base64");
-
+    // الـ PDF بيتعمل generate on-the-fly في /api/certificates/[code]
+    // فمش محتاجين نخزنه في الداتابيز (بيوفّر مساحة كبيرة)
     const certificate = await prisma.certificate.create({
       data: {
         userId: session.user.id,
         courseId,
         certificateCode,
-        pdfUrl: `data:application/pdf;base64,${pdfBase64}`,
       },
     });
 
