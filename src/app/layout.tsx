@@ -6,6 +6,7 @@ import { GoogleAnalytics } from "@/components/analytics/google-analytics";
 import { OrganizationSchema, WebsiteSchema } from "@/lib/structured-data";
 import { ReferralCapture } from "@/components/referral-capture";
 import { PwaRegister } from "@/components/pwa-register";
+import { ScrollToTop } from "@/components/ui/scroll-to-top";
 import "./globals.css";
 
 const ibmPlex = IBM_Plex_Sans_Arabic({
@@ -140,7 +141,10 @@ export default function RootLayout({
       <body className={`${ibmPlex.variable} font-sans`}>
         <ReferralCapture />
         <PwaRegister />
-        <Providers>{children}</Providers>
+        <Providers>
+          {children}
+          <ScrollToTop />
+        </Providers>
       </body>
     </html>
   );

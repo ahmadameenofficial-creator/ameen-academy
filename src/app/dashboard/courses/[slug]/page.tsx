@@ -15,6 +15,7 @@ import {
   IconChevronDown,
   IconArrowRight,
 } from "@tabler/icons-react";
+import { CompletionBanner } from "@/components/dashboard/completion-banner";
 
 interface Props {
   params: Promise<{ slug: string }>;
@@ -68,6 +69,10 @@ export default async function CourseContentPage({ params }: Props) {
           </span>
         </div>
       </div>
+
+      {progressPercent === 100 && (
+        <CompletionBanner courseId={course.id} courseTitle={course.title} />
+      )}
 
       <div className="space-y-3">
         {course.modules.map((module) => {
