@@ -19,6 +19,8 @@ interface LessonRowProps {
   isLoading: boolean;
   isUploading: boolean;
   uploadProgress: number;
+  uploadFileName?: string;
+  uploadFileSize?: number;
   onDelete: () => void;
   onUpload: () => void;
 }
@@ -28,6 +30,8 @@ export function LessonRow({
   isLoading,
   isUploading,
   uploadProgress,
+  uploadFileName,
+  uploadFileSize,
   onDelete,
   onUpload,
 }: LessonRowProps) {
@@ -53,7 +57,7 @@ export function LessonRow({
       </div>
       <div className="flex items-center gap-2">
         {isUploading ? (
-          <VideoUploadProgress progress={uploadProgress} />
+          <VideoUploadProgress progress={uploadProgress} fileName={uploadFileName} fileSize={uploadFileSize} />
         ) : (
           <Button variant="ghost" size="sm" className="h-7 text-xs gap-1" onClick={onUpload}>
             <IconUpload className="h-3 w-3" />

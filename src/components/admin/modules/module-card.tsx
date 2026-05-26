@@ -19,6 +19,8 @@ interface ModuleCardProps {
   loadingId: string | null;
   uploadingFor: string | null;
   uploadProgress: number;
+  uploadFileName?: string;
+  uploadFileSize?: number;
   onDeleteModule: () => void;
   onToggleLessonForm: () => void;
   onAddLesson: (data: { title: string; duration: number; isFree: boolean; video: File | null }) => void;
@@ -33,6 +35,8 @@ export function ModuleCard({
   loadingId,
   uploadingFor,
   uploadProgress,
+  uploadFileName,
+  uploadFileSize,
   onDeleteModule,
   onToggleLessonForm,
   onAddLesson,
@@ -82,6 +86,8 @@ export function ModuleCard({
               isLoading={loadingId === lesson.id}
               isUploading={uploadingFor === lesson.id}
               uploadProgress={uploadProgress}
+              uploadFileName={uploadFileName}
+              uploadFileSize={uploadFileSize}
               onDelete={() => onDeleteLesson(lesson.id)}
               onUpload={() => onUploadVideo(lesson.id)}
             />

@@ -27,6 +27,8 @@ export function ModulesManager({
   const [loading, setLoading] = useState<string | null>(null);
   const [uploadingFor, setUploadingFor] = useState<string | null>(null);
   const [uploadProgress, setUploadProgress] = useState(0);
+  const [uploadFileName, setUploadFileName] = useState<string>("");
+  const [uploadFileSize, setUploadFileSize] = useState<number>(0);
   const { success, error } = useToast();
 
   // ============ Modules ============
@@ -105,24 +107,26 @@ export function ModulesManager({
     try {
       setUploadingFor(lessonId);
       setUploadProgress(0);
+      setUploadFileName(file.name);
+      setUploadFileSize(file.size);
 
       // (1) إنشاء الفيديو + الحصول على توقيع رفع مؤقت (المفتاح بيفضل على السيرفر)
       const creds = await apiPost<TusUploadCredentials>(API.admin.videos.create, { title });
 
-      // (2) الرفع المباشر للـ Bunny عبر TUS — التوقيع بييجي من السيرفر والمفتاح مبيخرجش
-      await uploadVideoViaTus(creds, file, (pct) => setUploadProgress(Math.round(pct * 0.9)));
+      // (2) الرفع المباشر للـ Bunny عبر TUS — بنظام chunks مع دعم الاستئناف
+      await uploadVideoViaTus(creds, file, (pct) => setUploadProgress(Math.round(pct * 0.95)));
 
       // (3) ربط الفيديو بالدرس
-      setUploadProgress(95);
+      setUploadProgress(98);
       await apiPut(API.admin.lessons.update(lessonId), { videoId: creds.videoId });
       setUploadProgress(100);
-      success("تم رفع الفيديو بنجاح");
+      success(`تم رفع الفيديو بنجاح (${(file.size / (1024 * 1024)).toFixed(0)} MB)`);
       return creds.videoId;
     } catch {
       error("فشل رفع الفيديو، جرّب تاني");
       return null;
     } finally {
-      setTimeout(() => { setUploadingFor(null); setUploadProgress(0); }, 1500);
+      setTimeout(() => { setUploadingFor(null); setUploadProgress(0); setUploadFileName(""); setUploadFileSize(0); }, 2000);
     }
   }
 
@@ -168,6 +172,8 @@ export function ModulesManager({
           loadingId={loading}
           uploadingFor={uploadingFor}
           uploadProgress={uploadProgress}
+          uploadFileName={uploadFileName}
+          uploadFileSize={uploadFileSize}
           onDeleteModule={() => deleteModule(module.id)}
           onToggleLessonForm={() => setAddingLessonTo(addingLessonTo === module.id ? null : module.id)}
           onAddLesson={(data) => addLesson(module.id, data)}
