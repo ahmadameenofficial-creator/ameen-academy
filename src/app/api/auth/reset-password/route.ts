@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { z } from "zod";
 import bcrypt from "bcryptjs";
+import { rateLimit } from "@/lib/rate-limit";
 
 const schema = z.object({
   token: z.string().min(1),
@@ -13,6 +14,12 @@ const schema = z.object({
 });
 
 export async function POST(req: Request) {
+  // حماية من brute force على الـ token
+  const ip = req.headers.get("x-forwarded-for") || "unknown";
+  const rl = rateLimit(`reset:${ip}`, { limit: 5, windowSeconds: 15 * 60 });
+  if (!rl.success) {
+    return NextResponse.json({ error: "محاولات كتير، جرّب بعد 15 دقيقة" }, { status: 429 });
+  }
   try {
     const body = await req.json();
     const result = schema.safeParse(body);

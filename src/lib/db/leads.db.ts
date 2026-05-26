@@ -21,3 +21,11 @@ export function findAllLeads() {
 export function countLeads() {
   return prisma.lead.count();
 }
+
+/** هل المستخدم ده سجّل بياناته قبل كده؟ (بالإيميل) */
+export function isLeadByEmail(email: string) {
+  return prisma.lead.findFirst({
+    where: { email },
+    select: { id: true },
+  });
+}

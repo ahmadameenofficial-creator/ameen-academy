@@ -8,29 +8,42 @@ import { useToast } from "@/components/ui/toast";
 import { apiPost, ApiError, API } from "@/lib/api";
 import { LeadGateModal, hasLeadCaptured, markLeadCaptured } from "@/components/free-course/lead-gate-modal";
 
-interface ClaimButtonProps {
+interface FreeEnrollButtonProps {
   isLoggedIn: boolean;
-  alreadyEnrolled: boolean;
+  isEnrolled: boolean;
   slug: string;
   /** السيرفر شيّك وإيميله موجود في Leads */
   serverLeadCaptured?: boolean;
+  fullWidth?: boolean;
+  size?: "lg" | "xl";
 }
 
-export function ClaimFreeButton({ isLoggedIn, alreadyEnrolled, slug, serverLeadCaptured = false }: ClaimButtonProps) {
+export function FreeEnrollButton({
+  isLoggedIn,
+  isEnrolled,
+  slug,
+  serverLeadCaptured = false,
+  fullWidth = true,
+  size = "xl",
+}: FreeEnrollButtonProps) {
   const router = useRouter();
   const [loading, setLoading] = useState(false);
   const [showLeadModal, setShowLeadModal] = useState(false);
   const { error } = useToast();
 
-  // لو السيرفر قال إنه lead — سجّل في localStorage كمان
+  // لو السيرفر قال إنه lead — سجّل في localStorage كمان عشان ميشوفش المودال تاني
   useEffect(() => {
     if (serverLeadCaptured) markLeadCaptured();
   }, [serverLeadCaptured]);
 
-  // لو مشترك بالفعل → روح للكورس على طول
-  if (alreadyEnrolled) {
+  if (isEnrolled) {
     return (
-      <Button asChild variant="gradient" size="xl" className="w-full sm:w-auto">
+      <Button
+        asChild
+        variant="gradient"
+        size={size}
+        className={fullWidth ? "w-full text-base" : "text-base"}
+      >
         <a href={`/dashboard/courses/${slug}`}>
           كمّل الكورس
           <IconArrowLeft className="size-5" />
@@ -40,8 +53,9 @@ export function ClaimFreeButton({ isLoggedIn, alreadyEnrolled, slug, serverLeadC
   }
 
   function handleClick() {
+    // لو السيرفر أو localStorage قالوا إنه سجّل قبل كده → كمّل على طول
     if (serverLeadCaptured || hasLeadCaptured()) {
-      proceedToClaim();
+      proceedToEnroll();
       return;
     }
     setShowLeadModal(true);
@@ -49,10 +63,10 @@ export function ClaimFreeButton({ isLoggedIn, alreadyEnrolled, slug, serverLeadC
 
   function handleLeadSuccess() {
     setShowLeadModal(false);
-    proceedToClaim();
+    proceedToEnroll();
   }
 
-  async function proceedToClaim() {
+  async function proceedToEnroll() {
     if (!isLoggedIn) {
       router.push("/register?next=/free");
       return;
@@ -74,16 +88,13 @@ export function ClaimFreeButton({ isLoggedIn, alreadyEnrolled, slug, serverLeadC
         onClick={handleClick}
         disabled={loading}
         variant="gradient"
-        size="xl"
-        className="w-full sm:w-auto"
+        size={size}
+        className={fullWidth ? "w-full text-base" : "text-base"}
       >
         {loading ? (
           <IconLoader2 className="size-5 animate-spin" />
         ) : (
-          <>
-            ابدأ دلوقتي ببلاش
-            <IconArrowLeft className="size-5" />
-          </>
+          "ابدأ ببلاش"
         )}
       </Button>
 

@@ -201,17 +201,38 @@ function renderContent(content: string) {
   return html + closingTag;
 }
 
+/** تنظيف HTML خطير — حماية من XSS */
+function escapeHtml(str: string) {
+  return str
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#039;");
+}
+
+/** التأكد إن الرابط آمن (مفيش javascript:) */
+function sanitizeUrl(url: string) {
+  const trimmed = url.trim().toLowerCase();
+  if (trimmed.startsWith("javascript:") || trimmed.startsWith("data:") || trimmed.startsWith("vbscript:")) {
+    return "#";
+  }
+  return url;
+}
+
 function applyInline(text: string) {
+  // تنظيف HTML أولاً — قبل أي تحويل
+  text = escapeHtml(text);
   // Bold
   text = text.replace(/\*\*(.*?)\*\*/g, '<strong class="text-foreground font-semibold">$1</strong>');
   // Italic
   text = text.replace(/\*(.*?)\*/g, "<em>$1</em>");
   // Inline code
   text = text.replace(/`(.*?)`/g, '<code class="bg-muted px-1.5 py-0.5 rounded text-sm text-brand-600 font-mono">$1</code>');
-  // Links
+  // Links — مع sanitize URL
   text = text.replace(
     /\[([^\]]+)\]\(([^)]+)\)/g,
-    '<a href="$2" class="text-brand-600 underline underline-offset-2 hover:text-brand-700 transition-colors">$1</a>'
+    (_match, label, url) => `<a href="${sanitizeUrl(url)}" rel="noopener noreferrer" class="text-brand-600 underline underline-offset-2 hover:text-brand-700 transition-colors">${label}</a>`
   );
   return text;
 }

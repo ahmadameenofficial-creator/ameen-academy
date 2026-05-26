@@ -1,7 +1,15 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
+import { rateLimit } from "@/lib/rate-limit";
 
 export async function GET(req: NextRequest) {
+  // حماية من brute force على كودات الخصم
+  const ip = req.headers.get("x-forwarded-for") || "unknown";
+  const rl = rateLimit(`coupon:${ip}`, { limit: 10, windowSeconds: 60 });
+  if (!rl.success) {
+    return NextResponse.json({ error: "طلبات كتير، جرّب بعد شوية" }, { status: 429 });
+  }
+
   const code = req.nextUrl.searchParams.get("code");
   const courseId = req.nextUrl.searchParams.get("courseId");
 

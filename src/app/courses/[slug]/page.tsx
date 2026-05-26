@@ -10,6 +10,7 @@ export const dynamic = "force-dynamic";
 import { auth } from "@/auth";
 import { formatPrice, formatDuration, getLevelLabel } from "@/lib/format";
 import { CourseSchema, BreadcrumbSchema } from "@/lib/structured-data";
+import { leadsDb } from "@/lib/db";
 import { SITE_CONFIG } from "@/lib/constants";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -28,6 +29,7 @@ import {
   IconInfinity,
   IconCertificate,
 } from "@tabler/icons-react";
+import { EnrollCta } from "@/components/courses/enroll-cta";
 
 interface Props {
   params: Promise<{ slug: string }>;
@@ -127,6 +129,11 @@ export default async function CourseDetailsPage({ params }: Props) {
     ? await getEnrollment(session.user.id, course.id)
     : null;
   const isEnrolled = !!enrollment;
+
+  // شيّك لو إيميله موجود في Leads — عشان ميكتبش بياناته تاني
+  const isLead = session?.user?.email
+    ? Boolean(await leadsDb.isLeadByEmail(session.user.email))
+    : false;
 
   const totalLessons = course.lessons.length;
   const avgRating =
@@ -259,6 +266,7 @@ export default async function CourseDetailsPage({ params }: Props) {
                 isLoggedIn={!!session}
                 discount={discount}
                 totalLessons={totalLessons}
+                serverLeadCaptured={isLead}
               />
             </div>
 
@@ -271,6 +279,7 @@ export default async function CourseDetailsPage({ params }: Props) {
                 isLoggedIn={!!session}
                 discount={discount}
                 totalLessons={totalLessons}
+                serverLeadCaptured={isLead}
               />
             </div>
           </div>
@@ -430,6 +439,7 @@ export default async function CourseDetailsPage({ params }: Props) {
                 isLoggedIn={!!session}
                 discount={discount}
                 totalLessons={totalLessons}
+                serverLeadCaptured={isLead}
               />
             </div>
           </div>
@@ -438,7 +448,16 @@ export default async function CourseDetailsPage({ params }: Props) {
 
       {/* ======= Mobile Sticky CTA ======= */}
       <div className="md:hidden fixed bottom-0 inset-x-0 bg-background/95 backdrop-blur-md border-t border-border p-4 z-50 safe-area-pb">
-        {isEnrolled ? (
+        {course.price === 0 ? (
+          <EnrollCta
+            slug={slug}
+            price={0}
+            isLoggedIn={!!session}
+            isEnrolled={isEnrolled}
+            serverLeadCaptured={isLead}
+            size="lg"
+          />
+        ) : isEnrolled ? (
           <Button variant="gradient" size="lg" className="w-full" asChild>
             <Link href="/dashboard">كمّل تعلّم</Link>
           </Button>
@@ -481,6 +500,7 @@ function PricingCard({
   isLoggedIn,
   discount,
   totalLessons,
+  serverLeadCaptured = false,
 }: {
   course: {
     price: number;
@@ -492,6 +512,7 @@ function PricingCard({
   isLoggedIn: boolean;
   discount: number;
   totalLessons: number;
+  serverLeadCaptured?: boolean;
 }) {
   return (
     <Card className="overflow-hidden border-0 shadow-2xl shadow-black/20 bg-white">
@@ -515,18 +536,14 @@ function PricingCard({
           )}
         </div>
 
-        {/* زر الشراء */}
-        {isEnrolled ? (
-          <Button variant="gradient" size="xl" className="w-full text-base" asChild>
-            <Link href="/dashboard">كمّل تعلّم</Link>
-          </Button>
-        ) : (
-          <Button variant="gradient" size="xl" className="w-full text-base" asChild>
-            <Link href={isLoggedIn ? `/courses/${slug}/checkout` : "/login"}>
-              اشتري دلوقتي
-            </Link>
-          </Button>
-        )}
+        {/* زر الشراء / الاشتراك المجاني */}
+        <EnrollCta
+          slug={slug}
+          price={course.price}
+          isLoggedIn={isLoggedIn}
+          isEnrolled={isEnrolled}
+          serverLeadCaptured={serverLeadCaptured}
+        />
 
         {/* المميزات */}
         <div className="space-y-3 pt-2 border-t border-border">

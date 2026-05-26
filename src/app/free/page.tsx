@@ -9,7 +9,7 @@ import {
 } from "@tabler/icons-react";
 import { auth } from "@/auth";
 import { enrollmentService } from "@/lib/services";
-import { enrollmentsDb } from "@/lib/db";
+import { enrollmentsDb, leadsDb } from "@/lib/db";
 import { FREE_COURSE } from "@/lib/constants";
 import { Navbar } from "@/components/layout/navbar";
 import { Footer } from "@/components/layout/footer";
@@ -39,6 +39,11 @@ export default async function FreeCoursePage() {
     session?.user && course
       ? Boolean(await enrollmentsDb.findEnrollment(session.user.id, course.id))
       : false;
+
+  // شيّك لو إيميله موجود في Leads — عشان ميكتبش بياناته تاني
+  const isLead = session?.user?.email
+    ? Boolean(await leadsDb.isLeadByEmail(session.user.email))
+    : false;
 
   return (
     <>
@@ -117,6 +122,7 @@ export default async function FreeCoursePage() {
                     isLoggedIn={Boolean(session?.user)}
                     alreadyEnrolled={alreadyEnrolled}
                     slug={course.slug}
+                    serverLeadCaptured={isLead}
                   />
                 </div>
               )}
