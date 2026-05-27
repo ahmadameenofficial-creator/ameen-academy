@@ -167,15 +167,18 @@ export function CourseSidebar({
   return (
     <>
       {/* زرار فتح القائمة في الموبايل — ثابت في أسفل الشاشة */}
-      <button
-        onClick={() => setMobileOpen(true)}
-        className="lg:hidden fixed bottom-4 left-4 z-40 flex items-center gap-2 bg-brand-600 text-white px-4 py-2.5 rounded-full shadow-lg shadow-brand-500/30 hover:bg-brand-500 active:scale-95 transition-all"
-      >
-        <IconList className="h-4 w-4" />
-        <span className="text-sm font-medium">
-          {currentIndex >= 0 ? `${currentIndex + 1}/${totalLessons}` : "الدروس"}
-        </span>
-      </button>
+      {!mobileOpen && (
+        <button
+          onClick={() => setMobileOpen(true)}
+          className="lg:hidden fixed bottom-5 right-4 z-40 flex items-center gap-2 bg-brand-600 text-white pl-4 pr-3 py-3 rounded-full shadow-lg shadow-brand-500/30 active:scale-95 transition-all"
+          aria-label="قائمة الدروس"
+        >
+          <span className="text-sm font-medium">
+            {currentIndex >= 0 ? `${currentIndex + 1} / ${totalLessons}` : "الدروس"}
+          </span>
+          <IconList className="h-5 w-5" />
+        </button>
+      )}
 
       {/* السايدبار في الموبايل — overlay */}
       {mobileOpen && (

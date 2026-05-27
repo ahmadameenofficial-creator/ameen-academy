@@ -4,7 +4,6 @@ import { useState, useCallback } from "react";
 import { useRouter } from "next/navigation";
 import {
   IconPlayerPlay,
-  IconCheck,
   IconLoader2,
   IconCircleCheck,
   IconCircleDashed,
@@ -36,21 +35,17 @@ export function VideoPlayer({
   const toggleComplete = useCallback(async () => {
     setMarking(true);
     const newState = !isCompleted;
-    // تحديث optimistic — بنغيّر الحالة فوراً
     setIsCompleted(newState);
     try {
       await apiPost(API.progress.track, { lessonId, isCompleted: newState });
-      // بنعمل refresh عشان الـ layout sidebar يتحدّث
       router.refresh();
     } catch {
-      // لو فشل — نرجّع الحالة
       setIsCompleted(!newState);
       error("معرفناش نحفظ تقدّمك، جرّب تاني");
     }
     setMarking(false);
   }, [lessonId, isCompleted, error, router]);
 
-  // بناء رابط الـ embed
   const embedUrl = signedEmbedUrl
     ? `${signedEmbedUrl}&autoplay=false&preload=true${lastPosition > 0 ? `&t=${lastPosition}` : ""}`
     : null;
@@ -82,26 +77,24 @@ export function VideoPlayer({
       </div>
 
       {/* شريط أسفل الفيديو — علّم كمكتمل */}
-      <div className="bg-zinc-900 px-4 py-2.5">
-        <button
-          onClick={toggleComplete}
-          disabled={marking}
-          className={`flex items-center gap-2 text-sm font-medium transition-all rounded-lg px-3 py-1.5 -mx-1 ${
-            isCompleted
-              ? "text-green-400 hover:text-green-300 hover:bg-white/5"
-              : "text-zinc-400 hover:text-white hover:bg-white/5"
-          }`}
-        >
-          {marking ? (
-            <IconLoader2 className="h-5 w-5 animate-spin" />
-          ) : isCompleted ? (
-            <IconCircleCheck className="h-5 w-5" />
-          ) : (
-            <IconCircleDashed className="h-5 w-5" />
-          )}
-          {isCompleted ? "مكتمل — اضغط عشان تلغي" : "علّم الدرس كمكتمل"}
-        </button>
-      </div>
+      <button
+        onClick={toggleComplete}
+        disabled={marking}
+        className={`w-full flex items-center justify-center gap-2.5 text-sm font-medium transition-all px-4 py-3 ${
+          isCompleted
+            ? "bg-zinc-900 text-green-400 active:bg-zinc-800"
+            : "bg-zinc-900 text-zinc-400 active:bg-zinc-800"
+        }`}
+      >
+        {marking ? (
+          <IconLoader2 className="h-5 w-5 animate-spin" />
+        ) : isCompleted ? (
+          <IconCircleCheck className="h-5 w-5" />
+        ) : (
+          <IconCircleDashed className="h-5 w-5" />
+        )}
+        {isCompleted ? "مكتمل — اضغط عشان تلغي" : "علّم الدرس كمكتمل"}
+      </button>
     </div>
   );
 }

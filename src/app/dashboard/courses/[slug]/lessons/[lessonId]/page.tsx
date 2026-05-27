@@ -73,7 +73,7 @@ export default async function LessonPage({ params }: Props) {
       />
 
       {/* معلومات الدرس + التنقل */}
-      <div className="p-4 md:p-6 space-y-4">
+      <div className="p-4 md:p-6 pb-20 lg:pb-6 space-y-4">
         <div>
           <h1 className="text-lg md:text-xl font-bold text-foreground">{lesson.title}</h1>
           {lesson.description && (
