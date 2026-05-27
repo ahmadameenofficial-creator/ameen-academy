@@ -112,6 +112,7 @@ export const API = {
     videos: {
       list: "/api/admin/videos",
       create: "/api/admin/videos",
+      get: (videoId: string) => `/api/admin/videos/${videoId}`,
       upload: (videoId: string) => `/api/admin/videos/${videoId}/upload`,
     },
   },

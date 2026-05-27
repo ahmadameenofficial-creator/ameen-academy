@@ -65,7 +65,12 @@ export async function uploadVideoViaTus(
     offset = await uploadChunkWithRetry(location, chunk, offset, totalSize, onProgress);
   }
 
-  // تأكيد الانتهاء
+  // تأكيد الانتهاء من الرفع
+  onProgress?.(98);
+
+  // (3) تأكيد إن Bunny استلم الفيديو فعلاً — بنسأل السيرفر يشيّك
+  await verifyUploadComplete(creds.videoId);
+
   onProgress?.(100);
 }
 
@@ -176,4 +181,63 @@ async function getServerOffset(location: string): Promise<number | null> {
 
 function sleep(ms: number): Promise<void> {
   return new Promise((resolve) => setTimeout(resolve, ms));
+}
+
+// ============ التأكد إن Bunny استلم الفيديو فعلاً ============
+// بعد ما الـ TUS upload يخلص، بنسأل السيرفر يشيّك مع Bunny:
+//   status 0 = Created (لسه مستناه)
+//   status 1 = Uploaded ✓
+//   status 2 = Processing ✓
+//   status 3 = Transcoding ✓
+//   status 4 = Finished ✓
+//   status 5 = Error ✗
+//   status 6 = UploadFailed ✗
+
+const VERIFY_POLL_INTERVAL = 3000; // 3 ثواني بين كل سؤال
+const VERIFY_MAX_ATTEMPTS = 20; // 20 محاولة = دقيقة كاملة كحد أقصى
+
+async function verifyUploadComplete(videoId: string): Promise<void> {
+  for (let attempt = 0; attempt < VERIFY_MAX_ATTEMPTS; attempt++) {
+    try {
+      const res = await fetch(`/api/admin/videos/${videoId}`);
+      if (!res.ok) {
+        console.warn(`[Upload] فشل التحقق من حالة الفيديو (${res.status})`);
+        // نستنى ونحاول تاني
+        await sleep(VERIFY_POLL_INTERVAL);
+        continue;
+      }
+
+      const video = await res.json();
+      const status = video.status ?? video.Status ?? -1;
+
+      console.log(`[Upload] حالة الفيديو: ${status} (محاولة ${attempt + 1}/${VERIFY_MAX_ATTEMPTS})`);
+
+      // حالات النجاح — الفيديو اتقبل
+      if (status >= 1 && status <= 4) {
+        return; // تمام ✓
+      }
+
+      // حالات الفشل — Bunny رفض الفيديو
+      if (status === 5) {
+        throw new Error("Bunny رفض الفيديو — في خطأ في المعالجة");
+      }
+      if (status === 6) {
+        throw new Error("Bunny قال إن الرفع فشل — الملف ممكن يكون تالف أو مش مدعوم");
+      }
+
+      // status === 0 (Created) — لسه بيستنى الملف يوصل
+      // نستنى ونسأل تاني
+    } catch (err) {
+      // لو الخطأ من throw أعلاه — نرميه فوراً
+      if (err instanceof Error && err.message.startsWith("Bunny")) {
+        throw err;
+      }
+      console.warn(`[Upload] خطأ أثناء التحقق:`, err);
+    }
+
+    await sleep(VERIFY_POLL_INTERVAL);
+  }
+
+  // لو وصلنا هنا — الفيديو لسه status 0 بعد دقيقة
+  throw new Error("الفيديو لم يُتأكد استلامه من Bunny بعد وقت الانتظار — جرّب ترفع تاني");
 }

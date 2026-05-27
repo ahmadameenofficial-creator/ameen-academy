@@ -1,8 +1,14 @@
 "use client";
 
 import { useState, useCallback } from "react";
-import { IconPlayerPlay, IconCheck, IconLoader2 } from "@tabler/icons-react";
-import { Button } from "@/components/ui/button";
+import { useRouter } from "next/navigation";
+import {
+  IconPlayerPlay,
+  IconCheck,
+  IconLoader2,
+  IconCircleCheck,
+  IconCircleDashed,
+} from "@tabler/icons-react";
 import { useToast } from "@/components/ui/toast";
 import { apiPost, API } from "@/lib/api";
 
@@ -21,43 +27,39 @@ export function VideoPlayer({
   signedEmbedUrl,
   lastPosition,
   isCompleted: initialCompleted,
-  userName,
 }: VideoPlayerProps) {
   const [isCompleted, setIsCompleted] = useState(initialCompleted);
   const [marking, setMarking] = useState(false);
   const { error } = useToast();
+  const router = useRouter();
 
-  const markComplete = useCallback(async () => {
+  const toggleComplete = useCallback(async () => {
     setMarking(true);
+    const newState = !isCompleted;
+    // تحديث optimistic — بنغيّر الحالة فوراً
+    setIsCompleted(newState);
     try {
-      await apiPost(API.progress.track, { lessonId, isCompleted: true });
-      setIsCompleted(true);
+      await apiPost(API.progress.track, { lessonId, isCompleted: newState });
+      // بنعمل refresh عشان الـ layout sidebar يتحدّث
+      router.refresh();
     } catch {
+      // لو فشل — نرجّع الحالة
+      setIsCompleted(!newState);
       error("معرفناش نحفظ تقدّمك، جرّب تاني");
     }
     setMarking(false);
-  }, [lessonId, error]);
+  }, [lessonId, isCompleted, error, router]);
 
-  const markIncomplete = useCallback(async () => {
-    setMarking(true);
-    try {
-      await apiPost(API.progress.track, { lessonId, isCompleted: false });
-      setIsCompleted(false);
-    } catch {
-      error("معرفناش نحفظ تقدّمك، جرّب تاني");
-    }
-    setMarking(false);
-  }, [lessonId, error]);
-
-  // بناء رابط الـ embed مع الإعدادات
+  // بناء رابط الـ embed
   const embedUrl = signedEmbedUrl
     ? `${signedEmbedUrl}&autoplay=false&preload=true${lastPosition > 0 ? `&t=${lastPosition}` : ""}`
     : null;
 
   return (
-    <div className="bg-black">
-      {videoId && embedUrl ? (
-        <div className="relative max-w-5xl mx-auto">
+    <div>
+      {/* الفيديو */}
+      <div className="bg-black">
+        {videoId && embedUrl ? (
           <div className="relative aspect-video">
             <iframe
               src={embedUrl}
@@ -66,55 +68,39 @@ export function VideoPlayer({
               allowFullScreen
               style={{ border: 0 }}
             />
-            {/* Watermark بيتعامل معاه Bunny نفسه — بيظهر على الفيديو حتى في fullscreen */}
           </div>
-        </div>
-      ) : (
-        <div className="max-w-5xl mx-auto">
-          <div className="aspect-video bg-gradient-to-br from-brand-900 to-brand-800 flex flex-col items-center justify-center gap-4">
-            <div className="h-20 w-20 rounded-full bg-white/10 flex items-center justify-center">
-              <IconPlayerPlay className="h-10 w-10 text-white/60" />
+        ) : (
+          <div className="aspect-video bg-gradient-to-br from-zinc-900 to-zinc-800 flex flex-col items-center justify-center gap-3">
+            <div className="h-16 w-16 rounded-full bg-white/5 flex items-center justify-center">
+              <IconPlayerPlay className="h-8 w-8 text-white/40" />
             </div>
-            <p className="text-white/60 text-sm">
+            <p className="text-white/40 text-sm">
               {videoId ? "جاري تحميل الفيديو..." : "الفيديو هيتضاف قريب"}
             </p>
           </div>
-        </div>
-      )}
-
-      {/* علّم كمكتمل */}
-      <div className="max-w-5xl mx-auto px-4 py-3 flex items-center justify-between bg-zinc-900">
-        <span className="text-sm text-zinc-400">
-          {isCompleted ? "خلّصت الدرس ده" : "خلّصت الدرس؟"}
-        </span>
-        {isCompleted ? (
-          <Button
-            size="sm"
-            variant="ghost"
-            className="text-green-400 hover:text-green-300 hover:bg-zinc-800"
-            onClick={markIncomplete}
-            disabled={marking}
-          >
-            {marking ? (
-              <IconLoader2 className="h-4 w-4 animate-spin" />
-            ) : (
-              <><IconCheck className="h-4 w-4" /> مكتمل</>
-            )}
-          </Button>
-        ) : (
-          <Button
-            size="sm"
-            className="bg-brand-600 hover:bg-brand-500 text-white"
-            onClick={markComplete}
-            disabled={marking}
-          >
-            {marking ? (
-              <IconLoader2 className="h-4 w-4 animate-spin" />
-            ) : (
-              "علّم كمكتمل"
-            )}
-          </Button>
         )}
+      </div>
+
+      {/* شريط أسفل الفيديو — علّم كمكتمل */}
+      <div className="bg-zinc-900 px-4 py-2.5">
+        <button
+          onClick={toggleComplete}
+          disabled={marking}
+          className={`flex items-center gap-2 text-sm font-medium transition-all rounded-lg px-3 py-1.5 -mx-1 ${
+            isCompleted
+              ? "text-green-400 hover:text-green-300 hover:bg-white/5"
+              : "text-zinc-400 hover:text-white hover:bg-white/5"
+          }`}
+        >
+          {marking ? (
+            <IconLoader2 className="h-5 w-5 animate-spin" />
+          ) : isCompleted ? (
+            <IconCircleCheck className="h-5 w-5" />
+          ) : (
+            <IconCircleDashed className="h-5 w-5" />
+          )}
+          {isCompleted ? "مكتمل — اضغط عشان تلغي" : "علّم الدرس كمكتمل"}
+        </button>
       </div>
     </div>
   );
