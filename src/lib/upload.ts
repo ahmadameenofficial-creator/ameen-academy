@@ -23,13 +23,33 @@ const MAX_RETRIES = 5;
 // الانتظار بين المحاولات (بالملي ثانية) — بيزيد مع كل محاولة
 const RETRY_BASE_DELAY = 2000;
 
+/**
+ * تحويل نص لـ Base64 بشكل آمن — بيشتغل مع العربي واليونيكود
+ * المتصفح الـ btoa بتاعه بيقع لو النص فيه حروف مش Latin1
+ */
+function safeBase64(str: string): string {
+  try {
+    // الطريقة الصح: TextEncoder → bytes → base64
+    const bytes = new TextEncoder().encode(str);
+    let binary = "";
+    for (let i = 0; i < bytes.length; i++) {
+      binary += String.fromCharCode(bytes[i]);
+    }
+    return btoa(binary);
+  } catch {
+    // fallback — لو حصل أي مشكلة نرجع اسم بسيط
+    return btoa("video");
+  }
+}
+
 export async function uploadVideoViaTus(
   creds: TusUploadCredentials,
   file: File,
   onProgress?: (percent: number) => void,
 ): Promise<void> {
   // (1) إنشاء جلسة الرفع — هيدرز التوقيع + مواصفات TUS
-  const metadata = `filetype ${btoa(file.type || "video/mp4")},title ${btoa(file.name || "video")}`;
+  // مهم: btoa بيقع لو اسم الملف فيه حروف عربية — لازم نحوّل لـ UTF-8 base64
+  const metadata = `filetype ${safeBase64(file.type || "video/mp4")},title ${safeBase64(file.name || "video")}`;
   const createRes = await fetch(creds.endpoint, {
     method: "POST",
     headers: {
@@ -43,12 +63,15 @@ export async function uploadVideoViaTus(
     },
   });
 
+  console.log(`[TUS] POST ${creds.endpoint} → status ${createRes.status}`);
+
   if (createRes.status !== 201) {
     const text = await createRes.text().catch(() => "");
     throw new Error(`فشل إنشاء جلسة الرفع (${createRes.status}): ${text}`);
   }
 
   const location = createRes.headers.get("Location");
+  console.log(`[TUS] Location: ${location}`);
   if (!location) {
     throw new Error("الخادم لم يُرجع رابط الرفع (Location)");
   }
