@@ -19,7 +19,7 @@ const navItems = [
   { href: "/admin/courses", label: "الكورسات", icon: IconBook },
   { href: "/admin/blog", label: "المدونة", icon: IconArticle },
   { href: "/admin/students", label: "الطلاب", icon: IconUsers },
-  { href: "/admin/leads", label: "المهتمين", icon: IconAddressBook },
+  { href: "/admin/leads", label: "العملاء", icon: IconAddressBook },
   { href: "/admin/payments", label: "المدفوعات", icon: IconCreditCard },
   { href: "/admin/commissions", label: "العمولات", icon: IconGift },
   { href: "/admin/coupons", label: "الأكواد", icon: IconTag },

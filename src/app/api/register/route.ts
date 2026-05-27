@@ -28,8 +28,9 @@ export async function POST(req: Request) {
       );
     }
 
-    const { name, email, password } = result.data;
+    const { name, email, phone, password } = result.data;
     const normalizedEmail = email.toLowerCase().trim();
+    const normalizedPhone = phone.replace(/\s|-/g, "").trim();
 
     const existingUser = await prisma.user.findUnique({
       where: { email: normalizedEmail },
@@ -48,6 +49,7 @@ export async function POST(req: Request) {
       data: {
         name: name.trim(),
         email: normalizedEmail,
+        phone: normalizedPhone,
         password: hashedPassword,
       },
     });

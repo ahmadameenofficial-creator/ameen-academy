@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { IconLoader2, IconMail, IconLock, IconUser, IconEye, IconEyeOff } from "@tabler/icons-react";
+import { IconLoader2, IconMail, IconLock, IconUser, IconEye, IconEyeOff, IconPhone } from "@tabler/icons-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Logo } from "@/components/shared/logo";
@@ -106,6 +106,26 @@ export function RegisterForm() {
           </div>
           {errors.email && (
             <p className="text-xs text-destructive">{errors.email.message}</p>
+          )}
+        </div>
+
+        <div className="space-y-2">
+          <label htmlFor="phone" className="text-sm font-medium text-foreground">
+            رقم الموبايل (واتساب)
+          </label>
+          <div className="relative">
+            <IconPhone className="absolute right-3 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" />
+            <Input
+              id="phone"
+              type="tel"
+              placeholder="01012345678"
+              className="pr-10"
+              dir="ltr"
+              {...register("phone")}
+            />
+          </div>
+          {errors.phone && (
+            <p className="text-xs text-destructive">{errors.phone.message}</p>
           )}
         </div>
 

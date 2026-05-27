@@ -19,6 +19,10 @@ export const registerSchema = z.object({
     .string()
     .min(1, "الإيميل مطلوب")
     .email("إيميل مش صحيح"),
+  phone: z
+    .string()
+    .min(1, "رقم الموبايل مطلوب")
+    .regex(/^01[0-9]{9}$/, "رقم موبايل مصري مش صحيح (01xxxxxxxxx)"),
   password: z
     .string()
     .min(8, "الباسورد لازم 8 حروف على الأقل")
