@@ -74,8 +74,8 @@ export function CommunityFeed({ initialPosts }: { initialPosts?: Post[] }) {
       .catch(() => {});
   }, [session]);
 
-  async function handlePost(content: string, image?: string) {
-    await apiPost(API.posts.create, { content, image });
+  async function handlePost(content: string) {
+    await apiPost(API.posts.create, { content });
     // حمّل أول صفحة تاني
     setPage(1);
     fetchPosts(1);

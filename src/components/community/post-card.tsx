@@ -209,21 +209,9 @@ export function PostCard({
             </div>
           </div>
         ) : (
-          <>
-            {post.content && (
-              <p className="text-sm text-foreground whitespace-pre-line leading-relaxed">
-                {post.content}
-              </p>
-            )}
-            {post.image && (
-              <img
-                src={post.image}
-                alt=""
-                className="rounded-xl max-h-96 object-cover w-full mt-2"
-                loading="lazy"
-              />
-            )}
-          </>
+          <p className="text-sm text-foreground whitespace-pre-line leading-relaxed">
+            {post.content}
+          </p>
         )}
       </div>
 
