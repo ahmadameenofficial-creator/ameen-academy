@@ -14,7 +14,9 @@
       "Bash(git commit *)",
       "Bash(npx tsc *)",
       "Bash(npx vercel *)",
-      "Bash(git push *)"
+      "Bash(git push *)",
+      "Bash(npx prisma *)",
+      "Bash(npx next *)"
     ]
   }
 }

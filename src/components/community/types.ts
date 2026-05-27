@@ -31,6 +31,7 @@ export interface ReactionsSummary {
 export interface Post {
   id: string;
   content: string;
+  image?: string | null;
   user: UserInfo;
   isPinned: boolean;
   likesCount: number;

@@ -1,17 +1,23 @@
 import { notFound } from "next/navigation";
 import Image from "next/image";
+import Link from "next/link";
 import { prisma } from "@/lib/prisma";
+import { auth } from "@/auth";
 
 export const dynamic = "force-dynamic";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import {
   IconUser,
   IconBook,
   IconMessage,
   IconCalendar,
   IconShield,
+  IconMessageCircle,
+  IconSend,
 } from "@tabler/icons-react";
+import { SendMessageButton } from "./send-message-button";
 
 interface PageProps {
   params: Promise<{ userId: string }>;
@@ -58,12 +64,15 @@ export async function generateMetadata({ params }: PageProps) {
 
 export default async function UserProfilePage({ params }: PageProps) {
   const { userId } = await params;
-  const [user, posts] = await Promise.all([
+  const [user, posts, session] = await Promise.all([
     getUser(userId),
     getUserPosts(userId),
+    auth(),
   ]);
 
   if (!user) notFound();
+
+  const isOwnProfile = session?.user?.id === user.id;
 
   return (
     <div className="min-h-screen bg-muted/30">
@@ -124,6 +133,27 @@ export default async function UserProfilePage({ params }: PageProps) {
                   </span>
                 </div>
               </div>
+
+              {/* زرار ابعت رسالة */}
+              {session?.user && !isOwnProfile && (
+                <div className="mt-4 w-full">
+                  <SendMessageButton
+                    recipientId={user.id}
+                    recipientName={user.name}
+                  />
+                </div>
+              )}
+
+              {!session?.user && (
+                <div className="mt-4">
+                  <Button variant="outline" size="sm" asChild>
+                    <Link href="/login" className="gap-1.5">
+                      <IconMessageCircle className="h-4 w-4" />
+                      سجّل دخولك عشان تبعت رسالة
+                    </Link>
+                  </Button>
+                </div>
+              )}
             </CardContent>
           </Card>
         </div>
@@ -145,6 +175,13 @@ export default async function UserProfilePage({ params }: PageProps) {
             {posts.map((post) => (
               <Card key={post.id} className="p-4 space-y-2">
                 <p className="text-sm text-foreground whitespace-pre-line">{post.content}</p>
+                {post.image && (
+                  <img
+                    src={post.image}
+                    alt=""
+                    className="rounded-xl max-h-72 object-cover w-full"
+                  />
+                )}
                 <div className="flex items-center gap-4 text-xs text-muted-foreground pt-1">
                   <span>{post._count.likes} إعجاب</span>
                   <span>{post._count.comments} تعليق</span>

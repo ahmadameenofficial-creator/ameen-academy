@@ -34,7 +34,7 @@ export async function POST(req: Request) {
     const result = postSchema.safeParse(body);
     if (!result.success) throw new ValidationError(result.error.errors[0].message);
 
-    const post = await communityDb.createPost(session.user.id, result.data.content, result.data.courseId);
+    const post = await communityDb.createPost(session.user.id, result.data.content || "", result.data.courseId, result.data.image);
     return NextResponse.json(post, { status: 201 });
   } catch (error) {
     return handleApiError(error);

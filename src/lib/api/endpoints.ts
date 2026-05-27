@@ -36,6 +36,12 @@ export const API = {
     free: "/api/enrollments/free",
   },
   leads: "/api/leads",
+  messages: {
+    list: "/api/messages",
+    send: "/api/messages",
+    unread: "/api/messages/unread",
+    conversation: (id: string) => `/api/messages/${id}`,
+  },
   profile: {
     update: "/api/profile",
     password: "/api/profile/password",

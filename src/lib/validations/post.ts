@@ -3,8 +3,12 @@ import { z } from "zod";
 export const VALID_REACTION_TYPES = ["like", "love", "haha", "wow", "sad"] as const;
 
 export const postSchema = z.object({
-  content: z.string().min(3, "المنشور قصير أوي").max(2000, "المنشور طويل أوي"),
+  content: z.string().max(2000, "المنشور طويل أوي").optional().default(""),
   courseId: z.string().optional(),
+  image: z.string().url().optional(),
+}).refine((d) => d.content.trim().length >= 1 || d.image, {
+  message: "المنشور لازم يكون فيه نص أو صورة",
+  path: ["content"],
 });
 
 export const commentSchema = z.object({

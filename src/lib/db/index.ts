@@ -10,3 +10,4 @@ export * as notificationsDb from "./notifications.db";
 export * as certificatesDb from "./certificates.db";
 export * as referralsDb from "./referrals.db";
 export * as leadsDb from "./leads.db";
+export * as messagesDb from "./messages.db";
