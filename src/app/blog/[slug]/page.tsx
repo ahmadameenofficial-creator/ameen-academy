@@ -402,7 +402,7 @@ export default async function BlogPostPage({ params }: Props) {
             <div className="relative">
               <h3 className="text-xl font-bold mb-2">عايز تتعلم المهارات دي عمليا؟</h3>
               <p className="text-white/70 text-sm mb-5 max-w-md mx-auto">
-                شوف كورساتنا العملية — من الصفر للاحتراف مع شهادة معتمدة
+                شوف كورساتنا العملية — من الصفر للاحتراف مع شهادة إتمام
               </p>
               <Link
                 href="/courses"

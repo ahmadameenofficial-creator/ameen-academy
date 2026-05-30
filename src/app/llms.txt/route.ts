@@ -10,7 +10,7 @@ export function GET() {
 - **Founded:** 2026
 - **Location:** Cairo, Egypt
 - **Language:** Arabic (Egyptian dialect)
-- **Founder:** Amr Ameen (عمرو أمين)
+- **Founder:** Ahmed Ameen (أحمد أمين) — graphic designer with 10+ years of experience in the Egyptian and Gulf markets, and a former marketing manager
 - **Website:** https://ameen.academy
 - **Target Audience:** Arabic-speaking learners, primarily in Egypt and the Arab world
 
@@ -34,6 +34,9 @@ export function GET() {
 
 ## Key Pages
 - Homepage: /
+- Free crash course: /free
+- Workshop (flagship paid course): /workshop
+- VIP community (monthly membership): /vip
 - All Courses: /courses
 - Blog: /blog
 - FAQ: /faq
@@ -43,7 +46,7 @@ export function GET() {
 
 ## Pricing
 - Courses are priced in Egyptian Pounds (EGP)
-- Payment methods: Visa, Mastercard, Vodafone Cash, Fawry
+- Payment methods: Vodafone Cash and InstaPay
 - 14-day money-back guarantee on all courses
 
 ## Unique Value Proposition

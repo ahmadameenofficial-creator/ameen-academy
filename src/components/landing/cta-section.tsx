@@ -33,8 +33,8 @@ export function CtaSection() {
             </h2>
 
             <p className="mt-5 text-balance text-base leading-relaxed opacity-90 sm:text-lg">
-              كورس قيمته 1500 جنيه، بتاخده ببلاش بدون ولا جنيه. هيحطك على الطريق
-              الصح وتفهم يعني إيه تصميم في 2026. خده دلوقتي قبل ما يتغيّر سعره.
+              كراش كورس حقيقي بتاخده ببلاش بدون ولا جنيه. هيحطك على الطريق
+              الصح وتفهم يعني إيه تصميم في 2026. خده دلوقتي وابدأ من النهاردة.
             </p>
 
             <div className="mt-9 flex flex-col items-center justify-center gap-3 sm:flex-row">

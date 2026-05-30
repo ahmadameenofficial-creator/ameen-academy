@@ -143,8 +143,8 @@ export function ModulesManager({
       try {
         creds = await apiPost<TusUploadCredentials>(API.admin.videos.create, { title });
       } catch (err) {
-        console.error("[Upload] فشل إنشاء الفيديو على Bunny:", err);
-        error("فشل إنشاء الفيديو — تأكد إن إعدادات Bunny مظبوطة في الـ environment variables");
+        console.error("[Upload] فشل إنشاء الفيديو:", err);
+        error("فشل إنشاء الفيديو — تأكد إن إعدادات Bunny مظبوطة");
         return null;
       }
 
@@ -154,7 +154,7 @@ export function ModulesManager({
         return null;
       }
 
-      console.log(`[Upload] جلسة رفع تم إنشاؤها: videoId=${creds.videoId}`);
+      console.log(`[Upload] جلسة رفع جاهزة: videoId=${creds.videoId}`);
 
       // (2) الرفع المباشر للـ Bunny عبر TUS — بنظام chunks
       try {

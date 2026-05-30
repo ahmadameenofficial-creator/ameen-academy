@@ -11,7 +11,6 @@ import {
   IconClock,
 } from "@tabler/icons-react";
 import { Button } from "@/components/ui/button";
-import { ROUTES } from "@/lib/constants";
 
 export function HeroSection() {
   return (
@@ -83,8 +82,8 @@ export function HeroSection() {
                 </Link>
               </Button>
               <Button asChild variant="outline" size="xl" className="w-full sm:w-auto">
-                <Link href={ROUTES.courses}>
-                  استكشف الكورسات
+                <Link href="/workshop">
+                  شوف كورس الورشة
                   <IconArrowLeft className="size-5" />
                 </Link>
               </Button>

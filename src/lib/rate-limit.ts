@@ -64,4 +64,8 @@ export const RATE_LIMITS = {
   comment: { limit: 20, windowSeconds: 10 * 60 },
   // رفع ملف: 10 كل 10 دقائق
   upload: { limit: 10, windowSeconds: 10 * 60 },
+  // طلب VIP: 3 طلبات كل ساعة (مكلف — بيبعت إيميلين لكل طلب)
+  vipApplication: { limit: 3, windowSeconds: 60 * 60 },
+  // الاشتراك المجاني: 5 محاولات كل 10 دقائق
+  freeEnrollment: { limit: 5, windowSeconds: 10 * 60 },
 } as const;

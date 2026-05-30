@@ -29,13 +29,13 @@ export function FreeCourseSection() {
               <h2 className="mt-5 text-balance text-2xl font-bold leading-[1.4] text-foreground sm:text-3xl lg:text-4xl">
                 ابدأ دلوقتي بالكورس المجاني
                 <span className="mt-2 block text-gradient-brand pb-1 leading-[1.4]">
-                  قيمته 1500 جنيه — ببلاش
+                  من غير ما تدفع ولا جنيه
                 </span>
               </h2>
 
               <p className="mt-4 text-balance leading-relaxed text-muted-foreground">
                 كراش كورس هيخليك تفهم يعني إيه تصميم وازاي تبقى مصمم في 2026.
-                هدفه يساعدك بجد — مش هزار ومش تسويق. خده دلوقتي بدون ولا جنيه.
+                هدفه يساعدك بجد — مش هزار ومش تسويق. خده دلوقتي وانت تقرر بعدها.
               </p>
 
               <ul className="mt-5 flex flex-col items-center gap-2 lg:items-start">
@@ -66,10 +66,10 @@ export function FreeCourseSection() {
             <div className="flex justify-center">
               <div className="relative rounded-3xl border border-brand-200 bg-white p-8 text-center shadow-xl shadow-brand-500/10">
                 <div className="absolute -top-3 right-1/2 translate-x-1/2 rounded-full bg-brand-500 px-3 py-1 text-xs font-bold text-white">
-                  أوفر 1500 جنيه
+                  زكاة علم
                 </div>
                 <p className="mt-3 text-sm text-muted-foreground">قيمة الكورس الحقيقية</p>
-                <p className="text-2xl font-bold text-muted-foreground line-through">1500 جنيه</p>
+                <p className="text-2xl font-bold text-muted-foreground line-through">500 جنيه</p>
                 <p className="mt-3 text-sm text-muted-foreground">سعره ليك دلوقتي</p>
                 <p className="text-5xl font-extrabold text-gradient-brand">0</p>
                 <p className="text-sm font-medium text-foreground">جنيه</p>

@@ -19,8 +19,12 @@ export async function GET(_req: Request, context: RouteContext) {
     const video = await getVideo(videoId);
     return NextResponse.json(video);
   } catch (err) {
-    console.error("Error getting video:", err);
-    return NextResponse.json({ error: "حصل مشكلة" }, { status: 500 });
+    const msg = err instanceof Error ? err.message : String(err);
+    console.error("Error getting video:", msg);
+    return NextResponse.json(
+      { error: msg, videoId },
+      { status: msg.includes("404") ? 404 : 500 },
+    );
   }
 }
 

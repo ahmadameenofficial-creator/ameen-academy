@@ -8,7 +8,7 @@ export const revalidate = 60;
 export const metadata: Metadata = {
   title: "كورسات تعلمك مهارات تجيبلك فلوس",
   description:
-    "تصفّح كورسات أكاديمية أمين — تصميم جرافيك، ذكاء اصطناعي، فريلانس، ومهارات مطلوبة في سوق العمل 2026. كورسات عملية بالعربي مع شهادة معتمدة.",
+    "تصفّح كورسات أكاديمية أمين — تصميم جرافيك، ذكاء اصطناعي، فريلانس، ومهارات مطلوبة في سوق العمل 2026. كورسات عملية بالعربي مع شهادة إتمام ووصول مدى الحياة.",
   alternates: {
     canonical: "/courses",
   },
@@ -40,7 +40,7 @@ export default async function CoursesPage() {
             الكورسات
           </h1>
           <p className="mt-3 text-muted-foreground max-w-lg mx-auto">
-            كورسات احترافية هتنقلك من الصفر للاحتراف
+            مهارة عملية تكسب منها فعلاً — من الصفر، بالعربي، وانت قاعد في بيتك.
           </p>
         </div>
       </div>
@@ -111,10 +111,12 @@ export default async function CoursesPage() {
                             {formatDuration(course.duration)}
                           </span>
                         )}
-                        <span className="flex items-center gap-1">
-                          <IconUsers className="h-4 w-4 text-brand-500" />
-                          {course._count.enrollments} طالب
-                        </span>
+                        {course._count.enrollments > 0 && (
+                          <span className="flex items-center gap-1">
+                            <IconUsers className="h-4 w-4 text-brand-500" />
+                            {course._count.enrollments} طالب
+                          </span>
+                        )}
                       </div>
 
                       <div className="flex items-center justify-between pt-4 border-t border-border">

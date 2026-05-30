@@ -44,6 +44,7 @@ export const ROUTES = {
   home: "/",
   courses: "/courses",
   community: "/community",
+  vip: "/vip",
   blog: "/blog",
   about: "/about",
   contact: "/contact",
@@ -86,7 +87,7 @@ export const FEATURES = [
     icon: "users",
   },
   {
-    title: "شهادة معتمدة",
+    title: "شهادة إتمام",
     description: "احصل على شهادة إكمال بعد كل كورس",
     icon: "certificate",
   },
@@ -95,11 +96,4 @@ export const FEATURES = [
     description: "فريق الدعم متواجد لمساعدتك في أي وقت",
     icon: "headset",
   },
-] as const;
-
-export const STATS = [
-  { value: "1000+", label: "طالب مسجل" },
-  { value: "50+", label: "ساعة محتوى" },
-  { value: "98%", label: "نسبة الرضا" },
-  { value: "24/7", label: "دعم مستمر" },
 ] as const;

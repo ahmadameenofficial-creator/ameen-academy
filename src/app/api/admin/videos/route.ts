@@ -2,7 +2,8 @@ import { NextResponse } from "next/server";
 import { auth } from "@/auth";
 import { createVideo, listVideos, getTusUploadCredentials } from "@/lib/bunny";
 
-// إنشاء فيديو جديد (الخطوة الأولى — بيرجع الـ ID للرفع)
+// إنشاء فيديو + إرجاع توقيع رفع مؤقت
+// المتصفح هيستخدم tus-js-client بعد كده عشان يرفع المحتوى مباشرة لـ Bunny
 export async function POST(req: Request) {
   const session = await auth();
   if (!session?.user || session.user.role !== "ADMIN") {
@@ -16,16 +17,19 @@ export async function POST(req: Request) {
     }
 
     const video = await createVideo(title);
+    console.log(`[Videos API] تم إنشاء فيديو: ${video.guid}`);
 
-    // بنرجّع بيانات رفع TUS موقّعة — من غير ما المفتاح يخرج للمتصفح إطلاقاً
+    // التوقيع صالح لـ 6 ساعات — كفاية لأي فيديو حتى لو كبير
     return NextResponse.json(getTusUploadCredentials(video.guid));
   } catch (err) {
     console.error("Error creating video:", err);
-    return NextResponse.json({ error: "حصل مشكلة في إنشاء الفيديو" }, { status: 500 });
+    return NextResponse.json(
+      { error: `فشل إنشاء الفيديو: ${err instanceof Error ? err.message : "خطأ غير معروف"}` },
+      { status: 500 },
+    );
   }
 }
 
-// جلب كل الفيديوهات
 export async function GET() {
   const session = await auth();
   if (!session?.user || session.user.role !== "ADMIN") {

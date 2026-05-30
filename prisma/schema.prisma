@@ -616,3 +616,133 @@ model AuditLog {
   @@index([userId, createdAt])
   @@index([action, createdAt])
 }
+
+// =====================================================
+// ============ VIP Community (الاشتراك الشهري) ============
+// =====================================================
+
+// طلبات الانضمام للـ VIP
+model VipApplication {
+  id          String   @id @default(cuid())
+  userId      String?  // لو مسجّل بالفعل
+  name        String
+  email       String
+  phone       String
+  experience  String   @db.Text // مستوى الخبرة الحالي
+  currentWork String   @db.Text // بيشتغل في إيه دلوقتي
+  goal        String   @db.Text // إيه هدفه من VIP
+  status      VipApplicationStatus @default(PENDING)
+  reviewNotes String?  @db.Text
+  reviewedAt  DateTime?
+  createdAt   DateTime @default(now())
+
+  @@index([status, createdAt])
+  @@index([email])
+}
+
+enum VipApplicationStatus {
+  PENDING
+  APPROVED
+  REJECTED
+  ENROLLED  // قبل ودفع
+}
+
+// عضويات الـ VIP (الفعّالين)
+model VipMembership {
+  id            String   @id @default(cuid())
+  userId        String   @unique
+  plan          VipPlan  @default(MONTHLY)
+  status        VipStatus @default(ACTIVE)
+  startedAt     DateTime @default(now())
+  currentPeriodEnd DateTime
+  cancelledAt   DateTime?
+  totalPaid     Int      @default(0) // بالقرش
+
+  // الـ hot seat - دور كل عضو
+  hotSeatOrder  Int      @default(0)
+  hadHotSeats   Int      @default(0)
+
+  @@index([status, currentPeriodEnd])
+}
+
+enum VipPlan {
+  MONTHLY
+  QUARTERLY
+  ANNUAL
+}
+
+enum VipStatus {
+  ACTIVE
+  PAUSED
+  CANCELLED
+  EXPIRED
+}
+
+// اللايف ستريم اللي بيتعمل كل أسبوعين
+model VipLive {
+  id            String   @id @default(cuid())
+  title         String
+  description   String?  @db.Text
+  scheduledAt   DateTime
+  durationMins  Int      @default(90)
+  meetingUrl    String?  // Zoom/Google Meet
+  recordingUrl  String?  // اللينك بعد ما يتسجّل
+  hotSeatUserId String?  // مين هياخد الـ hot seat اللايف ده
+  status        VipLiveStatus @default(SCHEDULED)
+  createdAt     DateTime @default(now())
+
+  @@index([scheduledAt])
+  @@index([status, scheduledAt])
+}
+
+enum VipLiveStatus {
+  SCHEDULED
+  LIVE
+  RECORDED
+  CANCELLED
+}
+
+// الـ briefs الشهرية
+model VipBrief {
+  id          String   @id @default(cuid())
+  title       String
+  description String   @db.Text
+  clientStyle String   @db.Text // الـ brief بأسلوب client (الفعلي)
+  deliverables String  @db.Text // اللي مطلوب يتسلّم
+  dueDate     DateTime
+  publishedAt DateTime @default(now())
+  attachments String?  @db.Text // JSON of refs
+
+  @@index([publishedAt])
+}
+
+// الـ resources المتاحة للأعضاء
+model VipResource {
+  id          String   @id @default(cuid())
+  title       String
+  description String?  @db.Text
+  category    String   // mockups, fonts, contracts, scripts, etc
+  fileUrl     String
+  thumbnailUrl String?
+  downloadCount Int    @default(0)
+  publishedAt DateTime @default(now())
+
+  @@index([category, publishedAt])
+}
+
+// الـ job board
+model VipJob {
+  id          String   @id @default(cuid())
+  title       String
+  description String   @db.Text
+  budget      String   // text عشان نقدر نكتب "500-1000 ج" مثلاً
+  type        String   // freelance, full-time, contract
+  clientInfo  String?  // معلومات عن العميل
+  contactInfo String   // إزاي يتواصلوا
+  postedAt    DateTime @default(now())
+  expiresAt   DateTime
+  filledAt    DateTime?
+
+  @@index([postedAt])
+  @@index([expiresAt])
+}

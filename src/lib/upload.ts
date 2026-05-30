@@ -1,10 +1,14 @@
-// ============ رفع فيديو للـ Bunny عبر بروتوكول TUS (من المتصفح مباشرة) ============
-// المفتاح (API key) مبيوصلش للمتصفح أبداً — بنستخدم توقيع SHA256 مؤقت بييجي من السيرفر.
+// ============ رفع فيديو للـ Bunny عبر TUS — باستخدام المكتبة الرسمية ============
+// tus-js-client هي المكتبة الرسمية لبروتوكول TUS، ومتستخدمة من Bunny نفسها
+// في docs بتاعتهم: https://docs.bunny.net/reference/tus-resumable-uploads
 //
-// بيدعم:
-// - رفع ملفات كبيرة (حتى 10+ جيجا) عبر chunks
-// - استئناف الرفع لو الاتصال اتقطع (TUS resume)
-// - تتبّع نسبة التقدّم بدقة
+// المكتبة دي بتتعامل مع:
+// - CORS edge cases بشكل صحيح (دي كانت المشكلة الأساسية)
+// - تفاوض حجم الـ chunks مع السيرفر
+// - retry + resume + exponential backoff
+// - استئناف الرفع لو الاتصال اتقطع
+
+import * as tus from "tus-js-client";
 
 export interface TusUploadCredentials {
   endpoint: string;
@@ -14,213 +18,89 @@ export interface TusUploadCredentials {
   expirationTime: number;
 }
 
-// حجم كل chunk: 10 ميجا — متوازن بين السرعة والاستقرار
-const CHUNK_SIZE = 10 * 1024 * 1024; // 10MB
-
-// عدد المحاولات لو chunk فشل
-const MAX_RETRIES = 5;
-
-// الانتظار بين المحاولات (بالملي ثانية) — بيزيد مع كل محاولة
-const RETRY_BASE_DELAY = 2000;
-
-// الهيدرز المطلوبة مع كل request لـ Bunny TUS
-interface TusAuthHeaders {
-  AuthorizationSignature: string;
-  AuthorizationExpire: string;
-  VideoId: string;
-  LibraryId: string;
-}
-
-/**
- * تحويل نص لـ Base64 بشكل آمن — بيشتغل مع العربي واليونيكود
- * المتصفح الـ btoa بتاعه بيقع لو النص فيه حروف مش Latin1
- */
-function safeBase64(str: string): string {
-  try {
-    const bytes = new TextEncoder().encode(str);
-    let binary = "";
-    for (let i = 0; i < bytes.length; i++) {
-      binary += String.fromCharCode(bytes[i]);
-    }
-    return btoa(binary);
-  } catch {
-    return btoa("video");
-  }
-}
-
 export async function uploadVideoViaTus(
   creds: TusUploadCredentials,
   file: File,
   onProgress?: (percent: number) => void,
 ): Promise<void> {
-  // هيدرز التوقيع — لازم تتبعت مع كل request (POST + PATCH + HEAD)
-  const authHeaders: TusAuthHeaders = {
-    AuthorizationSignature: creds.signature,
-    AuthorizationExpire: String(creds.expirationTime),
-    VideoId: creds.videoId,
-    LibraryId: creds.libraryId,
-  };
-
-  // (1) إنشاء جلسة الرفع
-  const metadata = `filetype ${safeBase64(file.type || "video/mp4")},title ${safeBase64(file.name || "video")}`;
-  const createRes = await fetch(creds.endpoint, {
-    method: "POST",
-    headers: {
-      "Tus-Resumable": "1.0.0",
-      "Upload-Length": String(file.size),
-      "Upload-Metadata": metadata,
-      ...authHeaders,
-    },
-  });
-
-  console.log(`[TUS] POST → ${createRes.status}`);
-
-  if (createRes.status !== 201) {
-    const text = await createRes.text().catch(() => "");
-    throw new Error(`فشل إنشاء جلسة الرفع (${createRes.status}): ${text}`);
-  }
-
-  const rawLocation = createRes.headers.get("Location");
-  if (!rawLocation) {
-    throw new Error("الخادم لم يُرجع رابط الرفع (Location)");
-  }
-
-  // مهم جداً: Bunny بيرجّع الـ Location كـ relative path (مثلاً /tusupload/xxx)
-  // الـ XHR في المتصفح بيفسّره relative لـ الصفحة الحالية — وده غلط!
-  // لازم نحوّله لـ absolute URL على Bunny
-  const location = rawLocation.startsWith("http")
-    ? rawLocation
-    : `https://video.bunnycdn.com${rawLocation}`;
-  console.log(`[TUS] Upload URL: ${location}`);
-
-  // (2) رفع الملف بنظام chunks مع دعم الاستئناف
-  let offset = 0;
-  const totalSize = file.size;
-
-  while (offset < totalSize) {
-    const chunkEnd = Math.min(offset + CHUNK_SIZE, totalSize);
-    const chunk = file.slice(offset, chunkEnd);
-
-    offset = await uploadChunkWithRetry(location, authHeaders, chunk, offset, totalSize, onProgress);
-  }
-
-  // تأكيد الانتهاء من الرفع
-  onProgress?.(98);
-
-  // (3) تأكيد إن Bunny استلم الفيديو فعلاً — بنسأل السيرفر يشيّك
-  await verifyUploadComplete(creds.videoId);
-
-  onProgress?.(100);
-}
-
-/**
- * رفع chunk واحد مع إعادة المحاولة والاستئناف
- */
-async function uploadChunkWithRetry(
-  location: string,
-  authHeaders: TusAuthHeaders,
-  chunk: Blob,
-  offset: number,
-  totalSize: number,
-  onProgress?: (percent: number) => void,
-): Promise<number> {
-  let lastError: Error | null = null;
-
-  for (let attempt = 0; attempt < MAX_RETRIES; attempt++) {
-    try {
-      if (attempt > 0) {
-        const actualOffset = await getServerOffset(location, authHeaders);
-        if (actualOffset !== null && actualOffset !== offset) {
-          offset = actualOffset;
-          return offset; // نرجع للـ loop الخارجي يعيد القص
-        }
-        await sleep(RETRY_BASE_DELAY * Math.pow(2, attempt - 1));
-      }
-
-      const newOffset = await uploadSingleChunk(location, authHeaders, chunk, offset, totalSize, onProgress);
-      return newOffset;
-    } catch (err) {
-      lastError = err instanceof Error ? err : new Error(String(err));
-      console.warn(`[Upload] Chunk failed (attempt ${attempt + 1}/${MAX_RETRIES}):`, lastError.message);
-    }
-  }
-
-  throw new Error(`فشل رفع جزء من الفيديو بعد ${MAX_RETRIES} محاولات: ${lastError?.message}`);
-}
-
-/**
- * رفع chunk واحد فعلاً — بيبعت الـ data + هيدرز التوقيع
- */
-function uploadSingleChunk(
-  location: string,
-  authHeaders: TusAuthHeaders,
-  chunk: Blob,
-  offset: number,
-  totalSize: number,
-  onProgress?: (percent: number) => void,
-): Promise<number> {
   return new Promise((resolve, reject) => {
-    const xhr = new XMLHttpRequest();
-    xhr.open("PATCH", location);
-    xhr.setRequestHeader("Tus-Resumable", "1.0.0");
-    xhr.setRequestHeader("Upload-Offset", String(offset));
-    xhr.setRequestHeader("Content-Type", "application/offset+octet-stream");
-    // هيدرز التوقيع — بدونها Bunny بيرفض الـ PATCH (400)
-    xhr.setRequestHeader("AuthorizationSignature", authHeaders.AuthorizationSignature);
-    xhr.setRequestHeader("AuthorizationExpire", authHeaders.AuthorizationExpire);
-    xhr.setRequestHeader("VideoId", authHeaders.VideoId);
-    xhr.setRequestHeader("LibraryId", authHeaders.LibraryId);
+    if (!file || file.size === 0) {
+      reject(new Error("الملف فاضي أو مش صالح"));
+      return;
+    }
 
-    xhr.upload.onprogress = (e) => {
-      if (e.lengthComputable && onProgress) {
-        const chunkProgress = e.loaded;
-        const totalProgress = ((offset + chunkProgress) / totalSize) * 100;
-        onProgress(Math.min(Math.round(totalProgress), 99));
-      }
-    };
+    console.log(`[TUS] بدء رفع: ${file.name} (${(file.size / (1024 * 1024)).toFixed(1)} MB)`);
+    console.log(`[TUS] videoId: ${creds.videoId}`);
 
-    xhr.onload = () => {
-      if (xhr.status >= 200 && xhr.status < 300) {
-        const serverOffset = xhr.getResponseHeader("Upload-Offset");
-        const newOffset = serverOffset ? parseInt(serverOffset, 10) : offset + chunk.size;
-        resolve(newOffset);
-      } else {
-        reject(new Error(`فشل رفع جزء من الفيديو (${xhr.status})`));
-      }
-    };
+    const upload = new tus.Upload(file, {
+      endpoint: creds.endpoint,
 
-    xhr.onerror = () => reject(new Error("فشل الاتصال أثناء الرفع — تحقق من الإنترنت"));
-    xhr.ontimeout = () => reject(new Error("انتهى وقت الانتظار — الاتصال بطيء"));
-    xhr.timeout = 120000; // دقيقتين لكل chunk
+      // فترات إعادة المحاولة — لو اتصال اتقطع المكتبة هتعيد لوحدها
+      retryDelays: [0, 3000, 5000, 10000, 20000, 60000, 60000],
 
-    xhr.send(chunk);
-  });
-}
-
-/**
- * شيّك الـ offset الفعلي من السيرفر — عشان الاستئناف
- */
-async function getServerOffset(location: string, authHeaders: TusAuthHeaders): Promise<number | null> {
-  try {
-    const res = await fetch(location, {
-      method: "HEAD",
+      // هيدرز التوقيع — Bunny بتشيّك عليهم في كل request
       headers: {
-        "Tus-Resumable": "1.0.0",
-        ...authHeaders,
+        AuthorizationSignature: creds.signature,
+        AuthorizationExpire: String(creds.expirationTime),
+        VideoId: creds.videoId,
+        LibraryId: creds.libraryId,
+      },
+
+      // metadata — المكتبة بتعمل base64 encoding لوحدها (بشكل صحيح للعربي)
+      metadata: {
+        filetype: file.type || "video/mp4",
+        title: file.name || "video",
+      },
+
+      // حجم الـ chunk — 50MB متوازن بين السرعة وعدد الـ requests
+      // مهم: لازم يبقى divisible by 256KB (متطلب Bunny)
+      chunkSize: 50 * 1024 * 1024,
+
+      // لو الـ upload فشل، المكتبة بتاخد رابط من السيرفر وبتعيد
+      removeFingerprintOnSuccess: true,
+
+      onError(error) {
+        console.error("[TUS] فشل الرفع:", error);
+        const msg = error instanceof Error ? error.message : String(error);
+        reject(new Error(`فشل رفع الفيديو: ${msg}`));
+      },
+
+      onProgress(bytesUploaded, bytesTotal) {
+        const percent = (bytesUploaded / bytesTotal) * 100;
+        console.log(`[TUS] ${bytesUploaded}/${bytesTotal} (${percent.toFixed(1)}%)`);
+        // نخصّص آخر 2% للـ verification
+        onProgress?.(Math.min(Math.round(percent * 0.97), 97));
+      },
+
+      async onSuccess() {
+        console.log("[TUS] ✅ كل الـ chunks اترفعت — بنتأكد من Bunny...");
+        onProgress?.(98);
+        try {
+          await verifyUploadComplete(creds.videoId);
+          onProgress?.(100);
+          console.log("[TUS] ✅ الرفع تم بنجاح!");
+          resolve();
+        } catch (err) {
+          reject(err);
+        }
+      },
+
+      onShouldRetry(error, retryAttempt, options) {
+        const status = (error as { originalResponse?: { getStatus?: () => number } })
+          ?.originalResponse?.getStatus?.();
+        console.warn(`[TUS] محاولة ${retryAttempt + 1} — status: ${status}`);
+
+        // متعيدش لو 4xx (غير 423/Locked) — دي أخطاء client مش هتتصلح بـ retry
+        if (status && status >= 400 && status < 500 && status !== 423) {
+          console.error(`[TUS] خطأ client (${status}) — مش هنعيد المحاولة`);
+          return false;
+        }
+        return retryAttempt < (options.retryDelays?.length ?? 0);
       },
     });
-    if (res.ok) {
-      const offsetHeader = res.headers.get("Upload-Offset");
-      return offsetHeader ? parseInt(offsetHeader, 10) : null;
-    }
-    return null;
-  } catch {
-    return null;
-  }
-}
 
-function sleep(ms: number): Promise<void> {
-  return new Promise((resolve) => setTimeout(resolve, ms));
+    upload.start();
+  });
 }
 
 // ============ التأكد إن Bunny استلم الفيديو فعلاً ============
@@ -233,7 +113,7 @@ async function verifyUploadComplete(videoId: string): Promise<void> {
     try {
       const res = await fetch(`/api/admin/videos/${videoId}`);
       if (!res.ok) {
-        console.warn(`[Upload] فشل التحقق من حالة الفيديو (${res.status})`);
+        console.warn(`[Verify] فشل التحقق (${res.status})`);
         await sleep(VERIFY_POLL_INTERVAL);
         continue;
       }
@@ -241,8 +121,9 @@ async function verifyUploadComplete(videoId: string): Promise<void> {
       const video = await res.json();
       const status = video.status ?? video.Status ?? -1;
 
-      console.log(`[Upload] حالة الفيديو: ${status} (محاولة ${attempt + 1}/${VERIFY_MAX_ATTEMPTS})`);
+      console.log(`[Verify] حالة الفيديو: ${status} (محاولة ${attempt + 1}/${VERIFY_MAX_ATTEMPTS})`);
 
+      // status 1-4 = الفيديو اتستلم وبيتعالج أو خلص
       if (status >= 1 && status <= 4) {
         return;
       }
@@ -257,11 +138,15 @@ async function verifyUploadComplete(videoId: string): Promise<void> {
       if (err instanceof Error && err.message.startsWith("Bunny")) {
         throw err;
       }
-      console.warn(`[Upload] خطأ أثناء التحقق:`, err);
+      console.warn(`[Verify] خطأ:`, err);
     }
 
     await sleep(VERIFY_POLL_INTERVAL);
   }
 
-  throw new Error("الفيديو لم يُتأكد استلامه من Bunny بعد وقت الانتظار — جرّب ترفع تاني");
+  throw new Error("الفيديو لم يُتأكد استلامه من Bunny — جرّب ترفع تاني");
+}
+
+function sleep(ms: number): Promise<void> {
+  return new Promise((resolve) => setTimeout(resolve, ms));
 }

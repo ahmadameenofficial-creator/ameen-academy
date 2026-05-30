@@ -1,8 +1,5 @@
 node_modules
 .next
-.env
-.env.local
-.env*.local
 .DS_Store
 *.log
 .vercel
@@ -14,6 +11,25 @@ prisma/migrations
 public/uploads
 tsconfig.tsbuildinfo
 preview/
-
 .vercel
 namecheap-order-*.pdf
+
+# ============ Environment Variables (Critical Security) ============
+# لا تكوميت أي ملف فيه secrets — لو شفت أي حاجة من دي في PR، ارفضها فوراً
+.env
+.env.*
+!.env.example
+.env.local
+.env.development.local
+.env.production.local
+.env.test.local
+.env.vercel.tmp
+.env.prod.tmp
+
+# مفاتيح ومستندات حساسة
+*.pem
+*.key
+*.crt
+secrets/
+credentials.json
+service-account*.json

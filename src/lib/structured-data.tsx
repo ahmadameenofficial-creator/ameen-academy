@@ -18,8 +18,21 @@ export function OrganizationSchema() {
     foundingDate: "2026",
     founder: {
       "@type": "Person",
-      name: "عمرو أمين",
+      name: "أحمد أمين",
+      jobTitle: "مصمم جرافيك ومؤسس أكاديمية أمين",
+      sameAs: [
+        SITE_CONFIG.links.facebook,
+        SITE_CONFIG.links.youtube,
+        SITE_CONFIG.links.twitter,
+      ],
     },
+    knowsAbout: [
+      "تصميم جرافيك",
+      "الذكاء الاصطناعي",
+      "العمل الحر",
+      "التسويق الرقمي",
+      "هوية بصرية",
+    ],
     address: {
       "@type": "PostalAddress",
       addressCountry: "EG",
@@ -72,6 +85,47 @@ export function WebsiteSchema() {
       },
       "query-input": "required name=search_term_string",
     },
+  };
+
+  return (
+    <script
+      type="application/ld+json"
+      dangerouslySetInnerHTML={{ __html: JSON.stringify(data) }}
+    />
+  );
+}
+
+// ============ Person Schema (E-E-A-T) ============
+// بيعرّف أحمد أمين كـ Entity موثوق — بيساعد محركات البحث والـ AI
+// إنها تفهم "مين الخبير" وتستشهد بيه
+export function PersonSchema() {
+  const data = {
+    "@context": "https://schema.org",
+    "@type": "Person",
+    name: "أحمد أمين",
+    url: `${BASE_URL}/about`,
+    image: `${BASE_URL}/images/03.png`,
+    jobTitle: "مصمم جرافيك ومؤسس أكاديمية أمين",
+    description:
+      "مصمم جرافيك بخبرة أكتر من 10 سنين في السوق المصري والخليجي، ومدير تسويق سابق. مؤسس أكاديمية أمين لتعليم مهارات التصميم والعمل الحر بالعربي.",
+    worksFor: {
+      "@type": "EducationalOrganization",
+      name: "أكاديمية أمين",
+      url: BASE_URL,
+    },
+    knowsAbout: [
+      "تصميم جرافيك",
+      "الهوية البصرية",
+      "الذكاء الاصطناعي",
+      "العمل الحر",
+      "التسويق الرقمي",
+    ],
+    nationality: { "@type": "Country", name: "Egypt" },
+    sameAs: [
+      SITE_CONFIG.links.facebook,
+      SITE_CONFIG.links.youtube,
+      SITE_CONFIG.links.twitter,
+    ],
   };
 
   return (

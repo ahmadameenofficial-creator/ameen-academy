@@ -12,11 +12,12 @@ import {
   IconTrophy,
   IconArrowLeft,
 } from "@tabler/icons-react";
+import { PersonSchema, BreadcrumbSchema } from "@/lib/structured-data";
 
 export const metadata: Metadata = {
   title: "عن أكاديمية أمين",
   description:
-    "تعرف على أكاديمية أمين — منصة تعليمية مصرية متخصصة في الجرافيك ديزاين والتصميم الاحترافي.",
+    "تعرف على أكاديمية أمين — منصة تعليمية مصرية بتعلّمك المهارات اللي السوق محتاجها فعلاً: تصميم، ذكاء اصطناعي، وفريلانس، بأسلوب عملي يأهّلك تكسب من شغلك.",
   alternates: { canonical: "/about" },
 };
 
@@ -46,6 +47,13 @@ const values = [
 export default function AboutPage() {
   return (
     <>
+      <PersonSchema />
+      <BreadcrumbSchema
+        items={[
+          { name: "الرئيسية", url: "https://ameen.academy" },
+          { name: "عن الأكاديمية", url: "https://ameen.academy/about" },
+        ]}
+      />
       <Navbar />
       <main className="flex-1">
         {/* Hero */}
@@ -58,11 +66,14 @@ export default function AboutPage() {
           <div className="absolute top-0 right-1/4 w-96 h-96 bg-brand-500/20 rounded-full blur-[120px]" />
 
           <div className="relative container mx-auto px-4 py-16 md:py-24 text-center text-white">
-            <h1 className="text-3xl md:text-5xl font-bold">
+            <h1 className="animate-fade-up text-3xl md:text-5xl font-bold">
               أكاديمية أمين
             </h1>
-            <p className="mt-4 text-lg md:text-xl text-white/70 max-w-2xl mx-auto leading-relaxed">
-              منصة تعليمية مصرية متخصصة في التصميم الجرافيكي — هدفنا نأهلك تنزل السوق كمصمم محترف يقدر يبيع شغله ويعيش منه.
+            <p
+              className="mt-4 animate-fade-up text-lg md:text-xl text-white/70 max-w-2xl mx-auto leading-relaxed"
+              style={{ animationDelay: "0.1s" }}
+            >
+              منصة تعليمية مصرية بتعلّمك المهارات اللي السوق بيدفع فيها فعلاً — تصميم، ذكاء اصطناعي، وفريلانس. هدفنا نأهّلك تنزل السوق وانت قادر تبيع شغلك وتعيش منه، مش بس تجمع شهادات.
             </p>
           </div>
         </section>
@@ -133,12 +144,23 @@ export default function AboutPage() {
 
         {/* CTA */}
         <section className="container mx-auto px-4 pb-16 md:pb-20 text-center">
-          <Button variant="gradient" size="xl" asChild>
-            <Link href="/courses">
-              تصفّح الكورسات
-              <IconArrowLeft className="h-5 w-5" />
-            </Link>
-          </Button>
+          <h2 className="text-2xl md:text-3xl font-bold text-foreground mb-3">
+            جاهز تبدأ؟
+          </h2>
+          <p className="text-muted-foreground mb-7 max-w-md mx-auto">
+            ابدأ بالكورس المجاني وجرّب الأسلوب بنفسك — وانت تقرر بعدها.
+          </p>
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
+            <Button variant="gradient" size="xl" asChild className="w-full sm:w-auto">
+              <Link href="/free">
+                ابدأ بالكورس المجاني
+                <IconArrowLeft className="h-5 w-5" />
+              </Link>
+            </Button>
+            <Button variant="outline" size="xl" asChild className="w-full sm:w-auto">
+              <Link href="/workshop">شوف كورس الورشة</Link>
+            </Button>
+          </div>
         </section>
       </main>
       <Footer />

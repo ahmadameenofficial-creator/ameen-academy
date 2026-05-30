@@ -81,9 +81,8 @@ export async function listVideos(page = 1, perPage = 100) {
 // التوقيع = sha256(libraryId + apiKey + expiration + videoId) — والـ apiKey
 // بيفضل على السيرفر بس، اللي بيوصل للمتصفح هو التوقيع الجاهز فقط.
 
-export function getTusUploadCredentials(videoId: string, expiresInSeconds = 3600) {
-  // مهم: نحسب الـ expiration مرة واحدة ونستخدمه في التوقيع والهيدر بنفس القيمة
-  // (الـ bug القديم كان بيحسبه مرتين منفصلتين فالتوقيع كان ممكن يبقى غير صالح)
+// مهم: الـ expiration بـ 6 ساعات عشان الفيديوهات الكبيرة (1GB+) متعدّيش الميعاد
+export function getTusUploadCredentials(videoId: string, expiresInSeconds = 21600) {
   const expirationTime = Math.floor(Date.now() / 1000) + expiresInSeconds;
   const signature = crypto
     .createHash("sha256")

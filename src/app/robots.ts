@@ -24,7 +24,25 @@ export default function robots(): MetadataRoute.Robots {
         allow: "/",
         disallow: ["/api/", "/dashboard/", "/admin/"],
       },
-      // منع الـ bots اللي بتستهلك موارد
+      // السماح صراحةً لزواحف الـ AI بالوصول للصفحات العامة
+      // عشان نتعرض ونتذكر في ChatGPT و Perplexity و Google AI و Claude
+      {
+        userAgent: [
+          "GPTBot",
+          "OAI-SearchBot",
+          "ChatGPT-User",
+          "ClaudeBot",
+          "Claude-Web",
+          "anthropic-ai",
+          "PerplexityBot",
+          "Google-Extended",
+          "Applebot-Extended",
+          "CCBot",
+        ],
+        allow: "/",
+        disallow: ["/api/", "/dashboard/", "/admin/"],
+      },
+      // منع الـ bots اللي بتستهلك موارد بدون فايدة
       {
         userAgent: ["AhrefsBot", "SemrushBot", "MJ12bot"],
         disallow: "/",
