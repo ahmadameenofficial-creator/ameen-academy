@@ -1,9 +1,23 @@
 import { ImageResponse } from "next/og";
+import { readFile } from "fs/promises";
+import { join } from "path";
 import { prisma } from "@/lib/prisma";
 
 export const alt = "مقال — أكاديمية أمين";
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
+
+// نحمّل اللوجو من public ونحوّله Data URI عشان Satori يقدر يرسمه.
+async function loadLogo(): Promise<string | null> {
+  try {
+    const data = await readFile(
+      join(process.cwd(), "public/images/academy-logo.png"),
+    );
+    return `data:image/png;base64,${data.toString("base64")}`;
+  } catch {
+    return null;
+  }
+}
 
 // نحمّل خط عربي (WOFF — Satori بيدعمه) من CDN ثابت.
 // لو فشل التحميل لأي سبب، بنرجّع null ونستخدم صورة احتياطية مضمونة.
@@ -66,12 +80,13 @@ export default async function Image({
     const { slug: raw } = await params;
     const slug = decodeURIComponent(raw);
 
-    const [post, font] = await Promise.all([
+    const [post, font, logo] = await Promise.all([
       prisma.blogPost.findUnique({
         where: { slug },
         select: { title: true, category: true },
       }),
       loadArabicFont(),
+      loadLogo(),
     ]);
 
     // لو مفيش مقال أو الخط مش متاح → الصورة الاحتياطية المضمونة
@@ -100,23 +115,28 @@ export default async function Image({
               direction: "rtl",
             }}
           >
-            <div
-              style={{
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-                width: 72,
-                height: 72,
-                borderRadius: "50%",
-                background: "rgba(255,255,255,0.15)",
-                border: "3px solid rgba(255,255,255,0.25)",
-                fontSize: 40,
-                fontWeight: 700,
-                color: "white",
-              }}
-            >
-              A
-            </div>
+            {logo ? (
+              // eslint-disable-next-line @next/next/no-img-element
+              <img src={logo} alt="أكاديمية أمين" width={105} height={72} />
+            ) : (
+              <div
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  width: 72,
+                  height: 72,
+                  borderRadius: "50%",
+                  background: "rgba(255,255,255,0.15)",
+                  border: "3px solid rgba(255,255,255,0.25)",
+                  fontSize: 40,
+                  fontWeight: 700,
+                  color: "white",
+                }}
+              >
+                A
+              </div>
+            )}
             <div style={{ fontSize: 34, fontWeight: 700, color: "white" }}>
               أكاديمية أمين
             </div>
