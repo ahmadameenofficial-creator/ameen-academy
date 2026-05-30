@@ -66,13 +66,13 @@ export function Hero({ remainingSeats }: HeroProps) {
           transition={{ duration: 0.7, delay: 0.1 }}
           className="text-5xl md:text-7xl lg:text-8xl font-black leading-[0.95] tracking-tighter mb-6 text-white"
         >
-          كفاية بقى
+          خطوة بخطوة
           <br />
-          تتفرّج على
+          جنب
           <br />
           <span className="relative inline-block">
             <span className="bg-gradient-to-br from-brand-200 via-brand-400 to-brand-600 bg-clip-text text-transparent">
-              شغل غيرك.
+              المحترفين.
             </span>
             <motion.span
               initial={{ scaleX: 0 }}
@@ -91,8 +91,9 @@ export function Hero({ remainingSeats }: HeroProps) {
           transition={{ duration: 0.7, delay: 0.3 }}
           className="text-base md:text-xl text-white/65 max-w-2xl mx-auto leading-relaxed mb-3"
         >
-          <span className="text-white font-medium">30 مصمم</span> في غرفة واحدة. لايف كل أسبوعين.
-          شغل بييجيلك مش بتدوّر عليه. ومراجعة شخصية لكل سطر بتعمله.
+          <span className="text-white font-medium">30 مصمم محترف</span> في غرفة واحدة. لايف كل أسبوعين،
+          شغل بييجيلك، ومراجعة شخصية لكل سطر بتعمله. بتمشي معاهم خطوة بخطوة —
+          <span className="text-white font-medium"> وتختصر سنين</span> كنت هتضيّعها لوحدك.
         </motion.p>
 
         <motion.p

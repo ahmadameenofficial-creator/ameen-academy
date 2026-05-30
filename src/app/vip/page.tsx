@@ -249,7 +249,7 @@ export default async function VipLandingPage() {
           </h2>
           <div className="space-y-5 text-lg md:text-xl text-white/70 leading-[1.9]">
             <p>
-              8 سنين شغل في التصميم. بدأت من صفر زيّك بالظبط. عملت لـ براندات
+              أكتر من 10 سنين شغل في التصميم. بدأت من صفر زيّك بالظبط. عملت لـ براندات
               مصرية وسعودية كبيرة. درّبت 500+ مصمم في الكورسات.
             </p>
             <p>
