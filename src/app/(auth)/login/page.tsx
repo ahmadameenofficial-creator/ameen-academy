@@ -3,6 +3,9 @@ import { LoginForm } from "./login-form";
 import { IconLoader2 } from "@tabler/icons-react";
 
 export default function LoginPage() {
+  const googleEnabled = !!(
+    process.env.GOOGLE_CLIENT_ID && process.env.GOOGLE_CLIENT_SECRET
+  );
   return (
     <Suspense
       fallback={
@@ -11,7 +14,7 @@ export default function LoginPage() {
         </div>
       }
     >
-      <LoginForm />
+      <LoginForm googleEnabled={googleEnabled} />
     </Suspense>
   );
 }

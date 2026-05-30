@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -9,12 +9,15 @@ import { IconLoader2, IconMail, IconLock, IconUser, IconEye, IconEyeOff, IconPho
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Logo } from "@/components/shared/logo";
+import { GoogleButton } from "@/components/auth/google-button";
 import { registerSchema, type RegisterInput } from "@/lib/validations/auth";
 import { apiPost, ApiError, API } from "@/lib/api";
 import { REFERRAL_STORAGE_KEY } from "@/components/referral-capture";
 
-export function RegisterForm() {
+export function RegisterForm({ googleEnabled = false }: { googleEnabled?: boolean }) {
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const callbackUrl = searchParams.get("callbackUrl") || "/dashboard";
   const [error, setError] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
@@ -197,6 +200,17 @@ export function RegisterForm() {
           )}
         </Button>
       </form>
+
+      {googleEnabled && (
+        <>
+          <div className="flex items-center gap-3">
+            <span className="h-px flex-1 bg-border" />
+            <span className="text-xs text-muted-foreground">أو</span>
+            <span className="h-px flex-1 bg-border" />
+          </div>
+          <GoogleButton callbackUrl={callbackUrl} label="سجّل بحساب جوجل" />
+        </>
+      )}
 
       <p className="text-center text-sm text-muted-foreground">
         عندك حساب؟{" "}

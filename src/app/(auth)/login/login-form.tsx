@@ -10,9 +10,10 @@ import { IconLoader2, IconMail, IconLock, IconEye, IconEyeOff } from "@tabler/ic
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Logo } from "@/components/shared/logo";
+import { GoogleButton } from "@/components/auth/google-button";
 import { loginSchema, type LoginInput } from "@/lib/validations/auth";
 
-export function LoginForm() {
+export function LoginForm({ googleEnabled = false }: { googleEnabled?: boolean }) {
   const router = useRouter();
   const searchParams = useSearchParams();
   const callbackUrl = searchParams.get("callbackUrl") || "/dashboard";
@@ -140,6 +141,17 @@ export function LoginForm() {
           )}
         </Button>
       </form>
+
+      {googleEnabled && (
+        <>
+          <div className="flex items-center gap-3">
+            <span className="h-px flex-1 bg-border" />
+            <span className="text-xs text-muted-foreground">أو</span>
+            <span className="h-px flex-1 bg-border" />
+          </div>
+          <GoogleButton callbackUrl={callbackUrl} label="دخول بحساب جوجل" />
+        </>
+      )}
 
       <p className="text-center text-sm text-muted-foreground">
         مش عندك حساب؟{" "}
