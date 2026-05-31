@@ -268,16 +268,16 @@ function SubmissionCard({
 
   return (
     <Card className="overflow-hidden">
-      <div className="relative aspect-square bg-muted">
+      <Link href={`/brief/submissions/${submission.id}`} className="relative block aspect-square bg-muted">
         <Image
           src={submission.imageUrl}
           alt={`حل بواسطة ${submission.user.name}`}
           fill
-          className="object-cover"
+          className="object-cover transition-transform hover:scale-105"
           unoptimized
           sizes="(max-width: 768px) 100vw, 33vw"
         />
-      </div>
+      </Link>
       <CardContent className="space-y-3 p-4">
         <Link
           href={`/brief/designers/${submission.user.id}`}

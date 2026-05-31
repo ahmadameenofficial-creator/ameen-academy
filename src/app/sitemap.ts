@@ -107,6 +107,13 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     }),
   ]);
 
+  const submissions = await prisma.briefSubmission.findMany({
+    where: { status: "PUBLISHED" },
+    select: { id: true, updatedAt: true },
+    orderBy: { createdAt: "desc" },
+    take: 5000,
+  });
+
   const coursePages: MetadataRoute.Sitemap = courses.map((course) => ({
     url: `${BASE_URL}/courses/${course.slug}`,
     lastModified: course.updatedAt,
@@ -128,5 +135,19 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     priority: 0.7,
   }));
 
-  return [...staticPages, ...briefHubPages, ...coursePages, ...blogPages, ...briefPages];
+  const submissionPages: MetadataRoute.Sitemap = submissions.map((s) => ({
+    url: `${BASE_URL}/brief/submissions/${s.id}`,
+    lastModified: s.updatedAt,
+    changeFrequency: "weekly" as const,
+    priority: 0.5,
+  }));
+
+  return [
+    ...staticPages,
+    ...briefHubPages,
+    ...coursePages,
+    ...blogPages,
+    ...briefPages,
+    ...submissionPages,
+  ];
 }
