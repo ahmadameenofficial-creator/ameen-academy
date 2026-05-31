@@ -9,21 +9,24 @@ interface EnrollCtaProps {
   price: number;
   isLoggedIn: boolean;
   isEnrolled: boolean;
-  /** السيرفر شيّك وإيميله موجود في Leads */
-  serverLeadCaptured?: boolean;
+  /** المستخدم عنده رقم واتساب محفوظ؟ */
+  hasPhone?: boolean;
+  /** اسم المستخدم — لو هنطلب رقمه */
+  userName?: string;
   size?: "lg" | "xl";
   fullWidth?: boolean;
 }
 
 /**
- * زر ذكي — لو الكورس مجاني يفتح LeadGate (لو محتاج)، لو مدفوع يروح Checkout
+ * زر ذكي — لو الكورس مجاني يشترك فوراً (والتسجيل مرة واحدة هو البوابة)، لو مدفوع يروح Checkout
  */
 export function EnrollCta({
   slug,
   price,
   isLoggedIn,
   isEnrolled,
-  serverLeadCaptured = false,
+  hasPhone = false,
+  userName = "",
   size = "xl",
   fullWidth = true,
 }: EnrollCtaProps) {
@@ -35,7 +38,8 @@ export function EnrollCta({
         isLoggedIn={isLoggedIn}
         isEnrolled={isEnrolled}
         slug={slug}
-        serverLeadCaptured={serverLeadCaptured}
+        hasPhone={hasPhone}
+        userName={userName}
         size={size}
         fullWidth={fullWidth}
       />

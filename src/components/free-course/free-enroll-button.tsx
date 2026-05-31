@@ -1,19 +1,21 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { IconLoader2, IconArrowLeft } from "@tabler/icons-react";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/components/ui/toast";
 import { apiPost, ApiError, API } from "@/lib/api";
-import { LeadGateModal, hasLeadCaptured, markLeadCaptured } from "@/components/free-course/lead-gate-modal";
+import { PhoneGateModal } from "@/components/free-course/phone-gate-modal";
 
 interface FreeEnrollButtonProps {
   isLoggedIn: boolean;
   isEnrolled: boolean;
   slug: string;
-  /** السيرفر شيّك وإيميله موجود في Leads */
-  serverLeadCaptured?: boolean;
+  /** المستخدم عنده رقم واتساب محفوظ؟ (مستخدمي جوجل ممكن مايكونش) */
+  hasPhone?: boolean;
+  /** اسم المستخدم — محتاجينه لو هنطلب الرقم */
+  userName?: string;
   fullWidth?: boolean;
   size?: "lg" | "xl";
 }
@@ -22,19 +24,15 @@ export function FreeEnrollButton({
   isLoggedIn,
   isEnrolled,
   slug,
-  serverLeadCaptured = false,
+  hasPhone = false,
+  userName = "",
   fullWidth = true,
   size = "xl",
 }: FreeEnrollButtonProps) {
   const router = useRouter();
   const [loading, setLoading] = useState(false);
-  const [showLeadModal, setShowLeadModal] = useState(false);
+  const [showPhoneModal, setShowPhoneModal] = useState(false);
   const { error } = useToast();
-
-  // لو السيرفر قال إنه lead — سجّل في localStorage كمان عشان ميشوفش المودال تاني
-  useEffect(() => {
-    if (serverLeadCaptured) markLeadCaptured();
-  }, [serverLeadCaptured]);
 
   if (isEnrolled) {
     return (
@@ -53,25 +51,25 @@ export function FreeEnrollButton({
   }
 
   function handleClick() {
-    // لو السيرفر أو localStorage قالوا إنه سجّل قبل كده → كمّل على طول
-    if (serverLeadCaptured || hasLeadCaptured()) {
-      proceedToEnroll();
+    // التسجيل مرة واحدة هو البوابة — لو مش مسجّل ودّيه يسجّل ويرجع
+    if (!isLoggedIn) {
+      router.push("/register?callbackUrl=/free");
       return;
     }
-    setShowLeadModal(true);
+    // مسجّل بس ملوش رقم (غالباً دخل بجوجل) → خد رقمه الأول
+    if (!hasPhone) {
+      setShowPhoneModal(true);
+      return;
+    }
+    proceedToEnroll();
   }
 
-  function handleLeadSuccess() {
-    setShowLeadModal(false);
+  function handlePhoneSuccess() {
+    setShowPhoneModal(false);
     proceedToEnroll();
   }
 
   async function proceedToEnroll() {
-    if (!isLoggedIn) {
-      router.push("/register?next=/free");
-      return;
-    }
-
     setLoading(true);
     try {
       const { slug: courseSlug } = await apiPost<{ slug: string }>(API.enrollments.free, {});
@@ -98,10 +96,11 @@ export function FreeEnrollButton({
         )}
       </Button>
 
-      <LeadGateModal
-        open={showLeadModal}
-        onOpenChange={setShowLeadModal}
-        onSuccess={handleLeadSuccess}
+      <PhoneGateModal
+        open={showPhoneModal}
+        onOpenChange={setShowPhoneModal}
+        onSuccess={handlePhoneSuccess}
+        name={userName}
       />
     </>
   );

@@ -40,10 +40,27 @@ export interface CrmContactSerialized {
   totalPaid: number;
   hasPaidCourse: boolean;
   hasFreeCourseOnly: boolean;
+  inFreeCourse: boolean;
+  freeProgress: number;
+  leadTier: "hot" | "warm" | "cold" | "none";
   progressPercent: number;
 }
 
-type FilterType = "all" | "free-only" | "paid" | "no-course" | "leads-form" | "has-phone";
+type FilterType =
+  | "all"
+  | "free-only"
+  | "paid"
+  | "no-course"
+  | "leads-form"
+  | "has-phone"
+  | "strong-leads";
+
+const TIER_LABEL: Record<CrmContactSerialized["leadTier"], string> = {
+  hot: "ساخن — خلّص الكورس",
+  warm: "دافي — نص الكورس",
+  cold: "بدأ الكورس",
+  none: "",
+};
 
 interface CrmStats {
   totalContacts: number;
@@ -95,6 +112,7 @@ const FILTERS: { key: FilterType; label: string; icon: React.ElementType }[] = [
   { key: "free-only", label: "كورس مجاني بس", icon: IconBook },
   { key: "paid", label: "مشترين", icon: IconCoin },
   { key: "no-course", label: "مسجّل بس", icon: IconUserCheck },
+  { key: "strong-leads", label: "ليدز أقوياء", icon: IconPercentage },
   { key: "leads-form", label: "من فورم الاهتمام", icon: IconSend },
   { key: "has-phone", label: "عنده واتساب", icon: IconPhone },
 ];
@@ -127,6 +145,10 @@ export function LeadsCrm({
       case "no-course":
         list = list.filter((c) => c.type === "user" && c.enrolledCourses.length === 0);
         break;
+      case "strong-leads":
+        // اللي خدوا 50% أو أكتر من الكورس المجاني = ليد أقوى
+        list = list.filter((c) => c.leadTier === "warm" || c.leadTier === "hot");
+        break;
       case "leads-form":
         list = list.filter((c) => c.type === "lead");
         break;
@@ -152,6 +174,12 @@ export function LeadsCrm({
   const selectedWithPhone = useMemo(
     () => filtered.filter((c) => selected.has(c.id) && c.phone),
     [filtered, selected],
+  );
+
+  // ليدز أقوياء = خدوا 50%+ من الكورس المجاني
+  const strongLeads = useMemo(
+    () => contacts.filter((c) => c.leadTier === "warm" || c.leadTier === "hot").length,
+    [contacts],
   );
 
   function toggleAll() {
@@ -186,12 +214,13 @@ export function LeadsCrm({
   return (
     <div className="space-y-6">
       {/* الإحصائيات */}
-      <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-7 gap-3">
+      <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-8 gap-3">
         <StatCard label="إجمالي الناس" value={stats.totalContacts} icon={IconUsers} />
         <StatCard label="مسجّلين" value={stats.totalUsers} icon={IconUserCheck} color="text-brand-600" />
         <StatCard label="من فورم الاهتمام" value={stats.totalLeads} icon={IconSend} color="text-amber-600" />
         <StatCard label="عندهم واتساب" value={stats.usersWithPhone} icon={IconPhone} color="text-green-600" />
         <StatCard label="كورس مجاني" value={stats.freeEnrollments} icon={IconBook} color="text-blue-600" />
+        <StatCard label="ليدز أقوياء" value={strongLeads} icon={IconPercentage} color="text-rose-600" />
         <StatCard label="مشترين" value={stats.paidEnrollments} icon={IconCoin} color="text-emerald-600" />
         <StatCard label="نسبة التحويل" value={`${stats.conversionRate}%`} icon={IconPercentage} color="text-brand-600" />
       </div>
@@ -405,7 +434,7 @@ function ContactRow({
         </div>
 
         {/* الحالة */}
-        <div className="hidden md:flex items-center w-32">
+        <div className="hidden md:flex flex-col items-start gap-1 w-32">
           <Badge
             variant={
               contact.hasPaidCourse
@@ -420,6 +449,14 @@ function ContactRow({
           >
             {contact.source}
           </Badge>
+          {(contact.leadTier === "hot" || contact.leadTier === "warm") && (
+            <Badge
+              variant={contact.leadTier === "hot" ? "default" : "success"}
+              className="text-[9px]"
+            >
+              {TIER_LABEL[contact.leadTier]} ({contact.freeProgress}%)
+            </Badge>
+          )}
         </div>
 
         {/* الكورسات */}

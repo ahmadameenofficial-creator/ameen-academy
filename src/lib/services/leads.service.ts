@@ -2,6 +2,16 @@ import { prisma } from "@/lib/prisma";
 
 export type LeadType = "all" | "free-only" | "paid" | "no-course" | "leads-form";
 
+// قوة الـ Lead حسب تقدّمه في الكورس المجاني
+export type LeadTier = "hot" | "warm" | "cold" | "none";
+
+export const LEAD_TIER_LABEL: Record<LeadTier, string> = {
+  hot: "ساخن (خلّص الكورس)",
+  warm: "دافي (نص الكورس)",
+  cold: "بدأ بس",
+  none: "—",
+};
+
 export interface CrmContact {
   id: string;
   type: "user" | "lead"; // user = مسجّل عالمنصة، lead = سجّل من فورم الاهتمام بس
@@ -16,7 +26,18 @@ export interface CrmContact {
   totalPaid: number; // بالقرش
   hasPaidCourse: boolean;
   hasFreeCourseOnly: boolean;
-  progressPercent: number; // نسبة إتمام أعلى كورس
+  inFreeCourse: boolean; // مشترك في الكورس المجاني؟
+  freeProgress: number; // نسبة إتمام الكورس المجاني (0-100)
+  leadTier: LeadTier; // قوة الـ lead حسب تقدّمه
+  progressPercent: number; // نسبة إتمام الكورس المجاني (alias قديم)
+}
+
+/** يحدد قوة الـ lead من نسبة تقدّمه في الكورس المجاني */
+function tierFromProgress(inFreeCourse: boolean, progress: number): LeadTier {
+  if (!inFreeCourse) return "none";
+  if (progress >= 100) return "hot";
+  if (progress >= 50) return "warm";
+  return "cold";
 }
 
 /**
@@ -25,7 +46,15 @@ export interface CrmContact {
  * 2. leads من فورم الاهتمام — اللي مسجّلوش بعد
  */
 export async function getCrmContacts(): Promise<CrmContact[]> {
-  const [users, leads, payments, progressData] = await Promise.all([
+  // الكورس المجاني (lead magnet) — عشان نحسب تقدّم كل واحد فيه بدقة
+  const freeCourse = await prisma.course.findFirst({
+    where: { price: 0, isPublished: true },
+    select: { id: true, _count: { select: { lessons: true } } },
+  });
+  const freeCourseId = freeCourse?.id ?? null;
+  const freeTotalLessons = freeCourse?._count.lessons ?? 0;
+
+  const [users, leads, payments, freeProgressData] = await Promise.all([
     prisma.user.findMany({
       where: { role: "STUDENT" },
       select: {
@@ -37,6 +66,7 @@ export async function getCrmContacts(): Promise<CrmContact[]> {
         lastLoginAt: true,
         enrollments: {
           select: {
+            courseId: true,
             course: { select: { title: true, price: true } },
             completedAt: true,
           },
@@ -50,23 +80,35 @@ export async function getCrmContacts(): Promise<CrmContact[]> {
       where: { status: "PAID" },
       _sum: { amount: true },
     }),
-    // نسبة التقدم لكل مستخدم (أعلى كورس)
-    prisma.lessonProgress.groupBy({
-      by: ["userId"],
-      where: { isCompleted: true },
-      _count: { id: true },
-    }),
+    // عدد الدروس المكتملة في الكورس المجاني لكل مستخدم
+    freeCourseId
+      ? prisma.lessonProgress.groupBy({
+          by: ["userId"],
+          where: { isCompleted: true, lesson: { courseId: freeCourseId } },
+          _count: { id: true },
+        })
+      : Promise.resolve([] as { userId: string; _count: { id: number } }[]),
   ]);
 
   const paidMap = new Map(payments.map((p) => [p.userId, p._sum.amount ?? 0]));
-  const progressMap = new Map(progressData.map((p) => [p.userId, p._count.id]));
+  const freeProgressMap = new Map(freeProgressData.map((p) => [p.userId, p._count.id]));
 
   // المستخدمين المسجلين
   const userContacts: CrmContact[] = users.map((u) => {
     const totalPaid = paidMap.get(u.id) ?? 0;
     const hasPaid = u.enrollments.some((e) => e.course.price > 0);
     const hasFreeOnly = u.enrollments.length > 0 && !hasPaid;
-    const completedLessons = progressMap.get(u.id) ?? 0;
+
+    // تقدّم الكورس المجاني بدقة (دروس مكتملة ÷ إجمالي دروس الكورس المجاني)
+    const inFreeCourse = freeCourseId
+      ? u.enrollments.some((e) => e.courseId === freeCourseId)
+      : false;
+    const completedFree = freeProgressMap.get(u.id) ?? 0;
+    const freeProgress =
+      inFreeCourse && freeTotalLessons > 0
+        ? Math.min(Math.round((completedFree / freeTotalLessons) * 100), 100)
+        : 0;
+    const leadTier = tierFromProgress(inFreeCourse, freeProgress);
 
     return {
       id: u.id,
@@ -85,7 +127,10 @@ export async function getCrmContacts(): Promise<CrmContact[]> {
       totalPaid,
       hasPaidCourse: hasPaid,
       hasFreeCourseOnly: hasFreeOnly,
-      progressPercent: completedLessons > 0 ? Math.min(completedLessons * 10, 100) : 0,
+      inFreeCourse,
+      freeProgress,
+      leadTier,
+      progressPercent: freeProgress,
     };
   });
 
@@ -113,6 +158,9 @@ export async function getCrmContacts(): Promise<CrmContact[]> {
       totalPaid: 0,
       hasPaidCourse: false,
       hasFreeCourseOnly: false,
+      inFreeCourse: false,
+      freeProgress: 0,
+      leadTier: "none" as const,
       progressPercent: 0,
     }));
 

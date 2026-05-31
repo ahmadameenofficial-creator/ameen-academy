@@ -3,11 +3,12 @@
 import { useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
-import { useForm } from "react-hook-form";
+import { useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { IconLoader2, IconMail, IconLock, IconUser, IconEye, IconEyeOff, IconPhone } from "@tabler/icons-react";
+import { IconLoader2, IconMail, IconLock, IconUser, IconEye, IconEyeOff } from "@tabler/icons-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { PhoneInput } from "@/components/ui/phone-input";
 import { Logo } from "@/components/shared/logo";
 import { GoogleButton } from "@/components/auth/google-button";
 import { registerSchema, type RegisterInput } from "@/lib/validations/auth";
@@ -25,6 +26,7 @@ export function RegisterForm({ googleEnabled = false }: { googleEnabled?: boolea
 
   const {
     register,
+    control,
     handleSubmit,
     formState: { errors },
   } = useForm<RegisterInput>({
@@ -114,19 +116,20 @@ export function RegisterForm({ googleEnabled = false }: { googleEnabled?: boolea
 
         <div className="space-y-2">
           <label htmlFor="phone" className="text-sm font-medium text-foreground">
-            رقم الموبايل (واتساب)
+            رقم الواتساب
           </label>
-          <div className="relative">
-            <IconPhone className="absolute right-3 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" />
-            <Input
-              id="phone"
-              type="tel"
-              placeholder="01012345678"
-              className="pr-10"
-              dir="ltr"
-              {...register("phone")}
-            />
-          </div>
+          <Controller
+            name="phone"
+            control={control}
+            render={({ field }) => (
+              <PhoneInput
+                id="phone"
+                value={field.value}
+                onChange={field.onChange}
+                placeholder="رقم الواتساب"
+              />
+            )}
+          />
           {errors.phone && (
             <p className="text-xs text-destructive">{errors.phone.message}</p>
           )}

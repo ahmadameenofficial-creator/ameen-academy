@@ -33,3 +33,5 @@ namecheap-order-*.pdf
 secrets/
 credentials.json
 service-account*.json
+
+.env*

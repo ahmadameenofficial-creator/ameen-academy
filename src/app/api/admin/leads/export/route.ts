@@ -1,5 +1,6 @@
 import { requireAdminApi, unauthorized } from "@/lib/admin-api";
 import { leadsService } from "@/lib/services";
+import { LEAD_TIER_LABEL } from "@/lib/services/leads.service";
 
 // تصدير كل العملاء كملف CSV احترافي (بيفتح في Google Sheets / Excel)
 export async function GET() {
@@ -16,6 +17,9 @@ export async function GET() {
     "الحالة",
     "عدد الكورسات",
     "الكورسات",
+    "في الكورس المجاني؟",
+    "نسبة إتمام الكورس المجاني",
+    "قوة الـ Lead",
     "إجمالي المدفوع (ج.م)",
     "تاريخ التسجيل",
     "آخر دخول",
@@ -32,6 +36,9 @@ export async function GET() {
       c.source,
       String(c.enrolledCourses.length),
       c.enrolledCourses.map((e) => e.title).join(" | ") || "—",
+      c.inFreeCourse ? "نعم" : "لا",
+      c.inFreeCourse ? `${c.freeProgress}%` : "—",
+      LEAD_TIER_LABEL[c.leadTier],
       c.totalPaid > 0 ? String(c.totalPaid / 100) : "0",
       new Date(c.createdAt).toLocaleString("ar-EG"),
       c.lastLoginAt ? new Date(c.lastLoginAt).toLocaleString("ar-EG") : "—",

@@ -10,7 +10,7 @@ export const dynamic = "force-dynamic";
 import { auth } from "@/auth";
 import { formatPrice, formatDuration, getLevelLabel } from "@/lib/format";
 import { CourseSchema, BreadcrumbSchema } from "@/lib/structured-data";
-import { leadsDb } from "@/lib/db";
+import { usersDb } from "@/lib/db";
 import { SITE_CONFIG } from "@/lib/constants";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -130,10 +130,10 @@ export default async function CourseDetailsPage({ params }: Props) {
     : null;
   const isEnrolled = !!enrollment;
 
-  // شيّك لو إيميله موجود في Leads — عشان ميكتبش بياناته تاني
-  const isLead = session?.user?.email
-    ? Boolean(await leadsDb.isLeadByEmail(session.user.email))
-    : false;
+  // بيانات المستخدم — عشان لو هياخد كورس مجاني وملوش رقم واتساب (دخل بجوجل) ناخده منه
+  const user = session?.user?.id ? await usersDb.findUserById(session.user.id) : null;
+  const hasPhone = Boolean(user?.phone);
+  const userName = user?.name ?? session?.user?.name ?? "";
 
   const totalLessons = course.lessons.length;
   const avgRating =
@@ -266,7 +266,8 @@ export default async function CourseDetailsPage({ params }: Props) {
                 isLoggedIn={!!session}
                 discount={discount}
                 totalLessons={totalLessons}
-                serverLeadCaptured={isLead}
+                hasPhone={hasPhone}
+                userName={userName}
               />
             </div>
 
@@ -279,7 +280,8 @@ export default async function CourseDetailsPage({ params }: Props) {
                 isLoggedIn={!!session}
                 discount={discount}
                 totalLessons={totalLessons}
-                serverLeadCaptured={isLead}
+                hasPhone={hasPhone}
+                userName={userName}
               />
             </div>
           </div>
@@ -439,7 +441,8 @@ export default async function CourseDetailsPage({ params }: Props) {
                 isLoggedIn={!!session}
                 discount={discount}
                 totalLessons={totalLessons}
-                serverLeadCaptured={isLead}
+                hasPhone={hasPhone}
+                userName={userName}
               />
             </div>
           </div>
@@ -454,7 +457,8 @@ export default async function CourseDetailsPage({ params }: Props) {
             price={0}
             isLoggedIn={!!session}
             isEnrolled={isEnrolled}
-            serverLeadCaptured={isLead}
+            hasPhone={hasPhone}
+            userName={userName}
             size="lg"
           />
         ) : isEnrolled ? (
@@ -500,7 +504,8 @@ function PricingCard({
   isLoggedIn,
   discount,
   totalLessons,
-  serverLeadCaptured = false,
+  hasPhone = false,
+  userName = "",
 }: {
   course: {
     price: number;
@@ -512,7 +517,8 @@ function PricingCard({
   isLoggedIn: boolean;
   discount: number;
   totalLessons: number;
-  serverLeadCaptured?: boolean;
+  hasPhone?: boolean;
+  userName?: string;
 }) {
   return (
     <Card className="overflow-hidden border-0 shadow-2xl shadow-black/20 bg-white">
@@ -542,7 +548,8 @@ function PricingCard({
           price={course.price}
           isLoggedIn={isLoggedIn}
           isEnrolled={isEnrolled}
-          serverLeadCaptured={serverLeadCaptured}
+          hasPhone={hasPhone}
+          userName={userName}
         />
 
         {/* المميزات */}

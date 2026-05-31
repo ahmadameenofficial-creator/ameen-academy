@@ -11,7 +11,7 @@ import {
 } from "@tabler/icons-react";
 import { auth } from "@/auth";
 import { enrollmentService } from "@/lib/services";
-import { enrollmentsDb, leadsDb } from "@/lib/db";
+import { enrollmentsDb, usersDb } from "@/lib/db";
 import { Navbar } from "@/components/layout/navbar";
 import { Footer } from "@/components/layout/footer";
 import { ClaimFreeButton } from "./claim-button";
@@ -52,9 +52,10 @@ export default async function FreeCoursePage() {
       ? Boolean(await enrollmentsDb.findEnrollment(session.user.id, course.id))
       : false;
 
-  const isLead = session?.user?.email
-    ? Boolean(await leadsDb.isLeadByEmail(session.user.email))
-    : false;
+  // بيانات المستخدم (عشان نعرف عنده رقم واتساب ولا لأ — مستخدمي جوجل ممكن مايكونش)
+  const user = session?.user?.id ? await usersDb.findUserById(session.user.id) : null;
+  const hasPhone = Boolean(user?.phone);
+  const userName = user?.name ?? session?.user?.name ?? "";
 
   return (
     <>
@@ -126,7 +127,8 @@ export default async function FreeCoursePage() {
                     isLoggedIn={Boolean(session?.user)}
                     alreadyEnrolled={alreadyEnrolled}
                     slug={course.slug}
-                    serverLeadCaptured={isLead}
+                    hasPhone={hasPhone}
+                    userName={userName}
                   />
                 </div>
               </FadeIn>
@@ -226,7 +228,8 @@ export default async function FreeCoursePage() {
                   isLoggedIn={Boolean(session?.user)}
                   alreadyEnrolled={alreadyEnrolled}
                   slug={course.slug}
-                  serverLeadCaptured={isLead}
+                  hasPhone={hasPhone}
+                  userName={userName}
                 />
               </FadeIn>
             </div>
