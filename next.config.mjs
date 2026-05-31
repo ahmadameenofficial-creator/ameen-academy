@@ -6,6 +6,8 @@ const nextConfig = {
       { protocol: "https", hostname: "vz-*.b-cdn.net" },
       { protocol: "https", hostname: "*.bunnycdn.com" },
       { protocol: "https", hostname: "lh3.googleusercontent.com" },
+      // Vercel Blob — تخزين الصور المرفوعة
+      { protocol: "https", hostname: "*.public.blob.vercel-storage.com" },
     ],
   },
   experimental: {
@@ -38,7 +40,7 @@ const nextConfig = {
               "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://www.googletagmanager.com https://www.google-analytics.com",
               "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
               "font-src 'self' https://fonts.gstatic.com",
-              "img-src 'self' data: blob: https://*.b-cdn.net https://*.bunnycdn.com https://lh3.googleusercontent.com",
+              "img-src 'self' data: blob: https://*.b-cdn.net https://*.bunnycdn.com https://lh3.googleusercontent.com https://*.public.blob.vercel-storage.com",
               "frame-src 'self' https://iframe.mediadelivery.net",
               "connect-src 'self' https://www.google-analytics.com https://video.bunnycdn.com https://*.b-cdn.net",
               "media-src 'self' https://*.b-cdn.net",

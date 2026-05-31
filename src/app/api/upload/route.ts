@@ -1,16 +1,14 @@
 import { NextResponse } from "next/server";
 import { auth } from "@/auth";
-import { writeFile, mkdir } from "fs/promises";
-import { join } from "path";
+import { put } from "@vercel/blob";
 import { randomBytes } from "crypto";
 import { rateLimit, RATE_LIMITS } from "@/lib/rate-limit";
 
-// الحد الأقصى: 5 ميجا للصور، 50 ميجا للفيديو
-const MAX_IMAGE_SIZE = 5 * 1024 * 1024;
-const MAX_VIDEO_SIZE = 50 * 1024 * 1024;
+// الحد الأقصى: 4 ميجا للصور (تحت حد Vercel للـ request body = 4.5 ميجا).
+// الفيديو بيترفع عبر Bunny Stream في مكان تاني، مش من هنا.
+const MAX_IMAGE_SIZE = 4 * 1024 * 1024;
 const ALLOWED_IMAGE_TYPES = ["image/jpeg", "image/png", "image/webp", "image/gif"];
-const ALLOWED_VIDEO_TYPES = ["video/mp4", "video/webm"];
-const ALLOWED_TYPES = [...ALLOWED_IMAGE_TYPES, ...ALLOWED_VIDEO_TYPES];
+const ALLOWED_TYPES = ALLOWED_IMAGE_TYPES;
 
 export async function POST(req: Request) {
   const session = await auth();
@@ -32,39 +30,34 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: "مفيش ملف" }, { status: 400 });
     }
 
-    // Validate type
+    // التحقق من النوع
     if (!ALLOWED_TYPES.includes(file.type)) {
       return NextResponse.json(
-        { error: "نوع الملف مش مدعوم. استخدم JPG/PNG/WebP/GIF أو MP4/WebM" },
+        { error: "نوع الملف مش مدعوم. استخدم JPG/PNG/WebP/GIF" },
         { status: 400 }
       );
     }
 
-    // Validate size based on type
-    const isVideo = ALLOWED_VIDEO_TYPES.includes(file.type);
-    const maxSize = isVideo ? MAX_VIDEO_SIZE : MAX_IMAGE_SIZE;
-    if (file.size > maxSize) {
+    // التحقق من الحجم
+    if (file.size > MAX_IMAGE_SIZE) {
       return NextResponse.json(
-        { error: isVideo ? "الفيديو لازم يكون أقل من 50 ميجا" : "الصورة لازم تكون أقل من 5 ميجا" },
+        { error: "الصورة لازم تكون أقل من 4 ميجا" },
         { status: 400 }
       );
     }
 
-    // Generate unique filename
-    const ext = file.name.split(".").pop() || "jpg";
-    const fileName = `${randomBytes(16).toString("hex")}.${ext}`;
+    // اسم فريد عشوائي (منمنعش تخمين أو دهس ملفات) + امتداد آمن
+    const ext = (file.name.split(".").pop() || "jpg").toLowerCase().replace(/[^a-z0-9]/g, "").slice(0, 5) || "jpg";
+    const fileName = `uploads/${randomBytes(16).toString("hex")}.${ext}`;
 
-    // Ensure upload directory exists
-    const uploadDir = join(process.cwd(), "public", "uploads");
-    await mkdir(uploadDir, { recursive: true });
+    // الرفع على Vercel Blob — تخزين دائم على الـ CDN (مش على قرص السيرفر المؤقت)
+    const blob = await put(fileName, file, {
+      access: "public",
+      contentType: file.type,
+      addRandomSuffix: false,
+    });
 
-    // Save file
-    const bytes = await file.arrayBuffer();
-    const buffer = Buffer.from(bytes);
-    await writeFile(join(uploadDir, fileName), buffer);
-
-    const url = `/uploads/${fileName}`;
-    return NextResponse.json({ url });
+    return NextResponse.json({ url: blob.url });
   } catch {
     return NextResponse.json({ error: "حصل مشكلة في رفع الملف" }, { status: 500 });
   }
