@@ -14,9 +14,9 @@ export const BRIEF_TYPES: { value: BriefType; label: string; icon: string; desc:
   },
   {
     value: "SOCIAL_POST",
-    label: "بوست سوشيال ميديا",
+    label: "حملة سوشيال ميديا",
     icon: "IconPhoto",
-    desc: "اعمل بوست يبيع، مش مجرد صورة حلوة",
+    desc: "صمّم حملة كاملة من 4 بوستات تبيع، مش مجرد صورة حلوة",
   },
   {
     value: "BRAND_IDENTITY",
@@ -35,7 +35,7 @@ export const BRIEF_LEVELS: { value: BriefLevel; label: string; desc: string }[] 
 
 export const BRIEF_TYPE_LABELS: Record<BriefType, string> = {
   LOGO: "تصميم شعار",
-  SOCIAL_POST: "بوست سوشيال ميديا",
+  SOCIAL_POST: "حملة سوشيال ميديا",
   BRAND_IDENTITY: "هوية بصرية كاملة",
 };
 

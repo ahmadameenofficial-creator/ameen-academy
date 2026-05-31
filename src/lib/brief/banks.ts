@@ -303,7 +303,7 @@ export const CLIENT_PERSONAS: ClientPersona[] = [
   { trait: "العميل مستعجل وعايز التسليم بدري", minLevel: "INTERMEDIATE" },
   { trait: "العميل بيغيّر رأيه كتير وبيطلب تعديلات", minLevel: "INTERMEDIATE" },
   { trait: "العميل بيكره لون معيّن ومتمسّك برأيه", minLevel: "INTERMEDIATE" },
-  { trait: "العميل عايز يبان فخم بميزانية صغيرة", minLevel: "PRO" },
+  { trait: "العميل عايز يبان فخم بس بأبسط العناصر — بساطة مدروسة", minLevel: "PRO" },
   { trait: "العميل عنده فكرة متضاربة: عايز بسيط بس مميز بس زي المنافسين", minLevel: "PRO" },
   { trait: "العميل مش عارف هو عايز إيه بالظبط ومحتاج منك توجّهه", minLevel: "PRO" },
 ];
@@ -317,13 +317,6 @@ export const FORBIDDEN_COLORS = [
   "الألوان الباردة",
   "الذهبي",
 ];
-
-// الميزانيات (نص واقعي)
-export const BUDGETS: Record<BriefLevel, string[]> = {
-  BEGINNER: ["500 - 1000 جنيه", "ميزانية مفتوحة للتعلّم", "800 جنيه"],
-  INTERMEDIATE: ["1500 - 3000 جنيه", "2000 جنيه", "ميزانية محدودة بس جادة"],
-  PRO: ["5000 - 10000 جنيه", "ميزانية كبيرة بس توقعات أعلى", "8000 جنيه مع ريفيجن لا نهائي"],
-};
 
 // المهل الزمنية — حسب النوع والمستوى (الهوية أكبر شغل من اللوجو من البوست)
 export const DEADLINES_BY_TYPE: Record<BriefType, Record<BriefLevel, string[]>> = {
@@ -353,9 +346,11 @@ export const DELIVERABLES: Record<BriefType, { name: string; format: string; siz
     { name: "موك أب توضيحي على خلفية", format: "JPG", size: "1080×1080" },
   ],
   SOCIAL_POST: [
-    { name: "بوست انستجرام (مربّع)", format: "JPG/PNG", size: "1080×1080" },
-    { name: "ستوري (عمودي)", format: "JPG/PNG", size: "1080×1920" },
-    { name: "نسخة فيسبوك (أفقي)", format: "JPG/PNG", size: "1200×630" },
+    { name: "البوست 1 — تشويق (Teaser)", format: "JPG/PNG", size: "1080×1080" },
+    { name: "البوست 2 — الإعلان الرئيسي (Reveal)", format: "JPG/PNG", size: "1080×1080" },
+    { name: "البوست 3 — القيمة / ليه إحنا (Value)", format: "JPG/PNG", size: "1080×1080" },
+    { name: "البوست 4 — آخر فرصة + CTA (Urgency)", format: "JPG/PNG", size: "1080×1080" },
+    { name: "نسخ ستوري للحملة (الأربع بوستات)", format: "JPG/PNG", size: "1080×1920" },
   ],
   BRAND_IDENTITY: [
     { name: "نظام اللوجو الكامل (أفقي + رأسي + أيقونة + أحادي اللون)", format: "SVG + PNG", size: "متجه" },
@@ -418,11 +413,11 @@ export const MUST_INCLUDE_BY_TYPE: Record<BriefType, string[]> = {
     "يشتغل على خلفية فاتحة وداكنة",
   ],
   SOCIAL_POST: [
-    "لوجو البراند في مكان واضح بس مش طاغي",
-    "الهيدلاين: «{headline}»",
-    "السطر الداعم: «{subline}»",
-    "زرار/دعوة للفعل: «{cta}»",
-    "الهاشتاج: {hashtag}",
+    "هوية بصرية موحّدة عبر الأربع بوستات (نفس الألوان والخطوط والستايل)",
+    "لوجو البراند ثابت في مكان واحد في كل بوست",
+    "الهاشتاج الموحّد {hashtag} في كل بوستات الحملة",
+    "تسلسل واضح: كل بوست يكمّل اللي قبله ويبني تفاعل متصاعد",
+    "دعوة للفعل (CTA) واضحة ومميّزة في كل بوست",
   ],
   BRAND_IDENTITY: [
     "نظام لوجو متناسق (مش لوجو واحد بس — أفقي/أيقونة/أحادي)",
@@ -432,3 +427,36 @@ export const MUST_INCLUDE_BY_TYPE: Record<BriefType, string[]> = {
     "تطبيق واقعي على 3 مواد على الأقل (كارت + سوشيال + موك أب)",
   ],
 };
+
+// =====================================================
+// بوستات الحملة (للسوشيال ميديا) — حملة كاملة من 4 بوستات مترابطة
+// البوست رقم 2 بييجي من الـ Campaign نفسها (العرض الرئيسي)،
+// والباقي (تشويق/قيمة/استعجال) بيتركّب من البنوك دي عشان حملة متكاملة
+// =====================================================
+
+export interface CampaignPostSeed {
+  headline: string;
+  subline: string;
+  cta: string;
+}
+
+// البوست 1 — تشويق قبل الكشف عن العرض
+export const TEASER_POSTS: CampaignPostSeed[] = [
+  { headline: "استنونا... جايالكم جديد", subline: "حاجة كنتوا مستنينها — قربت تنزل، تابعونا", cta: "خليك متابع" },
+  { headline: "في حاجة كبيرة جاية", subline: "عدّ تنازلي بدأ... أيام وتعرفوا السر", cta: "فضل متابعنا" },
+  { headline: "قربنا نفتح الستارة", subline: "تابع الصفحة عشان تكون أول من يعرف", cta: "تابعنا دلوقتي" },
+];
+
+// البوست 4 — آخر فرصة / استعجال ({occasion} بيتعوّض في المحرك)
+export const URGENCY_POSTS: CampaignPostSeed[] = [
+  { headline: "آخر فرصة تلحق {occasion}", subline: "العرض بيخلص قريب — متفوّتش الفرصة", cta: "الحق دلوقتي" },
+  { headline: "باقي أيام معدودة", subline: "اللي يأجّل يندم — العرض مش هيتكرر", cta: "استفد قبل ما يخلص" },
+  { headline: "الفرصة بتعدّ تنازلي", subline: "آخر يومين على {occasion} — قرّر بسرعة", cta: "اطلب قبل ما يقفل" },
+];
+
+// عبارات افتتاحية لبوست القيمة (البوست 3) — بيتكمّل بجوهر البراند
+export const VALUE_HEADLINES: string[] = [
+  "ليه تختار {business}؟",
+  "إيه اللي يميّز {business}؟",
+  "{business} مش زي أي حد",
+];

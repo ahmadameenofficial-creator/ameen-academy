@@ -9,7 +9,6 @@ import {
   CLIENT_NAMES,
   CLIENT_PERSONAS,
   FORBIDDEN_COLORS,
-  BUDGETS,
   DEADLINES_BY_TYPE,
   DELIVERABLES,
   TITLE_TEMPLATES,
@@ -17,6 +16,9 @@ import {
   DONTS_BANK,
   DOS_BY_TYPE,
   MUST_INCLUDE_BY_TYPE,
+  TEASER_POSTS,
+  URGENCY_POSTS,
+  VALUE_HEADLINES,
   type BusinessSeed,
   type Campaign,
 } from "./banks";
@@ -30,10 +32,26 @@ export interface BriefCopy {
   hashtag: string;
 }
 
+// بوست واحد ضمن حملة السوشيال
+export interface SocialCampaignPost {
+  role: string; // دور البوست في الحملة (تشويق/إعلان/قيمة/استعجال)
+  headline: string;
+  subline: string;
+  cta: string;
+}
+
+// حملة سوشيال ميديا كاملة من 4 بوستات مترابطة
+export interface SocialCampaign {
+  theme: string; // ثيم/مناسبة الحملة
+  hashtag: string; // الهاشتاج الموحّد لكل الحملة
+  posts: SocialCampaignPost[];
+}
+
 export interface BriefDetails {
   goal: string; // الهدف المحدد من التصميم
   keyMessage: string; // الرسالة الأساسية اللي لازم توصل
-  copy?: BriefCopy; // النصوص الجاهزة (للسوشيال أساساً)
+  copy?: BriefCopy; // النصوص الجاهزة (للهوية كمثال تطبيقي)
+  campaign?: SocialCampaign; // حملة الـ4 بوستات (للسوشيال ميديا)
   mustInclude: string[]; // عناصر لازم تظهر
   moodKeywords: string[]; // الاتجاه البصري
   dos: string[]; // افعل
@@ -52,7 +70,6 @@ export interface GeneratedBrief {
   audience: string;
   brandTone: string;
   constraints: {
-    budget: string;
     deadline: string;
     forbiddenColor?: string;
     notes: string;
@@ -129,7 +146,6 @@ export async function generateBrief(opts: GenerateOptions): Promise<GeneratedBri
   );
   const persona = pick(eligiblePersonas);
 
-  const budget = pick(BUDGETS[level]);
   const deadline = pick(DEADLINES_BY_TYPE[type][level]);
   // الألوان الممنوعة تظهر من المستوى المتوسط فأعلى
   const forbiddenColor = level === "BEGINNER" ? undefined : pick(FORBIDDEN_COLORS);
@@ -138,7 +154,7 @@ export async function generateBrief(opts: GenerateOptions): Promise<GeneratedBri
   const deliverables = DELIVERABLES[type];
 
   // الهدف والرسالة حسب النوع
-  const { goal, keyMessage, copy } = buildObjective({
+  const { goal, keyMessage, copy, campaignPlan } = buildObjective({
     type,
     clientBusiness,
     category: business.category,
@@ -167,7 +183,6 @@ export async function generateBrief(opts: GenerateOptions): Promise<GeneratedBri
     brandTone,
     persona: persona.trait,
     goal,
-    budget,
     deadline,
     forbiddenColor,
     type,
@@ -201,7 +216,6 @@ export async function generateBrief(opts: GenerateOptions): Promise<GeneratedBri
     audience: business.audience,
     brandTone,
     constraints: {
-      budget,
       deadline,
       forbiddenColor,
       notes: persona.trait,
@@ -211,6 +225,7 @@ export async function generateBrief(opts: GenerateOptions): Promise<GeneratedBri
       goal,
       keyMessage,
       copy,
+      campaign: campaignPlan,
       mustInclude,
       moodKeywords,
       dos,
@@ -226,18 +241,13 @@ function buildObjective(p: {
   category: string;
   essence: string;
   campaign: Campaign;
-}): { goal: string; keyMessage: string; copy?: BriefCopy } {
+}): { goal: string; keyMessage: string; copy?: BriefCopy; campaignPlan?: SocialCampaign } {
   switch (p.type) {
     case "SOCIAL_POST":
       return {
-        goal: `بوست يروّج لـ«${p.campaign.occasion}» ويجيب تفاعل وعملاء فعليين لـ${p.clientBusiness}`,
+        goal: `حملة سوشيال ميديا متكاملة من 4 بوستات مترابطة تروّج لـ«${p.campaign.occasion}»، تبني تفاعل متصاعد من التشويق للعرض للاستعجال، وتجيب عملاء فعليين لـ${p.clientBusiness}`,
         keyMessage: `${p.campaign.headline} — ${p.campaign.subline}`,
-        copy: {
-          headline: p.campaign.headline,
-          subline: p.campaign.subline,
-          cta: p.campaign.cta,
-          hashtag: p.campaign.hashtag,
-        },
+        campaignPlan: buildSocialCampaign(p.campaign, p.essence, p.clientBusiness),
       };
     case "LOGO":
       return {
@@ -259,6 +269,48 @@ function buildObjective(p: {
   }
 }
 
+// بناء حملة سوشيال من 4 بوستات: تشويق → إعلان رئيسي → قيمة → آخر فرصة
+function buildSocialCampaign(
+  campaign: Campaign,
+  essence: string,
+  clientBusiness: string
+): SocialCampaign {
+  const teaser = pick(TEASER_POSTS);
+  const urgency = pick(URGENCY_POSTS);
+  const valueHeadline = pick(VALUE_HEADLINES).replace("{business}", clientBusiness);
+
+  return {
+    theme: campaign.occasion,
+    hashtag: campaign.hashtag,
+    posts: [
+      {
+        role: "البوست 1 — تشويق (Teaser)",
+        headline: teaser.headline,
+        subline: teaser.subline,
+        cta: teaser.cta,
+      },
+      {
+        role: "البوست 2 — الإعلان الرئيسي (Reveal)",
+        headline: campaign.headline,
+        subline: campaign.subline,
+        cta: campaign.cta,
+      },
+      {
+        role: "البوست 3 — القيمة / ليه إحنا (Value)",
+        headline: valueHeadline,
+        subline: essence,
+        cta: "اعرف أكتر",
+      },
+      {
+        role: "البوست 4 — آخر فرصة (Urgency)",
+        headline: urgency.headline.replace("{occasion}", campaign.occasion),
+        subline: urgency.subline.replace("{occasion}", campaign.occasion),
+        cta: campaign.cta,
+      },
+    ],
+  };
+}
+
 function buildScenario(p: {
   clientName: string;
   clientBusiness: string;
@@ -268,7 +320,6 @@ function buildScenario(p: {
   brandTone: string;
   persona: string;
   goal: string;
-  budget: string;
   deadline: string;
   forbiddenColor?: string;
   type: BriefType;
@@ -280,7 +331,7 @@ function buildScenario(p: {
     `اللي محتاجه منك بالظبط: ${p.goal}.`,
     `وحابب الإحساس العام يكون ${p.brandTone}.`,
     `${p.persona}.`,
-    `الميزانية ${p.budget}، والتسليم خلال ${p.deadline}.`,
+    `التسليم خلال ${p.deadline}.`,
   ];
   if (p.forbiddenColor) {
     lines.push(`ملاحظة مهمة: مش عايز ${p.forbiddenColor} خالص في التصميم.`);

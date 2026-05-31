@@ -3,8 +3,9 @@ import {
   IconBuildingStore,
   IconTargetArrow,
   IconPalette,
-  IconWallet,
   IconClock,
+  IconLayoutGrid,
+  IconHash,
   IconBan,
   IconChecklist,
   IconMessage2,
@@ -65,6 +66,38 @@ export function BriefDisplay({ brief }: { brief: GeneratedBrief }) {
           </Section>
         )}
 
+        {/* حملة السوشيال — 4 بوستات مترابطة */}
+        {d?.campaign && d.campaign.posts.length > 0 && (
+          <div className="rounded-xl border-2 border-dashed border-brand-200 bg-brand-50/50 p-4 dark:border-brand-800 dark:bg-brand-900/10">
+            <div className="mb-1 flex items-center gap-2 font-semibold text-brand-700 dark:text-brand-300">
+              <IconLayoutGrid size={18} />
+              الحملة: {d.campaign.posts.length} بوستات مترابطة
+            </div>
+            <p className="mb-3 text-xs text-muted-foreground">
+              صمّم الحملة كاملة بهوية بصرية موحّدة — كل بوست له دوره في القصة
+            </p>
+            <div className="grid gap-3 sm:grid-cols-2">
+              {d.campaign.posts.map((post, i) => (
+                <div key={i} className="rounded-lg bg-background p-3 ring-1 ring-border">
+                  <div className="mb-2 inline-flex rounded-md bg-brand-100 px-2 py-0.5 text-xs font-semibold text-brand-700 dark:bg-brand-900/40 dark:text-brand-300">
+                    {post.role}
+                  </div>
+                  <div className="space-y-1.5 text-sm">
+                    <CopyRow label="العنوان الرئيسي" value={post.headline} big />
+                    <CopyRow label="السطر الداعم" value={post.subline} />
+                    <CopyRow label="الدعوة للفعل (CTA)" value={post.cta} />
+                  </div>
+                </div>
+              ))}
+            </div>
+            <div className="mt-3 flex items-center gap-2 rounded-lg bg-background px-3 py-2 text-sm">
+              <IconHash size={15} className="text-brand-500" />
+              <span className="text-xs text-muted-foreground">هاشتاج موحّد لكل الحملة:</span>
+              <span className="font-bold text-foreground">{d.campaign.hashtag}</span>
+            </div>
+          </div>
+        )}
+
         {/* النصوص الجاهزة (TOV) */}
         {d?.copy && (
           <div className="rounded-xl border-2 border-dashed border-brand-200 bg-brand-50/50 p-4 dark:border-brand-800 dark:bg-brand-900/10">
@@ -87,7 +120,6 @@ export function BriefDisplay({ brief }: { brief: GeneratedBrief }) {
           <Detail icon={<IconBuildingStore size={18} />} label="النشاط" value={brief.clientBusiness} />
           <Detail icon={<IconTargetArrow size={18} />} label="الجمهور المستهدف" value={brief.audience} />
           <Detail icon={<IconPalette size={18} />} label="نبرة البراند" value={brief.brandTone} />
-          <Detail icon={<IconWallet size={18} />} label="الميزانية" value={brief.constraints.budget} />
           <Detail icon={<IconClock size={18} />} label="التسليم خلال" value={brief.constraints.deadline} />
           {brief.constraints.forbiddenColor && (
             <Detail

@@ -20,10 +20,24 @@ const copySchema = z.object({
   hashtag: z.string().max(120),
 });
 
+const campaignPostSchema = z.object({
+  role: z.string().max(80),
+  headline: z.string().max(300),
+  subline: z.string().max(600),
+  cta: z.string().max(120),
+});
+
+const campaignSchema = z.object({
+  theme: z.string().max(160),
+  hashtag: z.string().max(120),
+  posts: z.array(campaignPostSchema).max(6),
+});
+
 const detailsSchema = z.object({
   goal: z.string().max(600),
   keyMessage: z.string().max(600),
   copy: copySchema.optional(),
+  campaign: campaignSchema.optional(),
   mustInclude: z.array(z.string().max(300)).max(20),
   moodKeywords: z.array(z.string().max(60)).max(12),
   dos: z.array(z.string().max(300)).max(20),
@@ -42,7 +56,6 @@ const schema = z.object({
   audience: z.string().min(1).max(600),
   brandTone: z.string().min(1).max(120),
   constraints: z.object({
-    budget: z.string().max(160),
     deadline: z.string().max(160),
     forbiddenColor: z.string().max(60).optional(),
     notes: z.string().max(600),
