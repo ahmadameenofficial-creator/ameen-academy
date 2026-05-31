@@ -18,7 +18,7 @@ import {
   MUST_INCLUDE_BY_TYPE,
   TEASER_POSTS,
   URGENCY_POSTS,
-  VALUE_HEADLINES,
+  VALUE_POSTS,
   type BusinessSeed,
   type Campaign,
 } from "./banks";
@@ -204,9 +204,10 @@ export async function generateBrief(opts: GenerateOptions): Promise<GeneratedBri
   let brandStory: string | undefined;
   let customerInsight: string | undefined;
   let designRationale: string | undefined;
+  let finalCampaign = campaignPlan;
 
   // طبقة الـ AI — بتثري البريف بشرح حقيقي عن البراند والعميل وتوجيه التصميم،
-  // وبتنوّع رسالة العميل عشان البريفات ماتبقاش مكررة. أي مشكلة → نرجع للقالب.
+  // وبتولّد حملة سوشيال بزوايا متنوّعة وTOV بشري. أي مشكلة → نرجع للقالب.
   if (useAI && isGeminiEnabled()) {
     try {
       const enriched = await enrichBrief({
@@ -219,6 +220,7 @@ export async function generateBrief(opts: GenerateOptions): Promise<GeneratedBri
         brandTone,
         goal,
         type,
+        occasion: campaign.occasion,
       });
       if (enriched) {
         scenario = enriched.scenario;
@@ -226,6 +228,19 @@ export async function generateBrief(opts: GenerateOptions): Promise<GeneratedBri
         customerInsight = enriched.customerInsight || undefined;
         designRationale = enriched.designRationale || undefined;
         source = "AI";
+        // لو الـ AI طلّع حملة كاملة نستخدمها بدل قالب المكتبة (للسوشيال)
+        if (type === "SOCIAL_POST" && enriched.campaign && enriched.campaign.posts.length > 0) {
+          finalCampaign = {
+            theme: enriched.campaign.theme || campaign.occasion,
+            hashtag: enriched.campaign.hashtag || campaign.hashtag,
+            posts: enriched.campaign.posts.map((p, i) => ({
+              role: p.role || `البوست ${i + 1}`,
+              headline: p.headline,
+              subline: p.subline,
+              cta: p.cta,
+            })),
+          };
+        }
       }
     } catch {
       // fallback صامت للقالب — المنصة ماتقفش أبداً
@@ -253,7 +268,7 @@ export async function generateBrief(opts: GenerateOptions): Promise<GeneratedBri
       goal,
       keyMessage,
       copy,
-      campaign: campaignPlan,
+      campaign: finalCampaign,
       brandStory,
       customerInsight,
       designRationale,
@@ -305,42 +320,46 @@ function buildObjective(p: {
   }
 }
 
-// بناء حملة سوشيال من 4 بوستات: تشويق → إعلان رئيسي → قيمة → آخر فرصة
+// بناء حملة سوشيال من 4 بوستات (fallback القالب): افتتاح متنوّع → كشف العرض
+// → قيمة/إثبات → ختام/استعجال. الأدوار بتتنوّع عشوائياً عشان البريفات ماتتكررش.
 function buildSocialCampaign(
   campaign: Campaign,
   essence: string,
   clientBusiness: string
 ): SocialCampaign {
-  const teaser = pick(TEASER_POSTS);
-  const urgency = pick(URGENCY_POSTS);
-  const valueHeadline = pick(VALUE_HEADLINES).replace("{business}", clientBusiness);
+  const opener = pick(TEASER_POSTS);
+  const value = pick(VALUE_POSTS);
+  const closer = pick(URGENCY_POSTS);
+
+  const fill = (s: string) =>
+    s.replace("{occasion}", campaign.occasion).replace("{business}", clientBusiness).replace("{essence}", essence);
 
   return {
     theme: campaign.occasion,
     hashtag: campaign.hashtag,
     posts: [
       {
-        role: "البوست 1 — تشويق (Teaser)",
-        headline: teaser.headline,
-        subline: teaser.subline,
-        cta: teaser.cta,
+        role: `البوست 1 — ${opener.role}`,
+        headline: fill(opener.post.headline),
+        subline: fill(opener.post.subline),
+        cta: opener.post.cta,
       },
       {
-        role: "البوست 2 — الإعلان الرئيسي (Reveal)",
+        role: "البوست 2 — الكشف عن العرض",
         headline: campaign.headline,
         subline: campaign.subline,
         cta: campaign.cta,
       },
       {
-        role: "البوست 3 — القيمة / ليه إحنا (Value)",
-        headline: valueHeadline,
-        subline: essence,
-        cta: "اعرف أكتر",
+        role: `البوست 3 — ${value.role}`,
+        headline: fill(value.post.headline),
+        subline: fill(value.post.subline),
+        cta: value.post.cta,
       },
       {
-        role: "البوست 4 — آخر فرصة (Urgency)",
-        headline: urgency.headline.replace("{occasion}", campaign.occasion),
-        subline: urgency.subline.replace("{occasion}", campaign.occasion),
+        role: `البوست 4 — ${closer.role}`,
+        headline: fill(closer.post.headline),
+        subline: fill(closer.post.subline),
         cta: campaign.cta,
       },
     ],

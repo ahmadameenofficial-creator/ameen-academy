@@ -50,12 +50,25 @@ export async function rewriteScenario(baseScenario: string, brandTone: string): 
   });
 }
 
-// إثراء البريف: رسالة عميل + 3 أقسام شرح تساعد المصمم يفهم البراند والعميل
+// بوست واحد ضمن حملة سوشيال مولّدة بالـ AI
+export interface EnrichedCampaignPost {
+  role: string; // زاوية البوست (عد تنازلي/مقارنة/شهادة عميل...)
+  headline: string;
+  subline: string;
+  cta: string;
+}
+
+// إثراء البريف: رسالة عميل + 3 أقسام شرح + (للسوشيال) حملة كاملة متنوّعة
 export interface BriefEnrichment {
   scenario: string; // رسالة العميل بنبرته (بتحل محل القالب)
   brandStory: string; // قصة البراند: مين هو، ليه اتعمل، إيه اللي يميّزه
   customerInsight: string; // العميل المستهدف: مين، بيدوّر على إيه، إيه اللي يوقفه
   designRationale: string; // توجيه للمصمم: إيه اللي يخلّي التصميم ناجح والزاوية الإبداعية
+  campaign?: {
+    theme: string;
+    hashtag: string;
+    posts: EnrichedCampaignPost[];
+  };
 }
 
 export interface EnrichContext {
@@ -68,23 +81,53 @@ export interface EnrichContext {
   brandTone: string;
   goal: string;
   type: string;
+  occasion?: string; // مناسبة/سبب الحملة (للسوشيال)
 }
 
+// قواعد اللهجة — تتبع في كل النصوص عشان نشيل إحساس الـ AI تماماً
+const HUMAN_TONE_RULES = `قواعد الكتابة (مهمة جداً):
+- اكتب زي تاجر مصري شاطر بيكلّم زباينه، مش زي روبوت أو إعلان رسمي.
+- ممنوع تماماً الكليشيهات الفاضية زي: "في عالمنا اليوم"، "نسعى دائماً"، "الجودة والتميز"، "نحرص على"، "بكل فخر"، "وجهتك الأولى"، "نقدم لكم".
+- خلّي الكلام قصير، محدد، وفيه تفصيلة ملموسة (رقم، اسم منتج، موقف حقيقي) — مش وصف عام.
+- العناوين تكون hooks بتوقف الـ scroll (سؤال، رقم صادم، تحدّي، فضول)، مش مجرد وصف.
+- بلاش علامات تعجب كتير، وبلاش أي رموز تعبيرية (emojis) خالص.
+- في رسالة العميل: ابدأ من غير ما تنادي المصمم باسمه، ومتكتبش أبداً أي placeholder زي [اسم المصمم] أو (اسم المصمم) أو [الاسم] — ادخل في الموضوع على طول أو قول "يا فنان/يا مصمم".
+- نوّع التراكيب — متبدأش كل جملة بنفس الأسلوب.`;
+
+const CAMPAIGN_ANGLES = `زوايا البوستات المتاحة (اختار 4 مختلفة فعلاً تبني قمع تسويقي مترابط لهذه الحملة بالذات، بلا تكرار):
+عد تنازلي للموعد، تشويق غامض، الكشف عن العرض، مقارنة قبل/بعد، شهادة عميل أو قصة نجاح، سؤال أو استفتاء للجمهور، إحصائية أو معلومة صادمة، خلف الكواليس، رد على اعتراض شائع (FAQ)، عرض محدود بكمية أو وقت، آخر فرصة، شرح القيمة (ليه إحنا).`;
+
 /**
- * بيطلّع بريف غني ومتنوّع: رسالة العميل + شرح للبراند والعميل وتوجيه التصميم.
+ * بيطلّع بريف غني ومتنوّع: رسالة العميل + شرح للبراند والعميل وتوجيه التصميم،
+ * وللسوشيال حملة كاملة من 4 بوستات بزوايا متنوّعة وTOV بشري قوي.
  * بيرجع JSON منظّم. أي خطأ/تجاوز كوتة → null والمحرك بيكمّل بالقالب.
  */
 export async function enrichBrief(ctx: EnrichContext): Promise<BriefEnrichment | null> {
   if (!API_KEY) return null;
 
+  const isSocial = ctx.type === "SOCIAL_POST";
   const typeLabel =
     ctx.type === "LOGO"
       ? "تصميم شعار"
-      : ctx.type === "SOCIAL_POST"
+      : isSocial
         ? "حملة سوشيال ميديا"
         : "هوية بصرية كاملة";
 
-  const prompt = `إنت مدير إبداعي مصري محترف بتجهّز بريف تصميم حقيقي لمصمم. النوع المطلوب: ${typeLabel}.
+  const campaignBlock = isSocial
+    ? `,
+  "campaign": {
+    "theme": "ثيم/مناسبة الحملة في جملة",
+    "hashtag": "هاشتاج موحّد بالعربي يبدأ بـ # من غير مسافات",
+    "posts": [
+      { "role": "زاوية البوست 1", "headline": "عنوان hook قوي", "subline": "سطر داعم محدد", "cta": "دعوة فعل" },
+      { "role": "زاوية البوست 2", "headline": "...", "subline": "...", "cta": "..." },
+      { "role": "زاوية البوست 3", "headline": "...", "subline": "...", "cta": "..." },
+      { "role": "زاوية البوست 4", "headline": "...", "subline": "...", "cta": "..." }
+    ]
+  }`
+    : "";
+
+  const prompt = `إنت مدير إبداعي مصري محترف بتجهّز بريف تصميم حقيقي لمصمم هيحطه في البورتفوليو بتاعه. النوع المطلوب: ${typeLabel}.
 
 معلومات المشروع:
 - العميل: ${ctx.clientName}، صاحب «${ctx.clientBusiness}»
@@ -93,22 +136,24 @@ export async function enrichBrief(ctx: EnrichContext): Promise<BriefEnrichment |
 - الجمهور: ${ctx.audience}
 - وضع السوق والمنافسين: ${ctx.competitors}
 - نبرة البراند: ${ctx.brandTone}
-- المطلوب: ${ctx.goal}
+- المطلوب: ${ctx.goal}${ctx.occasion ? `\n- مناسبة الحملة: ${ctx.occasion}` : ""}
 
-اطلّع بريف غني ومتنوّع (متكررش نفس الكلام). رد بصيغة JSON فقط، من غير أي نص قبله أو بعده، بالشكل ده بالظبط:
+${HUMAN_TONE_RULES}
+${isSocial ? `\n${CAMPAIGN_ANGLES}\n` : ""}
+رد بصيغة JSON فقط، من غير أي نص قبله أو بعده، بالشكل ده بالظبط:
 {
-  "scenario": "رسالة واتساب حقيقية من العميل للمصمم بالعامية المصرية، بنبرة ${ctx.brandTone}، فيها تفاصيل عن المشروع وإيه اللي محتاجه. طبيعية ومقنعة.",
-  "brandStory": "فقرة قصيرة (٢-٣ جمل) عن البراند: قصته، ليه اتعمل، وإيه اللي يميّزه عن المنافسين.",
-  "customerInsight": "فقرة قصيرة (٢-٣ جمل) عن العميل المستهدف: مين هو بالظبط، بيدوّر على إيه، وإيه اللي بيوقفه قدام التصميم ويخليه يتفاعل.",
-  "designRationale": "فقرة قصيرة (٢-٣ جمل) توجيه للمصمم: إيه اللي يخلّي التصميم ده ناجح، الزاوية الإبداعية المقترحة، وإيه اللي لازم يتجنّبه."
-}
-كل النصوص بالعامية المصرية ومن غير أي رموز تعبيرية (emojis).`;
+  "scenario": "رسالة واتساب حقيقية من العميل للمصمم بالعامية المصرية، بنبرة ${ctx.brandTone}، فيها تفاصيل ملموسة عن المشروع وإيه اللي محتاجه بالظبط.",
+  "brandStory": "فقرة قصيرة (٢-٣ جمل) عن البراند: قصته، ليه اتعمل، وإيه اللي يميّزه عن المنافسين بشكل محدد.",
+  "customerInsight": "فقرة قصيرة (٢-٣ جمل) عن العميل المستهدف: مين بالظبط، بيدوّر على إيه، وإيه اللي بيوقفه ويخليه يتفاعل.",
+  "designRationale": "فقرة قصيرة (٢-٣ جمل) توجيه للمصمم: إيه اللي يخلّي التصميم ناجح، الزاوية الإبداعية، وإيه يتجنّبه."${campaignBlock}
+}`;
 
   const text = await callGemini(TEXT_MODEL, {
     contents: [{ parts: [{ text: prompt }] }],
     generationConfig: {
       temperature: 0.95,
-      maxOutputTokens: 1400,
+      // الحملة محتاجة توكنز أكتر عشان الـ4 بوستات (العربي توكنز تقيلة)
+      maxOutputTokens: isSocial ? 3200 : 1500,
       thinkingConfig: { thinkingBudget: 0 },
     },
   });
@@ -119,11 +164,36 @@ export async function enrichBrief(ctx: EnrichContext): Promise<BriefEnrichment |
     if (!match) return null;
     const parsed = JSON.parse(match[0]) as Partial<BriefEnrichment>;
     if (!parsed.scenario || parsed.scenario.trim().length === 0) return null;
+
+    // تنظيف رسالة العميل من أي placeholder للاسم لو الموديل حطّه بالغلط
+    const cleanScenario = parsed.scenario
+      .replace(/[\[\(]\s*(اسم المصمم|الاسم|اسمك|المصمم)\s*[\]\)]/g, "يا فنان")
+      .trim();
+
+    let campaign: BriefEnrichment["campaign"];
+    if (
+      parsed.campaign &&
+      Array.isArray(parsed.campaign.posts) &&
+      parsed.campaign.posts.length > 0
+    ) {
+      campaign = {
+        theme: (parsed.campaign.theme ?? ctx.occasion ?? "").trim(),
+        hashtag: (parsed.campaign.hashtag ?? "").trim(),
+        posts: parsed.campaign.posts.slice(0, 4).map((p) => ({
+          role: (p?.role ?? "").trim(),
+          headline: (p?.headline ?? "").trim(),
+          subline: (p?.subline ?? "").trim(),
+          cta: (p?.cta ?? "").trim(),
+        })),
+      };
+    }
+
     return {
-      scenario: parsed.scenario.trim(),
+      scenario: cleanScenario,
       brandStory: (parsed.brandStory ?? "").trim(),
       customerInsight: (parsed.customerInsight ?? "").trim(),
       designRationale: (parsed.designRationale ?? "").trim(),
+      campaign,
     };
   } catch {
     return null;

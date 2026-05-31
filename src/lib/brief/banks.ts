@@ -440,23 +440,28 @@ export interface CampaignPostSeed {
   cta: string;
 }
 
-// البوست 1 — تشويق قبل الكشف عن العرض
-export const TEASER_POSTS: CampaignPostSeed[] = [
-  { headline: "استنونا... جايالكم جديد", subline: "حاجة كنتوا مستنينها — قربت تنزل، تابعونا", cta: "خليك متابع" },
-  { headline: "في حاجة كبيرة جاية", subline: "عدّ تنازلي بدأ... أيام وتعرفوا السر", cta: "فضل متابعنا" },
-  { headline: "قربنا نفتح الستارة", subline: "تابع الصفحة عشان تكون أول من يعرف", cta: "تابعنا دلوقتي" },
+// البوست الافتتاحي (1) — زوايا تشويق متنوّعة (عد تنازلي/غموض/سؤال)
+export const TEASER_POSTS: { role: string; post: CampaignPostSeed }[] = [
+  { role: "عد تنازلي", post: { headline: "٣… ٢… ١… وكل حاجة هتتغيّر", subline: "عدّ تنازلي بدأ — أيام وتعرفوا الجاي", cta: "فضل متابعنا" } },
+  { role: "تشويق غامض", post: { headline: "في سر إحنا مخبيينه عنكم", subline: "حاجة كنتوا مستنينها — قربت تتكشف", cta: "خليك متابع" } },
+  { role: "سؤال للجمهور", post: { headline: "لو قلنالك في مفاجأة… هتصدّقنا؟", subline: "علّق برأيك، وخليك معانا الأيام الجاية", cta: "قول رأيك" } },
+  { role: "تشويق", post: { headline: "قربنا نفتح الستارة", subline: "تابع الصفحة عشان تكون أول من يعرف", cta: "تابعنا دلوقتي" } },
+  { role: "كواليس", post: { headline: "بنجهّزلكم حاجة من ورا الكواليس", subline: "شغل كتير بيحصل عشانكم — استنونا", cta: "تابع الجاي" } },
 ];
 
-// البوست 4 — آخر فرصة / استعجال ({occasion} بيتعوّض في المحرك)
-export const URGENCY_POSTS: CampaignPostSeed[] = [
-  { headline: "آخر فرصة تلحق {occasion}", subline: "العرض بيخلص قريب — متفوّتش الفرصة", cta: "الحق دلوقتي" },
-  { headline: "باقي أيام معدودة", subline: "اللي يأجّل يندم — العرض مش هيتكرر", cta: "استفد قبل ما يخلص" },
-  { headline: "الفرصة بتعدّ تنازلي", subline: "آخر يومين على {occasion} — قرّر بسرعة", cta: "اطلب قبل ما يقفل" },
+// بوست الاستعجال/الختام (4) — زوايا متنوّعة ({occasion} بيتعوّض في المحرك)
+export const URGENCY_POSTS: { role: string; post: CampaignPostSeed }[] = [
+  { role: "آخر فرصة", post: { headline: "آخر فرصة تلحق {occasion}", subline: "العرض بيخلص قريب — متفوّتش الفرصة", cta: "الحق دلوقتي" } },
+  { role: "كمية محدودة", post: { headline: "الكمية بتخلص بسرعة", subline: "اللي فات مش هيرجع — احجز نصيبك من {occasion}", cta: "احجز قبل ما يخلص" } },
+  { role: "عد تنازلي للختام", post: { headline: "آخر يومين بس", subline: "العدّ التنازلي على {occasion} بدأ — قرّر بسرعة", cta: "اطلب قبل ما يقفل" } },
+  { role: "رد على التردد", post: { headline: "لسه بتفكر؟ القرار سهل", subline: "{occasion} مش هيتكرر قريب — متخليش الفرصة تعدّي", cta: "قرّر دلوقتي" } },
 ];
 
-// عبارات افتتاحية لبوست القيمة (البوست 3) — بيتكمّل بجوهر البراند
-export const VALUE_HEADLINES: string[] = [
-  "ليه تختار {business}؟",
-  "إيه اللي يميّز {business}؟",
-  "{business} مش زي أي حد",
+// بوست المنتصف (3) — زوايا قيمة/إثبات/مقارنة. {business} و{essence} بيتعوّضوا
+export const VALUE_POSTS: { role: string; post: CampaignPostSeed }[] = [
+  { role: "شرح القيمة", post: { headline: "ليه تختار {business}؟", subline: "{essence}", cta: "اعرف أكتر" } },
+  { role: "ليه إحنا مختلفين", post: { headline: "{business} مش زي أي حد", subline: "{essence}", cta: "شوف الفرق" } },
+  { role: "إثبات اجتماعي", post: { headline: "العملاء اللي جرّبوا مرجعوش لحد تاني", subline: "{essence}", cta: "اقرا تجاربهم" } },
+  { role: "مقارنة قبل/بعد", post: { headline: "الفرق اللي هتحسّه بنفسك", subline: "{essence}", cta: "جرّب وقارن" } },
+  { role: "رد على اعتراض", post: { headline: "فاكرها غالية أو معقّدة؟", subline: "{essence}", cta: "اعرف الحقيقة" } },
 ];
