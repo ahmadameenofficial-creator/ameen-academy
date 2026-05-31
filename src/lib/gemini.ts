@@ -6,7 +6,7 @@
 // =====================================================
 
 const API_KEY = process.env.GEMINI_API_KEY;
-const TEXT_MODEL = "gemini-2.0-flash";
+const TEXT_MODEL = "gemini-2.5-flash";
 const BASE = "https://generativelanguage.googleapis.com/v1beta/models";
 
 export function isGeminiEnabled(): boolean {
@@ -40,7 +40,13 @@ export async function rewriteScenario(baseScenario: string, brandTone: string): 
 
   return callGemini(TEXT_MODEL, {
     contents: [{ parts: [{ text: prompt }] }],
-    generationConfig: { temperature: 0.9, maxOutputTokens: 600 },
+    // thinkingBudget: 0 يقفل "التفكير الداخلي" بتاع 2.5-flash عشان ميستهلكش
+    // حد التوكنز ويقطع النص. مش محتاجين تفكير لإعادة صياغة بسيطة.
+    generationConfig: {
+      temperature: 0.9,
+      maxOutputTokens: 800,
+      thinkingConfig: { thinkingBudget: 0 },
+    },
   });
 }
 
@@ -77,7 +83,7 @@ export async function analyzeSubmission(
             ],
           },
         ],
-        generationConfig: { temperature: 0.4, maxOutputTokens: 800 },
+        generationConfig: { temperature: 0.4, maxOutputTokens: 1000, thinkingConfig: { thinkingBudget: 0 } },
       }),
       signal: AbortSignal.timeout(45000),
     });
