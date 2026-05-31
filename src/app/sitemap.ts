@@ -69,7 +69,28 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     },
   ];
 
-  const [courses, blogPosts] = await Promise.all([
+  const briefHubPages: MetadataRoute.Sitemap = [
+    {
+      url: `${BASE_URL}/brief`,
+      lastModified: new Date(),
+      changeFrequency: "daily",
+      priority: 0.8,
+    },
+    {
+      url: `${BASE_URL}/brief/explore`,
+      lastModified: new Date(),
+      changeFrequency: "daily",
+      priority: 0.7,
+    },
+    {
+      url: `${BASE_URL}/brief/leaderboard`,
+      lastModified: new Date(),
+      changeFrequency: "daily",
+      priority: 0.6,
+    },
+  ];
+
+  const [courses, blogPosts, briefs] = await Promise.all([
     prisma.course.findMany({
       where: { isPublished: true },
       select: { slug: true, updatedAt: true },
@@ -77,6 +98,12 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     prisma.blogPost.findMany({
       where: { isPublished: true },
       select: { slug: true, updatedAt: true },
+    }),
+    prisma.brief.findMany({
+      where: { isPublished: true },
+      select: { slug: true, updatedAt: true },
+      orderBy: { createdAt: "desc" },
+      take: 5000,
     }),
   ]);
 
@@ -94,5 +121,12 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     priority: 0.8,
   }));
 
-  return [...staticPages, ...coursePages, ...blogPages];
+  const briefPages: MetadataRoute.Sitemap = briefs.map((brief) => ({
+    url: `${BASE_URL}/brief/${brief.slug}`,
+    lastModified: brief.updatedAt,
+    changeFrequency: "weekly" as const,
+    priority: 0.7,
+  }));
+
+  return [...staticPages, ...briefHubPages, ...coursePages, ...blogPages, ...briefPages];
 }

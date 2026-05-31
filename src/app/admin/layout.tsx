@@ -13,11 +13,13 @@ import {
   IconGift,
   IconAddressBook,
   IconCrown,
+  IconPalette,
 } from "@tabler/icons-react";
 
 const navItems = [
   { href: "/admin", label: "الرئيسية", icon: IconLayoutDashboard },
   { href: "/admin/courses", label: "الكورسات", icon: IconBook },
+  { href: "/admin/brief", label: "البريف", icon: IconPalette },
   { href: "/admin/vip", label: "VIP", icon: IconCrown },
   { href: "/admin/blog", label: "المدونة", icon: IconArticle },
   { href: "/admin/students", label: "الطلاب", icon: IconUsers },

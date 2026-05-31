@@ -77,6 +77,13 @@ model User {
   referrals       User[]           @relation("UserReferrals")
   commissions     Commission[]     @relation("CommissionReferrer")
 
+  // منصة البريف (Ameen.academy/brief)
+  briefsCreated    Brief[]           @relation("BriefCreator")
+  briefSubmissions BriefSubmission[]
+  briefVotes       BriefVote[]
+  designerStats    DesignerStats?
+  designerBadges   DesignerBadge[]
+
   @@index([email])
   @@index([role])
   @@index([referredById])
@@ -745,4 +752,168 @@ model VipJob {
 
   @@index([postedAt])
   @@index([expiresAt])
+}
+
+// =====================================================
+// ============ منصة البريف (Ameen.academy/brief) ============
+// منصة عامة مجانية لتدريب المصممين على بريفات واقعية
+// =====================================================
+
+enum BriefType {
+  LOGO            // تصميم شعار
+  SOCIAL_POST     // بوست سوشيال ميديا
+  BRAND_IDENTITY  // هوية بصرية كاملة
+}
+
+enum BriefLevel {
+  BEGINNER
+  INTERMEDIATE
+  PRO
+}
+
+enum BriefSource {
+  TEMPLATE // اتولّد من محرك القوالب
+  AI       // اتولّد بمساعدة Gemini
+}
+
+enum SubmissionStatus {
+  PUBLISHED
+  HIDDEN
+  FLAGGED
+}
+
+// البريف المنشور (صفحة SEO لكل بريف)
+model Brief {
+  id               String      @id @default(cuid())
+  slug             String      @unique
+  type             BriefType
+  level            BriefLevel  @default(BEGINNER)
+  source           BriefSource @default(TEMPLATE)
+  clientName       String      // اسم العميل الوهمي
+  clientBusiness   String      // اسم النشاط (مثلاً: مطعم كشري المعادي)
+  businessCategory String      // فئة النشاط (مطاعم، عيادات، أزياء...)
+  title            String      // عنوان البريف
+  scenario         String      @db.Text // السرد الكامل بنبرة العميل
+  audience         String      @db.Text // الجمهور المستهدف
+  brandTone        String      // نبرة البراند
+  constraints      Json        // {budget, deadline, forbiddenColors, notes}
+  deliverables     Json        // [{name, format, size}]
+  details          Json?       // {goal, keyMessage, copy{headline,subline,cta,hashtag}, mustInclude[], moodKeywords[], dos[], donts[]}
+  createdById      String?     // مين ولّده (null = توليد مجهول/مبدئي)
+  isPublished      Boolean     @default(true)
+  isFeatured       Boolean     @default(false)
+  viewsCount       Int         @default(0)
+  challengeId      String?
+  createdAt        DateTime    @default(now())
+  updatedAt        DateTime    @updatedAt
+
+  createdBy   User?            @relation("BriefCreator", fields: [createdById], references: [id], onDelete: SetNull)
+  challenge   BriefChallenge?  @relation(fields: [challengeId], references: [id], onDelete: SetNull)
+  submissions BriefSubmission[]
+
+  @@index([isPublished, isFeatured, createdAt])
+  @@index([type, level])
+  @@index([createdById])
+  @@index([challengeId])
+}
+
+// حل المصمم لبريف
+model BriefSubmission {
+  id             String           @id @default(cuid())
+  briefId        String
+  userId         String
+  imageUrl       String           // الصورة على Bunny Storage
+  thumbnailUrl   String?
+  note           String?          @db.Text // ملاحظات المصمم على حله
+  votesCount     Int              @default(0)
+  aiScore        Int?             // تقييم AI (0-100)
+  aiFeedback     Json?            // ملاحظات Gemini المنظمة
+  expertFeedback String?          @db.Text // فيدباك خبير/أدمن
+  status         SubmissionStatus @default(PUBLISHED)
+  createdAt      DateTime         @default(now())
+  updatedAt      DateTime         @updatedAt
+
+  brief Brief       @relation(fields: [briefId], references: [id], onDelete: Cascade)
+  user  User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+  votes BriefVote[]
+
+  @@index([briefId, status, createdAt])
+  @@index([userId])
+  @@index([status, votesCount])
+}
+
+// تصويت على حل
+model BriefVote {
+  id           String   @id @default(cuid())
+  submissionId String
+  userId       String
+  createdAt    DateTime @default(now())
+
+  submission BriefSubmission @relation(fields: [submissionId], references: [id], onDelete: Cascade)
+  user       User            @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([submissionId, userId])
+  @@index([userId])
+}
+
+// إحصائيات المصمم (gamification) — 1:1 مع User
+model DesignerStats {
+  id            String    @id @default(cuid())
+  userId        String    @unique
+  xp            Int       @default(0)
+  level         Int       @default(1)
+  currentStreak Int       @default(0)
+  longestStreak Int       @default(0)
+  lastSolvedAt  DateTime?
+  briefsSolved  Int       @default(0)
+  updatedAt     DateTime  @updatedAt
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([xp])
+}
+
+// تعريف الشارات
+model BriefBadge {
+  id          String   @id @default(cuid())
+  key         String   @unique // معرّف ثابت (first_brief, logo_master...)
+  name        String
+  description String
+  icon        String   // اسم أيقونة Tabler
+  threshold   Json     // معيار الحصول عليها
+  createdAt   DateTime @default(now())
+
+  designers DesignerBadge[]
+}
+
+// شارات المصمم (join)
+model DesignerBadge {
+  id       String   @id @default(cuid())
+  userId   String
+  badgeId  String
+  earnedAt DateTime @default(now())
+
+  user  User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+  badge BriefBadge @relation(fields: [badgeId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, badgeId])
+  @@index([userId])
+}
+
+// التحديات الأسبوعية/الشهرية
+model BriefChallenge {
+  id          String     @id @default(cuid())
+  slug        String     @unique
+  title       String
+  theme       String
+  description String     @db.Text
+  type        BriefType?
+  startsAt    DateTime
+  endsAt      DateTime
+  isActive    Boolean    @default(true)
+  createdAt   DateTime   @default(now())
+
+  briefs Brief[]
+
+  @@index([isActive, endsAt])
 }

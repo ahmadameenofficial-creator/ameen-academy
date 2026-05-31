@@ -12,6 +12,7 @@ import {
   IconHome,
   IconArticle,
   IconCrown,
+  IconPalette,
 } from "@tabler/icons-react";
 import { Logo } from "@/components/shared/logo";
 import { ROUTES } from "@/lib/constants";
@@ -22,6 +23,7 @@ import { NotificationBell } from "./notification-bell";
 const navLinks = [
   { href: ROUTES.home, label: "الرئيسية", icon: IconHome },
   { href: ROUTES.courses, label: "الكورسات", icon: IconBook2 },
+  { href: ROUTES.brief, label: "البريف", icon: IconPalette },
   { href: ROUTES.vip, label: "VIP", icon: IconCrown, premium: true },
   { href: ROUTES.blog, label: "المدونة", icon: IconArticle },
   { href: ROUTES.community, label: "المجتمع", icon: IconUsers },

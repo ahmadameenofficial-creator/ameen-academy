@@ -1,5 +1,6 @@
 import { PrismaClient } from "@prisma/client";
 import bcrypt from "bcryptjs";
+import { BADGE_DEFINITIONS } from "../src/lib/brief/constants";
 
 const prisma = new PrismaClient();
 
@@ -198,6 +199,27 @@ async function main() {
       });
     }
   }
+
+  // ===== شارات منصة البريف =====
+  for (const badge of BADGE_DEFINITIONS) {
+    await prisma.briefBadge.upsert({
+      where: { key: badge.key },
+      update: {
+        name: badge.name,
+        description: badge.description,
+        icon: badge.icon,
+        threshold: badge.threshold,
+      },
+      create: {
+        key: badge.key,
+        name: badge.name,
+        description: badge.description,
+        icon: badge.icon,
+        threshold: badge.threshold,
+      },
+    });
+  }
+  console.log(`Brief badges seeded: ${BADGE_DEFINITIONS.length}`);
 
   console.log("Seed done! Admin: admin@ameen.academy / Admin@2026");
   console.log(`Free course: ${freeCourse.slug} (${freeLessons.length} lessons)`);

@@ -253,3 +253,32 @@
     transition-duration: 0.01ms !important;
   }
 }
+
+/* ============================================
+   طباعة البريف كـ PDF — نعزل كارت البريف بس
+   ============================================ */
+@media print {
+  body * {
+    visibility: hidden !important;
+  }
+  #brief-printable,
+  #brief-printable * {
+    visibility: visible !important;
+  }
+  #brief-printable {
+    position: absolute !important;
+    inset: 0 !important;
+    width: 100% !important;
+    margin: 0 !important;
+    border: none !important;
+    box-shadow: none !important;
+  }
+  /* نخلي الألوان والتدرّجات تطبع زي ما هي */
+  #brief-printable * {
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+  .no-print {
+    display: none !important;
+  }
+}
