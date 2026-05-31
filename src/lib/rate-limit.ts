@@ -68,4 +68,6 @@ export const RATE_LIMITS = {
   vipApplication: { limit: 3, windowSeconds: 60 * 60 },
   // الاشتراك المجاني: 5 محاولات كل 10 دقائق
   freeEnrollment: { limit: 5, windowSeconds: 10 * 60 },
+  // توليد بريف بالـ AI: 15 كل ساعة لكل IP (يحمي كوتة Gemini — بعدها يرجع للقالب)
+  briefAI: { limit: 15, windowSeconds: 60 * 60 },
 } as const;

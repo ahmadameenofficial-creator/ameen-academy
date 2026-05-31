@@ -23,6 +23,7 @@ import {
   type Campaign,
 } from "./banks";
 import { enrichBrief, isGeminiEnabled } from "@/lib/gemini";
+import { getCachedBrief, cacheBrief } from "./ai-cache";
 
 // النصوص الجاهزة اللي بتتحط على التصميم (Text On Visuals)
 export interface BriefCopy {
@@ -133,6 +134,13 @@ export interface GenerateOptions {
 export async function generateBrief(opts: GenerateOptions): Promise<GeneratedBrief> {
   const { type, level, category, useAI = false } = opts;
 
+  // كاش الـ AI: لو فيه مخزون بريفات AI كفاية نخدم منه أحياناً ونوفّر نداء Gemini.
+  // مانعملش كده لو المستخدم طلب مجال معيّن — عشان نحافظ على الصلة بطلبه.
+  if (useAI && isGeminiEnabled() && !category) {
+    const cached = getCachedBrief(type, level);
+    if (cached) return cached;
+  }
+
   const business = pickBusiness(category);
   const clientBusiness = pick(business.names);
   const clientName = pick(CLIENT_NAMES);
@@ -224,7 +232,7 @@ export async function generateBrief(opts: GenerateOptions): Promise<GeneratedBri
     }
   }
 
-  return {
+  const generated: GeneratedBrief = {
     type,
     level,
     source,
@@ -255,6 +263,11 @@ export async function generateBrief(opts: GenerateOptions): Promise<GeneratedBri
       donts,
     },
   };
+
+  // نخزّن نسخ الـ AI الناجحة في المخزون عشان نعيد استخدامها ونوفّر كوتة
+  if (source === "AI" && !category) cacheBrief(generated);
+
+  return generated;
 }
 
 // الهدف + الرسالة + النصوص الجاهزة حسب النوع
