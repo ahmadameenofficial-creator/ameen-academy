@@ -22,7 +22,7 @@ import {
   type BusinessSeed,
   type Campaign,
 } from "./banks";
-import { rewriteScenario, isGeminiEnabled } from "@/lib/gemini";
+import { enrichBrief, isGeminiEnabled } from "@/lib/gemini";
 
 // النصوص الجاهزة اللي بتتحط على التصميم (Text On Visuals)
 export interface BriefCopy {
@@ -52,6 +52,9 @@ export interface BriefDetails {
   keyMessage: string; // الرسالة الأساسية اللي لازم توصل
   copy?: BriefCopy; // النصوص الجاهزة (للهوية كمثال تطبيقي)
   campaign?: SocialCampaign; // حملة الـ4 بوستات (للسوشيال ميديا)
+  brandStory?: string; // قصة البراند ومميزاته (AI)
+  customerInsight?: string; // تحليل العميل المستهدف (AI)
+  designRationale?: string; // توجيه التصميم والزاوية الإبداعية (AI)
   mustInclude: string[]; // عناصر لازم تظهر
   moodKeywords: string[]; // الاتجاه البصري
   dos: string[]; // افعل
@@ -190,13 +193,30 @@ export async function generateBrief(opts: GenerateOptions): Promise<GeneratedBri
 
   let scenario = baseScenario;
   let source: "TEMPLATE" | "AI" = "TEMPLATE";
+  let brandStory: string | undefined;
+  let customerInsight: string | undefined;
+  let designRationale: string | undefined;
 
-  // طبقة الـ AI — اختيارية وآمنة: أي مشكلة → نرجع للقالب
+  // طبقة الـ AI — بتثري البريف بشرح حقيقي عن البراند والعميل وتوجيه التصميم،
+  // وبتنوّع رسالة العميل عشان البريفات ماتبقاش مكررة. أي مشكلة → نرجع للقالب.
   if (useAI && isGeminiEnabled()) {
     try {
-      const rewritten = await rewriteScenario(baseScenario, brandTone);
-      if (rewritten && rewritten.trim().length > 0) {
-        scenario = rewritten.trim();
+      const enriched = await enrichBrief({
+        clientName,
+        clientBusiness,
+        category: business.category,
+        audience: business.audience,
+        competitors: business.competitors,
+        essence,
+        brandTone,
+        goal,
+        type,
+      });
+      if (enriched) {
+        scenario = enriched.scenario;
+        brandStory = enriched.brandStory || undefined;
+        customerInsight = enriched.customerInsight || undefined;
+        designRationale = enriched.designRationale || undefined;
         source = "AI";
       }
     } catch {
@@ -226,6 +246,9 @@ export async function generateBrief(opts: GenerateOptions): Promise<GeneratedBri
       keyMessage,
       copy,
       campaign: campaignPlan,
+      brandStory,
+      customerInsight,
+      designRationale,
       mustInclude,
       moodKeywords,
       dos,

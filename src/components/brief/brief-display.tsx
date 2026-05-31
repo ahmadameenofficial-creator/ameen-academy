@@ -66,6 +66,25 @@ export function BriefDisplay({ brief }: { brief: GeneratedBrief }) {
           </Section>
         )}
 
+        {/* شرح البراند والعميل وتوجيه التصميم (AI) */}
+        {(d?.brandStory || d?.customerInsight || d?.designRationale) && (
+          <div className="space-y-4 rounded-xl border border-brand-200 bg-brand-50/40 p-4 dark:border-brand-800 dark:bg-brand-900/10">
+            <div className="flex items-center gap-2 font-semibold text-brand-700 dark:text-brand-300">
+              <IconBulb size={18} />
+              افهم البراند والعميل قبل ما تبدأ
+            </div>
+            {d?.brandStory && (
+              <InsightBlock icon={<IconBuildingStore size={16} />} title="قصة البراند" text={d.brandStory} />
+            )}
+            {d?.customerInsight && (
+              <InsightBlock icon={<IconUser size={16} />} title="العميل المستهدف" text={d.customerInsight} />
+            )}
+            {d?.designRationale && (
+              <InsightBlock icon={<IconSparkles size={16} />} title="توجيه التصميم" text={d.designRationale} />
+            )}
+          </div>
+        )}
+
         {/* حملة السوشيال — 4 بوستات مترابطة */}
         {d?.campaign && d.campaign.posts.length > 0 && (
           <div className="rounded-xl border-2 border-dashed border-brand-200 bg-brand-50/50 p-4 dark:border-brand-800 dark:bg-brand-900/10">
@@ -234,6 +253,26 @@ function Section({
         {title}
       </div>
       {children}
+    </div>
+  );
+}
+
+function InsightBlock({
+  icon,
+  title,
+  text,
+}: {
+  icon: React.ReactNode;
+  title: string;
+  text: string;
+}) {
+  return (
+    <div className="rounded-lg bg-background p-3">
+      <div className="mb-1 flex items-center gap-2 text-sm font-semibold text-foreground">
+        <span className="text-brand-500">{icon}</span>
+        {title}
+      </div>
+      <p className="text-sm leading-relaxed text-foreground/80">{text}</p>
     </div>
   );
 }

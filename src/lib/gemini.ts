@@ -50,6 +50,86 @@ export async function rewriteScenario(baseScenario: string, brandTone: string): 
   });
 }
 
+// إثراء البريف: رسالة عميل + 3 أقسام شرح تساعد المصمم يفهم البراند والعميل
+export interface BriefEnrichment {
+  scenario: string; // رسالة العميل بنبرته (بتحل محل القالب)
+  brandStory: string; // قصة البراند: مين هو، ليه اتعمل، إيه اللي يميّزه
+  customerInsight: string; // العميل المستهدف: مين، بيدوّر على إيه، إيه اللي يوقفه
+  designRationale: string; // توجيه للمصمم: إيه اللي يخلّي التصميم ناجح والزاوية الإبداعية
+}
+
+export interface EnrichContext {
+  clientName: string;
+  clientBusiness: string;
+  category: string;
+  audience: string;
+  competitors: string;
+  essence: string;
+  brandTone: string;
+  goal: string;
+  type: string;
+}
+
+/**
+ * بيطلّع بريف غني ومتنوّع: رسالة العميل + شرح للبراند والعميل وتوجيه التصميم.
+ * بيرجع JSON منظّم. أي خطأ/تجاوز كوتة → null والمحرك بيكمّل بالقالب.
+ */
+export async function enrichBrief(ctx: EnrichContext): Promise<BriefEnrichment | null> {
+  if (!API_KEY) return null;
+
+  const typeLabel =
+    ctx.type === "LOGO"
+      ? "تصميم شعار"
+      : ctx.type === "SOCIAL_POST"
+        ? "حملة سوشيال ميديا"
+        : "هوية بصرية كاملة";
+
+  const prompt = `إنت مدير إبداعي مصري محترف بتجهّز بريف تصميم حقيقي لمصمم. النوع المطلوب: ${typeLabel}.
+
+معلومات المشروع:
+- العميل: ${ctx.clientName}، صاحب «${ctx.clientBusiness}»
+- المجال: ${ctx.category}
+- جوهر البراند: ${ctx.essence}
+- الجمهور: ${ctx.audience}
+- وضع السوق والمنافسين: ${ctx.competitors}
+- نبرة البراند: ${ctx.brandTone}
+- المطلوب: ${ctx.goal}
+
+اطلّع بريف غني ومتنوّع (متكررش نفس الكلام). رد بصيغة JSON فقط، من غير أي نص قبله أو بعده، بالشكل ده بالظبط:
+{
+  "scenario": "رسالة واتساب حقيقية من العميل للمصمم بالعامية المصرية، بنبرة ${ctx.brandTone}، فيها تفاصيل عن المشروع وإيه اللي محتاجه. طبيعية ومقنعة.",
+  "brandStory": "فقرة قصيرة (٢-٣ جمل) عن البراند: قصته، ليه اتعمل، وإيه اللي يميّزه عن المنافسين.",
+  "customerInsight": "فقرة قصيرة (٢-٣ جمل) عن العميل المستهدف: مين هو بالظبط، بيدوّر على إيه، وإيه اللي بيوقفه قدام التصميم ويخليه يتفاعل.",
+  "designRationale": "فقرة قصيرة (٢-٣ جمل) توجيه للمصمم: إيه اللي يخلّي التصميم ده ناجح، الزاوية الإبداعية المقترحة، وإيه اللي لازم يتجنّبه."
+}
+كل النصوص بالعامية المصرية ومن غير أي رموز تعبيرية (emojis).`;
+
+  const text = await callGemini(TEXT_MODEL, {
+    contents: [{ parts: [{ text: prompt }] }],
+    generationConfig: {
+      temperature: 0.95,
+      maxOutputTokens: 1400,
+      thinkingConfig: { thinkingBudget: 0 },
+    },
+  });
+  if (!text) return null;
+
+  try {
+    const match = text.match(/\{[\s\S]*\}/);
+    if (!match) return null;
+    const parsed = JSON.parse(match[0]) as Partial<BriefEnrichment>;
+    if (!parsed.scenario || parsed.scenario.trim().length === 0) return null;
+    return {
+      scenario: parsed.scenario.trim(),
+      brandStory: (parsed.brandStory ?? "").trim(),
+      customerInsight: (parsed.customerInsight ?? "").trim(),
+      designRationale: (parsed.designRationale ?? "").trim(),
+    };
+  } catch {
+    return null;
+  }
+}
+
 export interface SubmissionFeedback {
   score: number; // 0-100
   strengths: string[];

@@ -28,7 +28,7 @@ export function BriefGenerator() {
       const res = await fetch("/api/brief/generate", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ type, level }),
+        body: JSON.stringify({ type, level, useAI: true }),
       });
       if (!res.ok) {
         const data = await res.json().catch(() => ({}));
