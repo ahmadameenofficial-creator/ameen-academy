@@ -1,14 +1,38 @@
 "use client";
 
 import { useState } from "react";
-import Link from "next/link";
 import { motion } from "framer-motion";
-import { IconCertificate, IconConfetti } from "@tabler/icons-react";
+import { IconCertificate, IconConfetti, IconLoader2 } from "@tabler/icons-react";
 import { Button } from "@/components/ui/button";
 import { Confetti } from "@/components/ui/confetti";
+import { useToast } from "@/components/ui/toast";
 
 export function CompletionBanner({ courseId, courseTitle }: { courseId: string; courseTitle: string }) {
   const [celebrate] = useState(true); // يظهر أول ما الصفحة تتحمل
+  const [loading, setLoading] = useState(false);
+  const { error } = useToast();
+
+  // 1) ننشئ الشهادة (POST) ونرجع الـ certificateCode
+  // 2) نفتح صفحة الـ PDF (GET /api/certificates/[code]) في تبويب جديد
+  async function downloadCertificate() {
+    setLoading(true);
+    try {
+      const res = await fetch("/api/certificates", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ courseId }),
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || "حصل مشكلة في إصدار الشهادة");
+
+      // نفتح الـ PDF في تبويب جديد عشان الطالب يحفظها/يطبعها
+      window.open(`/api/certificates/${data.certificateCode}`, "_blank");
+    } catch (e) {
+      error(e instanceof Error ? e.message : "حصل مشكلة، جرّب تاني");
+    } finally {
+      setLoading(false);
+    }
+  }
 
   return (
     <>
@@ -34,13 +58,16 @@ export function CompletionBanner({ courseId, courseTitle }: { courseId: string; 
           <h2 className="text-xl font-bold">مبروك! خلّصت {courseTitle}</h2>
           <p className="text-white/80 text-sm">شهادتك جاهزة للتحميل — شاركها على لينكدإن</p>
           <Button
-            asChild
+            onClick={downloadCertificate}
+            disabled={loading}
             className="bg-white text-brand-700 hover:bg-white/90"
           >
-            <Link href={`/api/certificates?courseId=${courseId}`}>
+            {loading ? (
+              <IconLoader2 className="size-4 animate-spin" />
+            ) : (
               <IconCertificate className="size-4" />
-              حمّل الشهادة
-            </Link>
+            )}
+            {loading ? "بنحضّر الشهادة..." : "حمّل الشهادة"}
           </Button>
         </div>
       </motion.div>
