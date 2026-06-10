@@ -12,7 +12,7 @@ export async function GET(_req: Request, context: RouteContext) {
   const certificate = await prisma.certificate.findUnique({
     where: { certificateCode: code },
     include: {
-      user: { select: { name: true } },
+      user: { select: { name: true, certificateName: true } },
       course: { select: { title: true, price: true } },
     },
   });
@@ -22,7 +22,7 @@ export async function GET(_req: Request, context: RouteContext) {
   }
 
   const pdfBytes = await generateCertificatePDF({
-    studentName: certificate.user.name || "طالب",
+    studentName: certificate.user.certificateName || certificate.user.name || "طالب",
     certificateCode: certificate.certificateCode,
     issuedAt: certificate.issuedAt,
     isPaid: certificate.course.price > 0,

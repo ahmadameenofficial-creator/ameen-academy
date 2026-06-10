@@ -33,6 +33,7 @@ model User {
   emailVerified   DateTime?
   password        String? // hashed - null لمستخدمي OAuth
   name            String
+  certificateName String? // الاسم الثلاثي اللي بيتطبع على الشهادات — بيتسجل عند أول إصدار
   image           String?
   bio             String?   @db.Text
   phone           String?

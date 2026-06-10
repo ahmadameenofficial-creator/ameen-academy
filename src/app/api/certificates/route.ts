@@ -10,9 +10,21 @@ export async function POST(req: Request) {
   }
 
   try {
-    const { courseId } = await req.json();
+    const { courseId, certificateName } = await req.json();
     if (!courseId) {
       return NextResponse.json({ error: "courseId مطلوب" }, { status: 400 });
+    }
+
+    // الاسم اللي هيتطبع على الشهادة — لازم ثلاثي (3 كلمات على الأقل)
+    // وحروف بس (عربي أو إنجليزي) من غير أرقام أو رموز
+    const name = typeof certificateName === "string" ? certificateName.trim().replace(/\s+/g, " ") : "";
+    const nameWords = name.split(" ").filter((w) => w.length >= 2);
+    const validChars = /^[؀-ۿa-zA-Z\s'.-]+$/.test(name);
+    if (name && (!validChars || nameWords.length < 3 || name.length > 60)) {
+      return NextResponse.json(
+        { error: "اكتب اسمك الثلاثي كامل (3 أسماء على الأقل) بالحروف بس" },
+        { status: 400 }
+      );
     }
 
     const enrollment = await prisma.enrollment.findUnique({
@@ -69,6 +81,24 @@ export async function POST(req: Request) {
       return NextResponse.json({
         certificateCode: existing.certificateCode,
         message: "الشهادة موجودة بالفعل",
+      });
+    }
+
+    // لازم يكون فيه اسم ثلاثي مسجّل — من الطلب الحالي أو من إصدار سابق
+    const user = await prisma.user.findUnique({
+      where: { id: session.user.id },
+      select: { certificateName: true },
+    });
+    if (!name && !user?.certificateName) {
+      return NextResponse.json(
+        { error: "محتاجين اسمك الثلاثي الأول", needName: true },
+        { status: 400 }
+      );
+    }
+    if (name && name !== user?.certificateName) {
+      await prisma.user.update({
+        where: { id: session.user.id },
+        data: { certificateName: name },
       });
     }
 
