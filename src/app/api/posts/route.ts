@@ -5,6 +5,7 @@ import { communityService } from "@/lib/services";
 import { postSchema } from "@/lib/validations/post";
 import { rateLimit, RATE_LIMITS } from "@/lib/rate-limit";
 import { handleApiError, UnauthorizedError, RateLimitError, ValidationError } from "@/lib/errors";
+import { broadcastNewPost } from "@/lib/notifications";
 
 export async function GET(req: Request) {
   const { searchParams } = new URL(req.url);
@@ -35,6 +36,14 @@ export async function POST(req: Request) {
     if (!result.success) throw new ValidationError(result.error.errors[0].message);
 
     const post = await communityDb.createPost(session.user.id, result.data.content, result.data.courseId);
+
+    // إشعار push لكل المشتركين إن في بوست جديد — في الخلفية، مش بيعطّل الرد
+    broadcastNewPost(
+      session.user.id,
+      session.user.name || "حد من الكوميونتي",
+      result.data.content
+    ).catch(() => {});
+
     return NextResponse.json(post, { status: 201 });
   } catch (error) {
     return handleApiError(error);

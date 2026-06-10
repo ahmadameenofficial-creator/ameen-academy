@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { revalidatePath } from "next/cache";
 import { prisma } from "@/lib/prisma";
 import { requireAdminApi, unauthorized, badRequest } from "@/lib/admin-api";
+import { broadcastNewCourse } from "@/lib/notifications";
 import { z } from "zod";
 
 const updateCourseSchema = z.object({
@@ -33,15 +34,24 @@ export async function PUT(req: Request, context: RouteContext) {
     if (!result.success) return badRequest(result.error.errors[0].message);
 
     const data: Record<string, unknown> = { ...result.data };
+    let firstPublish = false;
     if (result.data.isPublished === true) {
       const existing = await prisma.course.findUnique({ where: { id } });
-      if (existing && !existing.publishedAt) data.publishedAt = new Date();
+      if (existing && !existing.publishedAt) {
+        data.publishedAt = new Date();
+        firstPublish = true;
+      }
     }
 
     const course = await prisma.course.update({ where: { id }, data });
 
     revalidatePath("/admin/courses");
     revalidatePath("/courses");
+
+    // أول نشر للكورس — أهم إشعار في المنصة، بيوصل لكل المشتركين
+    if (firstPublish) {
+      broadcastNewCourse(course.title, course.slug).catch(() => {});
+    }
 
     return NextResponse.json(course);
   } catch {

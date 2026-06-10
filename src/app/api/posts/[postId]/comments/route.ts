@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import { auth } from "@/auth";
 import { prisma } from "@/lib/prisma";
-import { notifyNewComment } from "@/lib/notifications";
+import { notifyNewComment, notifyCommentReply } from "@/lib/notifications";
 import { rateLimit, RATE_LIMITS } from "@/lib/rate-limit";
 import { z } from "zod";
 
@@ -63,10 +63,10 @@ export async function POST(req: Request, context: RouteContext) {
       }),
     ]);
 
-    // إشعار لصاحب البوست
+    // إشعار لصاحب البوست — بمعاينة من نص التعليق
     const post = await prisma.post.findUnique({ where: { id: postId }, select: { userId: true } });
     if (post && post.userId !== session.user.id) {
-      notifyNewComment(post.userId, session.user.name || "شخص");
+      notifyNewComment(post.userId, session.user.name || "شخص", result.data.content);
     }
 
     // إشعار لصاحب الكومنت الأصلي (لو رد)
@@ -76,7 +76,7 @@ export async function POST(req: Request, context: RouteContext) {
         select: { userId: true },
       });
       if (parentComment && parentComment.userId !== session.user.id) {
-        notifyNewComment(parentComment.userId, session.user.name || "شخص");
+        notifyCommentReply(parentComment.userId, session.user.name || "شخص", result.data.content);
       }
     }
 

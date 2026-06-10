@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { revalidatePath } from "next/cache";
 import { prisma } from "@/lib/prisma";
 import { requireAdminApi, unauthorized } from "@/lib/admin-api";
+import { broadcastNewArticle } from "@/lib/notifications";
 import { z } from "zod";
 
 const createBlogSchema = z.object({
@@ -67,6 +68,11 @@ export async function POST(req: Request) {
 
     revalidatePath("/admin/blog");
     revalidatePath("/blog");
+
+    // اتنشر من أول لحظة؟ — push لكل المشتركين
+    if (post.isPublished) {
+      broadcastNewArticle(post.title, post.slug).catch(() => {});
+    }
 
     return NextResponse.json(post);
   } catch {

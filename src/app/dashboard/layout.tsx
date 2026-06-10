@@ -2,6 +2,7 @@ import Link from "next/link";
 import { redirect } from "next/navigation";
 import { auth, signOut } from "@/auth";
 import { Logo } from "@/components/shared/logo";
+import { PushPrompt } from "@/components/shared/push-prompt";
 import {
   IconBook,
   IconLogout,
@@ -81,6 +82,7 @@ export default async function DashboardLayout({
       </header>
 
       <main className="p-4 md:p-6 max-w-6xl mx-auto">{children}</main>
+      <PushPrompt />
     </div>
   );
 }

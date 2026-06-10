@@ -57,6 +57,7 @@ model User {
   likes           Like[]
   reactions       Reaction[]
   notifications   Notification[]
+  pushSubscriptions PushSubscription[]
   ratings         Rating[]
   payments        Payment[]
   certificates    Certificate[]
@@ -499,6 +500,25 @@ enum NotificationType {
   PAYMENT_SUCCESS
   SYSTEM
   MESSAGE
+  NEW_POST
+  NEW_COURSE
+  NEW_ARTICLE
+}
+
+// ============ اشتراكات الإشعارات (Web Push) ============
+// كل جهاز (موبايل/لاب) بيسجّل اشتراك منفصل — المستخدم الواحد ممكن يكون له أكتر من واحد
+model PushSubscription {
+  id        String   @id @default(cuid())
+  userId    String
+  endpoint  String   @unique @db.Text // رابط التوصيل من المتصفح (جوجل/أبل/موزيلا)
+  p256dh    String // مفتاح تشفير الرسائل
+  auth      String // سر المصادقة
+  userAgent String? // نوع الجهاز — للعرض في الإعدادات لاحقاً
+  createdAt DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
 }
 
 // ============ الشهادات ============

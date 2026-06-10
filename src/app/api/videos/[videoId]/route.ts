@@ -51,8 +51,11 @@ export async function GET(_req: Request, context: RouteContext) {
       }
     }
 
+    // الـ watermark بيتبعت جوّه الرابط الموقّع نفسه — مش overlay من المتصفح
+    // يتشال بالـ DevTools. اسم الطالب بيتحرق في المشغّل حتى في fullscreen.
     const embedUrl = getSignedEmbedUrl(videoId, {
       expiresInSeconds: 7200,
+      watermarkText: session.user.name || session.user.email || "Ameen",
     });
 
     return NextResponse.json({

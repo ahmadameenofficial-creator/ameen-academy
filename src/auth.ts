@@ -124,6 +124,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
         token.id = user.id!;
         token.role = (user as { role: string }).role;
         token.picture = user.image;
+        token.checkedAt = Math.floor(Date.now() / 1000);
       }
       // تحديث البيانات لما اليوزر يعدل البروفايل
       if (trigger === "update") {
@@ -136,6 +137,22 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
           token.picture = dbUser.image;
           token.role = dbUser.role;
         }
+        token.checkedAt = Math.floor(Date.now() / 1000);
+      }
+
+      // إعادة تحقق دورية (كل ساعة) من الحظر والدور — عشان المحظور
+      // أو الأدمن المتشال ميفضلوش شغالين بصلاحيات قديمة لحد ما الـ JWT يخلص
+      const now = Math.floor(Date.now() / 1000);
+      const checkedAt = typeof token.checkedAt === "number" ? token.checkedAt : 0;
+      if (token.id && now - checkedAt > 60 * 60) {
+        const dbUser = await prisma.user.findUnique({
+          where: { id: token.id as string },
+          select: { isBanned: true, role: true },
+        });
+        // مستخدم محذوف أو محظور = إبطال الجلسة فوراً
+        if (!dbUser || dbUser.isBanned) return null;
+        token.role = dbUser.role;
+        token.checkedAt = now;
       }
       return token;
     },

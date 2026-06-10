@@ -57,3 +57,48 @@ self.addEventListener("fetch", (event) => {
     );
   }
 });
+
+// ============ Web Push — استقبال وعرض الإشعارات ============
+
+self.addEventListener("push", (event) => {
+  let data = {};
+  try {
+    data = event.data ? event.data.json() : {};
+  } catch {
+    // payload مش JSON — نعرض إشعار عام بدل ما نتجاهله
+  }
+
+  const title = data.title || "أكاديمية أمين";
+  const options = {
+    body: data.body || "",
+    icon: "/images/icon-192.png",
+    badge: "/images/icon-192.png",
+    dir: "rtl",
+    lang: "ar",
+    data: { link: data.link || "/" },
+  };
+  // إشعارات بنفس الـ tag بتستبدل بعضها — البوستات المتتالية مش بتتكدّس
+  if (data.tag) options.tag = data.tag;
+
+  event.waitUntil(self.registration.showNotification(title, options));
+});
+
+// الضغط على الإشعار: لو الموقع مفتوح بنوجّهه للصفحة، لو مقفول بنفتحه
+self.addEventListener("notificationclick", (event) => {
+  event.notification.close();
+  const link = (event.notification.data && event.notification.data.link) || "/";
+
+  event.waitUntil(
+    clients
+      .matchAll({ type: "window", includeUncontrolled: true })
+      .then((windows) => {
+        for (const win of windows) {
+          if ("focus" in win) {
+            win.navigate(link);
+            return win.focus();
+          }
+        }
+        return clients.openWindow(link);
+      }),
+  );
+});

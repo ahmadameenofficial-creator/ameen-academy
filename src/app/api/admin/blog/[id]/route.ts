@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { auth } from "@/auth";
 import { prisma } from "@/lib/prisma";
 import { revalidatePath } from "next/cache";
+import { broadcastNewArticle } from "@/lib/notifications";
 import { z } from "zod";
 
 interface RouteContext {
@@ -84,6 +85,11 @@ export async function PUT(req: Request, context: RouteContext) {
 
     revalidatePath("/admin/blog");
     revalidatePath("/blog");
+
+    // أول مرة يتنشر فيها المقال (مش كل تعديل) — push لكل المشتركين
+    if (data.isPublished && !existing.publishedAt) {
+      broadcastNewArticle(post.title, post.slug).catch(() => {});
+    }
 
     return NextResponse.json(post);
   } catch {
