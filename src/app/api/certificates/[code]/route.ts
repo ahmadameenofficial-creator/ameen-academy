@@ -13,7 +13,7 @@ export async function GET(_req: Request, context: RouteContext) {
     where: { certificateCode: code },
     include: {
       user: { select: { name: true } },
-      course: { select: { title: true } },
+      course: { select: { title: true, price: true } },
     },
   });
 
@@ -23,9 +23,9 @@ export async function GET(_req: Request, context: RouteContext) {
 
   const pdfBytes = await generateCertificatePDF({
     studentName: certificate.user.name || "طالب",
-    courseName: certificate.course.title,
     certificateCode: certificate.certificateCode,
     issuedAt: certificate.issuedAt,
+    isPaid: certificate.course.price > 0,
   });
 
   return new NextResponse(Buffer.from(pdfBytes), {
