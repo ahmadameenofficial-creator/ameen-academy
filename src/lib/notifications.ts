@@ -91,7 +91,8 @@ const POST_BROADCAST_COOLDOWN_MIN = 30;
 export async function broadcastNewPost(
   authorId: string,
   authorName: string,
-  postContent: string
+  postContent: string,
+  hasImage = false
 ) {
   // لو اتنشر بوست تاني خلال آخر نص ساعة يبقى الناس لسه واخدة إشعار — نسكت
   // (البوست الحالي نفسه محسوب، عشان كده الحد أكبر من 1)
@@ -104,7 +105,11 @@ export async function broadcastNewPost(
   broadcastPush(
     {
       title: `${authorName} نشر في الكوميونتي`,
-      body: `"${snippet(postContent)}"`,
+      body: postContent.trim()
+        ? `"${snippet(postContent)}"`
+        : hasImage
+          ? "شارك صورة جديدة — خش شوفها"
+          : "",
       link: "/community",
       tag: "community-post", // البوستات المتتالية بتستبدل بعضها — مفيش إزعاج
     },

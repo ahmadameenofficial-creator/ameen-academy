@@ -54,9 +54,9 @@ export function getUserReactionsForPosts(userId: string, postIds: string[]) {
   });
 }
 
-export function createPost(userId: string, content: string, courseId?: string | null) {
+export function createPost(userId: string, content: string, courseId?: string | null, image?: string | null) {
   return prisma.post.create({
-    data: { userId, content, courseId: courseId || null },
+    data: { userId, content, courseId: courseId || null, image: image || null },
     include: {
       user: { select: USER_SELECT },
       _count: { select: { comments: true, likes: true } },

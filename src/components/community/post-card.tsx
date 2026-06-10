@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useRef, useState } from "react";
 import Link from "next/link";
 import {
   IconMessageCircle,
@@ -21,12 +21,12 @@ import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Avatar } from "@/components/shared/avatar";
 import { useToast } from "@/components/ui/toast";
-import { apiPost, apiPut, apiDelete, API } from "@/lib/api";
+import { apiClient, apiPost, apiPut, apiDelete, API } from "@/lib/api";
 import { getTimeAgo } from "@/lib/format";
 import { ReactionPicker } from "./reaction-picker";
 import { ReactionsSummaryDisplay } from "./reactions-summary";
 import { CommentItem } from "./comment-item";
-import { REACTION_TYPES, type Post } from "./types";
+import { REACTION_TYPES, type CommentData, type Post } from "./types";
 
 interface PostCardProps {
   post: Post;
@@ -37,7 +37,6 @@ interface PostCardProps {
   onDelete: () => void;
   onEdit: (content: string) => void;
   isLoggedIn: boolean;
-  onRefresh: () => void;
 }
 
 export function PostCard({
@@ -49,7 +48,6 @@ export function PostCard({
   onDelete,
   onEdit,
   isLoggedIn,
-  onRefresh,
 }: PostCardProps) {
   const [showComments, setShowComments] = useState(false);
   const [showMenu, setShowMenu] = useState(false);
@@ -64,11 +62,25 @@ export function PostCard({
     post.reactionsSummary || { total: 0, byType: {}, myReaction: null },
   );
 
+  // التعليقات بتتدار محلياً — مفيش إعادة تحميل للفيد كله مع كل تعليق
+  const [comments, setComments] = useState<CommentData[]>(post.comments);
+  const [commentCount, setCommentCount] = useState(post._count.comments);
+  const [loadingAll, setLoadingAll] = useState(false);
+  const [loadedAll, setLoadedAll] = useState(false);
+
+  // ضغطة مطوّلة على الموبايل بتفتح منتقي التفاعلات (زي فيسبوك)
+  const longPressFired = useRef(false);
+  const pressTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+
   const isOwner = currentUserId === post.user.id;
   const isAdmin = currentUserRole === "ADMIN";
   const canModify = isOwner || isAdmin;
   const timeAgo = getTimeAgo(post.createdAt);
   const { error } = useToast();
+
+  // المعروض فعلياً (تعليقات + ردود) — عشان زرار "عرض الكل" يظهر بس لما فيه ناقص
+  const shownCount = comments.reduce((n, c) => n + 1 + (c.replies?.length || 0), 0);
+  const hasMoreComments = !loadedAll && commentCount > shownCount;
 
   async function handleReaction(type: string) {
     if (!isLoggedIn) return;
@@ -84,17 +96,63 @@ export function PostCard({
     }
   }
 
+  function startLongPress() {
+    longPressFired.current = false;
+    pressTimer.current = setTimeout(() => {
+      longPressFired.current = true;
+      setShowReactions(true);
+    }, 350);
+  }
+
+  function cancelLongPress() {
+    if (pressTimer.current) clearTimeout(pressTimer.current);
+  }
+
+  function handleReactionTap() {
+    // لو الضغطة المطوّلة فتحت المنتقي، الضغطة العادية متعملش لايك فوقها
+    if (longPressFired.current) {
+      longPressFired.current = false;
+      return;
+    }
+    if (!isLoggedIn) return;
+    handleReaction(myReaction || "like");
+  }
+
+  async function loadAllComments() {
+    setLoadingAll(true);
+    try {
+      const data = await apiClient<{ comments: CommentData[] }>(API.posts.comments(post.id));
+      setComments(data.comments);
+      setLoadedAll(true);
+    } catch {
+      error("معرفناش نحمّل التعليقات، جرّب تاني");
+    }
+    setLoadingAll(false);
+  }
+
   async function handleComment() {
     if (!newComment.trim() || commenting) return;
     setCommenting(true);
     try {
-      await apiPost(API.posts.comments(post.id), {
+      const created = await apiPost<CommentData>(API.posts.comments(post.id), {
         content: newComment,
         parentId: replyTo?.id || undefined,
       });
+      // إضافة محلية فورية — من غير ما نرجّع الفيد لأول صفحة
+      if (created.parentId) {
+        setComments((prev) =>
+          prev.map((c) =>
+            c.id === created.parentId
+              ? { ...c, replies: [...(c.replies || []), created] }
+              : c,
+          ),
+        );
+      } else {
+        setComments((prev) => [...prev, created]);
+      }
+      setCommentCount((n) => n + 1);
       setNewComment("");
       setReplyTo(null);
-      onRefresh();
     } catch {
       error("معرفناش نضيف التعليق، جرّب تاني");
     }
@@ -105,7 +163,15 @@ export function PostCard({
     if (!confirm("متأكد إنك عايز تحذف التعليق ده؟")) return;
     try {
       await apiDelete(API.comments.delete(commentId));
-      onRefresh();
+      setComments((prev) =>
+        prev
+          .filter((c) => c.id !== commentId)
+          .map((c) => ({
+            ...c,
+            replies: (c.replies || []).filter((r) => r.id !== commentId),
+          })),
+      );
+      setCommentCount((n) => Math.max(0, n - 1));
     } catch {
       error("معرفناش نحذف التعليق، جرّب تاني");
     }
@@ -114,7 +180,12 @@ export function PostCard({
   async function handleEditComment(commentId: string, content: string) {
     try {
       await apiPut(API.comments.update(commentId), { content });
-      onRefresh();
+      setComments((prev) =>
+        prev.map((c) => ({
+          ...(c.id === commentId ? { ...c, content } : c),
+          replies: (c.replies || []).map((r) => (r.id === commentId ? { ...r, content } : r)),
+        })),
+      );
     } catch {
       error("معرفناش نعدّل التعليق، جرّب تاني");
     }
@@ -209,19 +280,40 @@ export function PostCard({
             </div>
           </div>
         ) : (
-          <p className="text-sm text-foreground whitespace-pre-line leading-relaxed">
-            {post.content}
-          </p>
+          <>
+            {post.content && (
+              <p className="text-sm text-foreground whitespace-pre-line leading-relaxed">
+                {post.content}
+              </p>
+            )}
+            {post.image && (
+              <a
+                href={post.image}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="block mt-3"
+                aria-label="افتح الصورة بالحجم الكامل"
+              >
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img
+                  src={post.image}
+                  alt={post.content ? `صورة منشور ${post.user.name}` : `صورة من ${post.user.name}`}
+                  loading="lazy"
+                  className="w-full max-h-[480px] object-cover rounded-xl border border-border"
+                />
+              </a>
+            )}
+          </>
         )}
       </div>
 
       {/* Reactions Count */}
-      {(reactionsSummary.total > 0 || post._count.comments > 0) && (
+      {(reactionsSummary.total > 0 || commentCount > 0) && (
         <div className="flex items-center justify-between px-4 py-1.5 text-xs text-muted-foreground">
           <ReactionsSummaryDisplay summary={reactionsSummary} />
-          {post._count.comments > 0 && (
+          {commentCount > 0 && (
             <button onClick={() => setShowComments(!showComments)} className="hover:underline">
-              {post._count.comments} تعليق
+              {commentCount} تعليق
             </button>
           )}
         </div>
@@ -231,10 +323,14 @@ export function PostCard({
       <div className="flex items-center border-t border-border mx-4">
         <div className="relative flex-1">
           <button
-            onClick={() => isLoggedIn && (myReaction ? handleReaction(myReaction) : handleReaction("like"))}
+            onClick={handleReactionTap}
             onMouseEnter={() => isLoggedIn && setShowReactions(true)}
             onMouseLeave={() => setShowReactions(false)}
-            className={`w-full flex items-center justify-center gap-2 py-2.5 text-sm font-medium transition-colors ${
+            onTouchStart={() => isLoggedIn && startLongPress()}
+            onTouchEnd={cancelLongPress}
+            onTouchMove={cancelLongPress}
+            onContextMenu={(e) => e.preventDefault()}
+            className={`w-full flex items-center justify-center gap-2 py-2.5 text-sm font-medium transition-colors select-none ${
               myReaction ? "text-brand-600" : "text-muted-foreground hover:bg-muted/50"
             }`}
           >
@@ -267,9 +363,9 @@ export function PostCard({
       {/* Comments Section */}
       {showComments && (
         <div className="border-t border-border bg-muted/20">
-          {post.comments.length > 0 && (
+          {(comments.length > 0 || hasMoreComments) && (
             <div className="px-4 py-2 space-y-3">
-              {post.comments.map((comment) => (
+              {comments.map((comment) => (
                 <CommentItem
                   key={comment.id}
                   comment={comment}
@@ -281,10 +377,14 @@ export function PostCard({
                   onEdit={handleEditComment}
                 />
               ))}
-              {post._count.comments > post.comments.length && (
-                <p className="text-xs text-brand-600 cursor-pointer hover:underline text-center py-1">
-                  عرض كل التعليقات ({post._count.comments})
-                </p>
+              {hasMoreComments && (
+                <button
+                  onClick={loadAllComments}
+                  disabled={loadingAll}
+                  className="w-full text-xs text-brand-600 hover:underline text-center py-1 disabled:opacity-50"
+                >
+                  {loadingAll ? "ثواني…" : `عرض كل التعليقات (${commentCount})`}
+                </button>
               )}
             </div>
           )}

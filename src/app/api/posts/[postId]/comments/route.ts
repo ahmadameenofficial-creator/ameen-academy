@@ -14,6 +14,28 @@ interface RouteContext {
   params: Promise<{ postId: string }>;
 }
 
+const COMMENT_USER_SELECT = { id: true, name: true, image: true, role: true };
+
+// كل تعليقات البوست — لزرار "عرض كل التعليقات" (الفيد بيجيب أول 3 بس)
+export async function GET(_req: Request, context: RouteContext) {
+  const { postId } = await context.params;
+
+  const comments = await prisma.comment.findMany({
+    where: { postId, isDeleted: false, parentId: null },
+    orderBy: { createdAt: "asc" },
+    include: {
+      user: { select: COMMENT_USER_SELECT },
+      replies: {
+        where: { isDeleted: false },
+        orderBy: { createdAt: "asc" },
+        include: { user: { select: COMMENT_USER_SELECT } },
+      },
+    },
+  });
+
+  return NextResponse.json({ comments });
+}
+
 // إضافة كومنت أو رد
 export async function POST(req: Request, context: RouteContext) {
   const session = await auth();

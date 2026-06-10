@@ -74,8 +74,8 @@ export function CommunityFeed({ initialPosts }: { initialPosts?: Post[] }) {
       .catch(() => {});
   }, [session]);
 
-  async function handlePost(content: string) {
-    await apiPost(API.posts.create, { content });
+  async function handlePost(content: string, image?: string) {
+    await apiPost(API.posts.create, { content, image });
     // حمّل أول صفحة تاني
     setPage(1);
     fetchPosts(1);
@@ -161,7 +161,6 @@ export function CommunityFeed({ initialPosts }: { initialPosts?: Post[] }) {
                 onDelete={() => handleDeletePost(post.id)}
                 onEdit={(content) => handleEditPost(post.id, content)}
                 isLoggedIn={!!session}
-                onRefresh={() => fetchPosts(1)}
               />
             ))}
 
