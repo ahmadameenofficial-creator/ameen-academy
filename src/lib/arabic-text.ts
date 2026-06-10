@@ -77,12 +77,9 @@ export function drawShapedText(
 
   for (const run of segmentRuns(text)) {
     const { glyphs, positions } = font.layout(run.text);
-    // العربي بيترسم بترتيب بصري (معكوس) — اللاتيني بترتيبه الطبيعي
-    const order = run.rtl
-      ? glyphs.map((_, i) => glyphs.length - 1 - i)
-      : glyphs.map((_, i) => i);
-
-    for (const i of order) {
+    // fontkit بيرجّع حروف العربي بالترتيب البصري جاهز (يمين-لشمال) —
+    // بنرسم بالترتيب زي ما هو، وعكسه تاني بيبوّظ الاسم
+    for (let i = 0; i < glyphs.length; i++) {
       const d = glyphToSvgPath(glyphs[i]);
       if (d) {
         page.drawSvgPath(d, {

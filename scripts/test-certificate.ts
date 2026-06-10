@@ -4,7 +4,7 @@ import { generateCertificatePDF } from "../src/lib/certificate";
 
 async function main() {
 const free = await generateCertificatePDF({
-  studentName: "أحمد محمد عبد الرحمن",
+  studentName: "أحمد أمين",
   certificateCode: "AMN-1A2B3C4D",
   issuedAt: new Date(),
   isPaid: false,
