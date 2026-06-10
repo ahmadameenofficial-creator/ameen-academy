@@ -1,4 +1,5 @@
 import webpush from "web-push";
+import { after } from "next/server";
 import { prisma } from "@/lib/prisma";
 
 // ============ Web Push — إرسال إشعارات للأجهزة المشتركة ============
@@ -11,6 +12,8 @@ const VAPID_SUBJECT = process.env.VAPID_SUBJECT || "mailto:support@ameen.academy
 const pushConfigured = !!(VAPID_PUBLIC && VAPID_PRIVATE);
 if (pushConfigured) {
   webpush.setVapidDetails(VAPID_SUBJECT, VAPID_PUBLIC!, VAPID_PRIVATE!);
+} else {
+  console.warn("[push] مفاتيح VAPID مش متظبطة — الإشعارات متعطّلة");
 }
 
 export interface PushPayload {
@@ -61,27 +64,35 @@ async function deliverBatch(subs: StoredSubscription[], payload: PushPayload) {
   }
 }
 
-/** إشعار شخصي — بيوصل لكل أجهزة المستخدم (موبايل + لاب) */
-export async function sendPushToUser(userId: string, payload: PushPayload) {
+/**
+ * إشعار شخصي — بيوصل لكل أجهزة المستخدم (موبايل + لاب).
+ * الإرسال بيتجدول بـ after() — Vercel بيخلّي الـ function عايشة بعد الرد،
+ * فالإشعار مضمون يكمّل من غير ما يبطّأ الـ response.
+ */
+export function sendPushToUser(userId: string, payload: PushPayload) {
   if (!pushConfigured) return;
-  const subs = await prisma.pushSubscription.findMany({
-    where: { userId },
-    select: { id: true, endpoint: true, p256dh: true, auth: true },
+  after(async () => {
+    const subs = await prisma.pushSubscription.findMany({
+      where: { userId },
+      select: { id: true, endpoint: true, p256dh: true, auth: true },
+    });
+    if (subs.length === 0) return;
+    await deliverBatch(subs, payload);
   });
-  if (subs.length === 0) return;
-  await deliverBatch(subs, payload);
 }
 
 /** إشعار جماعي لكل المشتركين — للبوستات والكورسات والمقالات الجديدة */
-export async function broadcastPush(
+export function broadcastPush(
   payload: PushPayload,
   options?: { excludeUserId?: string }
 ) {
   if (!pushConfigured) return;
-  const subs = await prisma.pushSubscription.findMany({
-    where: options?.excludeUserId ? { userId: { not: options.excludeUserId } } : undefined,
-    select: { id: true, endpoint: true, p256dh: true, auth: true },
+  after(async () => {
+    const subs = await prisma.pushSubscription.findMany({
+      where: options?.excludeUserId ? { userId: { not: options.excludeUserId } } : undefined,
+      select: { id: true, endpoint: true, p256dh: true, auth: true },
+    });
+    if (subs.length === 0) return;
+    await deliverBatch(subs, payload);
   });
-  if (subs.length === 0) return;
-  await deliverBatch(subs, payload);
 }

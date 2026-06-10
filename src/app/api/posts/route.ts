@@ -37,8 +37,8 @@ export async function POST(req: Request) {
 
     const post = await communityDb.createPost(session.user.id, result.data.content, result.data.courseId);
 
-    // إشعار push لكل المشتركين إن في بوست جديد — في الخلفية، مش بيعطّل الرد
-    broadcastNewPost(
+    // فحص سريع للسبام (استعلام واحد) ثم جدولة الإرسال بعد الرد — لو فشل ميوقعش البوست
+    await broadcastNewPost(
       session.user.id,
       session.user.name || "حد من الكوميونتي",
       result.data.content

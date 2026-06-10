@@ -83,7 +83,12 @@ export function PushPrompt() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(subscription.toJSON()),
       });
-      if (!res.ok) throw new Error("subscribe failed");
+      if (!res.ok) {
+        // السيرفر معرفش يسجّل — لازم نشيل اشتراك المتصفح كمان،
+        // وإلا هيفضل "مشترك" شكلاً ومفيش إشعار هيوصله أبداً
+        await subscription.unsubscribe().catch(() => {});
+        throw new Error("subscribe failed");
+      }
 
       setVisible(false);
     } catch {

@@ -30,13 +30,13 @@ export async function createNotification({
     data: { userId, type, title, message, link },
   });
 
-  // الـ push في الخلفية — لو فشل ميأثرش على العملية الأساسية
+  // الـ push بيتجدول بعد الرد (after) — مش بيعطّل ولا بيتقتل على Vercel
   sendPushToUser(userId, {
     title,
     body: message,
     link: link || "/dashboard",
     tag: `${type}:${userId}`,
-  }).catch(() => {});
+  });
 
   return notification;
 }
@@ -83,13 +83,25 @@ export async function notifyCommentReply(
 
 // ============ إشعارات جماعية (push فقط — لكل المشتركين) ============
 
+// مهلة بين إشعارات البوستات — عشان الكوميونتي النشط ميتحوّلش لمدفع سبام
+// والناس تشيل إذن الإشعارات (اللي مبيرجعش تاني)
+const POST_BROADCAST_COOLDOWN_MIN = 30;
+
 /** أي حد نشر بوست في الكوميونتي — بيوصل للكل ما عدا صاحب البوست */
 export async function broadcastNewPost(
   authorId: string,
   authorName: string,
   postContent: string
 ) {
-  return broadcastPush(
+  // لو اتنشر بوست تاني خلال آخر نص ساعة يبقى الناس لسه واخدة إشعار — نسكت
+  // (البوست الحالي نفسه محسوب، عشان كده الحد أكبر من 1)
+  const since = new Date(Date.now() - POST_BROADCAST_COOLDOWN_MIN * 60 * 1000);
+  const recentPosts = await prisma.post.count({
+    where: { createdAt: { gte: since } },
+  });
+  if (recentPosts > 1) return;
+
+  broadcastPush(
     {
       title: `${authorName} نشر في الكوميونتي`,
       body: `"${snippet(postContent)}"`,

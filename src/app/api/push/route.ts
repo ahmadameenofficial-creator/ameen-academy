@@ -5,8 +5,31 @@ import { z } from "zod";
 
 // ============ تسجيل/إلغاء اشتراك جهاز في الإشعارات ============
 
+// خدمات الـ push الشرعية بس — من غير القايمة دي أي مستخدم يقدر يسجّل
+// أي URL والسيرفر هيبعتله POST في كل broadcast (ثغرة SSRF)
+const PUSH_SERVICES = [
+  ".googleapis.com", // كروم/أندرويد (FCM)
+  ".push.apple.com", // سفاري/آيفون
+  ".push.services.mozilla.com", // فايرفوكس
+  ".notify.windows.com", // إيدج (WNS)
+];
+
+function isTrustedPushEndpoint(endpoint: string): boolean {
+  try {
+    const url = new URL(endpoint);
+    return (
+      url.protocol === "https:" &&
+      PUSH_SERVICES.some((s) => url.hostname.endsWith(s))
+    );
+  } catch {
+    return false;
+  }
+}
+
 const subscribeSchema = z.object({
-  endpoint: z.string().url().max(1000),
+  endpoint: z.string().url().max(1000).refine(isTrustedPushEndpoint, {
+    message: "endpoint مش من خدمة push معروفة",
+  }),
   keys: z.object({
     p256dh: z.string().min(1).max(300),
     auth: z.string().min(1).max(100),
