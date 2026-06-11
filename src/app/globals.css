@@ -282,3 +282,36 @@
     display: none !important;
   }
 }
+
+/* ============ BorderBeam — شعاع بيلف حوالين حدود الكارت ============ */
+.border-beam {
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  padding: 1.5px;
+  pointer-events: none;
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  mask-composite: exclude;
+  overflow: hidden;
+}
+.border-beam::before {
+  content: "";
+  position: absolute;
+  inset: -100%;
+  background: conic-gradient(
+    from 0deg,
+    transparent 0deg 300deg,
+    rgba(160, 2, 255, 0.9) 330deg,
+    rgba(212, 175, 55, 0.95) 352deg,
+    transparent 360deg
+  );
+  animation: border-beam-spin 5s linear infinite;
+}
+@keyframes border-beam-spin {
+  to { transform: rotate(360deg); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .border-beam::before { animation: none; }
+}

@@ -11,6 +11,7 @@ import {
   IconClock,
 } from "@tabler/icons-react";
 import { Button } from "@/components/ui/button";
+import { Tilt3D } from "@/components/ui/tilt-3d";
 
 export function HeroSection() {
   return (
@@ -111,7 +112,7 @@ export function HeroSection() {
 
           {/* الصورة */}
           <div className="order-1 lg:order-2 flex justify-center animate-fade-in">
-            <div className="relative">
+            <Tilt3D className="relative">
               {/* الصورة الرئيسية */}
               <div className="relative rounded-3xl overflow-hidden shadow-2xl shadow-brand-500/20 border-2 border-white/20">
                 <Image
@@ -134,7 +135,7 @@ export function HeroSection() {
                   <p className="text-[10px] text-muted-foreground">محتوى عملي محدّث</p>
                 </div>
               </div>
-            </div>
+            </Tilt3D>
           </div>
         </div>
       </div>

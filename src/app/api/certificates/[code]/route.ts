@@ -22,7 +22,7 @@ export async function GET(_req: Request, context: RouteContext) {
   }
 
   const pdfBytes = await generateCertificatePDF({
-    studentName: certificate.user.certificateName || certificate.user.name || "طالب",
+    studentName: certificate.user.certificateName || certificate.user.name || "Student",
     certificateCode: certificate.certificateCode,
     issuedAt: certificate.issuedAt,
     isPaid: certificate.course.price > 0,

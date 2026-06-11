@@ -16,13 +16,13 @@ export async function POST(req: Request) {
     }
 
     // الاسم اللي هيتطبع على الشهادة — لازم ثلاثي (3 كلمات على الأقل)
-    // وحروف بس (عربي أو إنجليزي) من غير أرقام أو رموز
+    // وبالإنجليزي إجباري (الشهادة كلها إنجليزي عشان لينكدإن والـ CV)
     const name = typeof certificateName === "string" ? certificateName.trim().replace(/\s+/g, " ") : "";
     const nameWords = name.split(" ").filter((w) => w.length >= 2);
-    const validChars = /^[؀-ۿa-zA-Z\s'.-]+$/.test(name);
+    const validChars = /^[a-zA-Z\s'.-]+$/.test(name);
     if (name && (!validChars || nameWords.length < 3 || name.length > 60)) {
       return NextResponse.json(
-        { error: "اكتب اسمك الثلاثي كامل (3 أسماء على الأقل) بالحروف بس" },
+        { error: "اكتب اسمك الثلاثي كامل (3 أسماء على الأقل) بالحروف الإنجليزية بس" },
         { status: 400 }
       );
     }
@@ -85,13 +85,16 @@ export async function POST(req: Request) {
     }
 
     // لازم يكون فيه اسم ثلاثي مسجّل — من الطلب الحالي أو من إصدار سابق
+    // ولو الاسم المخزّن قديم (عربي مثلاً) بنطلبه تاني بالإنجليزي
     const user = await prisma.user.findUnique({
       where: { id: session.user.id },
       select: { certificateName: true },
     });
-    if (!name && !user?.certificateName) {
+    const storedNameValid =
+      !!user?.certificateName && /^[a-zA-Z\s'.-]+$/.test(user.certificateName);
+    if (!name && !storedNameValid) {
       return NextResponse.json(
-        { error: "محتاجين اسمك الثلاثي الأول", needName: true },
+        { error: "محتاجين اسمك الثلاثي بالإنجليزي الأول", needName: true },
         { status: 400 }
       );
     }

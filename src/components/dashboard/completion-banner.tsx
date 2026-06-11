@@ -20,12 +20,12 @@ export function CompletionBanner({ courseId, courseTitle }: { courseId: string; 
   const [certName, setCertName] = useState("");
   const { error } = useToast();
 
-  // الاسم لازم ثلاثي: 3 كلمات على الأقل، كل كلمة حرفين أو أكتر، حروف بس
+  // الاسم لازم ثلاثي بالإنجليزي: 3 كلمات على الأقل، كل كلمة حرفين أو أكتر
   const nameWords = certName.trim().split(/\s+/).filter((w) => w.length >= 2);
   const nameValid =
     nameWords.length >= 3 &&
     certName.trim().length <= 60 &&
-    /^[؀-ۿa-zA-Z\s'.-]+$/.test(certName.trim());
+    /^[a-zA-Z\s'.-]+$/.test(certName.trim());
 
   // 1) ننشئ الشهادة (POST) ونرجع الـ certificateCode
   // 2) نفتح صفحة الـ PDF (GET /api/certificates/[code]) في تبويب جديد
@@ -115,7 +115,7 @@ export function CompletionBanner({ courseId, courseTitle }: { courseId: string; 
             </div>
 
             <p className="text-sm text-muted-foreground leading-relaxed">
-              اكتب اسمك <strong className="text-foreground">الثلاثي كامل</strong> زي
+              اكتب اسمك <strong className="text-foreground">الثلاثي كامل بالإنجليزي</strong> زي
               ما عايزه يظهر على الشهادة بالظبط.
             </p>
 
@@ -133,7 +133,7 @@ export function CompletionBanner({ courseId, courseTitle }: { courseId: string; 
               <IconAlertTriangle className="size-4 text-amber-600 shrink-0 mt-0.5" />
               <p className="text-xs text-amber-800 leading-relaxed">
                 الاسم ده هيتطبع على الشهادة زي ما هو ومش هتقدر تغيّره بسهولة بعدين.
-                ننصح تكتبه <strong>بالإنجليزي</strong> بنفس إملاء باسبورك أو حسابك على لينكدإن.
+                اكتبه <strong>بالإنجليزي</strong> بنفس إملاء باسبورك أو حسابك على لينكدإن.
               </p>
             </div>
 
@@ -151,7 +151,7 @@ export function CompletionBanner({ courseId, courseTitle }: { courseId: string; 
             </Button>
             {certName.trim() && !nameValid && (
               <p className="text-xs text-destructive text-center">
-                الاسم لازم يكون 3 كلمات على الأقل وبالحروف بس
+                الاسم لازم يكون 3 كلمات على الأقل وبالحروف الإنجليزية بس
               </p>
             )}
           </div>

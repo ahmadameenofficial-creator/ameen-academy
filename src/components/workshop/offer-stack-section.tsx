@@ -6,6 +6,7 @@ import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { IconCheck, IconArrowLeft, IconFlame } from "@tabler/icons-react";
 import { Button } from "@/components/ui/button";
+import { BorderBeam } from "@/components/ui/border-beam";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -137,6 +138,8 @@ export function OfferStackSection() {
                 "0 0 80px -20px rgba(160,2,255,0.15), inset 0 1px 0 0 rgba(160,2,255,0.1)",
             }}
           >
+            {/* شعاع ضوئي بيلف حوالين الكارت — بيشد العين للسعر والزرار */}
+            <BorderBeam />
             <div className="space-y-6 relative z-10">
               <div>
                 <p className="text-white/50 text-sm">القيمة الحقيقية</p>
