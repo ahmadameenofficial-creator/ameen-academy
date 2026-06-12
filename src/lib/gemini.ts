@@ -6,7 +6,9 @@
 // =====================================================
 
 const API_KEY = process.env.GEMINI_API_KEY;
-const TEXT_MODEL = "gemini-2.5-flash";
+// سلسلة موديلات: الأقوى الأول، ولو الكوتة المجانية خلصت (429) ننزل للي بعده.
+// flash كوتته المجانية 20 طلب/يوم بس — flash-lite كوتته أعلى بكتير وجودته كافية.
+const MODEL_CHAIN = ["gemini-2.5-flash", "gemini-2.5-flash-lite"];
 const BASE = "https://generativelanguage.googleapis.com/v1beta/models";
 
 export function isGeminiEnabled(): boolean {
@@ -17,18 +19,42 @@ interface GeminiTextResponse {
   candidates?: { content?: { parts?: { text?: string }[] } }[];
 }
 
-async function callGemini(model: string, body: unknown): Promise<string | null> {
+// parts: نص فقط أو نص + صورة (vision) — نفس الشكل اللي الـ API مستنيه
+type GeminiParts = ({ text: string } | { inline_data: { mime_type: string; data: string } })[];
+
+async function callGemini(
+  parts: GeminiParts,
+  generationConfig: Record<string, unknown>
+): Promise<string | null> {
   if (!API_KEY) return null;
-  const res = await fetch(`${BASE}/${model}:generateContent?key=${API_KEY}`, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(body),
-    // مهلة معقولة عشان مهلة Vercel functions
-    signal: AbortSignal.timeout(45000),
-  });
-  if (!res.ok) return null;
-  const data = (await res.json()) as GeminiTextResponse;
-  return data.candidates?.[0]?.content?.parts?.[0]?.text ?? null;
+
+  for (const model of MODEL_CHAIN) {
+    try {
+      const res = await fetch(`${BASE}/${model}:generateContent?key=${API_KEY}`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ contents: [{ parts }], generationConfig }),
+        // مهلة معقولة عشان مهلة Vercel functions
+        signal: AbortSignal.timeout(45000),
+      });
+
+      if (res.ok) {
+        const data = (await res.json()) as GeminiTextResponse;
+        const text = data.candidates?.[0]?.content?.parts?.[0]?.text ?? null;
+        if (text) return text;
+        console.error(`[gemini] ${model}: رد فاضي (ممكن truncation أو safety block)`);
+        continue;
+      }
+
+      // 429 = الكوتة خلصت لليوم — نجرب الموديل اللي بعده في السلسلة
+      console.error(`[gemini] ${model}: HTTP ${res.status}${res.status === 429 ? " (كوتة) — بنجرب الموديل التالي" : ""}`);
+      if (res.status !== 429) return null;
+    } catch (e) {
+      console.error(`[gemini] ${model}: ${e instanceof Error ? e.message : "خطأ غير معروف"}`);
+      return null;
+    }
+  }
+  return null;
 }
 
 /**
@@ -38,15 +64,12 @@ async function callGemini(model: string, body: unknown): Promise<string | null> 
 export async function rewriteScenario(baseScenario: string, brandTone: string): Promise<string | null> {
   const prompt = `إنت عميل مصري بتكلّم مصمم جرافيك بالعامية المصرية. خد البريف ده وأعيد صياغته كأنه رسالة واتساب حقيقية منك ليه — طبيعية، فيها شوية تفاصيل عن مشروعك، بنبرة "${brandTone}". خليها مقنعة وواقعية ومن غير أي رموز تعبيرية (emojis). البريف:\n\n${baseScenario}\n\nاكتب الرسالة بس، من غير أي مقدمة.`;
 
-  return callGemini(TEXT_MODEL, {
-    contents: [{ parts: [{ text: prompt }] }],
-    // thinkingBudget: 0 يقفل "التفكير الداخلي" بتاع 2.5-flash عشان ميستهلكش
-    // حد التوكنز ويقطع النص. مش محتاجين تفكير لإعادة صياغة بسيطة.
-    generationConfig: {
-      temperature: 0.9,
-      maxOutputTokens: 800,
-      thinkingConfig: { thinkingBudget: 0 },
-    },
+  // thinkingBudget: 0 يقفل "التفكير الداخلي" بتاع 2.5 عشان ميستهلكش
+  // حد التوكنز ويقطع النص. مش محتاجين تفكير لإعادة صياغة بسيطة.
+  return callGemini([{ text: prompt }], {
+    temperature: 0.9,
+    maxOutputTokens: 800,
+    thinkingConfig: { thinkingBudget: 0 },
   });
 }
 
@@ -148,14 +171,11 @@ ${isSocial ? `\n${CAMPAIGN_ANGLES}\n` : ""}
   "designRationale": "فقرة قصيرة (٢-٣ جمل) توجيه للمصمم: إيه اللي يخلّي التصميم ناجح، الزاوية الإبداعية، وإيه يتجنّبه."${campaignBlock}
 }`;
 
-  const text = await callGemini(TEXT_MODEL, {
-    contents: [{ parts: [{ text: prompt }] }],
-    generationConfig: {
-      temperature: 0.95,
-      // الحملة محتاجة توكنز أكتر عشان الـ4 بوستات (العربي توكنز تقيلة)
-      maxOutputTokens: isSocial ? 3200 : 1500,
-      thinkingConfig: { thinkingBudget: 0 },
-    },
+  const text = await callGemini([{ text: prompt }], {
+    temperature: 0.95,
+    // الحملة محتاجة توكنز أكتر عشان الـ4 بوستات (العربي توكنز تقيلة)
+    maxOutputTokens: isSocial ? 3200 : 1500,
+    thinkingConfig: { thinkingBudget: 0 },
   });
   if (!text) return null;
 
@@ -221,25 +241,14 @@ export async function analyzeSubmission(
   const prompt = `إنت مدرّب تصميم محترف. ده بريف: "${briefSummary}". قيّم التصميم المرفق مقابل البريف. رد بصيغة JSON فقط بالشكل ده بالظبط من غير أي نص تاني: {"score": <رقم من 0 ل 100>, "strengths": ["نقطة","نقطة"], "improvements": ["نقطة","نقطة"]}. الملاحظات بالعامية المصرية ومن غير emojis.`;
 
   try {
-    const res = await fetch(`${BASE}/${TEXT_MODEL}:generateContent?key=${API_KEY}`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        contents: [
-          {
-            parts: [
-              { text: prompt },
-              { inline_data: { mime_type: mimeType, data: imageBase64 } },
-            ],
-          },
-        ],
-        generationConfig: { temperature: 0.4, maxOutputTokens: 1000, thinkingConfig: { thinkingBudget: 0 } },
-      }),
-      signal: AbortSignal.timeout(45000),
-    });
-    if (!res.ok) return null;
-    const data = (await res.json()) as GeminiTextResponse;
-    const text = data.candidates?.[0]?.content?.parts?.[0]?.text;
+    // flash-lite بيدعم vision برضه — نفس سلسلة الـ fallback
+    const text = await callGemini(
+      [
+        { text: prompt },
+        { inline_data: { mime_type: mimeType, data: imageBase64 } },
+      ],
+      { temperature: 0.4, maxOutputTokens: 1000, thinkingConfig: { thinkingBudget: 0 } }
+    );
     if (!text) return null;
 
     // استخراج JSON من الرد
