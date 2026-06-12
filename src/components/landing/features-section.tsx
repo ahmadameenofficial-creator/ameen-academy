@@ -8,6 +8,7 @@ import {
   type Icon as TablerIcon,
 } from "@tabler/icons-react";
 import { Card } from "@/components/ui/card";
+import { Reveal } from "@/components/ui/reveal";
 
 const features: Array<{
   title: string;
@@ -50,6 +51,7 @@ export function FeaturesSection() {
   return (
     <section className="py-20 lg:py-28">
       <div className="container">
+        <Reveal>
         <div className="mx-auto max-w-2xl text-center">
           <div className="inline-flex items-center gap-2 rounded-full bg-brand-50 px-3 py-1 text-xs font-medium text-brand-700 dark:bg-brand-900/30 dark:text-brand-300">
             هدفنا الوحيد
@@ -63,14 +65,15 @@ export function FeaturesSection() {
             وتمشي معانا خطوة بخطوة لحد ما تشتغل وتكسب.
           </p>
         </div>
+        </Reveal>
 
         <div className="mx-auto mt-14 grid max-w-6xl gap-5 sm:grid-cols-2 lg:grid-cols-3">
-          {features.map((feature) => {
+          {features.map((feature, i) => {
             const Icon = feature.Icon;
             return (
+              <Reveal key={feature.title} delay={(i % 3) * 100} className="h-full">
               <Card
-                key={feature.title}
-                className="group relative overflow-hidden p-7 transition-all duration-300 hover:-translate-y-1 hover:border-brand-200 hover:shadow-xl hover:shadow-brand-500/5"
+                className="group relative h-full overflow-hidden p-6 sm:p-7 transition-all duration-300 hover:-translate-y-1 hover:border-brand-200 hover:shadow-xl hover:shadow-brand-500/5"
               >
                 <div className="absolute -right-12 -top-12 size-32 rounded-full bg-brand-100/0 transition-all duration-500 group-hover:bg-brand-100/40 dark:group-hover:bg-brand-900/30" />
 
@@ -87,6 +90,7 @@ export function FeaturesSection() {
                   </p>
                 </div>
               </Card>
+              </Reveal>
             );
           })}
         </div>

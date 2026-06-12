@@ -6,6 +6,7 @@ import {
   type Icon as TablerIcon,
 } from "@tabler/icons-react";
 import { Card } from "@/components/ui/card";
+import { Reveal } from "@/components/ui/reveal";
 
 // بدل آراء مخترعة (اللي بتضرب الثقة) — أسباب حقيقية تخلّيك تثق
 const reasons: Array<{
@@ -43,6 +44,7 @@ export function TestimonialsSection() {
   return (
     <section className="bg-muted/30 py-20 lg:py-28">
       <div className="container">
+        <Reveal>
         <div className="mx-auto max-w-2xl text-center">
           <div className="inline-flex items-center gap-2 rounded-full bg-brand-50 px-3 py-1 text-xs font-medium text-brand-700 dark:bg-brand-900/30 dark:text-brand-300">
             ليه تثق فينا
@@ -56,14 +58,15 @@ export function TestimonialsSection() {
             اللي بنقدّمه — وعشان كده حطّينا الريسك كله علينا.
           </p>
         </div>
+        </Reveal>
 
         <div className="mx-auto mt-14 grid max-w-5xl gap-5 sm:grid-cols-2">
-          {reasons.map((r) => {
+          {reasons.map((r, i) => {
             const Icon = r.Icon;
             return (
+              <Reveal key={r.title} delay={(i % 2) * 100} className="h-full">
               <Card
-                key={r.title}
-                className="group flex items-start gap-4 p-6 transition-all duration-300 hover:-translate-y-1 hover:border-brand-200 hover:shadow-lg"
+                className="group flex h-full items-start gap-4 p-5 sm:p-6 transition-all duration-300 hover:-translate-y-1 hover:border-brand-200 hover:shadow-lg"
               >
                 <div className="flex size-12 shrink-0 items-center justify-center rounded-xl bg-brand-50 transition-colors group-hover:bg-brand-500 dark:bg-brand-900/30">
                   <Icon
@@ -78,6 +81,7 @@ export function TestimonialsSection() {
                   </p>
                 </div>
               </Card>
+              </Reveal>
             );
           })}
         </div>

@@ -1,6 +1,8 @@
 import Link from "next/link";
 import { IconGift, IconArrowLeft, IconCheck } from "@tabler/icons-react";
 import { Button } from "@/components/ui/button";
+import { Reveal } from "@/components/ui/reveal";
+import { BorderBeam } from "@/components/ui/border-beam";
 
 const points = [
   "تفهم يعني إيه تصميم بجد",
@@ -12,7 +14,8 @@ export function FreeCourseSection() {
   return (
     <section className="py-14 lg:py-20">
       <div className="container">
-        <div className="relative overflow-hidden rounded-3xl border border-brand-200 bg-gradient-to-br from-brand-50 to-background p-8 lg:p-12">
+        <Reveal>
+        <div className="relative overflow-hidden rounded-3xl border border-brand-200 bg-gradient-to-br from-brand-50 to-background p-6 sm:p-8 lg:p-12">
           <div
             className="absolute -left-20 -top-20 size-72 rounded-full bg-brand-500/10 blur-3xl"
             aria-hidden
@@ -50,7 +53,12 @@ export function FreeCourseSection() {
               </ul>
 
               <div className="mt-7 flex flex-col items-center gap-3 sm:flex-row lg:justify-start">
-                <Button asChild variant="gradient" size="xl" className="w-full sm:w-auto">
+                <Button
+                  asChild
+                  variant="gradient"
+                  size="xl"
+                  className="btn-shine w-full sm:w-auto"
+                >
                   <Link href="/free">
                     ابدأ دلوقتي ببلاش
                     <IconArrowLeft className="size-5" />
@@ -62,9 +70,10 @@ export function FreeCourseSection() {
               </div>
             </div>
 
-            {/* السعر المرئي */}
+            {/* السعر المرئي — شعاع بيلف حواليه يشد العين */}
             <div className="flex justify-center">
               <div className="relative rounded-3xl border border-brand-200 bg-white p-8 text-center shadow-xl shadow-brand-500/10">
+                <BorderBeam />
                 <div className="absolute -top-3 right-1/2 translate-x-1/2 rounded-full bg-brand-500 px-3 py-1 text-xs font-bold text-white">
                   زكاة علم
                 </div>
@@ -77,6 +86,7 @@ export function FreeCourseSection() {
             </div>
           </div>
         </div>
+        </Reveal>
       </div>
     </section>
   );

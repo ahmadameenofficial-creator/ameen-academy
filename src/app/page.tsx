@@ -6,6 +6,7 @@ import { FreeCourseSection } from "@/components/landing/free-course-section";
 import { FeaturesSection } from "@/components/landing/features-section";
 import { TestimonialsSection } from "@/components/landing/testimonials-section";
 import { CtaSection } from "@/components/landing/cta-section";
+import { StickyCta } from "@/components/landing/sticky-cta";
 
 export const metadata: Metadata = {
   title: "أكاديمية أمين | اتعلم المهارات اللي هتجيبلك فلوس في 2026",
@@ -27,6 +28,7 @@ export default function HomePage() {
         <TestimonialsSection />
         <CtaSection />
       </main>
+      <StickyCta />
       <Footer />
     </>
   );

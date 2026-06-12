@@ -1,13 +1,15 @@
 import Link from "next/link";
 import { IconArrowLeft, IconSparkles } from "@tabler/icons-react";
 import { Button } from "@/components/ui/button";
+import { Reveal } from "@/components/ui/reveal";
 import { ROUTES } from "@/lib/constants";
 
 export function CtaSection() {
   return (
     <section className="py-20 lg:py-24">
       <div className="container">
-        <div className="relative overflow-hidden rounded-3xl gradient-brand p-10 text-center text-white shadow-2xl shadow-brand-500/20 lg:p-16">
+        <Reveal>
+        <div className="relative overflow-hidden rounded-3xl gradient-brand p-8 text-center text-white shadow-2xl shadow-brand-500/20 sm:p-10 lg:p-16">
           {/* Decorative shapes */}
           <div
             className="absolute -right-20 -top-20 size-72 rounded-full bg-white/10 blur-2xl"
@@ -41,7 +43,7 @@ export function CtaSection() {
               <Button
                 asChild
                 size="xl"
-                className="w-full bg-white text-brand-700 hover:bg-white/90 sm:w-auto"
+                className="btn-shine w-full bg-white text-brand-700 hover:bg-white/90 sm:w-auto"
               >
                 <Link href="/free">
                   ابدأ دلوقتي ببلاش
@@ -63,6 +65,7 @@ export function CtaSection() {
             </p>
           </div>
         </div>
+        </Reveal>
       </div>
     </section>
   );
