@@ -18,14 +18,17 @@ function keyOf(type: string, level: string): string {
 }
 
 /**
- * بيرجّع بريف AI من المخزون (عشوائي) لو المخزون دفّى وطلع الاحتمال،
+ * بيرجّع بريف AI من المخزون لو المخزون دفّى وطلع الاحتمال،
  * وإلا بيرجّع null عشان المحرك ينده Gemini.
+ * البريف اللي بيتقدّم بيتشال من المخزون — كل بريف بيتخدم مرة واحدة بس
+ * عشان مفيش مستخدم يشوف نفس البريف مرتين.
  */
 export function getCachedBrief(type: string, level: string): GeneratedBrief | null {
   const list = pool.get(keyOf(type, level));
   if (!list || list.length < MIN_POOL_TO_SERVE) return null;
   if (Math.random() > SERVE_PROBABILITY) return null;
-  return list[Math.floor(Math.random() * list.length)];
+  const [served] = list.splice(Math.floor(Math.random() * list.length), 1);
+  return served ?? null;
 }
 
 /** بيخزّن بريف AI ناجح في المخزون (بحد أقصى MAX_POOL لكل مفتاح). */
