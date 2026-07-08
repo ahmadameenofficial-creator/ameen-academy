@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import { auth, signOut } from "@/auth";
+import { prisma } from "@/lib/prisma";
 import { Logo } from "@/components/shared/logo";
 import { PushPrompt } from "@/components/shared/push-prompt";
 import {
@@ -11,6 +12,7 @@ import {
   IconUsers,
   IconUser,
   IconGift,
+  IconSchool,
 } from "@tabler/icons-react";
 import { NotificationsBell } from "@/components/notifications-bell";
 
@@ -24,6 +26,13 @@ export default async function DashboardLayout({
 
   const isAdmin = session.user.role === "ADMIN";
 
+  // لينك "مجموعتي" بيظهر بس للطلاب المربوطين بمجموعة حضورية
+  const offlineStudent = await prisma.offlineStudent.findUnique({
+    where: { userId: session.user.id },
+    select: { id: true },
+  });
+  const hasOfflineGroup = !!offlineStudent;
+
   return (
     <div className="min-h-screen bg-muted/30">
       <header className="sticky top-0 z-40 bg-background border-b border-border">
@@ -33,6 +42,9 @@ export default async function DashboardLayout({
             <nav className="hidden md:flex items-center gap-1">
               <NavLink href="/dashboard" icon={IconHome} label="الرئيسية" />
               <NavLink href="/courses" icon={IconBook} label="الكورسات" />
+              {hasOfflineGroup && (
+                <NavLink href="/dashboard/offline" icon={IconSchool} label="مجموعتي" />
+              )}
               <NavLink href="/community" icon={IconUsers} label="المجتمع" />
               <NavLink href="/dashboard/referrals" icon={IconGift} label="اربح معانا" />
               <NavLink href="/dashboard/profile" icon={IconUser} label="حسابي" />
@@ -70,6 +82,9 @@ export default async function DashboardLayout({
           <nav className="flex items-center gap-1 px-4 pb-3 overflow-x-auto scrollbar-hide">
             <NavLink href="/dashboard" icon={IconHome} label="الرئيسية" mobile />
             <NavLink href="/courses" icon={IconBook} label="الكورسات" mobile />
+            {hasOfflineGroup && (
+              <NavLink href="/dashboard/offline" icon={IconSchool} label="مجموعتي" mobile />
+            )}
             <NavLink href="/community" icon={IconUsers} label="المجتمع" mobile />
             <NavLink href="/dashboard/referrals" icon={IconGift} label="اربح معانا" mobile />
             <NavLink href="/dashboard/profile" icon={IconUser} label="حسابي" mobile />

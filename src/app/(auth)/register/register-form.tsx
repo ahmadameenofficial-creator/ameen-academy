@@ -48,7 +48,8 @@ export function RegisterForm({ googleEnabled = false }: { googleEnabled?: boolea
       try {
         localStorage.removeItem(REFERRAL_STORAGE_KEY);
       } catch {}
-      router.push("/login?registered=1");
+      // نمرر الـ callbackUrl عشان اللي جاي من لينك (زي ربط الأوفلاين) يرجع لمكانه بعد الدخول
+      router.push(`/login?registered=1&callbackUrl=${encodeURIComponent(callbackUrl)}`);
     } catch (e) {
       setError(e instanceof ApiError ? e.message : "حصل مشكلة، جرّب تاني");
     } finally {

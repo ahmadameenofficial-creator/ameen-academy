@@ -45,29 +45,29 @@ model User {
   updatedAt       DateTime  @updatedAt
 
   // نظام الإحالة (Affiliate)
-  referralCode    String?   @unique // كود الإحالة الخاص بالمستخدم
-  referredById    String? // مين أحاله للمنصة
+  referralCode String? @unique // كود الإحالة الخاص بالمستخدم
+  referredById String? // مين أحاله للمنصة
 
   // العلاقات
-  accounts        Account[]
-  sessions        Session[]
-  enrollments     Enrollment[]
-  progress        LessonProgress[]
-  posts           Post[]
-  comments        Comment[]
-  likes           Like[]
-  reactions       Reaction[]
-  notifications   Notification[]
+  accounts          Account[]
+  sessions          Session[]
+  enrollments       Enrollment[]
+  progress          LessonProgress[]
+  posts             Post[]
+  comments          Comment[]
+  likes             Like[]
+  reactions         Reaction[]
+  notifications     Notification[]
   pushSubscriptions PushSubscription[]
-  ratings         Rating[]
-  payments        Payment[]
-  certificates    Certificate[]
-  videoTokens     VideoToken[]
-  loginAttempts   LoginAttempt[]
-  coursesCreated  Course[]         @relation("CourseInstructor")
-  blogPosts       BlogPost[]       @relation("BlogAuthor")
-  blogComments    BlogComment[]    @relation("BlogCommentAuthor")
-  blogLikes       BlogLike[]       @relation("BlogLikeUser")
+  ratings           Rating[]
+  payments          Payment[]
+  certificates      Certificate[]
+  videoTokens       VideoToken[]
+  loginAttempts     LoginAttempt[]
+  coursesCreated    Course[]           @relation("CourseInstructor")
+  blogPosts         BlogPost[]         @relation("BlogAuthor")
+  blogComments      BlogComment[]      @relation("BlogCommentAuthor")
+  blogLikes         BlogLike[]         @relation("BlogLikeUser")
 
   // الرسائل المباشرة
   conversationsAsP1 Conversation[] @relation("ConversationP1")
@@ -75,9 +75,9 @@ model User {
   sentMessages      Message[]      @relation("MessageSender")
 
   // علاقات الإحالة
-  referredBy      User?            @relation("UserReferrals", fields: [referredById], references: [id], onDelete: SetNull)
-  referrals       User[]           @relation("UserReferrals")
-  commissions     Commission[]     @relation("CommissionReferrer")
+  referredBy  User?        @relation("UserReferrals", fields: [referredById], references: [id], onDelete: SetNull)
+  referrals   User[]       @relation("UserReferrals")
+  commissions Commission[] @relation("CommissionReferrer")
 
   // منصة البريف (Ameen.academy/brief)
   briefsCreated    Brief[]           @relation("BriefCreator")
@@ -85,6 +85,9 @@ model User {
   briefVotes       BriefVote[]
   designerStats    DesignerStats?
   designerBadges   DesignerBadge[]
+
+  // الأوفلاين — ربط حساب الموقع بسجل الطالب الحضوري
+  offlineStudent OfflineStudent?
 
   @@index([email])
   @@index([role])
@@ -164,35 +167,35 @@ model LoginAttempt {
 
 // ============ الكورسات ============
 model Course {
-  id              String   @id @default(cuid())
-  slug            String   @unique
-  title           String
-  description     String   @db.Text
+  id               String    @id @default(cuid())
+  slug             String    @unique
+  title            String
+  description      String    @db.Text
   shortDescription String?
-  thumbnail       String?
-  trailerVideoId  String?
-  category        String
-  level           Level    @default(BEGINNER)
-  language        String   @default("ar")
-  price           Int      // بالقرش (499 جنيه = 49900)
-  comparePrice    Int?     // السعر قبل الخصم
-  duration        Int      @default(0) // إجمالي بالثواني
-  isPublished     Boolean  @default(false)
-  isFeatured      Boolean  @default(false)
-  publishedAt     DateTime?
-  instructorId    String
-  createdAt       DateTime @default(now())
-  updatedAt       DateTime @updatedAt
+  thumbnail        String?
+  trailerVideoId   String?
+  category         String
+  level            Level     @default(BEGINNER)
+  language         String    @default("ar")
+  price            Int // بالقرش (499 جنيه = 49900)
+  comparePrice     Int? // السعر قبل الخصم
+  duration         Int       @default(0) // إجمالي بالثواني
+  isPublished      Boolean   @default(false)
+  isFeatured       Boolean   @default(false)
+  publishedAt      DateTime?
+  instructorId     String
+  createdAt        DateTime  @default(now())
+  updatedAt        DateTime  @updatedAt
 
-  instructor    User           @relation("CourseInstructor", fields: [instructorId], references: [id])
-  modules       Module[]
-  lessons       Lesson[]
-  enrollments   Enrollment[]
-  posts         Post[]
-  ratings       Rating[]
-  payments      Payment[]
-  certificates  Certificate[]
-  coupons       Coupon[]
+  instructor   User          @relation("CourseInstructor", fields: [instructorId], references: [id])
+  modules      Module[]
+  lessons      Lesson[]
+  enrollments  Enrollment[]
+  posts        Post[]
+  ratings      Rating[]
+  payments     Payment[]
+  certificates Certificate[]
+  coupons      Coupon[]
 
   @@index([isPublished, isFeatured])
   @@index([instructorId])
@@ -221,18 +224,18 @@ model Module {
 
 // ============ الدروس ============
 model Lesson {
-  id            String     @id @default(cuid())
-  courseId      String
-  moduleId      String?
-  title         String
-  description   String?    @db.Text
-  videoId       String?    // Bunny Stream Video ID
-  duration      Int        @default(0) // بالثواني
-  order         Int
-  isFree        Boolean    @default(false) // متاحة للمعاينة
-  attachments   Json?      // [{name, url, size}]
-  createdAt     DateTime   @default(now())
-  updatedAt     DateTime   @updatedAt
+  id          String   @id @default(cuid())
+  courseId    String
+  moduleId    String?
+  title       String
+  description String?  @db.Text
+  videoId     String? // Bunny Stream Video ID
+  duration    Int      @default(0) // بالثواني
+  order       Int
+  isFree      Boolean  @default(false) // متاحة للمعاينة
+  attachments Json? // [{name, url, size}]
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
 
   course      Course           @relation(fields: [courseId], references: [id], onDelete: Cascade)
   module      Module?          @relation(fields: [moduleId], references: [id], onDelete: SetNull)
@@ -261,15 +264,15 @@ model Enrollment {
 
 // ============ تتبع التقدم ============
 model LessonProgress {
-  id              String    @id @default(cuid())
-  userId          String
-  lessonId        String
-  isCompleted     Boolean   @default(false)
-  watchedSeconds  Int       @default(0)
-  lastPosition    Int       @default(0) // resume watching
-  watchCount      Int       @default(0)
-  completedAt     DateTime?
-  updatedAt       DateTime  @updatedAt
+  id             String    @id @default(cuid())
+  userId         String
+  lessonId       String
+  isCompleted    Boolean   @default(false)
+  watchedSeconds Int       @default(0)
+  lastPosition   Int       @default(0) // resume watching
+  watchCount     Int       @default(0)
+  completedAt    DateTime?
+  updatedAt      DateTime  @updatedAt
 
   user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
   lesson Lesson @relation(fields: [lessonId], references: [id], onDelete: Cascade)
@@ -299,20 +302,20 @@ model VideoToken {
 
 // ============ المدفوعات ============
 model Payment {
-  id              String        @id @default(cuid())
-  userId          String
-  courseId        String
-  amount          Int           // بالقرش
-  currency        String        @default("EGP")
-  status          PaymentStatus @default(PENDING)
-  method          String?       // card, wallet, fawry
-  paymobOrderId   String?       @unique
-  paymobTxnId     String?       @unique
-  couponCode      String?
-  discount        Int           @default(0) // مبلغ الخصم بالقرش
-  metadata        Json?
-  createdAt       DateTime      @default(now())
-  paidAt          DateTime?
+  id            String        @id @default(cuid())
+  userId        String
+  courseId      String
+  amount        Int // بالقرش
+  currency      String        @default("EGP")
+  status        PaymentStatus @default(PENDING)
+  method        String? // card, wallet, fawry
+  paymobOrderId String?       @unique
+  paymobTxnId   String?       @unique
+  couponCode    String?
+  discount      Int           @default(0) // مبلغ الخصم بالقرش
+  metadata      Json?
+  createdAt     DateTime      @default(now())
+  paidAt        DateTime?
 
   user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
   course Course @relation(fields: [courseId], references: [id], onDelete: Cascade)
@@ -361,11 +364,11 @@ model Coupon {
   id            String    @id @default(cuid())
   code          String    @unique
   discountType  String    @default("percentage") // percentage | fixed
-  discountValue Int       // نسبة مئوية أو مبلغ بالقرش
-  maxUses       Int?      // null = unlimited
+  discountValue Int // نسبة مئوية أو مبلغ بالقرش
+  maxUses       Int? // null = unlimited
   usedCount     Int       @default(0)
-  minPrice      Int?      // أقل مبلغ للتطبيق (بالقرش)
-  courseId      String?   // null = ينطبق على كل الكورسات
+  minPrice      Int? // أقل مبلغ للتطبيق (بالقرش)
+  courseId      String? // null = ينطبق على كل الكورسات
   expiresAt     DateTime?
   isActive      Boolean   @default(true)
   createdAt     DateTime  @default(now())
@@ -378,7 +381,7 @@ model Rating {
   id        String   @id @default(cuid())
   userId    String
   courseId  String
-  rating    Int      // 1-5
+  rating    Int // 1-5
   comment   String?  @db.Text
   isPinned  Boolean  @default(false)
   createdAt DateTime @default(now())
@@ -395,11 +398,11 @@ model Rating {
 model Post {
   id            String   @id @default(cuid())
   userId        String
-  courseId      String?  // اختياري - منشور في كورس معين
+  courseId      String? // اختياري - منشور في كورس معين
   content       String   @db.Text
   image         String?
-  mediaUrl      String?   // رابط الصورة أو الفيديو
-  mediaType     String?   // "image" أو "video"
+  mediaUrl      String? // رابط الصورة أو الفيديو
+  mediaType     String? // "image" أو "video"
   likesCount    Int      @default(0)
   commentsCount Int      @default(0)
   isPinned      Boolean  @default(false)
@@ -422,7 +425,7 @@ model Comment {
   id         String   @id @default(cuid())
   postId     String
   userId     String
-  parentId   String?  // للردود على كومنت
+  parentId   String? // للردود على كومنت
   content    String   @db.Text
   likesCount Int      @default(0)
   isDeleted  Boolean  @default(false)
@@ -460,7 +463,7 @@ model Reaction {
   userId    String
   postId    String?
   commentId String?
-  type      String   // "like" | "love" | "haha" | "wow" | "sad"
+  type      String // "like" | "love" | "haha" | "wow" | "sad"
   createdAt DateTime @default(now())
 
   user    User     @relation(fields: [userId], references: [id], onDelete: Cascade)
@@ -540,26 +543,26 @@ model Certificate {
 
 // ============ المدونة ============
 model BlogPost {
-  id            String    @id @default(cuid())
-  slug          String    @unique
-  title         String
-  excerpt       String?   @db.Text // ملخص قصير للمقال
-  content       String    @db.Text // المحتوى بالـ Markdown
-  thumbnail     String?
-  category      String    // مثلاً: "تصميم", "AI", "فريلانس", "مهارات"
-  tags          String[]  // كلمات مفتاحية
-  authorId      String
-  isPublished   Boolean   @default(false)
-  isFeatured    Boolean   @default(false)
-  viewsCount    Int       @default(0)
-  readingTime   Int       @default(0) // بالدقايق
-  publishedAt   DateTime?
-  createdAt     DateTime  @default(now())
-  updatedAt     DateTime  @updatedAt
+  id          String    @id @default(cuid())
+  slug        String    @unique
+  title       String
+  excerpt     String?   @db.Text // ملخص قصير للمقال
+  content     String    @db.Text // المحتوى بالـ Markdown
+  thumbnail   String?
+  category    String // مثلاً: "تصميم", "AI", "فريلانس", "مهارات"
+  tags        String[] // كلمات مفتاحية
+  authorId    String
+  isPublished Boolean   @default(false)
+  isFeatured  Boolean   @default(false)
+  viewsCount  Int       @default(0)
+  readingTime Int       @default(0) // بالدقايق
+  publishedAt DateTime?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
 
-  author       User          @relation("BlogAuthor", fields: [authorId], references: [id])
-  comments     BlogComment[]
-  likes        BlogLike[]
+  author   User          @relation("BlogAuthor", fields: [authorId], references: [id])
+  comments BlogComment[]
+  likes    BlogLike[]
 
   @@index([isPublished, isFeatured, publishedAt])
   @@index([category])
@@ -600,15 +603,15 @@ model BlogLike {
 
 // ============ الرسائل المباشرة (DMs) ============
 model Conversation {
-  id            String    @id @default(cuid())
+  id             String   @id @default(cuid())
   participant1Id String
   participant2Id String
-  lastMessageAt DateTime  @default(now())
-  createdAt     DateTime  @default(now())
+  lastMessageAt  DateTime @default(now())
+  createdAt      DateTime @default(now())
 
-  participant1  User      @relation("ConversationP1", fields: [participant1Id], references: [id], onDelete: Cascade)
-  participant2  User      @relation("ConversationP2", fields: [participant2Id], references: [id], onDelete: Cascade)
-  messages      Message[]
+  participant1 User      @relation("ConversationP1", fields: [participant1Id], references: [id], onDelete: Cascade)
+  participant2 User      @relation("ConversationP2", fields: [participant2Id], references: [id], onDelete: Cascade)
+  messages     Message[]
 
   @@unique([participant1Id, participant2Id])
   @@index([participant1Id, lastMessageAt])
@@ -616,13 +619,13 @@ model Conversation {
 }
 
 model Message {
-  id              String   @id @default(cuid())
-  conversationId  String
-  senderId        String
-  content         String   @db.Text
-  image           String?  // رابط صورة مرفقة (اختياري)
-  isRead          Boolean  @default(false)
-  createdAt       DateTime @default(now())
+  id             String   @id @default(cuid())
+  conversationId String
+  senderId       String
+  content        String   @db.Text
+  image          String? // رابط صورة مرفقة (اختياري)
+  isRead         Boolean  @default(false)
+  createdAt      DateTime @default(now())
 
   conversation Conversation @relation(fields: [conversationId], references: [id], onDelete: Cascade)
   sender       User         @relation("MessageSender", fields: [senderId], references: [id], onDelete: Cascade)
@@ -637,7 +640,7 @@ model AuditLog {
   userId    String // الأدمن اللي عمل الفعل
   action    String // مثلاً: "payment.approve", "student.ban", "course.delete"
   target    String? // ID الحاجة اللي اتأثرت
-  details   String? @db.Text // تفاصيل إضافية (JSON أو نص)
+  details   String?  @db.Text // تفاصيل إضافية (JSON أو نص)
   ipAddress String?
   createdAt DateTime @default(now())
 
@@ -651,18 +654,18 @@ model AuditLog {
 
 // طلبات الانضمام للـ VIP
 model VipApplication {
-  id          String   @id @default(cuid())
-  userId      String?  // لو مسجّل بالفعل
+  id          String               @id @default(cuid())
+  userId      String? // لو مسجّل بالفعل
   name        String
   email       String
   phone       String
-  experience  String   @db.Text // مستوى الخبرة الحالي
-  currentWork String   @db.Text // بيشتغل في إيه دلوقتي
-  goal        String   @db.Text // إيه هدفه من VIP
+  experience  String               @db.Text // مستوى الخبرة الحالي
+  currentWork String               @db.Text // بيشتغل في إيه دلوقتي
+  goal        String               @db.Text // إيه هدفه من VIP
   status      VipApplicationStatus @default(PENDING)
-  reviewNotes String?  @db.Text
+  reviewNotes String?              @db.Text
   reviewedAt  DateTime?
-  createdAt   DateTime @default(now())
+  createdAt   DateTime             @default(now())
 
   @@index([status, createdAt])
   @@index([email])
@@ -672,23 +675,23 @@ enum VipApplicationStatus {
   PENDING
   APPROVED
   REJECTED
-  ENROLLED  // قبل ودفع
+  ENROLLED // قبل ودفع
 }
 
 // عضويات الـ VIP (الفعّالين)
 model VipMembership {
-  id            String   @id @default(cuid())
-  userId        String   @unique
-  plan          VipPlan  @default(MONTHLY)
-  status        VipStatus @default(ACTIVE)
-  startedAt     DateTime @default(now())
+  id               String    @id @default(cuid())
+  userId           String    @unique
+  plan             VipPlan   @default(MONTHLY)
+  status           VipStatus @default(ACTIVE)
+  startedAt        DateTime  @default(now())
   currentPeriodEnd DateTime
-  cancelledAt   DateTime?
-  totalPaid     Int      @default(0) // بالقرش
+  cancelledAt      DateTime?
+  totalPaid        Int       @default(0) // بالقرش
 
   // الـ hot seat - دور كل عضو
-  hotSeatOrder  Int      @default(0)
-  hadHotSeats   Int      @default(0)
+  hotSeatOrder Int @default(0)
+  hadHotSeats  Int @default(0)
 
   @@index([status, currentPeriodEnd])
 }
@@ -708,16 +711,16 @@ enum VipStatus {
 
 // اللايف ستريم اللي بيتعمل كل أسبوعين
 model VipLive {
-  id            String   @id @default(cuid())
+  id            String        @id @default(cuid())
   title         String
-  description   String?  @db.Text
+  description   String?       @db.Text
   scheduledAt   DateTime
-  durationMins  Int      @default(90)
-  meetingUrl    String?  // Zoom/Google Meet
-  recordingUrl  String?  // اللينك بعد ما يتسجّل
-  hotSeatUserId String?  // مين هياخد الـ hot seat اللايف ده
+  durationMins  Int           @default(90)
+  meetingUrl    String? // Zoom/Google Meet
+  recordingUrl  String? // اللينك بعد ما يتسجّل
+  hotSeatUserId String? // مين هياخد الـ hot seat اللايف ده
   status        VipLiveStatus @default(SCHEDULED)
-  createdAt     DateTime @default(now())
+  createdAt     DateTime      @default(now())
 
   @@index([scheduledAt])
   @@index([status, scheduledAt])
@@ -732,42 +735,42 @@ enum VipLiveStatus {
 
 // الـ briefs الشهرية
 model VipBrief {
-  id          String   @id @default(cuid())
-  title       String
-  description String   @db.Text
-  clientStyle String   @db.Text // الـ brief بأسلوب client (الفعلي)
-  deliverables String  @db.Text // اللي مطلوب يتسلّم
-  dueDate     DateTime
-  publishedAt DateTime @default(now())
-  attachments String?  @db.Text // JSON of refs
+  id           String   @id @default(cuid())
+  title        String
+  description  String   @db.Text
+  clientStyle  String   @db.Text // الـ brief بأسلوب client (الفعلي)
+  deliverables String   @db.Text // اللي مطلوب يتسلّم
+  dueDate      DateTime
+  publishedAt  DateTime @default(now())
+  attachments  String?  @db.Text // JSON of refs
 
   @@index([publishedAt])
 }
 
 // الـ resources المتاحة للأعضاء
 model VipResource {
-  id          String   @id @default(cuid())
-  title       String
-  description String?  @db.Text
-  category    String   // mockups, fonts, contracts, scripts, etc
-  fileUrl     String
-  thumbnailUrl String?
-  downloadCount Int    @default(0)
-  publishedAt DateTime @default(now())
+  id            String   @id @default(cuid())
+  title         String
+  description   String?  @db.Text
+  category      String // mockups, fonts, contracts, scripts, etc
+  fileUrl       String
+  thumbnailUrl  String?
+  downloadCount Int      @default(0)
+  publishedAt   DateTime @default(now())
 
   @@index([category, publishedAt])
 }
 
 // الـ job board
 model VipJob {
-  id          String   @id @default(cuid())
+  id          String    @id @default(cuid())
   title       String
-  description String   @db.Text
-  budget      String   // text عشان نقدر نكتب "500-1000 ج" مثلاً
-  type        String   // freelance, full-time, contract
-  clientInfo  String?  // معلومات عن العميل
-  contactInfo String   // إزاي يتواصلوا
-  postedAt    DateTime @default(now())
+  description String    @db.Text
+  budget      String // text عشان نقدر نكتب "500-1000 ج" مثلاً
+  type        String // freelance, full-time, contract
+  clientInfo  String? // معلومات عن العميل
+  contactInfo String // إزاي يتواصلوا
+  postedAt    DateTime  @default(now())
   expiresAt   DateTime
   filledAt    DateTime?
 
@@ -781,9 +784,9 @@ model VipJob {
 // =====================================================
 
 enum BriefType {
-  LOGO            // تصميم شعار
-  SOCIAL_POST     // بوست سوشيال ميديا
-  BRAND_IDENTITY  // هوية بصرية كاملة
+  LOGO // تصميم شعار
+  SOCIAL_POST // بوست سوشيال ميديا
+  BRAND_IDENTITY // هوية بصرية كاملة
 }
 
 enum BriefLevel {
@@ -794,7 +797,7 @@ enum BriefLevel {
 
 enum BriefSource {
   TEMPLATE // اتولّد من محرك القوالب
-  AI       // اتولّد بمساعدة Gemini
+  AI // اتولّد بمساعدة Gemini
 }
 
 enum SubmissionStatus {
@@ -810,17 +813,17 @@ model Brief {
   type             BriefType
   level            BriefLevel  @default(BEGINNER)
   source           BriefSource @default(TEMPLATE)
-  clientName       String      // اسم العميل الوهمي
-  clientBusiness   String      // اسم النشاط (مثلاً: مطعم كشري المعادي)
-  businessCategory String      // فئة النشاط (مطاعم، عيادات، أزياء...)
-  title            String      // عنوان البريف
+  clientName       String // اسم العميل الوهمي
+  clientBusiness   String // اسم النشاط (مثلاً: مطعم كشري المعادي)
+  businessCategory String // فئة النشاط (مطاعم، عيادات، أزياء...)
+  title            String // عنوان البريف
   scenario         String      @db.Text // السرد الكامل بنبرة العميل
   audience         String      @db.Text // الجمهور المستهدف
-  brandTone        String      // نبرة البراند
-  constraints      Json        // {budget, deadline, forbiddenColors, notes}
-  deliverables     Json        // [{name, format, size}]
-  details          Json?       // {goal, keyMessage, copy{headline,subline,cta,hashtag}, mustInclude[], moodKeywords[], dos[], donts[]}
-  createdById      String?     // مين ولّده (null = توليد مجهول/مبدئي)
+  brandTone        String // نبرة البراند
+  constraints      Json // {budget, deadline, forbiddenColors, notes}
+  deliverables     Json // [{name, format, size}]
+  details          Json? // {goal, keyMessage, copy{headline,subline,cta,hashtag}, mustInclude[], moodKeywords[], dos[], donts[]}
+  createdById      String? // مين ولّده (null = توليد مجهول/مبدئي)
   isPublished      Boolean     @default(true)
   isFeatured       Boolean     @default(false)
   viewsCount       Int         @default(0)
@@ -828,8 +831,8 @@ model Brief {
   createdAt        DateTime    @default(now())
   updatedAt        DateTime    @updatedAt
 
-  createdBy   User?            @relation("BriefCreator", fields: [createdById], references: [id], onDelete: SetNull)
-  challenge   BriefChallenge?  @relation(fields: [challengeId], references: [id], onDelete: SetNull)
+  createdBy   User?             @relation("BriefCreator", fields: [createdById], references: [id], onDelete: SetNull)
+  challenge   BriefChallenge?   @relation(fields: [challengeId], references: [id], onDelete: SetNull)
   submissions BriefSubmission[]
 
   @@index([isPublished, isFeatured, createdAt])
@@ -843,12 +846,12 @@ model BriefSubmission {
   id             String           @id @default(cuid())
   briefId        String
   userId         String
-  imageUrl       String           // الصورة على Bunny Storage
+  imageUrl       String // الصورة على Bunny Storage
   thumbnailUrl   String?
   note           String?          @db.Text // ملاحظات المصمم على حله
   votesCount     Int              @default(0)
-  aiScore        Int?             // تقييم AI (0-100)
-  aiFeedback     Json?            // ملاحظات Gemini المنظمة
+  aiScore        Int? // تقييم AI (0-100)
+  aiFeedback     Json? // ملاحظات Gemini المنظمة
   expertFeedback String?          @db.Text // فيدباك خبير/أدمن
   status         SubmissionStatus @default(PUBLISHED)
   createdAt      DateTime         @default(now())
@@ -900,8 +903,8 @@ model BriefBadge {
   key         String   @unique // معرّف ثابت (first_brief, logo_master...)
   name        String
   description String
-  icon        String   // اسم أيقونة Tabler
-  threshold   Json     // معيار الحصول عليها
+  icon        String // اسم أيقونة Tabler
+  threshold   Json // معيار الحصول عليها
   createdAt   DateTime @default(now())
 
   designers DesignerBadge[]
@@ -937,4 +940,110 @@ model BriefChallenge {
   briefs Brief[]
 
   @@index([isActive, endsAt])
+}
+
+// ============================================================
+// الأوفلاين — المجموعات الحضورية (إدارة يدوية من الأدمن)
+// راجع docs/OFFLINE.md قبل أي تعديل هنا
+// ============================================================
+
+// المجموعة الأوفلاين (حصة مرة واحدة أسبوعيًا)
+model OfflineGroup {
+  id        String  @id @default(cuid())
+  name      String // مثال: "جروب السبت — دفعة يناير"
+  dayOfWeek Int? // يوم الحصة: 0=الأحد ... 6=السبت
+  price     Int     @default(0) // السعر الافتراضي للطالب بالقرش
+  expenses  Int     @default(0) // مصاريف الجروب بالقرش (قاعة/طباعة) — الربح = المحصّل - المصاريف
+  notes     String?
+
+  // كود الحصة — بيتولد من الأدمن في القاعة، صالح ليوم واحد بس
+  sessionCode     String?
+  sessionCodeDate DateTime?
+  isActive        Boolean   @default(true)
+  createdAt       DateTime  @default(now())
+
+  students OfflineStudent[]
+}
+
+enum OfflineStudentStatus {
+  PENDING // طلب انضمام من الفورم العامة — مستني موافقة الأدمن
+  ACTIVE // مستمر
+  DROPPED // انسحب
+  COMPLETED // خلّص الكورس
+}
+
+// الطالب الأوفلاين — سجل يدوي، الربط بحساب الموقع في مرحلة لاحقة
+model OfflineStudent {
+  id            String               @id @default(cuid())
+  groupId       String
+  fullName      String // الاسم الثلاثي
+  email         String? // إيميل الطالب (بيتطلب في فورم الانضمام)
+  whatsapp      String // رقم الواتس (01xxxxxxxxx)
+  guardianPhone String? // رقم ولي الأمر لو تحت 18
+  age           Int?
+  address       String? // المنطقة/العنوان
+  agreedPrice   Int                  @default(0) // المتفق عليه بالقرش — 0 مع isFree = مجاني
+  isFree        Boolean              @default(false) // مشترك مجانًا
+  nextDueDate   DateTime? // ميعاد الدفعة الجاية (null = مفيش مستحق)
+  nextDueAmount Int? // مبلغ الدفعة الجاية بالقرش
+  status        OfflineStudentStatus @default(ACTIVE)
+  notes         String?
+  createdAt     DateTime             @default(now())
+
+  // ربط حساب الموقع: الأدمن بيبعت لينك دعوة فيه inviteToken ⇒ الطالب يعمل حساب/يدخل ⇒ userId بيتسجل
+  userId      String? @unique
+  inviteToken String? @unique
+
+  user       User?               @relation(fields: [userId], references: [id], onDelete: SetNull)
+  group      OfflineGroup        @relation(fields: [groupId], references: [id], onDelete: Cascade)
+  payments   OfflinePayment[]
+  attendance OfflineAttendance[]
+
+  @@index([groupId, status])
+  @@index([nextDueDate])
+}
+
+enum OfflinePayMethod {
+  CASH // كاش في الإيد
+  INSTAPAY // إنستا باي
+  VODAFONE_CASH // فودافون كاش
+  OTHER // غير ذلك
+}
+
+// دفعة يدوية — المتبقي بيتحسب دايمًا (المتفق عليه - مجموع الدفعات) ومش بيتخزن
+model OfflinePayment {
+  id        String           @id @default(cuid())
+  studentId String
+  amount    Int // بالقرش
+  method    OfflinePayMethod
+  paidAt    DateTime         @default(now())
+  note      String?
+  createdAt DateTime         @default(now())
+
+  student OfflineStudent @relation(fields: [studentId], references: [id], onDelete: Cascade)
+
+  @@index([studentId])
+}
+
+enum OfflineAttendanceStatus {
+  PRESENT // حضر
+  ABSENT // غاب
+  EXCUSED // غاب بعذر
+}
+
+// حضور حصة — الجروب + التاريخ بيحددوا الحصة (مفيش جدول حصص منفصل)
+model OfflineAttendance {
+  id         String                  @id @default(cuid())
+  studentId  String
+  date       DateTime // تاريخ الحصة (منتصف الليل UTC)
+  status     OfflineAttendanceStatus
+  self       Boolean                 @default(false) // الطالب سجل بنفسه بكود الحصة
+  checkInAt  DateTime? // وقت تسجيل الحضور الفعلي
+  checkOutAt DateTime? // وقت تسجيل الانصراف
+  createdAt  DateTime                @default(now())
+
+  student OfflineStudent @relation(fields: [studentId], references: [id], onDelete: Cascade)
+
+  @@unique([studentId, date])
+  @@index([date])
 }

@@ -6,3 +6,4 @@ export * as adminService from "./admin.service";
 export * as blogService from "./blog.service";
 export * as referralService from "./referral.service";
 export * as leadsService from "./leads.service";
+export * as offlineService from "./offline.service";

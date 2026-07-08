@@ -14,6 +14,7 @@ import {
   IconAddressBook,
   IconCrown,
   IconPalette,
+  IconSchool,
 } from "@tabler/icons-react";
 
 const navItems = [
@@ -22,6 +23,7 @@ const navItems = [
   { href: "/admin/brief", label: "البريف", icon: IconPalette },
   { href: "/admin/vip", label: "VIP", icon: IconCrown },
   { href: "/admin/blog", label: "المدونة", icon: IconArticle },
+  { href: "/admin/offline", label: "الأوفلاين", icon: IconSchool },
   { href: "/admin/students", label: "الطلاب", icon: IconUsers },
   { href: "/admin/leads", label: "العملاء", icon: IconAddressBook },
   { href: "/admin/payments", label: "المدفوعات", icon: IconCreditCard },
