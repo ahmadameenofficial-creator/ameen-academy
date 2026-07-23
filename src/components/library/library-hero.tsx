@@ -26,21 +26,24 @@ const floatingBooks = FLOATING_IDS.map(
 // عدّاد أرقام
 function CountUp({ to, suffix = "" }: { to: number; suffix?: string }) {
   const reduce = useReducedMotion();
-  // نبدأ بالقيمة الصحيحة عشان تظهر حتى لو الأنيميشن ما اشتغلش (مفيش «0»)
-  const [val, setVal] = useState(to);
+  const [val, setVal] = useState(0);
 
   useEffect(() => {
     if (reduce) {
       setVal(to);
       return;
     }
-    setVal(0);
     const controls = animate(0, to, {
       duration: 1.1,
       ease: "easeOut",
       onUpdate: (v) => setVal(Math.round(v)),
     });
-    return () => controls.stop();
+    // ضمان: لو الأنيميشن ما اشتغلش (تاب في الخلفية مثلاً) نثبّت الرقم الصح
+    const fallback = setTimeout(() => setVal(to), 1400);
+    return () => {
+      controls.stop();
+      clearTimeout(fallback);
+    };
   }, [to, reduce]);
 
   return (
