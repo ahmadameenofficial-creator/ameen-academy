@@ -117,7 +117,7 @@ export function LibraryGrid() {
               transition={{
                 duration: 0.4,
                 delay: reduce ? 0 : Math.min(i * 0.04, 0.4),
-                ease: [0.22, 1, 0.36, 1],
+                ease: "easeOut",
               }}
               whileHover={reduce ? undefined : { y: -8 }}
               className="group flex flex-col text-right focus:outline-none"

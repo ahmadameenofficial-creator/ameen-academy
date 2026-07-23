@@ -1,7 +1,13 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { motion, useReducedMotion, animate, useInView } from "framer-motion";
+import {
+  motion,
+  useReducedMotion,
+  animate,
+  useInView,
+  type Variants,
+} from "framer-motion";
 import { IconBooks, IconArrowDown, IconSparkles } from "@tabler/icons-react";
 import { BookCover } from "./book-cover";
 import { LIBRARY_BOOKS, LIBRARY_STATS } from "@/lib/data/library-books";
@@ -47,13 +53,17 @@ function CountUp({ to, suffix = "" }: { to: number; suffix?: string }) {
   );
 }
 
-const container = {
+const container: Variants = {
   hidden: {},
   show: { transition: { staggerChildren: 0.12, delayChildren: 0.05 } },
 };
-const item = {
+const item: Variants = {
   hidden: { opacity: 0, y: 24 },
-  show: { opacity: 1, y: 0, transition: { duration: 0.6, ease: [0.22, 1, 0.36, 1] } },
+  show: {
+    opacity: 1,
+    y: 0,
+    transition: { duration: 0.6, ease: "easeOut" },
+  },
 };
 
 export function LibraryHero() {
