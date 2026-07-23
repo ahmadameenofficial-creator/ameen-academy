@@ -50,6 +50,7 @@ export const ROUTES = {
   briefLeaderboard: "/brief/leaderboard",
   vip: "/vip",
   blog: "/blog",
+  library: "/library",
   about: "/about",
   contact: "/contact",
   login: "/login",
