@@ -1,11 +1,10 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import {
   motion,
   useReducedMotion,
   animate,
-  useInView,
   type Variants,
 } from "framer-motion";
 import { IconBooks, IconArrowDown, IconSparkles } from "@tabler/icons-react";
@@ -26,27 +25,26 @@ const floatingBooks = FLOATING_IDS.map(
 
 // عدّاد أرقام
 function CountUp({ to, suffix = "" }: { to: number; suffix?: string }) {
-  const ref = useRef<HTMLSpanElement>(null);
-  const inView = useInView(ref, { once: true });
   const reduce = useReducedMotion();
-  const [val, setVal] = useState(0);
+  // نبدأ بالقيمة الصحيحة عشان تظهر حتى لو الأنيميشن ما اشتغلش (مفيش «0»)
+  const [val, setVal] = useState(to);
 
   useEffect(() => {
-    if (!inView) return;
     if (reduce) {
       setVal(to);
       return;
     }
+    setVal(0);
     const controls = animate(0, to, {
       duration: 1.1,
       ease: "easeOut",
       onUpdate: (v) => setVal(Math.round(v)),
     });
     return () => controls.stop();
-  }, [inView, to, reduce]);
+  }, [to, reduce]);
 
   return (
-    <span ref={ref}>
+    <span>
       {val}
       {suffix}
     </span>
