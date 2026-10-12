@@ -15,4 +15,13 @@ assert.ok(existsSync(packagePath), `Missing traced package: ${packagePath}`);
 const middleware = JSON.parse(readFileSync(join(appRoot, '.next/server/middleware-manifest.json'), 'utf8'));
 assert.deepEqual(Object.keys(middleware.middleware ?? {}), [],
   'The public azkar app must not inherit the academy authentication middleware.');
+const precache = JSON.parse(readFileSync(join(appRoot, 'public/offline-precache.json'), 'utf8'));
+assert.ok(precache.pages.includes('/library') && precache.pages.includes('/azkar/after-prayer-fajr-maghrib'),
+  'The offline package must include the library and split prayer categories.');
+const worker = readFileSync(join(appRoot, 'public/sw.js'), 'utf8');
+assert.ok(worker.includes(precache.version) && !worker.includes('/* PRECACHE */'),
+  'The deployable service worker must contain this build\'s generated cache manifest.');
+for (const asset of ['/brand/sakina-logo.png', '/icons/icon-180.png', '/icons/icon-192.png', '/icons/icon-512.png']) {
+  assert.ok(existsSync(join(appRoot, 'public', asset)), 'Missing application brand asset: ' + asset);
+}
 console.log(`Deployment file paths verified: ${manifest.relativeAppDir}/.next/package.json`);

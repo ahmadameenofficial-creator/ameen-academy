@@ -12,6 +12,9 @@ export function ThemeSync() {
     const apply = () => {
       const resolved = state.theme === 'system' ? preference.matches ? 'dark' : 'light' : state.theme;
       document.documentElement.dataset.theme = resolved;
+      document.querySelectorAll('meta[name="theme-color"]').forEach(meta => {
+        meta.setAttribute('content', resolved === 'dark' ? '#081321' : '#ffffff');
+      });
     };
     apply();
     preference.addEventListener('change', apply);

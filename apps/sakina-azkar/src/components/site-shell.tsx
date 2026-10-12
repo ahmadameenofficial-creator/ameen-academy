@@ -1,8 +1,8 @@
 'use client';
 import Link from 'next/link';
+import Image from 'next/image';
 import { usePathname } from 'next/navigation';
-import { ArrowUpLeft, BookOpen, Bookmark, Home, Search } from 'lucide-react';
-import { Icon } from './icon';
+import { ArrowUpLeft, BookOpen, Bookmark, Home, Search, Download } from 'lucide-react';
 import { ThemeControl } from './theme';
 
 export function SiteHeader() {
@@ -11,14 +11,14 @@ export function SiteHeader() {
     <a className="skip-link" href="#main">انتقل إلى المحتوى</a>
     <header className="site-header">
       <div className="container header-inner">
-        <Link href="/" className="brand" aria-label="سكينة، الرئيسية"><span className="brand-mark"><Icon name="sparkles" size={27} /></span><span>سكينة<span className="brand-sub">رفيقك في الذكر</span></span></Link>
+        <Link href="/" className="brand" aria-label="سكينة، الرئيسية"><span><Image className="brand-logo" src="/brand/sakina-logo.png" alt="سكينة" width={300} height={100} priority unoptimized /><span className="brand-sub">رفيقك في الذكر</span></span></Link>
         <nav className="desktop-nav" aria-label="التنقل الرئيسي">
           <Link href="/" className={pathname === '/' ? 'active' : ''}>الرئيسية</Link>
           <Link href="/library" className={pathname.startsWith('/library') || pathname.startsWith('/azkar') ? 'active' : ''}>مكتبة الأذكار</Link>
           <Link href="/saved" className={pathname === '/saved' ? 'active' : ''}>المحفوظات</Link>
           <Link href="/sources" className={pathname === '/sources' ? 'active' : ''}>عن المحتوى</Link>
         </nav>
-        <div className="header-actions"><ThemeControl /><Link href="/library" className="header-cta">وقتٌ للذكر <ArrowUpLeft size={17} /></Link></div>
+        <div className="header-actions"><ThemeControl /><Link href="/#install" className="icon-button" aria-label="تثبيت تطبيق سكينة"><Download size={20} /></Link><Link href="/library" className="header-cta">وقتٌ للذكر <ArrowUpLeft size={17} /></Link></div>
       </div>
     </header>
     <div className="dedication-banner">
@@ -30,5 +30,5 @@ export function SiteHeader() {
   </>;
 }
 export function SiteFooter() {
-  return <footer className="site-footer container"><div><Link href="/" className="footer-brand">سكينة<span className="tiny-star">✦</span></Link><p>مساحة هادئة، لقلبٍ يذكر الله.</p></div><div className="footer-links"><Link href="/sources">المصادر ومراجعة المحتوى</Link><span>بدون إعلانات. بدون حساب.</span></div></footer>;
+  return <footer className="site-footer container"><div><Link href="/" className="footer-brand" aria-label="سكينة، الرئيسية"><Image className="footer-logo" src="/brand/sakina-logo.png" alt="سكينة" width={300} height={100} unoptimized /></Link><p>مساحة هادئة، لقلبٍ يذكر الله.</p></div><div className="footer-links"><Link href="/sources">المصادر ومراجعة المحتوى</Link><span>بدون إعلانات. بدون حساب.</span></div></footer>;
 }
