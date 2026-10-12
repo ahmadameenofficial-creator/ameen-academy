@@ -17,6 +17,7 @@ npm run test
 npm run lint
 npm run typecheck
 npm run build
+npm run check:deployment
 npx playwright install chromium
 npm run test:e2e
 ```
