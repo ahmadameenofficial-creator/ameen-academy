@@ -1,0 +1,9 @@
+{
+  "sourceRows": 345,
+  "importedEntries": 345,
+  "categories": 135,
+  "missingReferences": 242,
+  "missingRepetitions": 278,
+  "textPreservation": "Only literal \\n converted to newline and surrounding whitespace trimmed.",
+  "independentReligiousReview": false
+}
