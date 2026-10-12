@@ -20,6 +20,9 @@ export function SiteHeader() {
         <Link href="/library" className="header-cta">وقتٌ للذكر <ArrowUpLeft size={17} /></Link>
       </div>
     </header>
+    <div className="dedication-banner">
+      <p>هذا الموقع صدقة جارية على روح والدي <strong>أمين علي</strong>، ففضلًا ادعوا له بالرحمة والمغفرة.</p>
+    </div>
     <nav className="mobile-nav" aria-label="التنقل على الموبايل">
       {[{ href: '/', label: 'الرئيسية', icon: Home }, { href: '/library', label: 'الأذكار', icon: BookOpen }, { href: '/library?search=1', label: 'البحث', icon: Search }, { href: '/saved', label: 'المحفوظات', icon: Bookmark }].map(item => <Link key={item.label} href={item.href} className={(item.href === '/' ? pathname === '/' : item.label !== 'البحث' && pathname.startsWith(item.href)) ? 'active' : ''}><item.icon size={21} strokeWidth={1.7} /><span>{item.label}</span></Link>)}
     </nav>
