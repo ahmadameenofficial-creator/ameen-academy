@@ -1,6 +1,9 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { initialState, readingReducer, parseState, readingDay } from '../src/lib/progress';
+import { counterKey } from '../src/lib/progress';
+import { migrateCatalogState } from '../src/lib/catalog-migration';
+import changes from '../src/data/counter-migration.json';
 const id = 'z-0123456789abcdef';
 const day = '2026-10-12';
 
@@ -51,4 +54,45 @@ test('category reset does not reset unrelated counters or bookmarks', () => {
 test('reading day uses the local calendar, not an ISO UTC truncation', () => {
   const date = new Date(2026, 9, 12, 0, 15);
   assert.equal(readingDay(date), day);
+});
+
+test('each prayer has separate counts, resets, persistence and bookmark context', () => {
+  let state = initialState(day);
+  state = readingReducer(state, { type: 'increment', id: counterKey(id, 'fajr'), limit: 3 });
+  state = readingReducer(state, { type: 'increment', id: counterKey(id, 'maghrib'), limit: 3 });
+  state = readingReducer(state, { type: 'save', id, scope: 'maghrib' });
+  const parsed = parseState(JSON.stringify(state), day);
+  assert.equal(parsed.counts[counterKey(id, 'fajr')], 1);
+  assert.equal(parsed.counts[counterKey(id, 'maghrib')], 1);
+  assert.equal(parsed.savedScopes[id], 'maghrib');
+  const reset = readingReducer(parsed, { type: 'reset', ids: [counterKey(id, 'fajr')] });
+  assert.equal(reset.counts[counterKey(id, 'maghrib')], 1);
+  assert.equal(reset.counts[counterKey(id, 'fajr')], undefined);
+});
+
+test('free counts pass the former 100000 cap and fixed undo clamps old excess counts', () => {
+  let state = { ...initialState(day), counts: { [id]: 100000 } };
+  state = readingReducer(state, { type: 'increment', id, limit: null });
+  assert.equal(state.counts[id], 100001);
+  assert.equal(parseState(JSON.stringify(state), day).counts[id], 100001);
+  state = readingReducer(state, { type: 'decrement', id, limit: 3 });
+  assert.equal(state.counts[id], 2);
+});
+
+test('themes persist, sanitize and survive day rollover without altering reading progress', () => {
+  let state = readingReducer(initialState(day), { type: 'theme', theme: 'dark' });
+  state = readingReducer(state, { type: 'increment', id, limit: 3 });
+  assert.equal(parseState(JSON.stringify(state), day).theme, 'dark');
+  assert.equal(readingReducer(state, { type: 'day', day: '2026-10-13' }).theme, 'dark');
+  assert.equal(parseState(JSON.stringify({ ...state, theme: 'invalid' }), day).theme, 'system');
+});
+
+test('legacy combined counters reset safely and their bookmarks migrate idempotently', () => {
+  const [legacy, replacements] = Object.entries(changes).find(([key, value]) => value[0] !== key)!;
+  const old = { ...initialState(day), counts: { [legacy]: 20, [id]: 2 }, saved: [legacy] };
+  const next = migrateCatalogState(old);
+  assert.equal(next.counts[legacy], undefined);
+  assert.equal(next.counts[id], 2);
+  assert.deepEqual(next.saved, replacements);
+  assert.deepEqual(migrateCatalogState(next), next);
 });

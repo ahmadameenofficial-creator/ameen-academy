@@ -8,6 +8,7 @@ from collections import Counter
 import hashlib
 import json
 import re
+from curation import curate
 
 ROOT = Path(__file__).resolve().parents[1]
 COMMIT = "fbdfa017782c907fd0ca4ee2726060cbc527072f"
@@ -25,7 +26,7 @@ FEATURED = {
 
 def clean(value):
     # Upstream stores literal backslash-n sequences, not HTML.
-    return str(value or "").replace("\\n", "\n").strip()
+    return str(value or "").replace("\\r\\n", "\n").replace("\\n", "\n").replace("\\r", "\n").strip()
 
 def classify(title):
     if any(word in title for word in ["الصلاة", "السجود", "الركوع", "التشهد", "الوتر", "الوضوء", "المسجد", "الآذان", "الاستفتاح"]):
@@ -75,29 +76,42 @@ for row in rows:
 
 assert len(entries) == len(rows)
 assert len({e["id"] for e in entries}) == len(entries)
+(ROOT / "src/data").mkdir(parents=True, exist_ok=True)
+(ROOT / "src/data/original-entries.json").write_text(json.dumps(entries, ensure_ascii=False, indent=2) + "\n")
+categories, entries, corrections, migration, free_audit = curate(categories, entries)
+assert len({e["id"] for e in entries}) == len(entries)
 counts = Counter(e["categoryId"] for e in entries)
 for category in categories:
-    category["count"] = counts[category["id"]]
-categories.sort(key=lambda c: (not c["featured"], list(FEATURED).index(c["title"]) if c["featured"] else 0))
+    category["count"] = sum(counts[child] for child in category["children"]) if category.get("children") else counts[category["id"]]
+featured_order = {value[0]: i for i, value in enumerate(FEATURED.values())}
+categories.sort(key=lambda c: (not c["featured"], featured_order.get(c["id"], 0)))
 
 output = {
-    "version": 1,
+    "version": 2,
     "source": {
         "name": "osamayy/azkar-db", "commit": COMMIT,
         "url": f"https://github.com/osamayy/azkar-db/tree/{COMMIT}",
         "sha256": hashlib.sha256(raw).hexdigest(),
         "permission": "Upstream README explicitly permits free use, modification and redistribution.",
         "religiousReview": "not-independently-verified",
+        "originalRows": len(rows),
     },
     "categories": categories, "entries": entries,
 }
 (ROOT / "src/data").mkdir(parents=True, exist_ok=True)
 (ROOT / "src/data/azkar.json").write_text(json.dumps(output, ensure_ascii=False, indent=2) + "\n")
+(ROOT / "src/data/counter-migration.json").write_text(json.dumps(migration, ensure_ascii=False, indent=2) + "\n")
+(ROOT / "data/corrections.json").write_text(json.dumps(corrections, ensure_ascii=False, indent=2) + "\n")
+(ROOT / "data/free-counter-audit.json").write_text(json.dumps(free_audit, ensure_ascii=False, indent=2) + "\n")
 report = {
     "sourceRows": len(rows), "importedEntries": len(entries), "categories": len(categories),
     "missingReferences": sum(not e["reference"] for e in entries),
     "missingRepetitions": sum(e["repeat"] is None for e in entries),
-    "textPreservation": "Only literal \\n converted to newline and surrounding whitespace trimmed.",
+    "freeCounters": sum(e["counterKind"] == "free" for e in entries),
+    "instructionCards": sum(e["counterKind"] == "instruction" for e in entries),
+    "auditedOriginallyFreeCounters": len(free_audit),
+    "correctedSourceRows": len(corrections),
+    "textPreservation": "All 345 original rows preserved in original-entries.json. Explicit splits/corrections are recorded in corrections.json.",
     "independentReligiousReview": False,
 }
 (ROOT / "data/import-report.json").write_text(json.dumps(report, ensure_ascii=False, indent=2) + "\n")

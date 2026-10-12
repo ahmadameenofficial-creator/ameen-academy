@@ -1,12 +1,13 @@
 {
-  "version": 1,
+  "version": 2,
   "source": {
     "name": "osamayy/azkar-db",
     "commit": "fbdfa017782c907fd0ca4ee2726060cbc527072f",
     "url": "https://github.com/osamayy/azkar-db/tree/fbdfa017782c907fd0ca4ee2726060cbc527072f",
     "sha256": "071893211f6c711d7fb389826a7bcc79ac1ad2f0c13bdb4cc3bd38e871480a6c",
     "permission": "Upstream README explicitly permits free use, modification and redistribution.",
-    "religiousReview": "not-independently-verified"
+    "religiousReview": "not-independently-verified",
+    "originalRows": 345
   },
   "categories": [
     {
@@ -29,12 +30,16 @@
     },
     {
       "id": "after-prayer",
-      "title": "الأذكار بعد السلام من الصلاة",
+      "title": "أذكار بعد الصلاة",
       "icon": "prayer",
       "description": "لحظات ذكر بعد كل صلاة",
       "group": "prayer",
       "featured": true,
-      "count": 8
+      "children": [
+        "after-prayer-fajr-maghrib",
+        "after-prayer-dhuhr-asr-isha"
+      ],
+      "count": 28
     },
     {
       "id": "sleep",
@@ -43,7 +48,7 @@
       "description": "اختم يومك بقلب مطمئن",
       "group": "daily",
       "featured": true,
-      "count": 13
+      "count": 17
     },
     {
       "id": "waking",
@@ -61,7 +66,7 @@
       "description": "كلمات قليلة، ومعانٍ عظيمة",
       "group": "daily",
       "featured": true,
-      "count": 12
+      "count": 20
     },
     {
       "id": "c-508239c7d338",
@@ -187,7 +192,7 @@
       "description": "أذكار وأدعية لكل لحظة",
       "group": "prayer",
       "featured": false,
-      "count": 6
+      "count": 9
     },
     {
       "id": "c-39f54e704419",
@@ -313,7 +318,7 @@
       "description": "أذكار وأدعية لكل لحظة",
       "group": "prayer",
       "featured": false,
-      "count": 1
+      "count": 2
     },
     {
       "id": "c-337e8221eab8",
@@ -862,7 +867,7 @@
       "description": "أذكار وأدعية لكل لحظة",
       "group": "travel",
       "featured": false,
-      "count": 1
+      "count": 5
     },
     {
       "id": "c-61ba7866489f",
@@ -871,7 +876,7 @@
       "description": "أذكار وأدعية لكل لحظة",
       "group": "travel",
       "featured": false,
-      "count": 1
+      "count": 2
     },
     {
       "id": "c-2c6f72c23574",
@@ -952,7 +957,7 @@
       "description": "أذكار وأدعية لكل لحظة",
       "group": "travel",
       "featured": false,
-      "count": 1
+      "count": 2
     },
     {
       "id": "c-9212fe472c1c",
@@ -1069,7 +1074,7 @@
       "description": "أذكار وأدعية لكل لحظة",
       "group": "travel",
       "featured": false,
-      "count": 1
+      "count": 2
     },
     {
       "id": "c-d6f36480436b",
@@ -1123,7 +1128,7 @@
       "description": "أذكار وأدعية لكل لحظة",
       "group": "wellbeing",
       "featured": false,
-      "count": 1
+      "count": 2
     },
     {
       "id": "c-4f925cc5fb42",
@@ -1204,7 +1209,7 @@
       "description": "أذكار وأدعية لكل لحظة",
       "group": "wellbeing",
       "featured": false,
-      "count": 25
+      "count": 26
     },
     {
       "id": "c-9225664db506",
@@ -1223,6 +1228,33 @@
       "group": "duas",
       "featured": false,
       "count": 7
+    },
+    {
+      "id": "after-prayer-fajr-maghrib",
+      "title": "أذكار بعد الفجر والمغرب",
+      "prayers": [
+        "fajr",
+        "maghrib"
+      ],
+      "icon": "prayer",
+      "description": "نصوص منفصلة، وعدّاد مستقل لكل ذكر وصلاة",
+      "group": "prayer",
+      "featured": false,
+      "count": 15
+    },
+    {
+      "id": "after-prayer-dhuhr-asr-isha",
+      "title": "أذكار بعد الظهر والعصر والعشاء",
+      "prayers": [
+        "dhuhr",
+        "asr",
+        "isha"
+      ],
+      "icon": "prayer",
+      "description": "نصوص منفصلة، وعدّاد مستقل لكل ذكر وصلاة",
+      "group": "prayer",
+      "featured": false,
+      "count": 13
     }
   ],
   "entries": [
@@ -1234,7 +1266,8 @@
       "repeat": 1,
       "reference": "آية الكرسى - سورة البقرة 255",
       "keywords": "أذكار الصباح",
-      "sourceRow": 1
+      "sourceRow": 1,
+      "counterKind": "fixed"
     },
     {
       "id": "z-a94ea95cae3ba560",
@@ -1244,7 +1277,8 @@
       "repeat": 3,
       "reference": "سورة الإخلاص",
       "keywords": "أذكار الصباح",
-      "sourceRow": 2
+      "sourceRow": 2,
+      "counterKind": "fixed"
     },
     {
       "id": "z-df52b826256d8f30",
@@ -1254,7 +1288,8 @@
       "repeat": 3,
       "reference": "سورة الفلق",
       "keywords": "أذكار الصباح",
-      "sourceRow": 3
+      "sourceRow": 3,
+      "counterKind": "fixed"
     },
     {
       "id": "z-1c5dc9ef877d361c",
@@ -1264,7 +1299,8 @@
       "repeat": 3,
       "reference": "سورة الناس",
       "keywords": "أذكار الصباح",
-      "sourceRow": 4
+      "sourceRow": 4,
+      "counterKind": "fixed"
     },
     {
       "id": "z-03ff1fb7eacc0430",
@@ -1274,7 +1310,8 @@
       "repeat": 1,
       "reference": "مسلم",
       "keywords": "أذكار الصباح",
-      "sourceRow": 5
+      "sourceRow": 5,
+      "counterKind": "fixed"
     },
     {
       "id": "z-acd068f006279c04",
@@ -1284,7 +1321,8 @@
       "repeat": 1,
       "reference": "البخاري",
       "keywords": "أذكار الصباح",
-      "sourceRow": 6
+      "sourceRow": 6,
+      "counterKind": "fixed"
     },
     {
       "id": "z-aaca4283c2e3de2c",
@@ -1294,7 +1332,8 @@
       "repeat": 3,
       "reference": "أحمد",
       "keywords": "أذكار الصباح",
-      "sourceRow": 7
+      "sourceRow": 7,
+      "counterKind": "fixed"
     },
     {
       "id": "z-405cefe391ce68c6",
@@ -1304,7 +1343,8 @@
       "repeat": 4,
       "reference": "أبو داود",
       "keywords": "أذكار الصباح",
-      "sourceRow": 8
+      "sourceRow": 8,
+      "counterKind": "fixed"
     },
     {
       "id": "z-c9ea242ce1a7cceb",
@@ -1314,7 +1354,8 @@
       "repeat": 1,
       "reference": "أبو داود",
       "keywords": "أذكار الصباح",
-      "sourceRow": 9
+      "sourceRow": 9,
+      "counterKind": "fixed"
     },
     {
       "id": "z-07b8ed23edeea94e",
@@ -1324,7 +1365,8 @@
       "repeat": 7,
       "reference": "أبن السني",
       "keywords": "أذكار الصباح",
-      "sourceRow": 10
+      "sourceRow": 10,
+      "counterKind": "fixed"
     },
     {
       "id": "z-23bb643df89f3cb1",
@@ -1334,7 +1376,8 @@
       "repeat": 3,
       "reference": "ابن ماجة",
       "keywords": "أذكار الصباح",
-      "sourceRow": 11
+      "sourceRow": 11,
+      "counterKind": "fixed"
     },
     {
       "id": "z-903ce63c3dbba796",
@@ -1344,7 +1387,8 @@
       "repeat": 1,
       "reference": "الترمذي",
       "keywords": "أذكار الصباح",
-      "sourceRow": 12
+      "sourceRow": 12,
+      "counterKind": "fixed"
     },
     {
       "id": "z-8cd7791b7bf6b234",
@@ -1354,7 +1398,8 @@
       "repeat": 1,
       "reference": "أحمد",
       "keywords": "أذكار الصباح",
-      "sourceRow": 13
+      "sourceRow": 13,
+      "counterKind": "fixed"
     },
     {
       "id": "z-b65c08f8153ef80a",
@@ -1364,7 +1409,8 @@
       "repeat": 3,
       "reference": "مسلم",
       "keywords": "أذكار الصباح",
-      "sourceRow": 14
+      "sourceRow": 14,
+      "counterKind": "fixed"
     },
     {
       "id": "z-066f8c5230df9be4",
@@ -1374,7 +1420,8 @@
       "repeat": 3,
       "reference": "أحمد",
       "keywords": "أذكار الصباح",
-      "sourceRow": 15
+      "sourceRow": 15,
+      "counterKind": "fixed"
     },
     {
       "id": "z-e041e2cec2880ef8",
@@ -1384,7 +1431,8 @@
       "repeat": 3,
       "reference": "",
       "keywords": "أذكار الصباح",
-      "sourceRow": 16
+      "sourceRow": 16,
+      "counterKind": "fixed"
     },
     {
       "id": "z-c7bea85cdfe7a3f0",
@@ -1394,7 +1442,8 @@
       "repeat": 1,
       "reference": "أبو داود",
       "keywords": "أذكار الصباح",
-      "sourceRow": 17
+      "sourceRow": 17,
+      "counterKind": "fixed"
     },
     {
       "id": "z-d2c11e869e069462",
@@ -1404,7 +1453,8 @@
       "repeat": 3,
       "reference": "الترمذي",
       "keywords": "أذكار الصباح",
-      "sourceRow": 18
+      "sourceRow": 18,
+      "counterKind": "fixed"
     },
     {
       "id": "z-23871c77bc296d29",
@@ -1414,7 +1464,8 @@
       "repeat": 1,
       "reference": "أبو داود",
       "keywords": "أذكار الصباح",
-      "sourceRow": 19
+      "sourceRow": 19,
+      "counterKind": "fixed"
     },
     {
       "id": "z-67a9e2f4a8bebd5a",
@@ -1424,7 +1475,8 @@
       "repeat": 1,
       "reference": "الترمذي",
       "keywords": "أذكار الصباح",
-      "sourceRow": 20
+      "sourceRow": 20,
+      "counterKind": "fixed"
     },
     {
       "id": "z-5aa947aab721e7d8",
@@ -1434,7 +1486,8 @@
       "repeat": 3,
       "reference": "",
       "keywords": "أذكار الصباح",
-      "sourceRow": 21
+      "sourceRow": 21,
+      "counterKind": "fixed"
     },
     {
       "id": "z-5ffa32dffe7ec4d5",
@@ -1444,7 +1497,8 @@
       "repeat": 10,
       "reference": "الطبراني",
       "keywords": "أذكار الصباح",
-      "sourceRow": 22
+      "sourceRow": 22,
+      "counterKind": "fixed"
     },
     {
       "id": "z-4f2418ce2b15c661",
@@ -1454,7 +1508,8 @@
       "repeat": 3,
       "reference": "",
       "keywords": "أذكار الصباح",
-      "sourceRow": 23
+      "sourceRow": 23,
+      "counterKind": "fixed"
     },
     {
       "id": "z-073dca08bbbf21a5",
@@ -1464,7 +1519,8 @@
       "repeat": 3,
       "reference": "أبو داود",
       "keywords": "أذكار الصباح",
-      "sourceRow": 24
+      "sourceRow": 24,
+      "counterKind": "fixed"
     },
     {
       "id": "z-2b72009bbd9cdfde",
@@ -1474,7 +1530,8 @@
       "repeat": 3,
       "reference": "",
       "keywords": "أذكار الصباح",
-      "sourceRow": 25
+      "sourceRow": 25,
+      "counterKind": "fixed"
     },
     {
       "id": "z-ccc31aefbe92b385",
@@ -1484,7 +1541,8 @@
       "repeat": 3,
       "reference": "",
       "keywords": "أذكار الصباح",
-      "sourceRow": 26
+      "sourceRow": 26,
+      "counterKind": "fixed"
     },
     {
       "id": "z-c2c59499e04028b0",
@@ -1494,7 +1552,8 @@
       "repeat": 1,
       "reference": "ابن ماجة",
       "keywords": "أذكار الصباح",
-      "sourceRow": 27
+      "sourceRow": 27,
+      "counterKind": "fixed"
     },
     {
       "id": "z-ee22b0a5f43d4cab",
@@ -1504,7 +1563,8 @@
       "repeat": 1,
       "reference": "",
       "keywords": "أذكار الصباح",
-      "sourceRow": 28
+      "sourceRow": 28,
+      "counterKind": "fixed"
     },
     {
       "id": "z-5d657d57b11ad1cd",
@@ -1514,7 +1574,8 @@
       "repeat": 100,
       "reference": "الترمذي",
       "keywords": "أذكار الصباح",
-      "sourceRow": 29
+      "sourceRow": 29,
+      "counterKind": "fixed"
     },
     {
       "id": "z-4ca6d491dbd94c46",
@@ -1524,7 +1585,8 @@
       "repeat": 100,
       "reference": "مسلم",
       "keywords": "أذكار الصباح",
-      "sourceRow": 30
+      "sourceRow": 30,
+      "counterKind": "fixed"
     },
     {
       "id": "z-51d58c82917350d9",
@@ -1534,7 +1596,8 @@
       "repeat": 100,
       "reference": "البخاري",
       "keywords": "أذكار الصباح",
-      "sourceRow": 31
+      "sourceRow": 31,
+      "counterKind": "fixed"
     },
     {
       "id": "z-0aa4e14e9f34dd54",
@@ -1544,7 +1607,8 @@
       "repeat": 1,
       "reference": "آية الكرسى - سورة البقرة 255",
       "keywords": "أذكار المساء",
-      "sourceRow": 32
+      "sourceRow": 32,
+      "counterKind": "fixed"
     },
     {
       "id": "z-8eefbab5a94f712a",
@@ -1554,7 +1618,8 @@
       "repeat": 1,
       "reference": "سورة البقرة 285 - 286",
       "keywords": "أذكار المساء",
-      "sourceRow": 33
+      "sourceRow": 33,
+      "counterKind": "fixed"
     },
     {
       "id": "z-9c4ca8d7b93b1b18",
@@ -1564,7 +1629,8 @@
       "repeat": 3,
       "reference": "سورة الإخلاص",
       "keywords": "أذكار المساء",
-      "sourceRow": 34
+      "sourceRow": 34,
+      "counterKind": "fixed"
     },
     {
       "id": "z-d4c8540afa8aa298",
@@ -1574,7 +1640,8 @@
       "repeat": 3,
       "reference": "سورة الفلق",
       "keywords": "أذكار المساء",
-      "sourceRow": 35
+      "sourceRow": 35,
+      "counterKind": "fixed"
     },
     {
       "id": "z-031f089049fbc445",
@@ -1584,7 +1651,8 @@
       "repeat": 3,
       "reference": "سورة الناس",
       "keywords": "أذكار المساء",
-      "sourceRow": 36
+      "sourceRow": 36,
+      "counterKind": "fixed"
     },
     {
       "id": "z-e340c2202573e6e0",
@@ -1594,7 +1662,8 @@
       "repeat": 1,
       "reference": "مسلم",
       "keywords": "أذكار المساء",
-      "sourceRow": 37
+      "sourceRow": 37,
+      "counterKind": "fixed"
     },
     {
       "id": "z-6fec182f91ccb4cb",
@@ -1604,7 +1673,8 @@
       "repeat": 1,
       "reference": "البخاري",
       "keywords": "أذكار المساء",
-      "sourceRow": 38
+      "sourceRow": 38,
+      "counterKind": "fixed"
     },
     {
       "id": "z-230b5320ca68f64f",
@@ -1614,7 +1684,8 @@
       "repeat": 3,
       "reference": "أحمد",
       "keywords": "أذكار المساء",
-      "sourceRow": 39
+      "sourceRow": 39,
+      "counterKind": "fixed"
     },
     {
       "id": "z-bd075a9930fe19bb",
@@ -1624,7 +1695,8 @@
       "repeat": 4,
       "reference": "أبو داود",
       "keywords": "أذكار المساء",
-      "sourceRow": 40
+      "sourceRow": 40,
+      "counterKind": "fixed"
     },
     {
       "id": "z-4955ce744e24ec13",
@@ -1634,7 +1706,8 @@
       "repeat": 1,
       "reference": "أبو داود",
       "keywords": "أذكار المساء",
-      "sourceRow": 41
+      "sourceRow": 41,
+      "counterKind": "fixed"
     },
     {
       "id": "z-ed0d81775dce08b4",
@@ -1644,7 +1717,8 @@
       "repeat": 7,
       "reference": "أبن السني",
       "keywords": "أذكار المساء",
-      "sourceRow": 42
+      "sourceRow": 42,
+      "counterKind": "fixed"
     },
     {
       "id": "z-79fa74a0ea87f1dd",
@@ -1654,7 +1728,8 @@
       "repeat": 3,
       "reference": "ابن ماجة",
       "keywords": "أذكار المساء",
-      "sourceRow": 43
+      "sourceRow": 43,
+      "counterKind": "fixed"
     },
     {
       "id": "z-0c9a5cd88ba4d063",
@@ -1664,7 +1739,8 @@
       "repeat": 1,
       "reference": "الترمذي",
       "keywords": "أذكار المساء",
-      "sourceRow": 44
+      "sourceRow": 44,
+      "counterKind": "fixed"
     },
     {
       "id": "z-71b780c9f0d0465e",
@@ -1674,7 +1750,8 @@
       "repeat": 1,
       "reference": "أحمد",
       "keywords": "أذكار المساء",
-      "sourceRow": 45
+      "sourceRow": 45,
+      "counterKind": "fixed"
     },
     {
       "id": "z-4b7adf6e2181c851",
@@ -1684,7 +1761,8 @@
       "repeat": 3,
       "reference": "مسلم",
       "keywords": "أذكار المساء",
-      "sourceRow": 46
+      "sourceRow": 46,
+      "counterKind": "fixed"
     },
     {
       "id": "z-e74f6d1398e5cef3",
@@ -1694,7 +1772,8 @@
       "repeat": 3,
       "reference": "أحمد",
       "keywords": "أذكار المساء",
-      "sourceRow": 47
+      "sourceRow": 47,
+      "counterKind": "fixed"
     },
     {
       "id": "z-31cbfe1863ae8b3d",
@@ -1704,7 +1783,8 @@
       "repeat": 3,
       "reference": "",
       "keywords": "أذكار المساء",
-      "sourceRow": 48
+      "sourceRow": 48,
+      "counterKind": "fixed"
     },
     {
       "id": "z-9cd07967fc49b2a4",
@@ -1714,7 +1794,8 @@
       "repeat": 1,
       "reference": "أبو داود",
       "keywords": "أذكار المساء",
-      "sourceRow": 49
+      "sourceRow": 49,
+      "counterKind": "fixed"
     },
     {
       "id": "z-abcd4483b26bde12",
@@ -1724,7 +1805,8 @@
       "repeat": 3,
       "reference": "الترمذي",
       "keywords": "أذكار المساء",
-      "sourceRow": 50
+      "sourceRow": 50,
+      "counterKind": "fixed"
     },
     {
       "id": "z-e34a550c1dd9d300",
@@ -1734,7 +1816,8 @@
       "repeat": 1,
       "reference": "أبو داود",
       "keywords": "أذكار المساء",
-      "sourceRow": 51
+      "sourceRow": 51,
+      "counterKind": "fixed"
     },
     {
       "id": "z-9dfd697fc9e320ca",
@@ -1744,7 +1827,8 @@
       "repeat": 1,
       "reference": "الترمذي",
       "keywords": "أذكار المساء",
-      "sourceRow": 52
+      "sourceRow": 52,
+      "counterKind": "fixed"
     },
     {
       "id": "z-91332881f8b924c2",
@@ -1754,7 +1838,8 @@
       "repeat": 3,
       "reference": "",
       "keywords": "أذكار المساء",
-      "sourceRow": 53
+      "sourceRow": 53,
+      "counterKind": "fixed"
     },
     {
       "id": "z-e0a12a90d53f65aa",
@@ -1764,7 +1849,8 @@
       "repeat": 10,
       "reference": "الطبراني",
       "keywords": "أذكار المساء",
-      "sourceRow": 54
+      "sourceRow": 54,
+      "counterKind": "fixed"
     },
     {
       "id": "z-29847dbd7e5cd688",
@@ -1774,7 +1860,8 @@
       "repeat": 3,
       "reference": "",
       "keywords": "أذكار المساء",
-      "sourceRow": 55
+      "sourceRow": 55,
+      "counterKind": "fixed"
     },
     {
       "id": "z-33d1baad4d6907be",
@@ -1784,7 +1871,8 @@
       "repeat": 3,
       "reference": "أبو داود",
       "keywords": "أذكار المساء",
-      "sourceRow": 56
+      "sourceRow": 56,
+      "counterKind": "fixed"
     },
     {
       "id": "z-ba5a86ae179f1a4a",
@@ -1794,7 +1882,8 @@
       "repeat": 3,
       "reference": "",
       "keywords": "أذكار المساء",
-      "sourceRow": 57
+      "sourceRow": 57,
+      "counterKind": "fixed"
     },
     {
       "id": "z-750c1b9810f27252",
@@ -1804,7 +1893,8 @@
       "repeat": 3,
       "reference": "",
       "keywords": "أذكار المساء",
-      "sourceRow": 58
+      "sourceRow": 58,
+      "counterKind": "fixed"
     },
     {
       "id": "z-c6a650c9a875128a",
@@ -1814,7 +1904,8 @@
       "repeat": 100,
       "reference": "الترمذي",
       "keywords": "أذكار المساء",
-      "sourceRow": 59
+      "sourceRow": 59,
+      "counterKind": "fixed"
     },
     {
       "id": "z-305b6827482fcdfe",
@@ -1824,7 +1915,8 @@
       "repeat": 1,
       "reference": "",
       "keywords": "أذكار المساء",
-      "sourceRow": 60
+      "sourceRow": 60,
+      "counterKind": "fixed"
     },
     {
       "id": "z-f63e49f8788d92a8",
@@ -1834,7 +1926,8 @@
       "repeat": 100,
       "reference": "مسلم",
       "keywords": "أذكار المساء",
-      "sourceRow": 61
+      "sourceRow": 61,
+      "counterKind": "fixed"
     },
     {
       "id": "z-b4088e97f6a1d581",
@@ -1844,7 +1937,8 @@
       "repeat": null,
       "reference": "",
       "keywords": "أذكار الاستيقاظ من النوم",
-      "sourceRow": 62
+      "sourceRow": 62,
+      "counterKind": "free"
     },
     {
       "id": "z-8749400421151d28",
@@ -1854,7 +1948,8 @@
       "repeat": null,
       "reference": "",
       "keywords": "أذكار الاستيقاظ من النوم",
-      "sourceRow": 63
+      "sourceRow": 63,
+      "counterKind": "free"
     },
     {
       "id": "z-1a5512897a81a607",
@@ -1864,7 +1959,8 @@
       "repeat": null,
       "reference": "",
       "keywords": "أذكار الاستيقاظ من النوم",
-      "sourceRow": 64
+      "sourceRow": 64,
+      "counterKind": "free"
     },
     {
       "id": "z-bc75044625b95759",
@@ -1874,7 +1970,8 @@
       "repeat": null,
       "reference": "",
       "keywords": "أذكار الاستيقاظ من النوم",
-      "sourceRow": 65
+      "sourceRow": 65,
+      "counterKind": "free"
     },
     {
       "id": "z-6934a7878b88f690",
@@ -1884,7 +1981,8 @@
       "repeat": null,
       "reference": "",
       "keywords": "دعاء لبس الثوب - ملابس ثياب لباس",
-      "sourceRow": 66
+      "sourceRow": 66,
+      "counterKind": "free"
     },
     {
       "id": "z-82a42917a96bf327",
@@ -1894,7 +1992,8 @@
       "repeat": null,
       "reference": "",
       "keywords": "دعاء لبس الثوب الجديد - ملابس ثياب لباس",
-      "sourceRow": 67
+      "sourceRow": 67,
+      "counterKind": "free"
     },
     {
       "id": "z-b9509cb6f9f3de15",
@@ -1904,7 +2003,8 @@
       "repeat": null,
       "reference": "",
       "keywords": "دعاء لبس الثوب الجديد - ملابس ثياب لباس",
-      "sourceRow": 68
+      "sourceRow": 68,
+      "counterKind": "free"
     },
     {
       "id": "z-03d63c3b4eabe147",
@@ -1914,7 +2014,8 @@
       "repeat": null,
       "reference": "",
       "keywords": "دعاء لبس الثوب الجديد - ملابس ثياب لباس",
-      "sourceRow": 69
+      "sourceRow": 69,
+      "counterKind": "free"
     },
     {
       "id": "z-026bbd8a2d2daa6d",
@@ -1924,7 +2025,8 @@
       "repeat": null,
       "reference": "",
       "keywords": "ما يقول إذا وضع الثوب - ملابس ثياب لباس",
-      "sourceRow": 70
+      "sourceRow": 70,
+      "counterKind": "free"
     },
     {
       "id": "z-fd3dcfb58f6f26e7",
@@ -1934,7 +2036,8 @@
       "repeat": null,
       "reference": "",
       "keywords": "دعاء دخول الخلاء - الحمام دورة المياه المرحاض",
-      "sourceRow": 71
+      "sourceRow": 71,
+      "counterKind": "free"
     },
     {
       "id": "z-977ab27f6f3d20c6",
@@ -1944,7 +2047,8 @@
       "repeat": null,
       "reference": "",
       "keywords": "دعاء الخروج من الخلاء - الحمام دورة المياه المرحاض",
-      "sourceRow": 72
+      "sourceRow": 72,
+      "counterKind": "free"
     },
     {
       "id": "z-146ac33b189862dc",
@@ -1954,7 +2058,8 @@
       "repeat": null,
       "reference": "",
       "keywords": "الذكر قبل الوضوء",
-      "sourceRow": 73
+      "sourceRow": 73,
+      "counterKind": "free"
     },
     {
       "id": "z-e299801d1d0603fe",
@@ -1964,7 +2069,8 @@
       "repeat": null,
       "reference": "",
       "keywords": "الذكر بعد الفراغ من الوضوء",
-      "sourceRow": 74
+      "sourceRow": 74,
+      "counterKind": "free"
     },
     {
       "id": "z-9aef48c3fc9d487d",
@@ -1974,7 +2080,8 @@
       "repeat": null,
       "reference": "",
       "keywords": "الذكر بعد الفراغ من الوضوء",
-      "sourceRow": 75
+      "sourceRow": 75,
+      "counterKind": "free"
     },
     {
       "id": "z-3629d2a31f2f0284",
@@ -1984,7 +2091,8 @@
       "repeat": null,
       "reference": "",
       "keywords": "الذكر بعد الفراغ من الوضوء",
-      "sourceRow": 76
+      "sourceRow": 76,
+      "counterKind": "free"
     },
     {
       "id": "z-53d3da76ab901bf7",
@@ -1994,7 +2102,8 @@
       "repeat": null,
       "reference": "",
       "keywords": "الذكر عند الخروج من المنزل - البيت الشقة السكن",
-      "sourceRow": 77
+      "sourceRow": 77,
+      "counterKind": "free"
     },
     {
       "id": "z-c1dda6b756b635ed",
@@ -2004,7 +2113,8 @@
       "repeat": null,
       "reference": "",
       "keywords": "الذكر عند الخروج من المنزل - البيت الشقة السكن",
-      "sourceRow": 78
+      "sourceRow": 78,
+      "counterKind": "free"
     },
     {
       "id": "z-6760651f2dc9e152",
@@ -2014,7 +2124,8 @@
       "repeat": null,
       "reference": "",
       "keywords": "الذكر عند دخول المنزل - البيت الشقة السكن",
-      "sourceRow": 79
+      "sourceRow": 79,
+      "counterKind": "free"
     },
     {
       "id": "z-64f8c57396943118",
@@ -2024,7 +2135,8 @@
       "repeat": null,
       "reference": "",
       "keywords": "دعاء الذهاب إلى المسجد - الجامع",
-      "sourceRow": 80
+      "sourceRow": 80,
+      "counterKind": "free"
     },
     {
       "id": "z-b9b0710d460bbadb",
@@ -2034,7 +2146,8 @@
       "repeat": null,
       "reference": "",
       "keywords": "دعاء دخول المسجد - الجامع",
-      "sourceRow": 81
+      "sourceRow": 81,
+      "counterKind": "free"
     },
     {
       "id": "z-5b479bee0f5f8df9",
@@ -2044,7 +2157,8 @@
       "repeat": null,
       "reference": "",
       "keywords": "دعاء الخروج من المسجد - الجامع",
-      "sourceRow": 82
+      "sourceRow": 82,
+      "counterKind": "free"
     },
     {
       "id": "z-13075cd62436f94b",
@@ -2054,7 +2168,8 @@
       "repeat": null,
       "reference": "",
       "keywords": "أذكار الآذان - الاذان",
-      "sourceRow": 83
+      "sourceRow": 83,
+      "counterKind": "free"
     },
     {
       "id": "z-b38d0e202f2a52ef",
@@ -2064,7 +2179,8 @@
       "repeat": null,
       "reference": "",
       "keywords": "أذكار الآذان - الاذان",
-      "sourceRow": 84
+      "sourceRow": 84,
+      "counterKind": "free"
     },
     {
       "id": "z-439e9fc9961065a5",
@@ -2074,7 +2190,9 @@
       "repeat": null,
       "reference": "",
       "keywords": "أذكار الآذان - الاذان",
-      "sourceRow": 85
+      "sourceRow": 85,
+      "counterKind": "instruction",
+      "curated": true
     },
     {
       "id": "z-264d8126339994b4",
@@ -2084,7 +2202,8 @@
       "repeat": null,
       "reference": "",
       "keywords": "أذكار الآذان - الاذان",
-      "sourceRow": 86
+      "sourceRow": 86,
+      "counterKind": "free"
     },
     {
       "id": "z-58f2bf005116d10b",
@@ -2094,7 +2213,9 @@
       "repeat": null,
       "reference": "",
       "keywords": "أذكار الآذان - الاذان",
-      "sourceRow": 87
+      "sourceRow": 87,
+      "counterKind": "instruction",
+      "curated": true
     },
     {
       "id": "z-c957958a9e67e620",
@@ -2104,7 +2225,8 @@
       "repeat": null,
       "reference": "",
       "keywords": "دعاء الاستفتاح - الصلاة الصلاه",
-      "sourceRow": 88
+      "sourceRow": 88,
+      "counterKind": "free"
     },
     {
       "id": "z-52df6c0a4a050c9a",
@@ -2114,7 +2236,8 @@
       "repeat": null,
       "reference": "",
       "keywords": "دعاء الاستفتاح - الصلاة الصلاه",
-      "sourceRow": 89
+      "sourceRow": 89,
+      "counterKind": "free"
     },
     {
       "id": "z-b00f8b6831b8b817",
@@ -2124,7 +2247,8 @@
       "repeat": null,
       "reference": "",
       "keywords": "دعاء الاستفتاح - الصلاة الصلاه",
-      "sourceRow": 90
+      "sourceRow": 90,
+      "counterKind": "free"
     },
     {
       "id": "z-e6c603ae0e855298",
@@ -2134,17 +2258,68 @@
       "repeat": null,
       "reference": "",
       "keywords": "دعاء الاستفتاح - الصلاة الصلاه",
-      "sourceRow": 91
+      "sourceRow": 91,
+      "counterKind": "free"
     },
     {
-      "id": "z-4f1b34c500b0e260",
+      "id": "z-b8deef4bbceefffa",
       "categoryId": "c-a94c292adb88",
-      "text": "((اللَّهُ أَكْبَرُ كَبِيرَاً، اللَّهُ أَكْبَرُ كَبِيراً، اللَّهُ أَكْبَرُ كَبِيراً، وَالْحَمْدُ لِلَّهِ كَثيراً، وَالْحَمْدُ لِلَّهِ كَثيراً، وَالْحَمْدُ لِلَّهِ كَثيراً، وَسُبْحَانَ اللَّهِ بُكْرَةً وَأَصِيلاً)) ثَلاثاً ((أَعُوذُ بِاللَّهِ مِنَ الشَّيْطَانِ: مِنْ نَفْخِهِ، وَنَفْثِهِ، وَهَمْزِهِ)).",
+      "text": "اللَّهُ أَكْبَرُ كَبِيرًا.",
       "note": "",
-      "repeat": null,
+      "repeat": 3,
       "reference": "",
       "keywords": "دعاء الاستفتاح - الصلاة الصلاه",
-      "sourceRow": 92
+      "sourceRow": 92,
+      "title": "التكبير في الاستفتاح",
+      "counterKind": "fixed",
+      "referenceUrl": "",
+      "appliesTo": [],
+      "curated": true
+    },
+    {
+      "id": "z-78374387dd5082da",
+      "categoryId": "c-a94c292adb88",
+      "text": "الْحَمْدُ لِلَّهِ كَثِيرًا.",
+      "note": "",
+      "repeat": 3,
+      "reference": "",
+      "keywords": "دعاء الاستفتاح - الصلاة الصلاه",
+      "sourceRow": 92,
+      "title": "التحميد في الاستفتاح",
+      "counterKind": "fixed",
+      "referenceUrl": "",
+      "appliesTo": [],
+      "curated": true
+    },
+    {
+      "id": "z-c286e0d8025360c1",
+      "categoryId": "c-a94c292adb88",
+      "text": "سُبْحَانَ اللَّهِ بُكْرَةً وَأَصِيلًا.",
+      "note": "",
+      "repeat": 3,
+      "reference": "",
+      "keywords": "دعاء الاستفتاح - الصلاة الصلاه",
+      "sourceRow": 92,
+      "title": "التسبيح في الاستفتاح",
+      "counterKind": "fixed",
+      "referenceUrl": "",
+      "appliesTo": [],
+      "curated": true
+    },
+    {
+      "id": "z-5f7a0b99a3087d21",
+      "categoryId": "c-a94c292adb88",
+      "text": "أَعُوذُ بِاللَّهِ مِنَ الشَّيْطَانِ: مِنْ نَفْخِهِ، وَنَفْثِهِ، وَهَمْزِهِ.",
+      "note": "",
+      "repeat": 1,
+      "reference": "",
+      "keywords": "دعاء الاستفتاح - الصلاة الصلاه",
+      "sourceRow": 92,
+      "title": "الاستعاذة",
+      "counterKind": "reading",
+      "referenceUrl": "",
+      "appliesTo": [],
+      "curated": true
     },
     {
       "id": "z-83c55d4e32dfc9e9",
@@ -2154,17 +2329,23 @@
       "repeat": null,
       "reference": "",
       "keywords": "دعاء الاستفتاح - الصلاة الصلاه",
-      "sourceRow": 93
+      "sourceRow": 93,
+      "counterKind": "free"
     },
     {
-      "id": "z-1b0361809fcf18f0",
+      "id": "z-7875ffb5eb8099f1",
       "categoryId": "c-39f54e704419",
-      "text": "((سُبْحانَ رَبِّيَ الْعَظِيمِ)). ثلاث مرَّاتٍ.",
-      "note": "",
-      "repeat": null,
+      "text": "سُبْحَانَ رَبِّيَ الْعَظِيمِ.",
+      "note": "العدد مذكور صراحة في النص الأصلي.",
+      "repeat": 3,
       "reference": "",
       "keywords": "دعاء الركوع - الصلاة الصلاه",
-      "sourceRow": 94
+      "sourceRow": 94,
+      "title": "تسبيح الركوع",
+      "counterKind": "fixed",
+      "referenceUrl": "",
+      "appliesTo": [],
+      "curated": true
     },
     {
       "id": "z-d19107be5ce64c8c",
@@ -2174,7 +2355,8 @@
       "repeat": null,
       "reference": "",
       "keywords": "دعاء الركوع - الصلاة الصلاه",
-      "sourceRow": 95
+      "sourceRow": 95,
+      "counterKind": "free"
     },
     {
       "id": "z-fc9f5ea70d781102",
@@ -2184,7 +2366,8 @@
       "repeat": null,
       "reference": "",
       "keywords": "دعاء الركوع - الصلاة الصلاه",
-      "sourceRow": 96
+      "sourceRow": 96,
+      "counterKind": "free"
     },
     {
       "id": "z-5cfbcda35f5a6f43",
@@ -2194,7 +2377,8 @@
       "repeat": null,
       "reference": "",
       "keywords": "دعاء الركوع - الصلاة الصلاه",
-      "sourceRow": 97
+      "sourceRow": 97,
+      "counterKind": "free"
     },
     {
       "id": "z-bcb0ed3a0dd9c9b8",
@@ -2204,7 +2388,8 @@
       "repeat": null,
       "reference": "",
       "keywords": "دعاء الركوع - الصلاة الصلاه",
-      "sourceRow": 98
+      "sourceRow": 98,
+      "counterKind": "free"
     },
     {
       "id": "z-9f69409a2eca7e5b",
@@ -2214,7 +2399,8 @@
       "repeat": null,
       "reference": "",
       "keywords": "دعاء الرفع من الركوع - الصلاة الصلاه",
-      "sourceRow": 99
+      "sourceRow": 99,
+      "counterKind": "free"
     },
     {
       "id": "z-c07a6935bf4f5b26",
@@ -2224,7 +2410,8 @@
       "repeat": null,
       "reference": "",
       "keywords": "دعاء الرفع من الركوع - الصلاة الصلاه",
-      "sourceRow": 100
+      "sourceRow": 100,
+      "counterKind": "free"
     },
     {
       "id": "z-fd3332230f86050e",
@@ -2234,17 +2421,23 @@
       "repeat": null,
       "reference": "",
       "keywords": "دعاء الرفع من الركوع - الصلاة الصلاه",
-      "sourceRow": 101
+      "sourceRow": 101,
+      "counterKind": "free"
     },
     {
-      "id": "z-bb24bfc85de21322",
+      "id": "z-e477fda1dcf0e86e",
       "categoryId": "c-641235e94d66",
-      "text": "((سُبْحَانَ رَبِّيَ الأَعْلَى)) ثلاث مرَّاتٍ.",
-      "note": "",
-      "repeat": null,
+      "text": "سُبْحَانَ رَبِّيَ الْأَعْلَى.",
+      "note": "العدد مذكور صراحة في النص الأصلي.",
+      "repeat": 3,
       "reference": "",
       "keywords": "دعاء السجود - الصلاة الصلاه",
-      "sourceRow": 102
+      "sourceRow": 102,
+      "title": "تسبيح السجود",
+      "counterKind": "fixed",
+      "referenceUrl": "",
+      "appliesTo": [],
+      "curated": true
     },
     {
       "id": "z-20ff71f83feb5410",
@@ -2254,7 +2447,8 @@
       "repeat": null,
       "reference": "",
       "keywords": "دعاء السجود - الصلاة الصلاه",
-      "sourceRow": 103
+      "sourceRow": 103,
+      "counterKind": "free"
     },
     {
       "id": "z-24eda75290c559db",
@@ -2264,7 +2458,8 @@
       "repeat": null,
       "reference": "",
       "keywords": "دعاء السجود - الصلاة الصلاه",
-      "sourceRow": 104
+      "sourceRow": 104,
+      "counterKind": "free"
     },
     {
       "id": "z-0fe1c7cff8a3445d",
@@ -2274,7 +2469,8 @@
       "repeat": null,
       "reference": "",
       "keywords": "دعاء السجود - الصلاة الصلاه",
-      "sourceRow": 105
+      "sourceRow": 105,
+      "counterKind": "free"
     },
     {
       "id": "z-ac626bc3d06a1bda",
@@ -2284,7 +2480,8 @@
       "repeat": null,
       "reference": "",
       "keywords": "دعاء السجود - الصلاة الصلاه",
-      "sourceRow": 106
+      "sourceRow": 106,
+      "counterKind": "free"
     },
     {
       "id": "z-cc592aa813149a2c",
@@ -2294,7 +2491,8 @@
       "repeat": null,
       "reference": "",
       "keywords": "دعاء السجود - الصلاة الصلاه",
-      "sourceRow": 107
+      "sourceRow": 107,
+      "counterKind": "free"
     },
     {
       "id": "z-ec5d42019234b6d7",
@@ -2304,17 +2502,23 @@
       "repeat": null,
       "reference": "",
       "keywords": "دعاء السجود - الصلاة الصلاه",
-      "sourceRow": 108
+      "sourceRow": 108,
+      "counterKind": "free"
     },
     {
-      "id": "z-92af087f8879719b",
+      "id": "z-c1d80325aa2166ab",
       "categoryId": "c-c379f6cc9c58",
-      "text": "((رَبِّ اغْفِرْ لِي، رَبِّ اغْفِرْ لِي)).",
-      "note": "",
+      "text": "رَبِّ اغْفِرْ لِي.",
+      "note": "ورد اللفظ مكررًا في النص الأصلي؛ لا نضع عددًا حصريًا، وكل ضغطة هنا تقابل قول العبارة مرة واحدة.",
       "repeat": null,
       "reference": "",
       "keywords": "دعاء الجلسة بين السجدتين - الصلاة الصلاه",
-      "sourceRow": 109
+      "sourceRow": 109,
+      "title": "بين السجدتين",
+      "counterKind": "free",
+      "referenceUrl": "",
+      "appliesTo": [],
+      "curated": true
     },
     {
       "id": "z-1ee1988eb1d53c92",
@@ -2324,7 +2528,8 @@
       "repeat": null,
       "reference": "",
       "keywords": "دعاء الجلسة بين السجدتين - الصلاة الصلاه",
-      "sourceRow": 110
+      "sourceRow": 110,
+      "counterKind": "free"
     },
     {
       "id": "z-d55c48fe9d5d7676",
@@ -2334,7 +2539,8 @@
       "repeat": null,
       "reference": "",
       "keywords": "دعاء سجود التلاوة - القراءة",
-      "sourceRow": 111
+      "sourceRow": 111,
+      "counterKind": "free"
     },
     {
       "id": "z-1a4eb7b7c3449971",
@@ -2344,7 +2550,8 @@
       "repeat": null,
       "reference": "",
       "keywords": "دعاء سجود التلاوة - القراءة",
-      "sourceRow": 112
+      "sourceRow": 112,
+      "counterKind": "free"
     },
     {
       "id": "z-39e5d811d20a0fd7",
@@ -2354,7 +2561,8 @@
       "repeat": null,
       "reference": "",
       "keywords": "التشهد - الصلاة الصلاه",
-      "sourceRow": 113
+      "sourceRow": 113,
+      "counterKind": "free"
     },
     {
       "id": "z-5c47cf4acc684ce0",
@@ -2364,7 +2572,8 @@
       "repeat": null,
       "reference": "",
       "keywords": "الصلاة على النبي بعد التشهد - الصلاة الصلاه",
-      "sourceRow": 114
+      "sourceRow": 114,
+      "counterKind": "free"
     },
     {
       "id": "z-f3794464f90caea5",
@@ -2374,7 +2583,8 @@
       "repeat": null,
       "reference": "",
       "keywords": "الصلاة على النبي بعد التشهد - الصلاة الصلاه",
-      "sourceRow": 115
+      "sourceRow": 115,
+      "counterKind": "free"
     },
     {
       "id": "z-cfbb1cc529ff4249",
@@ -2384,7 +2594,8 @@
       "repeat": null,
       "reference": "",
       "keywords": "الدعاء بعد التشهد الأخير قبل السلام - الصلاة الصلاه",
-      "sourceRow": 116
+      "sourceRow": 116,
+      "counterKind": "free"
     },
     {
       "id": "z-b0ff61231993c3f3",
@@ -2394,7 +2605,8 @@
       "repeat": null,
       "reference": "",
       "keywords": "الدعاء بعد التشهد الأخير قبل السلام - الصلاة الصلاه",
-      "sourceRow": 117
+      "sourceRow": 117,
+      "counterKind": "free"
     },
     {
       "id": "z-9bb1f679cabe6cdb",
@@ -2404,7 +2616,8 @@
       "repeat": null,
       "reference": "",
       "keywords": "الدعاء بعد التشهد الأخير قبل السلام - الصلاة الصلاه",
-      "sourceRow": 118
+      "sourceRow": 118,
+      "counterKind": "free"
     },
     {
       "id": "z-44bd5a1b8072cc49",
@@ -2414,7 +2627,8 @@
       "repeat": null,
       "reference": "",
       "keywords": "الدعاء بعد التشهد الأخير قبل السلام - الصلاة الصلاه",
-      "sourceRow": 119
+      "sourceRow": 119,
+      "counterKind": "free"
     },
     {
       "id": "z-e20adac6cb4414ee",
@@ -2424,7 +2638,8 @@
       "repeat": null,
       "reference": "",
       "keywords": "الدعاء بعد التشهد الأخير قبل السلام - الصلاة الصلاه",
-      "sourceRow": 120
+      "sourceRow": 120,
+      "counterKind": "free"
     },
     {
       "id": "z-0912d675f38f4c6c",
@@ -2434,7 +2649,8 @@
       "repeat": null,
       "reference": "",
       "keywords": "الدعاء بعد التشهد الأخير قبل السلام - الصلاة الصلاه",
-      "sourceRow": 121
+      "sourceRow": 121,
+      "counterKind": "free"
     },
     {
       "id": "z-1941c611172b3ded",
@@ -2444,7 +2660,8 @@
       "repeat": null,
       "reference": "",
       "keywords": "الدعاء بعد التشهد الأخير قبل السلام - الصلاة الصلاه",
-      "sourceRow": 122
+      "sourceRow": 122,
+      "counterKind": "free"
     },
     {
       "id": "z-e562fd1628eb4749",
@@ -2454,7 +2671,8 @@
       "repeat": null,
       "reference": "",
       "keywords": "الدعاء بعد التشهد الأخير قبل السلام - الصلاة الصلاه",
-      "sourceRow": 123
+      "sourceRow": 123,
+      "counterKind": "free"
     },
     {
       "id": "z-8949252aeb395e9b",
@@ -2464,7 +2682,8 @@
       "repeat": null,
       "reference": "",
       "keywords": "الدعاء بعد التشهد الأخير قبل السلام - الصلاة الصلاه",
-      "sourceRow": 124
+      "sourceRow": 124,
+      "counterKind": "free"
     },
     {
       "id": "z-613e8be544b4d1fc",
@@ -2474,7 +2693,8 @@
       "repeat": null,
       "reference": "",
       "keywords": "الدعاء بعد التشهد الأخير قبل السلام - الصلاة الصلاه",
-      "sourceRow": 125
+      "sourceRow": 125,
+      "counterKind": "free"
     },
     {
       "id": "z-8b548d509efb85a3",
@@ -2484,87 +2704,430 @@
       "repeat": null,
       "reference": "",
       "keywords": "الدعاء بعد التشهد الأخير قبل السلام - الصلاة الصلاه",
-      "sourceRow": 126
+      "sourceRow": 126,
+      "counterKind": "free"
     },
     {
-      "id": "z-c5027073fd13ce39",
-      "categoryId": "after-prayer",
-      "text": "((أَسْتَغْفِرُ اللَّهَ (ثَلاَثَاً) اللَّهُمَّ أَنْتَ السَّلاَمُ، وَمِنْكَ السَّلاَمُ، تَبَارَكْتَ يَا ذَا الْجَلاَلِ وَالْإِكْرَامِ)).",
+      "id": "z-7ab1ca44d84a4712",
+      "categoryId": "after-prayer-fajr-maghrib",
+      "text": "أَسْتَغْفِرُ اللَّهَ.",
       "note": "",
-      "repeat": null,
-      "reference": "",
+      "repeat": 3,
+      "reference": "صحيح مسلم 591",
       "keywords": "الأذكار بعد السلام من الصلاة",
-      "sourceRow": 127
+      "sourceRow": 127,
+      "title": "الاستغفار",
+      "counterKind": "fixed",
+      "referenceUrl": "https://sunnah.com/muslim:591",
+      "appliesTo": [],
+      "curated": true
     },
     {
-      "id": "z-89d53bfd2948c4dc",
-      "categoryId": "after-prayer",
-      "text": "((لاَ إِلَهَ إِلاَّ اللَّهُ وَحْدَهُ لاَ شَرِيكَ لَهُ، لَهُ الْمُلْكُ وَلَهُ الْحَمْدُ وَهُوَ عَلَى كُلِّ شَيْءٍ قَدِيرٌ [ثلاثاً]، اللَّهُمَّ لاَ مَانِعَ لِمَا أَعْطَيْتَ، وَلاَ مُعْطِيَ لِمَا مَنَعْتَ، وَلاَ يَنْفَعُ ذَا الْجَدِّ مِنْكَ الجَدُّ)).",
-      "note": "",
-      "repeat": null,
-      "reference": "",
+      "id": "z-9d5aa63a7e531c56",
+      "categoryId": "after-prayer-fajr-maghrib",
+      "text": "اللَّهُمَّ أَنْتَ السَّلَامُ، وَمِنْكَ السَّلَامُ، تَبَارَكْتَ يَا ذَا الْجَلَالِ وَالْإِكْرَامِ.",
+      "note": "بعد الاستغفار ثلاثًا.",
+      "repeat": 1,
+      "reference": "حصن المسلم 66؛ صحيح مسلم 591",
       "keywords": "الأذكار بعد السلام من الصلاة",
-      "sourceRow": 128
+      "sourceRow": 127,
+      "title": "اللهم أنت السلام",
+      "counterKind": "fixed",
+      "referenceUrl": "https://sunnah.com/hisn:66",
+      "appliesTo": [],
+      "curated": true
     },
     {
-      "id": "z-1decae825efd17ec",
-      "categoryId": "after-prayer",
-      "text": "((لَا إِلَهَ إِلاَّ اللَّهُ وَحْدَهُ لاَ شَرِيكَ لَهُ، لَهُ الْمُلْكُ، وَلَهُ الْحَمدُ، وَهُوَ عَلَى كُلِّ شَيْءٍ قَدِيرٌ. لاَ حَوْلَ وَلاَ قُوَّةَ إِلاَّ بِاللَّهِ، لاَ إِلَهَ إِلاَّ اللَّهُ، وَلاَ نَعْبُدُ إِلاَّ إِيَّاهُ, لَهُ النِّعْمَةُ وَلَهُ الْفَضْلُ وَلَهُ الثَّنَاءُ الْحَسَنُ، لَا إِلَهَ إِلاَّ اللَّهُ مُخْلِصِينَ لَهُ الدِّينَ وَلَوْ كَرِهَ الكَافِرُونَ)).",
+      "id": "z-36a0778f078f14cf",
+      "categoryId": "after-prayer-dhuhr-asr-isha",
+      "text": "أَسْتَغْفِرُ اللَّهَ.",
       "note": "",
-      "repeat": null,
-      "reference": "",
+      "repeat": 3,
+      "reference": "صحيح مسلم 591",
       "keywords": "الأذكار بعد السلام من الصلاة",
-      "sourceRow": 129
+      "sourceRow": 127,
+      "title": "الاستغفار",
+      "counterKind": "fixed",
+      "referenceUrl": "https://sunnah.com/muslim:591",
+      "appliesTo": [],
+      "curated": true
     },
     {
-      "id": "z-67bed76d624762a4",
-      "categoryId": "after-prayer",
-      "text": "((سُبْحَانَ اللَّهِ، وَالْحَمْدُ لِلَّهِ، وَاللَّهُ أَكْبَرُ (ثلاثاً وثلاثين) لاَ إِلَهَ إِلاَّ اللَّهُ وَحْدَهُ لاَ شَرِيكَ لَهُ، لَهُ الْمُلْكُ وَلَهُ الْحَمْدُ وَهُوَ عَلَى كُلِّ شَيْءٍ قَدِيرٌ)).",
-      "note": "",
-      "repeat": null,
-      "reference": "",
+      "id": "z-b92c0477951613dd",
+      "categoryId": "after-prayer-dhuhr-asr-isha",
+      "text": "اللَّهُمَّ أَنْتَ السَّلَامُ، وَمِنْكَ السَّلَامُ، تَبَارَكْتَ يَا ذَا الْجَلَالِ وَالْإِكْرَامِ.",
+      "note": "بعد الاستغفار ثلاثًا.",
+      "repeat": 1,
+      "reference": "حصن المسلم 66؛ صحيح مسلم 591",
       "keywords": "الأذكار بعد السلام من الصلاة",
-      "sourceRow": 130
+      "sourceRow": 127,
+      "title": "اللهم أنت السلام",
+      "counterKind": "fixed",
+      "referenceUrl": "https://sunnah.com/hisn:66",
+      "appliesTo": [],
+      "curated": true
     },
     {
-      "id": "z-8170e6eb49b0e8a9",
-      "categoryId": "after-prayer",
-      "text": "بسم الله الرحمن الرحيم ﴿قُلْ هُوَ اللَّهُ أَحَدٌ* اللَّهُ الصَّمَدُ* لَمْ يَلِدْ وَلَمْ يُولَدْ* وَلَمْ يَكُن لَّهُ كُفُواً أَحَدٌ﴾، بسم الله الرحمن الرحيم ﴿قُلْ أَعُوذُ بِرَبِّ الْفَلَقِ* مِن شَرِّ مَا خَلَقَ* وَمِن شَرِّ غَاسِقٍ إِذَا وَقَبَ* وَمِن شَرِّ النَّفَّاثَاتِ فِي الْعُقَدِ* وَمِن شَرِّ حَاسِدٍ إِذَا حَسَدَ﴾،بسم الله الرحمن الرحيم ﴿قُلْ أَعُوذُ بِرَبِّ النَّاسِ* مَلِكِ النَّاسِ* إِلَهِ النَّاسِ* مِن شَرِّ الْوَسْوَاسِ الْخَنَّاسِ* الَّذِي يُوَسْوِسُ فِي صُدُورِ النَّاسِ* مِنَ الْجِنَّةِ وَ النَّاسِ﴾ بَعْدَ كُلِّ صَلاَةٍ.",
-      "note": "",
-      "repeat": null,
-      "reference": "",
+      "id": "z-975e683e4eb30542",
+      "categoryId": "after-prayer-fajr-maghrib",
+      "text": "لَا إِلَهَ إِلَّا اللَّهُ وَحْدَهُ لَا شَرِيكَ لَهُ، لَهُ الْمُلْكُ وَلَهُ الْحَمْدُ، وَهُوَ عَلَى كُلِّ شَيْءٍ قَدِيرٌ.",
+      "note": "هذه الصيغة مرة واحدة، ويتبعها الدعاء في البطاقة التالية.",
+      "repeat": 1,
+      "reference": "صحيح مسلم 593a",
       "keywords": "الأذكار بعد السلام من الصلاة",
-      "sourceRow": 131
+      "sourceRow": 128,
+      "title": "التهليل بعد الصلاة",
+      "counterKind": "fixed",
+      "referenceUrl": "https://sunnah.com/muslim:593a",
+      "appliesTo": [],
+      "curated": true
     },
     {
-      "id": "z-0e0a006de0d06596",
-      "categoryId": "after-prayer",
-      "text": "﴿اللَّهُ لاَ إِلَهَ إِلاَّ هُوَ الْحَيُّ الْقَيُّومُ لاَ تَأْخُذُهُ سِنَةٌ وَلاَ نَوْمٌ لَّهُ مَا فِي السَّمَوَاتِ وَمَا فِي الأَرْضِ مَن ذَا الَّذِي يَشْفَعُ عِنْدَهُ إِلاَّ بِإِذْنِهِ يَعْلَمُ مَا بَيْنَ أَيْدِيهِمْ وَمَا خَلْفَهُمْ وَلاَ يُحِيطُونَ بِشَيْءٍ مِّنْ عِلْمِهِ إِلاَّ بِمَا شَاءَ وَسِعَ كُرْسِيُّهُ السَّمَوَاتِ وَالأَرْضَ وَلاَ يَؤُودُهُ حِفْظُهُمَا وَهُوَ الْعَلِيُّ الْعَظِيمُ﴾ عَقِبَ كلِّ صَلاَةٍ.",
-      "note": "",
-      "repeat": null,
-      "reference": "آية الكرسى - سورة البقرة 255",
+      "id": "z-a8f1ab34f4d633f9",
+      "categoryId": "after-prayer-fajr-maghrib",
+      "text": "اللَّهُمَّ لَا مَانِعَ لِمَا أَعْطَيْتَ، وَلَا مُعْطِيَ لِمَا مَنَعْتَ، وَلَا يَنْفَعُ ذَا الْجَدِّ مِنْكَ الْجَدُّ.",
+      "note": "تتمة التهليل السابق، فُصلت لسهولة القراءة والعدّ.",
+      "repeat": 1,
+      "reference": "صحيح مسلم 593a",
       "keywords": "الأذكار بعد السلام من الصلاة",
-      "sourceRow": 132
+      "sourceRow": 128,
+      "title": "اللهم لا مانع لما أعطيت",
+      "counterKind": "fixed",
+      "referenceUrl": "https://sunnah.com/muslim:593a",
+      "appliesTo": [],
+      "curated": true
     },
     {
-      "id": "z-284791c54d9816a3",
-      "categoryId": "after-prayer",
-      "text": "((لاَ إِلَهَ إِلاَّ اللَّهُ وَحْدَهُ لاَ شَرِيكَ لَهُ، لَهُ الْمُلْكُ وَلَهُ الْحَمْدُ يُحْيِي وَيُمِيتُ وَهُوَ عَلَى كُلِّ شَيْءٍ قَدِيرٌ)) عَشْرَ مَرّاتٍ بَعْدَ صَلاةِ الْمَغْرِبِ وَالصُّبْحِ.",
-      "note": "",
-      "repeat": null,
-      "reference": "",
+      "id": "z-b6db3433d91629ca",
+      "categoryId": "after-prayer-dhuhr-asr-isha",
+      "text": "لَا إِلَهَ إِلَّا اللَّهُ وَحْدَهُ لَا شَرِيكَ لَهُ، لَهُ الْمُلْكُ وَلَهُ الْحَمْدُ، وَهُوَ عَلَى كُلِّ شَيْءٍ قَدِيرٌ.",
+      "note": "هذه الصيغة مرة واحدة، ويتبعها الدعاء في البطاقة التالية.",
+      "repeat": 1,
+      "reference": "صحيح مسلم 593a",
       "keywords": "الأذكار بعد السلام من الصلاة",
-      "sourceRow": 133
+      "sourceRow": 128,
+      "title": "التهليل بعد الصلاة",
+      "counterKind": "fixed",
+      "referenceUrl": "https://sunnah.com/muslim:593a",
+      "appliesTo": [],
+      "curated": true
     },
     {
-      "id": "z-48e85f2ea73fb698",
-      "categoryId": "after-prayer",
-      "text": "((اللَّهُمَّ إِنِّي أَسْأَلُكَ عِلْماً نافِعاً، وَرِزْقاً طَيِّباً، وَعَمَلاً مُتَقَبَّلاً)) بَعْدَ السّلامِ مِنْ صَلاَةِ الفَجْرِ.",
-      "note": "",
-      "repeat": null,
-      "reference": "",
+      "id": "z-6ecfef74f0ccb881",
+      "categoryId": "after-prayer-dhuhr-asr-isha",
+      "text": "اللَّهُمَّ لَا مَانِعَ لِمَا أَعْطَيْتَ، وَلَا مُعْطِيَ لِمَا مَنَعْتَ، وَلَا يَنْفَعُ ذَا الْجَدِّ مِنْكَ الْجَدُّ.",
+      "note": "تتمة التهليل السابق، فُصلت لسهولة القراءة والعدّ.",
+      "repeat": 1,
+      "reference": "صحيح مسلم 593a",
       "keywords": "الأذكار بعد السلام من الصلاة",
-      "sourceRow": 134
+      "sourceRow": 128,
+      "title": "اللهم لا مانع لما أعطيت",
+      "counterKind": "fixed",
+      "referenceUrl": "https://sunnah.com/muslim:593a",
+      "appliesTo": [],
+      "curated": true
+    },
+    {
+      "id": "z-5c0788c676fe330b",
+      "categoryId": "after-prayer-fajr-maghrib",
+      "text": "لَا إِلَهَ إِلاَّ اللَّهُ وَحْدَهُ لاَ شَرِيكَ لَهُ، لَهُ الْمُلْكُ، وَلَهُ الْحَمدُ، وَهُوَ عَلَى كُلِّ شَيْءٍ قَدِيرٌ. لاَ حَوْلَ وَلاَ قُوَّةَ إِلاَّ بِاللَّهِ، لاَ إِلَهَ إِلاَّ اللَّهُ، وَلاَ نَعْبُدُ إِلاَّ إِيَّاهُ, لَهُ النِّعْمَةُ وَلَهُ الْفَضْلُ وَلَهُ الثَّنَاءُ الْحَسَنُ، لَا إِلَهَ إِلاَّ اللَّهُ مُخْلِصِينَ لَهُ الدِّينَ وَلَوْ كَرِهَ الكَافِرُونَ",
+      "note": "تُقرأ الصيغة كاملة كما وردت.",
+      "repeat": 1,
+      "reference": "حصن المسلم 68؛ صحيح مسلم 594",
+      "keywords": "الأذكار بعد السلام من الصلاة",
+      "sourceRow": 129,
+      "title": "لا حول ولا قوة إلا بالله",
+      "counterKind": "fixed",
+      "referenceUrl": "https://sunnah.com/hisn:68",
+      "appliesTo": [],
+      "curated": true
+    },
+    {
+      "id": "z-20abd9d5a676c756",
+      "categoryId": "after-prayer-dhuhr-asr-isha",
+      "text": "لَا إِلَهَ إِلاَّ اللَّهُ وَحْدَهُ لاَ شَرِيكَ لَهُ، لَهُ الْمُلْكُ، وَلَهُ الْحَمدُ، وَهُوَ عَلَى كُلِّ شَيْءٍ قَدِيرٌ. لاَ حَوْلَ وَلاَ قُوَّةَ إِلاَّ بِاللَّهِ، لاَ إِلَهَ إِلاَّ اللَّهُ، وَلاَ نَعْبُدُ إِلاَّ إِيَّاهُ, لَهُ النِّعْمَةُ وَلَهُ الْفَضْلُ وَلَهُ الثَّنَاءُ الْحَسَنُ، لَا إِلَهَ إِلاَّ اللَّهُ مُخْلِصِينَ لَهُ الدِّينَ وَلَوْ كَرِهَ الكَافِرُونَ",
+      "note": "تُقرأ الصيغة كاملة كما وردت.",
+      "repeat": 1,
+      "reference": "حصن المسلم 68؛ صحيح مسلم 594",
+      "keywords": "الأذكار بعد السلام من الصلاة",
+      "sourceRow": 129,
+      "title": "لا حول ولا قوة إلا بالله",
+      "counterKind": "fixed",
+      "referenceUrl": "https://sunnah.com/hisn:68",
+      "appliesTo": [],
+      "curated": true
+    },
+    {
+      "id": "z-be7a745074f37e85",
+      "categoryId": "after-prayer-fajr-maghrib",
+      "text": "سُبْحَانَ اللَّهِ.",
+      "note": "",
+      "repeat": 33,
+      "reference": "صحيح مسلم 597a",
+      "keywords": "الأذكار بعد السلام من الصلاة",
+      "sourceRow": 130,
+      "title": "التسبيح",
+      "counterKind": "fixed",
+      "referenceUrl": "https://sunnah.com/muslim:597a",
+      "appliesTo": [],
+      "curated": true
+    },
+    {
+      "id": "z-57346e23cbae9253",
+      "categoryId": "after-prayer-fajr-maghrib",
+      "text": "الْحَمْدُ لِلَّهِ.",
+      "note": "",
+      "repeat": 33,
+      "reference": "صحيح مسلم 597a",
+      "keywords": "الأذكار بعد السلام من الصلاة",
+      "sourceRow": 130,
+      "title": "التحميد",
+      "counterKind": "fixed",
+      "referenceUrl": "https://sunnah.com/muslim:597a",
+      "appliesTo": [],
+      "curated": true
+    },
+    {
+      "id": "z-bd5b5a04bd4253db",
+      "categoryId": "after-prayer-fajr-maghrib",
+      "text": "اللَّهُ أَكْبَرُ.",
+      "note": "الصيغة المختارة هنا: 33 تسبيحة و33 تحميدة و33 تكبيرة، ثم التهليل تمام المائة.",
+      "repeat": 33,
+      "reference": "صحيح مسلم 597a",
+      "keywords": "الأذكار بعد السلام من الصلاة",
+      "sourceRow": 130,
+      "title": "التكبير",
+      "counterKind": "fixed",
+      "referenceUrl": "https://sunnah.com/muslim:597a",
+      "appliesTo": [],
+      "curated": true
+    },
+    {
+      "id": "z-1fa53183e6db1b73",
+      "categoryId": "after-prayer-fajr-maghrib",
+      "text": "لَا إِلَهَ إِلَّا اللَّهُ وَحْدَهُ لَا شَرِيكَ لَهُ، لَهُ الْمُلْكُ وَلَهُ الْحَمْدُ، وَهُوَ عَلَى كُلِّ شَيْءٍ قَدِيرٌ.",
+      "note": "بعد التسبيح والتحميد والتكبير.",
+      "repeat": 1,
+      "reference": "صحيح مسلم 597a",
+      "keywords": "الأذكار بعد السلام من الصلاة",
+      "sourceRow": 130,
+      "title": "تمام المائة",
+      "counterKind": "fixed",
+      "referenceUrl": "https://sunnah.com/muslim:597a",
+      "appliesTo": [],
+      "curated": true
+    },
+    {
+      "id": "z-834ba988a7877af7",
+      "categoryId": "after-prayer-dhuhr-asr-isha",
+      "text": "سُبْحَانَ اللَّهِ.",
+      "note": "",
+      "repeat": 33,
+      "reference": "صحيح مسلم 597a",
+      "keywords": "الأذكار بعد السلام من الصلاة",
+      "sourceRow": 130,
+      "title": "التسبيح",
+      "counterKind": "fixed",
+      "referenceUrl": "https://sunnah.com/muslim:597a",
+      "appliesTo": [],
+      "curated": true
+    },
+    {
+      "id": "z-e7d376fbf17a8cd4",
+      "categoryId": "after-prayer-dhuhr-asr-isha",
+      "text": "الْحَمْدُ لِلَّهِ.",
+      "note": "",
+      "repeat": 33,
+      "reference": "صحيح مسلم 597a",
+      "keywords": "الأذكار بعد السلام من الصلاة",
+      "sourceRow": 130,
+      "title": "التحميد",
+      "counterKind": "fixed",
+      "referenceUrl": "https://sunnah.com/muslim:597a",
+      "appliesTo": [],
+      "curated": true
+    },
+    {
+      "id": "z-c3467dea396059f7",
+      "categoryId": "after-prayer-dhuhr-asr-isha",
+      "text": "اللَّهُ أَكْبَرُ.",
+      "note": "الصيغة المختارة هنا: 33 تسبيحة و33 تحميدة و33 تكبيرة، ثم التهليل تمام المائة.",
+      "repeat": 33,
+      "reference": "صحيح مسلم 597a",
+      "keywords": "الأذكار بعد السلام من الصلاة",
+      "sourceRow": 130,
+      "title": "التكبير",
+      "counterKind": "fixed",
+      "referenceUrl": "https://sunnah.com/muslim:597a",
+      "appliesTo": [],
+      "curated": true
+    },
+    {
+      "id": "z-47ff37ba8b13e1c4",
+      "categoryId": "after-prayer-dhuhr-asr-isha",
+      "text": "لَا إِلَهَ إِلَّا اللَّهُ وَحْدَهُ لَا شَرِيكَ لَهُ، لَهُ الْمُلْكُ وَلَهُ الْحَمْدُ، وَهُوَ عَلَى كُلِّ شَيْءٍ قَدِيرٌ.",
+      "note": "بعد التسبيح والتحميد والتكبير.",
+      "repeat": 1,
+      "reference": "صحيح مسلم 597a",
+      "keywords": "الأذكار بعد السلام من الصلاة",
+      "sourceRow": 130,
+      "title": "تمام المائة",
+      "counterKind": "fixed",
+      "referenceUrl": "https://sunnah.com/muslim:597a",
+      "appliesTo": [],
+      "curated": true
+    },
+    {
+      "id": "z-e51d555d30733d6d",
+      "categoryId": "after-prayer-fajr-maghrib",
+      "text": "بِسْمِ اللهِ الرَّحْمنِ الرَّحِيم\nقُلْ هُوَ ٱللَّهُ أَحَدٌ، ٱللَّهُ ٱلصَّمَدُ، لَمْ يَلِدْ وَلَمْ يُولَدْ، وَلَمْ يَكُن لَّهُۥ كُفُوًا أَحَدٌۢ.",
+      "note": "تُقرأ كل سورة ثلاث مرات بعد الفجر والمغرب، ومرة بعد الظهر والعصر والعشاء.",
+      "repeat": 3,
+      "reference": "سورة الإخلاص؛ حصن المسلم 70",
+      "keywords": "الأذكار بعد السلام من الصلاة",
+      "sourceRow": 131,
+      "title": "سورة الإخلاص",
+      "counterKind": "fixed",
+      "referenceUrl": "https://sunnah.com/hisn:70",
+      "appliesTo": [],
+      "curated": true
+    },
+    {
+      "id": "z-757316181876673b",
+      "categoryId": "after-prayer-fajr-maghrib",
+      "text": "بِسْمِ اللهِ الرَّحْمنِ الرَّحِيم\nقُلْ أَعُوذُ بِرَبِّ ٱلْفَلَقِ، مِن شَرِّ مَا خَلَقَ، وَمِن شَرِّ غَاسِقٍ إِذَا وَقَبَ، وَمِن شَرِّ ٱلنَّفَّٰثَٰتِ فِى ٱلْعُقَدِ، وَمِن شَرِّ حَاسِدٍ إِذَا حَسَدَ.",
+      "note": "تُقرأ كل سورة ثلاث مرات بعد الفجر والمغرب، ومرة بعد الظهر والعصر والعشاء.",
+      "repeat": 3,
+      "reference": "سورة الفلق؛ حصن المسلم 70",
+      "keywords": "الأذكار بعد السلام من الصلاة",
+      "sourceRow": 131,
+      "title": "سورة الفلق",
+      "counterKind": "fixed",
+      "referenceUrl": "https://sunnah.com/hisn:70",
+      "appliesTo": [],
+      "curated": true
+    },
+    {
+      "id": "z-adcf4b80152ff9db",
+      "categoryId": "after-prayer-fajr-maghrib",
+      "text": "بِسْمِ اللهِ الرَّحْمنِ الرَّحِيم\nقُلْ أَعُوذُ بِرَبِّ ٱلنَّاسِ، مَلِكِ ٱلنَّاسِ، إِلَٰهِ ٱلنَّاسِ، مِن شَرِّ ٱلْوَسْوَاسِ ٱلْخَنَّاسِ، ٱلَّذِى يُوَسْوِسُ فِى صُدُورِ ٱلنَّاسِ، مِنَ ٱلْجِنَّةِ وَٱلنَّاسِ.",
+      "note": "تُقرأ كل سورة ثلاث مرات بعد الفجر والمغرب، ومرة بعد الظهر والعصر والعشاء.",
+      "repeat": 3,
+      "reference": "سورة الناس؛ حصن المسلم 70",
+      "keywords": "الأذكار بعد السلام من الصلاة",
+      "sourceRow": 131,
+      "title": "سورة الناس",
+      "counterKind": "fixed",
+      "referenceUrl": "https://sunnah.com/hisn:70",
+      "appliesTo": [],
+      "curated": true
+    },
+    {
+      "id": "z-dec1f054ed234c85",
+      "categoryId": "after-prayer-dhuhr-asr-isha",
+      "text": "بِسْمِ اللهِ الرَّحْمنِ الرَّحِيم\nقُلْ هُوَ ٱللَّهُ أَحَدٌ، ٱللَّهُ ٱلصَّمَدُ، لَمْ يَلِدْ وَلَمْ يُولَدْ، وَلَمْ يَكُن لَّهُۥ كُفُوًا أَحَدٌۢ.",
+      "note": "تُقرأ كل سورة ثلاث مرات بعد الفجر والمغرب، ومرة بعد الظهر والعصر والعشاء.",
+      "repeat": 1,
+      "reference": "سورة الإخلاص؛ حصن المسلم 70",
+      "keywords": "الأذكار بعد السلام من الصلاة",
+      "sourceRow": 131,
+      "title": "سورة الإخلاص",
+      "counterKind": "fixed",
+      "referenceUrl": "https://sunnah.com/hisn:70",
+      "appliesTo": [],
+      "curated": true
+    },
+    {
+      "id": "z-fc97460033822726",
+      "categoryId": "after-prayer-dhuhr-asr-isha",
+      "text": "بِسْمِ اللهِ الرَّحْمنِ الرَّحِيم\nقُلْ أَعُوذُ بِرَبِّ ٱلْفَلَقِ، مِن شَرِّ مَا خَلَقَ، وَمِن شَرِّ غَاسِقٍ إِذَا وَقَبَ، وَمِن شَرِّ ٱلنَّفَّٰثَٰتِ فِى ٱلْعُقَدِ، وَمِن شَرِّ حَاسِدٍ إِذَا حَسَدَ.",
+      "note": "تُقرأ كل سورة ثلاث مرات بعد الفجر والمغرب، ومرة بعد الظهر والعصر والعشاء.",
+      "repeat": 1,
+      "reference": "سورة الفلق؛ حصن المسلم 70",
+      "keywords": "الأذكار بعد السلام من الصلاة",
+      "sourceRow": 131,
+      "title": "سورة الفلق",
+      "counterKind": "fixed",
+      "referenceUrl": "https://sunnah.com/hisn:70",
+      "appliesTo": [],
+      "curated": true
+    },
+    {
+      "id": "z-0173afa2a59cac13",
+      "categoryId": "after-prayer-dhuhr-asr-isha",
+      "text": "بِسْمِ اللهِ الرَّحْمنِ الرَّحِيم\nقُلْ أَعُوذُ بِرَبِّ ٱلنَّاسِ، مَلِكِ ٱلنَّاسِ، إِلَٰهِ ٱلنَّاسِ، مِن شَرِّ ٱلْوَسْوَاسِ ٱلْخَنَّاسِ، ٱلَّذِى يُوَسْوِسُ فِى صُدُورِ ٱلنَّاسِ، مِنَ ٱلْجِنَّةِ وَٱلنَّاسِ.",
+      "note": "تُقرأ كل سورة ثلاث مرات بعد الفجر والمغرب، ومرة بعد الظهر والعصر والعشاء.",
+      "repeat": 1,
+      "reference": "سورة الناس؛ حصن المسلم 70",
+      "keywords": "الأذكار بعد السلام من الصلاة",
+      "sourceRow": 131,
+      "title": "سورة الناس",
+      "counterKind": "fixed",
+      "referenceUrl": "https://sunnah.com/hisn:70",
+      "appliesTo": [],
+      "curated": true
+    },
+    {
+      "id": "z-b262e192e684d51a",
+      "categoryId": "after-prayer-fajr-maghrib",
+      "text": "﴿اللَّهُ لاَ إِلَهَ إِلاَّ هُوَ الْحَيُّ الْقَيُّومُ لاَ تَأْخُذُهُ سِنَةٌ وَلاَ نَوْمٌ لَّهُ مَا فِي السَّمَوَاتِ وَمَا فِي الأَرْضِ مَن ذَا الَّذِي يَشْفَعُ عِنْدَهُ إِلاَّ بِإِذْنِهِ يَعْلَمُ مَا بَيْنَ أَيْدِيهِمْ وَمَا خَلْفَهُمْ وَلاَ يُحِيطُونَ بِشَيْءٍ مِّنْ عِلْمِهِ إِلاَّ بِمَا شَاءَ وَسِعَ كُرْسِيُّهُ السَّمَوَاتِ وَالأَرْضَ وَلاَ يَؤُودُهُ حِفْظُهُمَا وَهُوَ الْعَلِيُّ الْعَظِيمُ﴾",
+      "note": "عقب كل صلاة مفروضة.",
+      "repeat": 1,
+      "reference": "البقرة 255؛ حصن المسلم 71",
+      "keywords": "الأذكار بعد السلام من الصلاة",
+      "sourceRow": 132,
+      "title": "آية الكرسي",
+      "counterKind": "fixed",
+      "referenceUrl": "https://sunnah.com/hisn:71",
+      "appliesTo": [],
+      "curated": true
+    },
+    {
+      "id": "z-7b489e0725889b2e",
+      "categoryId": "after-prayer-dhuhr-asr-isha",
+      "text": "﴿اللَّهُ لاَ إِلَهَ إِلاَّ هُوَ الْحَيُّ الْقَيُّومُ لاَ تَأْخُذُهُ سِنَةٌ وَلاَ نَوْمٌ لَّهُ مَا فِي السَّمَوَاتِ وَمَا فِي الأَرْضِ مَن ذَا الَّذِي يَشْفَعُ عِنْدَهُ إِلاَّ بِإِذْنِهِ يَعْلَمُ مَا بَيْنَ أَيْدِيهِمْ وَمَا خَلْفَهُمْ وَلاَ يُحِيطُونَ بِشَيْءٍ مِّنْ عِلْمِهِ إِلاَّ بِمَا شَاءَ وَسِعَ كُرْسِيُّهُ السَّمَوَاتِ وَالأَرْضَ وَلاَ يَؤُودُهُ حِفْظُهُمَا وَهُوَ الْعَلِيُّ الْعَظِيمُ﴾",
+      "note": "عقب كل صلاة مفروضة.",
+      "repeat": 1,
+      "reference": "البقرة 255؛ حصن المسلم 71",
+      "keywords": "الأذكار بعد السلام من الصلاة",
+      "sourceRow": 132,
+      "title": "آية الكرسي",
+      "counterKind": "fixed",
+      "referenceUrl": "https://sunnah.com/hisn:71",
+      "appliesTo": [],
+      "curated": true
+    },
+    {
+      "id": "z-9f6dc302020d22cb",
+      "categoryId": "after-prayer-fajr-maghrib",
+      "text": "لاَ إِلَهَ إِلاَّ اللَّهُ وَحْدَهُ لاَ شَرِيكَ لَهُ، لَهُ الْمُلْكُ وَلَهُ الْحَمْدُ يُحْيِي وَيُمِيتُ وَهُوَ عَلَى كُلِّ شَيْءٍ قَدِيرٌ",
+      "note": "بعد الفجر والمغرب.",
+      "repeat": 10,
+      "reference": "حصن المسلم 72",
+      "keywords": "الأذكار بعد السلام من الصلاة",
+      "sourceRow": 133,
+      "title": "التهليل عشر مرات",
+      "counterKind": "fixed",
+      "referenceUrl": "https://sunnah.com/hisn:72",
+      "appliesTo": [],
+      "curated": true
+    },
+    {
+      "id": "z-c45ec40873bd6f11",
+      "categoryId": "after-prayer-fajr-maghrib",
+      "text": "اللَّهُمَّ إِنِّي أَسْأَلُكَ عِلْماً نافِعاً، وَرِزْقاً طَيِّباً، وَعَمَلاً مُتَقَبَّلاً",
+      "note": "هذا الدعاء بعد الفجر فقط، ويُخفى عند اختيار المغرب.",
+      "repeat": 1,
+      "reference": "حصن المسلم 73؛ ابن ماجه",
+      "keywords": "الأذكار بعد السلام من الصلاة",
+      "sourceRow": 134,
+      "title": "دعاء خاص بالفجر",
+      "counterKind": "fixed",
+      "referenceUrl": "https://sunnah.com/hisn:73",
+      "appliesTo": [
+        "fajr"
+      ],
+      "curated": true
     },
     {
       "id": "z-f861bd8b4c3e3044",
@@ -2574,17 +3137,53 @@
       "repeat": null,
       "reference": "",
       "keywords": "دعاء صلاة الاستخارة - الاستخارة الإستخارة",
-      "sourceRow": 135
+      "sourceRow": 135,
+      "counterKind": "free"
     },
     {
-      "id": "z-5497a58b68fd6fa0",
+      "id": "z-66b8487dc08f1c1d",
       "categoryId": "sleep",
-      "text": "((يَجْمَعُ كَفَّيْهِ ثُمَّ يَنْفُثُ فِيهِمَا فَيَقْرَأُ فِيهِمَا:بسم الله الرحمن الرحيم ﴿قُلْ هُوَ اللَّهُ أَحَدٌ * اللَّهُ الصَّمَدُ* لَمْ يَلِدْ وَلَمْ يُولَدْ* وَلَمْ يَكُن لَّهُ كُفُواً أَحَدٌ﴾.  بسم الله الرحمن الرحيم ﴿قُلْ أَعُوذُ بِرَبِّ الْفَلَقِ* مِن شَرِّ مَا خَلَقَ* وَمِن شَرِّ غَاسِقٍ إِذَا وَقَبَ* وَمِن شَرِّ النَّفَّاثَاتِ فِي الْعُقَدِ* وَمِن شَرِّ حَاسِدٍ إِذَا حَسَدَ﴾.  بسم الله الرحمن الرحيم ﴿قُلْ أَعُوذُ بِرَبِّ النَّاسِ* مَلِكِ النَّاسِ* إِلَهِ النَّاسِ* مِن شَرِّ الْوَسْوَاسِ الْخَنَّاسِ* الَّذِي يُوَسْوِسُ فِي صُدُورِ النَّاسِ* مِنَ الْجِنَّةِ وَ النَّاسِ﴾ ثُمَّ يَمْسَحُ بِهِمَا مَا اسْتَطَاعَ مِنْ جَسَدِهِ يَبْدَأُ بِهِمَا عَلَى رَأْسِهِ وَوَجْهِهِ وَمَا أَقبَلَ مِنْ جَسَدِهِ)) (يفعلُ ذلك ثلاثَ مرَّاتٍ).",
-      "note": "",
-      "repeat": null,
-      "reference": "",
+      "text": "بِسْمِ اللهِ الرَّحْمنِ الرَّحِيم\nقُلْ هُوَ ٱللَّهُ أَحَدٌ، ٱللَّهُ ٱلصَّمَدُ، لَمْ يَلِدْ وَلَمْ يُولَدْ، وَلَمْ يَكُن لَّهُۥ كُفُوًا أَحَدٌۢ.",
+      "note": "تجمع كفيك وتنفث فيهما، ثم تقرأ السور الثلاث وتمسح ما استطعت من جسدك، وتكرر هذه الدورة ثلاث مرات. لكل سورة عدّاد مستقل لمتابعة القراءة.",
+      "repeat": 3,
+      "reference": "صحيح البخاري 5017",
       "keywords": "أذكار النوم",
-      "sourceRow": 136
+      "sourceRow": 136,
+      "title": "سورة الإخلاص قبل النوم",
+      "counterKind": "fixed",
+      "referenceUrl": "https://sunnah.com/bukhari:5017",
+      "appliesTo": [],
+      "curated": true
+    },
+    {
+      "id": "z-8da5a9a719548444",
+      "categoryId": "sleep",
+      "text": "بِسْمِ اللهِ الرَّحْمنِ الرَّحِيم\nقُلْ أَعُوذُ بِرَبِّ ٱلْفَلَقِ، مِن شَرِّ مَا خَلَقَ، وَمِن شَرِّ غَاسِقٍ إِذَا وَقَبَ، وَمِن شَرِّ ٱلنَّفَّٰثَٰتِ فِى ٱلْعُقَدِ، وَمِن شَرِّ حَاسِدٍ إِذَا حَسَدَ.",
+      "note": "تجمع كفيك وتنفث فيهما، ثم تقرأ السور الثلاث وتمسح ما استطعت من جسدك، وتكرر هذه الدورة ثلاث مرات. لكل سورة عدّاد مستقل لمتابعة القراءة.",
+      "repeat": 3,
+      "reference": "صحيح البخاري 5017",
+      "keywords": "أذكار النوم",
+      "sourceRow": 136,
+      "title": "سورة الفلق قبل النوم",
+      "counterKind": "fixed",
+      "referenceUrl": "https://sunnah.com/bukhari:5017",
+      "appliesTo": [],
+      "curated": true
+    },
+    {
+      "id": "z-40c92efb60199be4",
+      "categoryId": "sleep",
+      "text": "بِسْمِ اللهِ الرَّحْمنِ الرَّحِيم\nقُلْ أَعُوذُ بِرَبِّ ٱلنَّاسِ، مَلِكِ ٱلنَّاسِ، إِلَٰهِ ٱلنَّاسِ، مِن شَرِّ ٱلْوَسْوَاسِ ٱلْخَنَّاسِ، ٱلَّذِى يُوَسْوِسُ فِى صُدُورِ ٱلنَّاسِ، مِنَ ٱلْجِنَّةِ وَٱلنَّاسِ.",
+      "note": "تجمع كفيك وتنفث فيهما، ثم تقرأ السور الثلاث وتمسح ما استطعت من جسدك، وتكرر هذه الدورة ثلاث مرات. لكل سورة عدّاد مستقل لمتابعة القراءة.",
+      "repeat": 3,
+      "reference": "صحيح البخاري 5017",
+      "keywords": "أذكار النوم",
+      "sourceRow": 136,
+      "title": "سورة الناس قبل النوم",
+      "counterKind": "fixed",
+      "referenceUrl": "https://sunnah.com/bukhari:5017",
+      "appliesTo": [],
+      "curated": true
     },
     {
       "id": "z-ae35028a461ed517",
@@ -2594,7 +3193,8 @@
       "repeat": null,
       "reference": "آية الكرسى - سورة البقرة 255",
       "keywords": "أذكار النوم",
-      "sourceRow": 137
+      "sourceRow": 137,
+      "counterKind": "free"
     },
     {
       "id": "z-720d3577adcb527b",
@@ -2604,7 +3204,8 @@
       "repeat": null,
       "reference": "سورة البقرة 285 - 286",
       "keywords": "أذكار النوم",
-      "sourceRow": 138
+      "sourceRow": 138,
+      "counterKind": "free"
     },
     {
       "id": "z-ed8aecb5fe394c11",
@@ -2614,7 +3215,8 @@
       "repeat": null,
       "reference": "",
       "keywords": "أذكار النوم",
-      "sourceRow": 139
+      "sourceRow": 139,
+      "counterKind": "free"
     },
     {
       "id": "z-535daafc6802d6b6",
@@ -2624,7 +3226,8 @@
       "repeat": null,
       "reference": "",
       "keywords": "أذكار النوم",
-      "sourceRow": 140
+      "sourceRow": 140,
+      "counterKind": "free"
     },
     {
       "id": "z-abcceeeefad1b248",
@@ -2634,7 +3237,8 @@
       "repeat": null,
       "reference": "",
       "keywords": "أذكار النوم",
-      "sourceRow": 141
+      "sourceRow": 141,
+      "counterKind": "free"
     },
     {
       "id": "z-64bd534a2e793d03",
@@ -2644,17 +3248,53 @@
       "repeat": null,
       "reference": "",
       "keywords": "أذكار النوم",
-      "sourceRow": 142
+      "sourceRow": 142,
+      "counterKind": "free"
     },
     {
-      "id": "z-c80e2dffa5881bf9",
+      "id": "z-919c9d828525385a",
       "categoryId": "sleep",
-      "text": "((سُبْحَانَ اللَّهِ (ثلاثاً وثلاثين) وَالْحَمْدُ لِلَّهِ (ثلاثاً وثلاثين) وَاللَّهُ أَكْبَرُ (أربعاً وثلاثينَ))).",
+      "text": "سُبْحَانَ اللَّهِ.",
       "note": "",
-      "repeat": null,
+      "repeat": 33,
       "reference": "",
       "keywords": "أذكار النوم",
-      "sourceRow": 143
+      "sourceRow": 143,
+      "title": "التسبيح قبل النوم",
+      "counterKind": "fixed",
+      "referenceUrl": "",
+      "appliesTo": [],
+      "curated": true
+    },
+    {
+      "id": "z-b823d3d5072665f4",
+      "categoryId": "sleep",
+      "text": "الْحَمْدُ لِلَّهِ.",
+      "note": "",
+      "repeat": 33,
+      "reference": "",
+      "keywords": "أذكار النوم",
+      "sourceRow": 143,
+      "title": "التحميد قبل النوم",
+      "counterKind": "fixed",
+      "referenceUrl": "",
+      "appliesTo": [],
+      "curated": true
+    },
+    {
+      "id": "z-7b98ace65c7f5db0",
+      "categoryId": "sleep",
+      "text": "اللَّهُ أَكْبَرُ.",
+      "note": "",
+      "repeat": 34,
+      "reference": "",
+      "keywords": "أذكار النوم",
+      "sourceRow": 143,
+      "title": "التكبير قبل النوم",
+      "counterKind": "fixed",
+      "referenceUrl": "",
+      "appliesTo": [],
+      "curated": true
     },
     {
       "id": "z-d0e2c644601dbc2f",
@@ -2664,7 +3304,8 @@
       "repeat": null,
       "reference": "",
       "keywords": "أذكار النوم",
-      "sourceRow": 144
+      "sourceRow": 144,
+      "counterKind": "free"
     },
     {
       "id": "z-870ab71b81f707df",
@@ -2674,7 +3315,8 @@
       "repeat": null,
       "reference": "",
       "keywords": "أذكار النوم",
-      "sourceRow": 145
+      "sourceRow": 145,
+      "counterKind": "free"
     },
     {
       "id": "z-6b099c76b78fb368",
@@ -2684,7 +3326,8 @@
       "repeat": null,
       "reference": "",
       "keywords": "أذكار النوم",
-      "sourceRow": 146
+      "sourceRow": 146,
+      "counterKind": "free"
     },
     {
       "id": "z-2333a52f67ca79f7",
@@ -2694,7 +3337,8 @@
       "repeat": null,
       "reference": "",
       "keywords": "أذكار النوم",
-      "sourceRow": 147
+      "sourceRow": 147,
+      "counterKind": "free"
     },
     {
       "id": "z-a50a7e46f2cd1d8c",
@@ -2704,7 +3348,8 @@
       "repeat": null,
       "reference": "",
       "keywords": "أذكار النوم",
-      "sourceRow": 148
+      "sourceRow": 148,
+      "counterKind": "free"
     },
     {
       "id": "z-2bb5587713882006",
@@ -2714,7 +3359,8 @@
       "repeat": null,
       "reference": "",
       "keywords": "الدعاء إذا تقلب في الليل - النوم",
-      "sourceRow": 149
+      "sourceRow": 149,
+      "counterKind": "free"
     },
     {
       "id": "z-a14d494ee4a4e12f",
@@ -2724,7 +3370,8 @@
       "repeat": null,
       "reference": "",
       "keywords": "دعاء الفزع في النوم و من بلي بالوحشة",
-      "sourceRow": 150
+      "sourceRow": 150,
+      "counterKind": "free"
     },
     {
       "id": "z-5edb9dab45084481",
@@ -2734,7 +3381,9 @@
       "repeat": null,
       "reference": "",
       "keywords": "ما يفعل من رأى الرؤيا أو الحلم في النوم",
-      "sourceRow": 151
+      "sourceRow": 151,
+      "counterKind": "instruction",
+      "curated": true
     },
     {
       "id": "z-f87dd9a034bd090a",
@@ -2744,7 +3393,8 @@
       "repeat": null,
       "reference": "",
       "keywords": "ما يفعل من رأى الرؤيا أو الحلم في النوم",
-      "sourceRow": 152
+      "sourceRow": 152,
+      "counterKind": "free"
     },
     {
       "id": "z-784fdc82833da05b",
@@ -2754,7 +3404,8 @@
       "repeat": null,
       "reference": "",
       "keywords": "دعاء قنوت الوتر - صلاة الوتر",
-      "sourceRow": 153
+      "sourceRow": 153,
+      "counterKind": "free"
     },
     {
       "id": "z-53afde4aa96be6a5",
@@ -2764,7 +3415,8 @@
       "repeat": null,
       "reference": "",
       "keywords": "دعاء قنوت الوتر - صلاة الوتر",
-      "sourceRow": 154
+      "sourceRow": 154,
+      "counterKind": "free"
     },
     {
       "id": "z-1a18a1947643ed38",
@@ -2774,17 +3426,38 @@
       "repeat": null,
       "reference": "",
       "keywords": "دعاء قنوت الوتر - صلاة الوتر",
-      "sourceRow": 155
+      "sourceRow": 155,
+      "counterKind": "free"
     },
     {
-      "id": "z-6dadcb163e0b6b4b",
+      "id": "z-11d331174c9d97f1",
       "categoryId": "c-feed2bf99c96",
-      "text": "((سُبْحَانَ المَلِكِ القُدُّوسِ)) ثلاثَ مرَّاتٍ والثَّالِثَةُ يَجْهَرُ بها ويَمُدُّ بها صَوتَهُ يقولُ: [رَبِّ الْمَلاَئِكَةِ وَالرُّوحِ])).",
-      "note": "",
-      "repeat": null,
+      "text": "سُبْحَانَ الْمَلِكِ الْقُدُّوسِ.",
+      "note": "في الثالثة يجهر بها ويمد صوته، كما في النص الأصلي.",
+      "repeat": 3,
       "reference": "",
       "keywords": "الذكر عقب السلام من الوتر - صلاة الوتر",
-      "sourceRow": 156
+      "sourceRow": 156,
+      "title": "الذكر بعد الوتر",
+      "counterKind": "fixed",
+      "referenceUrl": "",
+      "appliesTo": [],
+      "curated": true
+    },
+    {
+      "id": "z-614a5b28b41e25e0",
+      "categoryId": "c-feed2bf99c96",
+      "text": "رَبِّ الْمَلَائِكَةِ وَالرُّوحِ.",
+      "note": "",
+      "repeat": 1,
+      "reference": "",
+      "keywords": "الذكر عقب السلام من الوتر - صلاة الوتر",
+      "sourceRow": 156,
+      "title": "تتمة المرة الثالثة",
+      "counterKind": "reading",
+      "referenceUrl": "",
+      "appliesTo": [],
+      "curated": true
     },
     {
       "id": "z-b922fee7b5915426",
@@ -2794,7 +3467,8 @@
       "repeat": null,
       "reference": "",
       "keywords": "دعاء الهم والحزن",
-      "sourceRow": 157
+      "sourceRow": 157,
+      "counterKind": "free"
     },
     {
       "id": "z-61ab2b1b1a7c55a3",
@@ -2804,7 +3478,8 @@
       "repeat": null,
       "reference": "",
       "keywords": "دعاء الهم والحزن",
-      "sourceRow": 158
+      "sourceRow": 158,
+      "counterKind": "free"
     },
     {
       "id": "z-46d6a905b62027e8",
@@ -2814,7 +3489,8 @@
       "repeat": null,
       "reference": "",
       "keywords": "دعاء الكرب",
-      "sourceRow": 159
+      "sourceRow": 159,
+      "counterKind": "free"
     },
     {
       "id": "z-fd9ddf0a4f54d8fa",
@@ -2824,7 +3500,8 @@
       "repeat": null,
       "reference": "",
       "keywords": "دعاء الكرب",
-      "sourceRow": 160
+      "sourceRow": 160,
+      "counterKind": "free"
     },
     {
       "id": "z-a7057634f9fc0591",
@@ -2834,7 +3511,8 @@
       "repeat": null,
       "reference": "",
       "keywords": "دعاء الكرب",
-      "sourceRow": 161
+      "sourceRow": 161,
+      "counterKind": "free"
     },
     {
       "id": "z-6e2a608b40137533",
@@ -2844,7 +3522,8 @@
       "repeat": null,
       "reference": "",
       "keywords": "دعاء الكرب",
-      "sourceRow": 162
+      "sourceRow": 162,
+      "counterKind": "free"
     },
     {
       "id": "z-197ff6ea8ae74ff9",
@@ -2854,7 +3533,8 @@
       "repeat": null,
       "reference": "",
       "keywords": "دعاء لقاء العدو و ذي السلطان",
-      "sourceRow": 163
+      "sourceRow": 163,
+      "counterKind": "free"
     },
     {
       "id": "z-95036172ef622eff",
@@ -2864,7 +3544,8 @@
       "repeat": null,
       "reference": "",
       "keywords": "دعاء لقاء العدو و ذي السلطان",
-      "sourceRow": 164
+      "sourceRow": 164,
+      "counterKind": "free"
     },
     {
       "id": "z-15eb9101b1cbb408",
@@ -2874,7 +3555,8 @@
       "repeat": null,
       "reference": "",
       "keywords": "دعاء لقاء العدو و ذي السلطان",
-      "sourceRow": 165
+      "sourceRow": 165,
+      "counterKind": "free"
     },
     {
       "id": "z-31d3c27383395f9f",
@@ -2884,17 +3566,23 @@
       "repeat": null,
       "reference": "",
       "keywords": "دعاء من خاف ظلم السلطان",
-      "sourceRow": 166
+      "sourceRow": 166,
+      "counterKind": "free"
     },
     {
-      "id": "z-52fdaac15b70345b",
+      "id": "z-0df8b8ec19eb378a",
       "categoryId": "c-aed5ee2985b5",
-      "text": "((اللَّهُ أَكْبَرُ، اللَّهُ أَعَزُّ مِنْ خَلْقِهِ جَمِيعاً، اللَّهُ أَعَزُّ مِمَّا أَخَافُ وَأَحْذَرُ، أَعُوذُ بِاللَّهِ الَّذِي لاَ إِلَهَ إِلاَّ هُوَ، الْمُمْسِكِ السَّمَوَاتِ السَّبْعِ أَنْ يَقَعْنَ عَلَى الْأَرْضِ إِلاَّ بِإِذْنِهِ، مِنْ شَرِّ عَبْدِكَ فُلاَنٍ، وَجُنُودِهِ وَأَتْبَاعِهِ وَأَشْيَاعِهِ، مِنْ الْجِنِّ وَالإِنْسِ، اللَّهُمَّ كُنْ لِي جَاراً مِنْ شَرِّهِمْ، جَلَّ ثَنَاؤُكَ وَعَزَّ جَارُكَ، وَتَبَارَكَ اسْمُكَ، وَلاَ إِلَهَ غَيْرُكَ)) (ثلاثَ مرَّاتٍ).",
-      "note": "",
-      "repeat": null,
+      "text": "اللَّهُ أَكْبَرُ، اللَّهُ أَعَزُّ مِنْ خَلْقِهِ جَمِيعاً، اللَّهُ أَعَزُّ مِمَّا أَخَافُ وَأَحْذَرُ، أَعُوذُ بِاللَّهِ الَّذِي لاَ إِلَهَ إِلاَّ هُوَ، الْمُمْسِكِ السَّمَوَاتِ السَّبْعِ أَنْ يَقَعْنَ عَلَى الْأَرْضِ إِلاَّ بِإِذْنِهِ، مِنْ شَرِّ عَبْدِكَ فُلاَنٍ، وَجُنُودِهِ وَأَتْبَاعِهِ وَأَشْيَاعِهِ، مِنْ الْجِنِّ وَالإِنْسِ، اللَّهُمَّ كُنْ لِي جَاراً مِنْ شَرِّهِمْ، جَلَّ ثَنَاؤُكَ وَعَزَّ جَارُكَ، وَتَبَارَكَ اسْمُكَ، وَلاَ إِلَهَ غَيْرُكَ",
+      "note": "العدد مذكور صراحة في النص الأصلي.",
+      "repeat": 3,
       "reference": "",
       "keywords": "دعاء من خاف ظلم السلطان",
-      "sourceRow": 167
+      "sourceRow": 167,
+      "title": "دعاء عند الخوف من السلطان",
+      "counterKind": "fixed",
+      "referenceUrl": "",
+      "appliesTo": [],
+      "curated": true
     },
     {
       "id": "z-b1a86a218d626a7f",
@@ -2904,7 +3592,8 @@
       "repeat": null,
       "reference": "",
       "keywords": "الدعاء على العدو",
-      "sourceRow": 168
+      "sourceRow": 168,
+      "counterKind": "free"
     },
     {
       "id": "z-8adb8b2a5f5c1ce5",
@@ -2914,7 +3603,8 @@
       "repeat": null,
       "reference": "",
       "keywords": "ما يقول من خاف قوما - الخوف الرهبة",
-      "sourceRow": 169
+      "sourceRow": 169,
+      "counterKind": "free"
     },
     {
       "id": "z-ff3fbb9fc881fd21",
@@ -2924,7 +3614,8 @@
       "repeat": null,
       "reference": "",
       "keywords": "دعاء من أصابه وسوسة في الإيمان",
-      "sourceRow": 170
+      "sourceRow": 170,
+      "counterKind": "free"
     },
     {
       "id": "z-0c5705d522ac8134",
@@ -2934,7 +3625,8 @@
       "repeat": null,
       "reference": "",
       "keywords": "دعاء من أصابه وسوسة في الإيمان",
-      "sourceRow": 171
+      "sourceRow": 171,
+      "counterKind": "free"
     },
     {
       "id": "z-917a5148a98c0b97",
@@ -2944,7 +3636,8 @@
       "repeat": null,
       "reference": "",
       "keywords": "دعاء من أصابه وسوسة في الإيمان",
-      "sourceRow": 172
+      "sourceRow": 172,
+      "counterKind": "free"
     },
     {
       "id": "z-c177818d2f04d4ea",
@@ -2954,7 +3647,8 @@
       "repeat": null,
       "reference": "",
       "keywords": "دعاء قضاء الدين - سداد الدين الديون",
-      "sourceRow": 173
+      "sourceRow": 173,
+      "counterKind": "free"
     },
     {
       "id": "z-ca8a318b21e266d7",
@@ -2964,7 +3658,8 @@
       "repeat": null,
       "reference": "",
       "keywords": "دعاء قضاء الدين - سداد الدين الديون",
-      "sourceRow": 174
+      "sourceRow": 174,
+      "counterKind": "free"
     },
     {
       "id": "z-09151adf6a1e83f5",
@@ -2974,7 +3669,9 @@
       "repeat": null,
       "reference": "",
       "keywords": "دعاء الوسوسة في الصلاة و القراءة - الشيطان الصلاة",
-      "sourceRow": 175
+      "sourceRow": 175,
+      "counterKind": "instruction",
+      "curated": true
     },
     {
       "id": "z-cafc5847aef06387",
@@ -2984,7 +3681,8 @@
       "repeat": null,
       "reference": "",
       "keywords": "دعاء من استصعب عليه أمر",
-      "sourceRow": 176
+      "sourceRow": 176,
+      "counterKind": "free"
     },
     {
       "id": "z-f070c661d9fb317f",
@@ -2994,7 +3692,8 @@
       "repeat": null,
       "reference": "",
       "keywords": "ما يقول ويفعل من أذنب ذنبا - الذنب المعصية الاستغفار الإستغفار",
-      "sourceRow": 177
+      "sourceRow": 177,
+      "counterKind": "free"
     },
     {
       "id": "z-8c510c97a631c336",
@@ -3004,7 +3703,8 @@
       "repeat": null,
       "reference": "",
       "keywords": "دعاء طرد الشيطان و وساوسه",
-      "sourceRow": 178
+      "sourceRow": 178,
+      "counterKind": "free"
     },
     {
       "id": "z-00cea9f04e6a3375",
@@ -3014,7 +3714,8 @@
       "repeat": null,
       "reference": "",
       "keywords": "دعاء طرد الشيطان و وساوسه",
-      "sourceRow": 179
+      "sourceRow": 179,
+      "counterKind": "free"
     },
     {
       "id": "z-9e31f274a316a710",
@@ -3024,7 +3725,8 @@
       "repeat": null,
       "reference": "",
       "keywords": "دعاء طرد الشيطان و وساوسه",
-      "sourceRow": 180
+      "sourceRow": 180,
+      "counterKind": "free"
     },
     {
       "id": "z-10f4c967544d8571",
@@ -3034,7 +3736,8 @@
       "repeat": null,
       "reference": "",
       "keywords": "الدعاء حينما يقع ما لا يرضاه أو غلب على أمره",
-      "sourceRow": 181
+      "sourceRow": 181,
+      "counterKind": "free"
     },
     {
       "id": "z-86abf78c29bc675e",
@@ -3044,7 +3747,8 @@
       "repeat": null,
       "reference": "",
       "keywords": "ﺗﻬنئة المولود له وجوابه - التهنئة الطفل الولادة",
-      "sourceRow": 182
+      "sourceRow": 182,
+      "counterKind": "free"
     },
     {
       "id": "z-86c8f474404ed4ea",
@@ -3054,7 +3758,8 @@
       "repeat": null,
       "reference": "",
       "keywords": "ما يعوذ به الأولاد - رقية",
-      "sourceRow": 183
+      "sourceRow": 183,
+      "counterKind": "free"
     },
     {
       "id": "z-482633505842f4dd",
@@ -3064,7 +3769,8 @@
       "repeat": null,
       "reference": "",
       "keywords": "الدعاء للمريض في عيادته - زيارة المريض",
-      "sourceRow": 184
+      "sourceRow": 184,
+      "counterKind": "free"
     },
     {
       "id": "z-097b4e4603621118",
@@ -3074,7 +3780,8 @@
       "repeat": 7,
       "reference": "",
       "keywords": "الدعاء للمريض في عيادته - زيارة المريض",
-      "sourceRow": 185
+      "sourceRow": 185,
+      "counterKind": "fixed"
     },
     {
       "id": "z-e96fc368cb6cc170",
@@ -3084,7 +3791,9 @@
       "repeat": null,
       "reference": "",
       "keywords": "فضل عيادة المريض - زيارة المريض",
-      "sourceRow": 186
+      "sourceRow": 186,
+      "counterKind": "instruction",
+      "curated": true
     },
     {
       "id": "z-7349c63cce7f15a3",
@@ -3094,7 +3803,8 @@
       "repeat": null,
       "reference": "",
       "keywords": "دعاء المريض الذي يئس من حياته - زيارة المريض",
-      "sourceRow": 187
+      "sourceRow": 187,
+      "counterKind": "free"
     },
     {
       "id": "z-29099816b1b31a2e",
@@ -3104,7 +3814,8 @@
       "repeat": null,
       "reference": "",
       "keywords": "دعاء المريض الذي يئس من حياته - زيارة المريض",
-      "sourceRow": 188
+      "sourceRow": 188,
+      "counterKind": "free"
     },
     {
       "id": "z-b9fdf738d738a54a",
@@ -3114,7 +3825,8 @@
       "repeat": null,
       "reference": "",
       "keywords": "دعاء المريض الذي يئس من حياته - زيارة المريض",
-      "sourceRow": 189
+      "sourceRow": 189,
+      "counterKind": "free"
     },
     {
       "id": "z-feec4d74b28096fd",
@@ -3124,7 +3836,8 @@
       "repeat": null,
       "reference": "",
       "keywords": "تلقين المحتضر - سكرات الموت الوفاه الوفاة",
-      "sourceRow": 190
+      "sourceRow": 190,
+      "counterKind": "free"
     },
     {
       "id": "z-248ba103449bacf9",
@@ -3134,7 +3847,8 @@
       "repeat": null,
       "reference": "",
       "keywords": "دعاء من أصيب بمصيبة",
-      "sourceRow": 191
+      "sourceRow": 191,
+      "counterKind": "free"
     },
     {
       "id": "z-af231115eb5c725e",
@@ -3144,7 +3858,8 @@
       "repeat": null,
       "reference": "",
       "keywords": "الدعاء عند إغماض الميت -  الوفاه الوفاة الموت",
-      "sourceRow": 192
+      "sourceRow": 192,
+      "counterKind": "free"
     },
     {
       "id": "z-538f59941cdea5ed",
@@ -3154,7 +3869,8 @@
       "repeat": null,
       "reference": "",
       "keywords": "الدعاء للميت في الصلاة عليه -  الوفاه الوفاة الموت",
-      "sourceRow": 193
+      "sourceRow": 193,
+      "counterKind": "free"
     },
     {
       "id": "z-9a3160d234854661",
@@ -3164,7 +3880,8 @@
       "repeat": null,
       "reference": "",
       "keywords": "الدعاء للميت في الصلاة عليه -  الوفاه الوفاة الموت",
-      "sourceRow": 194
+      "sourceRow": 194,
+      "counterKind": "free"
     },
     {
       "id": "z-6ad1218b6000ac3b",
@@ -3174,7 +3891,8 @@
       "repeat": null,
       "reference": "",
       "keywords": "الدعاء للميت في الصلاة عليه -  الوفاه الوفاة الموت",
-      "sourceRow": 195
+      "sourceRow": 195,
+      "counterKind": "free"
     },
     {
       "id": "z-14cce61fb6c247a4",
@@ -3184,7 +3902,8 @@
       "repeat": null,
       "reference": "",
       "keywords": "الدعاء للميت في الصلاة عليه -  الوفاه الوفاة الموت",
-      "sourceRow": 196
+      "sourceRow": 196,
+      "counterKind": "free"
     },
     {
       "id": "z-aeb619a4fdd07190",
@@ -3194,7 +3913,8 @@
       "repeat": null,
       "reference": "",
       "keywords": "الدعاء للفرط في الصلاة عليه",
-      "sourceRow": 197
+      "sourceRow": 197,
+      "counterKind": "free"
     },
     {
       "id": "z-6b0687f86a6e9215",
@@ -3204,7 +3924,8 @@
       "repeat": null,
       "reference": "",
       "keywords": "الدعاء للفرط في الصلاة عليه",
-      "sourceRow": 198
+      "sourceRow": 198,
+      "counterKind": "free"
     },
     {
       "id": "z-d873e4b1d5df16f4",
@@ -3214,7 +3935,8 @@
       "repeat": null,
       "reference": "",
       "keywords": "دعاء التعزية - العزاء الوفاه الوفاة الموت",
-      "sourceRow": 199
+      "sourceRow": 199,
+      "counterKind": "free"
     },
     {
       "id": "z-0e99c94d0046cd6b",
@@ -3224,7 +3946,8 @@
       "repeat": null,
       "reference": "",
       "keywords": "الدعاء عند إدخال الميت القبر - المقابر الموت الوفاه الوفاة",
-      "sourceRow": 200
+      "sourceRow": 200,
+      "counterKind": "free"
     },
     {
       "id": "z-93af10901ea1c209",
@@ -3234,7 +3957,8 @@
       "repeat": null,
       "reference": "",
       "keywords": "الدعاء بعد دفن الميت - المقابر الموت الوفاه الوفاة",
-      "sourceRow": 201
+      "sourceRow": 201,
+      "counterKind": "free"
     },
     {
       "id": "z-2350a8525468f887",
@@ -3244,7 +3968,8 @@
       "repeat": null,
       "reference": "",
       "keywords": "دعاء زيارة القبور - المقابر الموت الوفاه الوفاة",
-      "sourceRow": 202
+      "sourceRow": 202,
+      "counterKind": "free"
     },
     {
       "id": "z-886d7717ddc39fd7",
@@ -3254,7 +3979,8 @@
       "repeat": null,
       "reference": "",
       "keywords": "دعاء الريح - الرياح الهواء العواصف العاصفة",
-      "sourceRow": 203
+      "sourceRow": 203,
+      "counterKind": "free"
     },
     {
       "id": "z-3001fe57fd43bbce",
@@ -3264,7 +3990,8 @@
       "repeat": null,
       "reference": "",
       "keywords": "دعاء الريح - الرياح الهواء العواصف العاصفة",
-      "sourceRow": 204
+      "sourceRow": 204,
+      "counterKind": "free"
     },
     {
       "id": "z-0ad3dcac2b29346c",
@@ -3274,7 +4001,8 @@
       "repeat": null,
       "reference": "",
       "keywords": "دعاء الرعد",
-      "sourceRow": 205
+      "sourceRow": 205,
+      "counterKind": "free"
     },
     {
       "id": "z-0e67fb142e6dac44",
@@ -3284,17 +4012,23 @@
       "repeat": null,
       "reference": "",
       "keywords": "من أدعية الاستسقاء",
-      "sourceRow": 206
+      "sourceRow": 206,
+      "counterKind": "free"
     },
     {
-      "id": "z-204b7f6af8c2f8e5",
+      "id": "z-d0bf3d926bfb20e8",
       "categoryId": "c-f2594e04b7d7",
-      "text": "((اللَّهُمَّ أَغِثْنَا، اللَّهُمَّ أَغِثْنَا، اللَّهُمَّ أَغِثْنَا)).",
-      "note": "",
-      "repeat": null,
+      "text": "اللَّهُمَّ أَغِثْنَا.",
+      "note": "اللفظ مكرر ثلاثًا في النص الأصلي.",
+      "repeat": 3,
       "reference": "",
       "keywords": "من أدعية الاستسقاء",
-      "sourceRow": 207
+      "sourceRow": 207,
+      "title": "دعاء الاستسقاء",
+      "counterKind": "fixed",
+      "referenceUrl": "",
+      "appliesTo": [],
+      "curated": true
     },
     {
       "id": "z-06d066400ff123f8",
@@ -3304,7 +4038,8 @@
       "repeat": null,
       "reference": "",
       "keywords": "من أدعية الاستسقاء",
-      "sourceRow": 208
+      "sourceRow": 208,
+      "counterKind": "free"
     },
     {
       "id": "z-ef56f8c99990f613",
@@ -3314,7 +4049,8 @@
       "repeat": null,
       "reference": "",
       "keywords": "الدعاء إذا نزل المطر",
-      "sourceRow": 209
+      "sourceRow": 209,
+      "counterKind": "free"
     },
     {
       "id": "z-2d962e8a7830136a",
@@ -3324,7 +4060,8 @@
       "repeat": null,
       "reference": "",
       "keywords": "الذكر بعد نزول المطر",
-      "sourceRow": 210
+      "sourceRow": 210,
+      "counterKind": "free"
     },
     {
       "id": "z-46ccaf89a4805bde",
@@ -3334,7 +4071,8 @@
       "repeat": null,
       "reference": "",
       "keywords": "من أدعية الاستصحاء",
-      "sourceRow": 211
+      "sourceRow": 211,
+      "counterKind": "free"
     },
     {
       "id": "z-5509be263b6c1f45",
@@ -3344,7 +4082,8 @@
       "repeat": null,
       "reference": "",
       "keywords": "دعاء رؤية الهلال",
-      "sourceRow": 212
+      "sourceRow": 212,
+      "counterKind": "free"
     },
     {
       "id": "z-681795b08c7cb1e3",
@@ -3354,7 +4093,8 @@
       "repeat": null,
       "reference": "",
       "keywords": "الدعاء عند إفطار الصائم - الصيام الصوم الأكل الاكل",
-      "sourceRow": 213
+      "sourceRow": 213,
+      "counterKind": "free"
     },
     {
       "id": "z-c3bc887a963a1d53",
@@ -3364,7 +4104,8 @@
       "repeat": null,
       "reference": "",
       "keywords": "الدعاء عند إفطار الصائم - الصيام الصوم الأكل الاكل",
-      "sourceRow": 214
+      "sourceRow": 214,
+      "counterKind": "free"
     },
     {
       "id": "z-719fb3e865d3f30d",
@@ -3374,7 +4115,8 @@
       "repeat": null,
       "reference": "",
       "keywords": "الدعاء قبل الطعام - الأكل الاكل",
-      "sourceRow": 215
+      "sourceRow": 215,
+      "counterKind": "free"
     },
     {
       "id": "z-7c372f72a2aa4e97",
@@ -3384,7 +4126,8 @@
       "repeat": null,
       "reference": "",
       "keywords": "الدعاء قبل الطعام - الأكل الاكل",
-      "sourceRow": 216
+      "sourceRow": 216,
+      "counterKind": "free"
     },
     {
       "id": "z-078aae5daa8f5e55",
@@ -3394,7 +4137,8 @@
       "repeat": null,
       "reference": "",
       "keywords": "الدعاء عند الفراغ من الطعام - الأكل الاكل",
-      "sourceRow": 217
+      "sourceRow": 217,
+      "counterKind": "free"
     },
     {
       "id": "z-4915489284bf123d",
@@ -3404,7 +4148,8 @@
       "repeat": null,
       "reference": "",
       "keywords": "الدعاء عند الفراغ من الطعام - الأكل الاكل",
-      "sourceRow": 218
+      "sourceRow": 218,
+      "counterKind": "free"
     },
     {
       "id": "z-225845e6d90fc7ff",
@@ -3414,7 +4159,8 @@
       "repeat": null,
       "reference": "",
       "keywords": "دعاء الضيف لصاحب الطعام - الأكل الاكل",
-      "sourceRow": 219
+      "sourceRow": 219,
+      "counterKind": "free"
     },
     {
       "id": "z-314e2d46e2b13d1d",
@@ -3424,7 +4170,8 @@
       "repeat": null,
       "reference": "",
       "keywords": "التعريض بالدعاء لطلب الطعام أو الشراب - الأكل الاكل",
-      "sourceRow": 220
+      "sourceRow": 220,
+      "counterKind": "free"
     },
     {
       "id": "z-cd74ad1205c4088e",
@@ -3434,7 +4181,8 @@
       "repeat": null,
       "reference": "",
       "keywords": "الدعاء إذا أفطر عند أهل بيت - طعام الأكل الاكل صيام صوم",
-      "sourceRow": 221
+      "sourceRow": 221,
+      "counterKind": "free"
     },
     {
       "id": "z-f291013f6c5c4ebc",
@@ -3444,7 +4192,8 @@
       "repeat": null,
       "reference": "",
       "keywords": "دعاء الصائم إذا حضر الطعام ولم يفطر - الأكل الاكل صوم صيام",
-      "sourceRow": 222
+      "sourceRow": 222,
+      "counterKind": "free"
     },
     {
       "id": "z-536e44f3a66ac69d",
@@ -3454,7 +4203,8 @@
       "repeat": null,
       "reference": "",
       "keywords": "ما يقول الصائم إذا سابه أحد - صوم صيام شتيمة",
-      "sourceRow": 223
+      "sourceRow": 223,
+      "counterKind": "free"
     },
     {
       "id": "z-4fed786a29ffc52a",
@@ -3464,7 +4214,8 @@
       "repeat": null,
       "reference": "",
       "keywords": "الدعاء عند رؤية باكورة الثمر",
-      "sourceRow": 224
+      "sourceRow": 224,
+      "counterKind": "free"
     },
     {
       "id": "z-781d97e28cfe337d",
@@ -3474,7 +4225,8 @@
       "repeat": null,
       "reference": "",
       "keywords": "دعاء العطاس",
-      "sourceRow": 225
+      "sourceRow": 225,
+      "counterKind": "free"
     },
     {
       "id": "z-270150d0f7c15291",
@@ -3484,7 +4236,8 @@
       "repeat": null,
       "reference": "",
       "keywords": "ما يقال للكافر إذا عطس فحمد الله",
-      "sourceRow": 226
+      "sourceRow": 226,
+      "counterKind": "free"
     },
     {
       "id": "z-90a85d72b36a1440",
@@ -3494,7 +4247,8 @@
       "repeat": null,
       "reference": "",
       "keywords": "الدعاء للمتزوج - زواج نكاح",
-      "sourceRow": 227
+      "sourceRow": 227,
+      "counterKind": "free"
     },
     {
       "id": "z-2e8fd42be0f38931",
@@ -3504,7 +4258,8 @@
       "repeat": null,
       "reference": "",
       "keywords": "دعاء المتزوج و شراء الدابة",
-      "sourceRow": 228
+      "sourceRow": 228,
+      "counterKind": "free"
     },
     {
       "id": "z-c495bfa855126b32",
@@ -3514,7 +4269,8 @@
       "repeat": null,
       "reference": "",
       "keywords": "الدعاء قبل إتيان الزوجة - الجماع زواج نكاح",
-      "sourceRow": 229
+      "sourceRow": 229,
+      "counterKind": "free"
     },
     {
       "id": "z-afffd52224681289",
@@ -3524,7 +4280,8 @@
       "repeat": null,
       "reference": "",
       "keywords": "دعاء الغضب - التوتر العصبية",
-      "sourceRow": 230
+      "sourceRow": 230,
+      "counterKind": "free"
     },
     {
       "id": "z-df0552167c39aa7e",
@@ -3534,17 +4291,23 @@
       "repeat": null,
       "reference": "",
       "keywords": "دعاء من رأى مبتلى",
-      "sourceRow": 231
+      "sourceRow": 231,
+      "counterKind": "free"
     },
     {
-      "id": "z-53ecd51ab42bf7b5",
+      "id": "z-efb9f25dcacd267d",
       "categoryId": "c-bda551fbee6e",
-      "text": "((عَنِ ابْنِ عُمَرَ رضي الله عنه قَاَلَ: كَانَ يُعَدُّ لِرَسُولِ اللَّهِ صلى الله عليه وسلم فِي الْمَجْلِسِ الوَاحِدِ مِائَةُ مَرَّةٍ مِنْ قَبْلِ أَنْ يَقُومَ: ((رَبِّ اغْفِرْ لِي، وَتُبْ عَلَيَّ، إِنَّكَ أَنْتَ التَّوَّابُ الغَفُورُ)).",
-      "note": "",
-      "repeat": null,
+      "text": "رَبِّ اغْفِرْ لِي، وَتُبْ عَلَيَّ، إِنَّكَ أَنْتَ التَّوَّابُ الْغَفُورُ.",
+      "note": "((عَنِ ابْنِ عُمَرَ رضي الله عنه قَاَلَ: كَانَ يُعَدُّ لِرَسُولِ اللَّهِ صلى الله عليه وسلم فِي الْمَجْلِسِ الوَاحِدِ مِائَةُ مَرَّةٍ مِنْ قَبْلِ أَنْ يَقُومَ: ((رَبِّ اغْفِرْ لِي، وَتُبْ عَلَيَّ، إِنَّكَ أَنْتَ التَّوَّابُ الغَفُورُ)).",
+      "repeat": 100,
       "reference": "",
       "keywords": "ما يقال في اﻟﻤﺠلس",
-      "sourceRow": 232
+      "sourceRow": 232,
+      "title": "الاستغفار في المجلس",
+      "counterKind": "fixed",
+      "referenceUrl": "",
+      "appliesTo": [],
+      "curated": true
     },
     {
       "id": "z-c3492821a2e1b907",
@@ -3554,7 +4317,8 @@
       "repeat": null,
       "reference": "",
       "keywords": "كفارة اﻟﻤﺠلس",
-      "sourceRow": 233
+      "sourceRow": 233,
+      "counterKind": "free"
     },
     {
       "id": "z-ec43eb3545c41cb2",
@@ -3564,7 +4328,8 @@
       "repeat": null,
       "reference": "",
       "keywords": "الدعاء لمن قال غفر الله لك",
-      "sourceRow": 234
+      "sourceRow": 234,
+      "counterKind": "free"
     },
     {
       "id": "z-1efdded5aec6dfa6",
@@ -3574,7 +4339,8 @@
       "repeat": null,
       "reference": "",
       "keywords": "الدعاء لمن صنع إليك معروفا",
-      "sourceRow": 235
+      "sourceRow": 235,
+      "counterKind": "free"
     },
     {
       "id": "z-596193ff2273776c",
@@ -3584,7 +4350,9 @@
       "repeat": null,
       "reference": "",
       "keywords": "ما يعصم الله به من الدجال",
-      "sourceRow": 236
+      "sourceRow": 236,
+      "counterKind": "instruction",
+      "curated": true
     },
     {
       "id": "z-11a0627b7367aea1",
@@ -3594,7 +4362,8 @@
       "repeat": null,
       "reference": "",
       "keywords": "الدعاء لمن قال إني أحبك في الله",
-      "sourceRow": 237
+      "sourceRow": 237,
+      "counterKind": "free"
     },
     {
       "id": "z-e42ecaf12ef1615b",
@@ -3604,7 +4373,8 @@
       "repeat": null,
       "reference": "",
       "keywords": "الدعاء لمن عرض عليك ماله",
-      "sourceRow": 238
+      "sourceRow": 238,
+      "counterKind": "free"
     },
     {
       "id": "z-17c11e6d918583e6",
@@ -3614,7 +4384,8 @@
       "repeat": null,
       "reference": "",
       "keywords": "الدعاء لمن أقرض عند القضاء",
-      "sourceRow": 239
+      "sourceRow": 239,
+      "counterKind": "free"
     },
     {
       "id": "z-bf2e54d43b984584",
@@ -3624,7 +4395,8 @@
       "repeat": null,
       "reference": "",
       "keywords": "دعاء الخوف من الشرك",
-      "sourceRow": 240
+      "sourceRow": 240,
+      "counterKind": "free"
     },
     {
       "id": "z-17d504360058d9ec",
@@ -3634,7 +4406,8 @@
       "repeat": null,
       "reference": "",
       "keywords": "الدعاء لمن قال بارك الله فيك",
-      "sourceRow": 241
+      "sourceRow": 241,
+      "counterKind": "free"
     },
     {
       "id": "z-ce94604009261e6c",
@@ -3644,27 +4417,113 @@
       "repeat": null,
       "reference": "",
       "keywords": "دعاء كراهية الطيرة - الشرك",
-      "sourceRow": 242
+      "sourceRow": 242,
+      "counterKind": "free"
     },
     {
-      "id": "z-f2dbee6b708bdda6",
+      "id": "z-8cbc78cdc5f477ae",
       "categoryId": "c-b603f2492975",
-      "text": "((بِسْمِ اللَّهِ، وَالْحَمْدُ للَّهِ ﴿سُبْحَانَ الَّذِي سَخَّرَ لَنَا هَذَا وَمَا كُنَّا لَهُ مُقْرِنِينَ، وَإِنَّا إِلَى رَبِّنَا لَمُنقَلِبُونَ﴾، ((الْحَمْدُ لِلَّهِ، الْحَمْدُ لِلَّهِ، الْحَمْدُ لِلَّهِ، اللَّهُ أَكْبَرُ، اللَّهُ أَكْبَرُ، اللَّهُ أَكْبَرُ، سُبْحَانَكَ اللَّهُمَّ إِنِّي ظَلَمْتُ نَفْسِي فَاغْفِرْ لِي؛ فَإِنَّهُ لاَ يَغْفِرُ الذُّنُوبَ إِلاَّ أَنْتَ)).",
+      "text": "بِسْمِ اللَّهِ، وَالْحَمْدُ لِلَّهِ.",
       "note": "",
-      "repeat": null,
+      "repeat": 1,
       "reference": "",
       "keywords": "دعاء الركوب - السيارة المصعد الطيارة الطائرة",
-      "sourceRow": 243
+      "sourceRow": 243,
+      "title": "عند الركوب",
+      "counterKind": "reading",
+      "referenceUrl": "",
+      "appliesTo": [],
+      "curated": true
     },
     {
-      "id": "z-6b7afed3fab6c92c",
-      "categoryId": "c-61ba7866489f",
-      "text": "اللَّهُ أَكْبَرُ، اللَّهُ أَكْبَرُ، اللَّهُ أَكْبَرُ، ﴿سُبْحَانَ الَّذِي سَخَّرَ لَنَا هَذَا وَمَا كُنَّا لَهُ مُقْرِنِينَ * وَإِنَّا إِلَى رَبِّنَا لَمُنقَلِبُونَ﴾ ((اللَّهُمَّ إِنّا نَسْأَلُكَ فِي سَفَرِنَا هَذَا البِرَّ وَالتَّقْوَى، وَمِنَ الْعَمَلِ مَا تَرْضَى، اللَّهُمَّ هَوِّنْ عَلَيْنَا سَفَرَنَا هَذَا وَاطْوِ عَنَّا بُعْدَهُ، اللَّهُمَّ أَنْتَ الصَّاحِبُ فِي السَّفَرِ، وَالْخَليفَةُ فِي الْأَهْلِ، اللَّهُمَّ إِنِّي أَعُوذُ بِكَ مِنْ وَعْثَاءِ السَّفَرِ، وَكَآبَةِ الْمَنْظَرِ، وَسُوءِ الْمُنْقَلَبِ فِي الْمَالِ وَالْأَهْلِ))، وإذا رَجَعَ قَالَهُنَّ وَزَادَ فِيهِنَّ: ((آيِبُونَ، تائِبُونَ، عَابِدُونَ، لِرَبِّنَا حَامِدُونَ)).",
+      "id": "z-554b5ab6674bda43",
+      "categoryId": "c-b603f2492975",
+      "text": "﴿سُبْحَانَ الَّذِي سَخَّرَ لَنَا هَذَا وَمَا كُنَّا لَهُ مُقْرِنِينَ، وَإِنَّا إِلَى رَبِّنَا لَمُنقَلِبُونَ﴾",
       "note": "",
-      "repeat": null,
+      "repeat": 1,
+      "reference": "",
+      "keywords": "دعاء الركوب - السيارة المصعد الطيارة الطائرة",
+      "sourceRow": 243,
+      "title": "دعاء الركوب",
+      "counterKind": "reading",
+      "referenceUrl": "",
+      "appliesTo": [],
+      "curated": true
+    },
+    {
+      "id": "z-e81d63c5f78ee0ea",
+      "categoryId": "c-b603f2492975",
+      "text": "الْحَمْدُ لِلَّهِ.",
+      "note": "",
+      "repeat": 3,
+      "reference": "",
+      "keywords": "دعاء الركوب - السيارة المصعد الطيارة الطائرة",
+      "sourceRow": 243,
+      "title": "التحميد عند الركوب",
+      "counterKind": "fixed",
+      "referenceUrl": "",
+      "appliesTo": [],
+      "curated": true
+    },
+    {
+      "id": "z-708fdd7943ed3d49",
+      "categoryId": "c-b603f2492975",
+      "text": "اللَّهُ أَكْبَرُ.",
+      "note": "",
+      "repeat": 3,
+      "reference": "",
+      "keywords": "دعاء الركوب - السيارة المصعد الطيارة الطائرة",
+      "sourceRow": 243,
+      "title": "التكبير عند الركوب",
+      "counterKind": "fixed",
+      "referenceUrl": "",
+      "appliesTo": [],
+      "curated": true
+    },
+    {
+      "id": "z-b25d1b1e69b29abf",
+      "categoryId": "c-b603f2492975",
+      "text": "سُبْحَانَكَ اللَّهُمَّ إِنِّي ظَلَمْتُ نَفْسِي فَاغْفِرْ لِي؛ فَإِنَّهُ لَا يَغْفِرُ الذُّنُوبَ إِلَّا أَنْتَ.",
+      "note": "",
+      "repeat": 1,
+      "reference": "",
+      "keywords": "دعاء الركوب - السيارة المصعد الطيارة الطائرة",
+      "sourceRow": 243,
+      "title": "الاستغفار عند الركوب",
+      "counterKind": "reading",
+      "referenceUrl": "",
+      "appliesTo": [],
+      "curated": true
+    },
+    {
+      "id": "z-d0c07d44a512ada1",
+      "categoryId": "c-61ba7866489f",
+      "text": "اللَّهُ أَكْبَرُ.",
+      "note": "",
+      "repeat": 3,
       "reference": "",
       "keywords": "دعاء السفر",
-      "sourceRow": 244
+      "sourceRow": 244,
+      "title": "التكبير في بداية السفر",
+      "counterKind": "fixed",
+      "referenceUrl": "",
+      "appliesTo": [],
+      "curated": true
+    },
+    {
+      "id": "z-f2fca2a5ae09b9ee",
+      "categoryId": "c-61ba7866489f",
+      "text": "﴿سُبْحَانَ الَّذِي سَخَّرَ لَنَا هَذَا وَمَا كُنَّا لَهُ مُقْرِنِينَ * وَإِنَّا إِلَى رَبِّنَا لَمُنقَلِبُونَ﴾ ((اللَّهُمَّ إِنّا نَسْأَلُكَ فِي سَفَرِنَا هَذَا البِرَّ وَالتَّقْوَى، وَمِنَ الْعَمَلِ مَا تَرْضَى، اللَّهُمَّ هَوِّنْ عَلَيْنَا سَفَرَنَا هَذَا وَاطْوِ عَنَّا بُعْدَهُ، اللَّهُمَّ أَنْتَ الصَّاحِبُ فِي السَّفَرِ، وَالْخَليفَةُ فِي الْأَهْلِ، اللَّهُمَّ إِنِّي أَعُوذُ بِكَ مِنْ وَعْثَاءِ السَّفَرِ، وَكَآبَةِ الْمَنْظَرِ، وَسُوءِ الْمُنْقَلَبِ فِي الْمَالِ وَالْأَهْلِ))",
+      "note": "عند الرجوع يقول الدعاء ويزيد: آيبون، تائبون، عابدون، لربنا حامدون.",
+      "repeat": 1,
+      "reference": "",
+      "keywords": "دعاء السفر",
+      "sourceRow": 244,
+      "title": "دعاء السفر",
+      "counterKind": "reading",
+      "referenceUrl": "",
+      "appliesTo": [],
+      "curated": true
     },
     {
       "id": "z-9e8db5d8ff071208",
@@ -3674,7 +4533,8 @@
       "repeat": null,
       "reference": "",
       "keywords": "دعاء دخول القرية أو البلدة - السفر المسافر المدينة البلد",
-      "sourceRow": 245
+      "sourceRow": 245,
+      "counterKind": "free"
     },
     {
       "id": "z-c5b148e9d1ab91ef",
@@ -3684,7 +4544,8 @@
       "repeat": null,
       "reference": "",
       "keywords": "دعاء دخول السوق - المول التسوق الأسواق الاسواق",
-      "sourceRow": 246
+      "sourceRow": 246,
+      "counterKind": "free"
     },
     {
       "id": "z-0d7a74bba3acaa85",
@@ -3694,7 +4555,8 @@
       "repeat": null,
       "reference": "",
       "keywords": "الدعاء إذا تعس المركوب",
-      "sourceRow": 247
+      "sourceRow": 247,
+      "counterKind": "free"
     },
     {
       "id": "z-dd7e6037c6e01507",
@@ -3704,7 +4566,8 @@
       "repeat": null,
       "reference": "",
       "keywords": "دعاء المسافر للمقيم - السفر",
-      "sourceRow": 248
+      "sourceRow": 248,
+      "counterKind": "free"
     },
     {
       "id": "z-6c962b3dac5adee6",
@@ -3714,7 +4577,8 @@
       "repeat": null,
       "reference": "",
       "keywords": "دعاء المقيم للمسافر - السفر",
-      "sourceRow": 249
+      "sourceRow": 249,
+      "counterKind": "free"
     },
     {
       "id": "z-7ed0be9f71b169aa",
@@ -3724,7 +4588,8 @@
       "repeat": null,
       "reference": "",
       "keywords": "دعاء المقيم للمسافر - السفر",
-      "sourceRow": 250
+      "sourceRow": 250,
+      "counterKind": "free"
     },
     {
       "id": "z-9d79612374258b7c",
@@ -3734,7 +4599,8 @@
       "repeat": null,
       "reference": "",
       "keywords": "التكبير و التسبيح في سير السفر",
-      "sourceRow": 251
+      "sourceRow": 251,
+      "counterKind": "free"
     },
     {
       "id": "z-67bcad880f28c36f",
@@ -3744,7 +4610,8 @@
       "repeat": null,
       "reference": "",
       "keywords": "دعاء المسافر إذا أسحر - السفر",
-      "sourceRow": 252
+      "sourceRow": 252,
+      "counterKind": "free"
     },
     {
       "id": "z-724960bca589b03b",
@@ -3754,17 +4621,38 @@
       "repeat": null,
       "reference": "",
       "keywords": "الدعاء إذا نزل مترلا في سفر أو غيره - المسافر",
-      "sourceRow": 253
+      "sourceRow": 253,
+      "counterKind": "free"
     },
     {
-      "id": "z-8b2774b39748a277",
+      "id": "z-05b54a3ac63f0db1",
       "categoryId": "c-a4df5b0fc0c0",
-      "text": "((يُكَبِّرُ عَلَى كُلِّ شَرَفٍ ثَلاَثَ تَكْبِيرَاتٍ ثُمَّ يَقُولُ: لاَ إِلَهَ إِلاَّ اللَّهُ وَحْدَهُ لاَ شَرِيكَ لَهُ، لَهُ الْمُلْكُ، وَلَهُ الْحَمْدُ، وَهُوَ عَلَى كُلِّ شَيْءٍ قَدِيرٌ، آيِبُونَ، تَائِبُونَ، عَابِدُونَ، لِرَبِّنا حَامِدُونَ، صَدَقَ اللَّهُ وَعْدَهُ، وَنَصَرَ عَبْدَهُ، وَهَزَمَ الْأَحْزابَ وَحْدَهُ)).",
-      "note": "",
-      "repeat": null,
+      "text": "اللَّهُ أَكْبَرُ.",
+      "note": "على كل شرف، ثم الدعاء في البطاقة التالية.",
+      "repeat": 3,
       "reference": "",
       "keywords": "ذكر الرجوع من السفر - المسافر",
-      "sourceRow": 254
+      "sourceRow": 254,
+      "title": "التكبير عند الرجوع من السفر",
+      "counterKind": "fixed",
+      "referenceUrl": "",
+      "appliesTo": [],
+      "curated": true
+    },
+    {
+      "id": "z-a8d3f9ecf0af8aa8",
+      "categoryId": "c-a4df5b0fc0c0",
+      "text": "لاَ إِلَهَ إِلاَّ اللَّهُ وَحْدَهُ لاَ شَرِيكَ لَهُ، لَهُ الْمُلْكُ، وَلَهُ الْحَمْدُ، وَهُوَ عَلَى كُلِّ شَيْءٍ قَدِيرٌ، آيِبُونَ، تَائِبُونَ، عَابِدُونَ، لِرَبِّنا حَامِدُونَ، صَدَقَ اللَّهُ وَعْدَهُ، وَنَصَرَ عَبْدَهُ، وَهَزَمَ الْأَحْزابَ وَحْدَهُ",
+      "note": "",
+      "repeat": 1,
+      "reference": "",
+      "keywords": "ذكر الرجوع من السفر - المسافر",
+      "sourceRow": 254,
+      "title": "دعاء الرجوع من السفر",
+      "counterKind": "reading",
+      "referenceUrl": "",
+      "appliesTo": [],
+      "curated": true
     },
     {
       "id": "z-ebb6c0afe0054082",
@@ -3774,7 +4662,8 @@
       "repeat": null,
       "reference": "",
       "keywords": "ما يقول من أتاه أمر يسره أو يكرهه - خبر أخبار فرح سرور",
-      "sourceRow": 255
+      "sourceRow": 255,
+      "counterKind": "free"
     },
     {
       "id": "z-08a765dc4e2ae2c9",
@@ -3784,7 +4673,9 @@
       "repeat": null,
       "reference": "",
       "keywords": "فضل الصلاة على النبي صلى الله عليه و سلم",
-      "sourceRow": 256
+      "sourceRow": 256,
+      "counterKind": "instruction",
+      "curated": true
     },
     {
       "id": "z-fbd129487e847300",
@@ -3794,7 +4685,8 @@
       "repeat": null,
       "reference": "",
       "keywords": "فضل الصلاة على النبي صلى الله عليه و سلم",
-      "sourceRow": 257
+      "sourceRow": 257,
+      "counterKind": "free"
     },
     {
       "id": "z-8f1ce818c7d571f5",
@@ -3804,7 +4696,8 @@
       "repeat": null,
       "reference": "",
       "keywords": "فضل الصلاة على النبي صلى الله عليه و سلم",
-      "sourceRow": 258
+      "sourceRow": 258,
+      "counterKind": "free"
     },
     {
       "id": "z-be00ef8bc487fd8d",
@@ -3814,7 +4707,8 @@
       "repeat": null,
       "reference": "",
       "keywords": "فضل الصلاة على النبي صلى الله عليه و سلم",
-      "sourceRow": 259
+      "sourceRow": 259,
+      "counterKind": "free"
     },
     {
       "id": "z-e847cd299b754364",
@@ -3824,7 +4718,8 @@
       "repeat": null,
       "reference": "",
       "keywords": "فضل الصلاة على النبي صلى الله عليه و سلم",
-      "sourceRow": 260
+      "sourceRow": 260,
+      "counterKind": "free"
     },
     {
       "id": "z-3cbce0b9bd7e6dd0",
@@ -3834,7 +4729,8 @@
       "repeat": null,
       "reference": "",
       "keywords": "إفشاء السلام - التحية",
-      "sourceRow": 261
+      "sourceRow": 261,
+      "counterKind": "free"
     },
     {
       "id": "z-7686093ad5eb0c09",
@@ -3844,7 +4740,9 @@
       "repeat": null,
       "reference": "",
       "keywords": "إفشاء السلام - التحية",
-      "sourceRow": 262
+      "sourceRow": 262,
+      "counterKind": "instruction",
+      "curated": true
     },
     {
       "id": "z-9ee57cf4a6ff0c2a",
@@ -3854,7 +4752,8 @@
       "repeat": null,
       "reference": "",
       "keywords": "إفشاء السلام - التحية",
-      "sourceRow": 263
+      "sourceRow": 263,
+      "counterKind": "free"
     },
     {
       "id": "z-70e38d95cc8cd54c",
@@ -3864,7 +4763,8 @@
       "repeat": null,
       "reference": "",
       "keywords": "كيف يرد السلام على الكافر إذا سلم - التحية",
-      "sourceRow": 264
+      "sourceRow": 264,
+      "counterKind": "free"
     },
     {
       "id": "z-e337308b0c2538cf",
@@ -3874,7 +4774,8 @@
       "repeat": null,
       "reference": "",
       "keywords": "الدعاء عند سماع صياح الديك ونهيق الحمار",
-      "sourceRow": 265
+      "sourceRow": 265,
+      "counterKind": "free"
     },
     {
       "id": "z-c570f37dc0a79af2",
@@ -3884,7 +4785,8 @@
       "repeat": null,
       "reference": "",
       "keywords": "دعاء نباح الكلب بالليل",
-      "sourceRow": 266
+      "sourceRow": 266,
+      "counterKind": "free"
     },
     {
       "id": "z-eacd84c11324552d",
@@ -3894,7 +4796,8 @@
       "repeat": null,
       "reference": "",
       "keywords": "الدعاء لمن سببته",
-      "sourceRow": 267
+      "sourceRow": 267,
+      "counterKind": "free"
     },
     {
       "id": "z-5bfa2d5ada674e26",
@@ -3904,7 +4807,8 @@
       "repeat": null,
       "reference": "",
       "keywords": "ما يقول المسلم إذا مدح المسلم",
-      "sourceRow": 268
+      "sourceRow": 268,
+      "counterKind": "free"
     },
     {
       "id": "z-336062998f57d175",
@@ -3914,7 +4818,8 @@
       "repeat": null,
       "reference": "",
       "keywords": "ما يقول المسلم إذا زكي",
-      "sourceRow": 269
+      "sourceRow": 269,
+      "counterKind": "free"
     },
     {
       "id": "z-58c8f4a62668f584",
@@ -3924,7 +4829,8 @@
       "repeat": null,
       "reference": "",
       "keywords": "كيف يلبي المحرم في الحج أو العمرة ؟",
-      "sourceRow": 270
+      "sourceRow": 270,
+      "counterKind": "free"
     },
     {
       "id": "z-3f252dd34e1b9e0e",
@@ -3934,7 +4840,8 @@
       "repeat": null,
       "reference": "",
       "keywords": "التكبير إذا أتى الركن الأسود",
-      "sourceRow": 271
+      "sourceRow": 271,
+      "counterKind": "free"
     },
     {
       "id": "z-7558162dd974c0cc",
@@ -3944,17 +4851,38 @@
       "repeat": null,
       "reference": "",
       "keywords": "الدعاء بين الركن اليماني والحجر الأسود",
-      "sourceRow": 272
+      "sourceRow": 272,
+      "counterKind": "free"
     },
     {
-      "id": "z-cd5560e889660759",
+      "id": "z-5a60672e0ff24eaf",
       "categoryId": "c-ba656dd0e0ea",
-      "text": "لَمَّا دَنَا النَّبِيُّ صلى الله عليه وسلم مِنَ الصَّفَا قَرَأَ: ﴿إِنَّ الصَّفَا وَالْمَرْوَةَ مِنْ شَعَآئِرِ اللَّهِ﴾ أَبْدَأُ بِمَا بَدَأَ اللَّهُ بِهِ)) فَبَدَأَ بِالصَّفَا فَرَقِيَ عَلَيْهِ حَتَّى رَأَى الْبَيْتَ، فَاسْتَقْبَلَ الْقِبْلَةَ، فَوَحَّدَ اللَّهَ وَكبَّرَهُ وَقَالَ: ((لاَ إِلَهَ إِلاَّ اللَّهُ وَحْدَهُ لاَ شَرِيكَ لَهُ، لَهُ الْمُلْكُ وَلَهُ الْحَمْدُ وَهُوَ عَلَى كُلِّ شَيْءٍ قَدِيرٌ، لاَ إِلَهَ إِلاَّ اللَّهُ وَحْدَهُ، أَنْجَزَ وَعْدَهُ، وَنَصَرَ عَبْدَهُ، وَهَزَمَ الْأَحْزَابَ وَحْدَهُ، ثُمَّ دَعَا بَيْنَ ذلكَ. قَالَ مِثْلَ هَذَا ثَلاَثَ مَرَّاتٍ)) الْحَدِيثُ. وَفِيهِ: ((فَفَعَلَ عَلَى الْمَرْوَةِ كَمَا فَعَلَ عَلَى الصَّفَا)).",
-      "note": "",
-      "repeat": null,
+      "text": "إِنَّ الصَّفَا وَالْمَرْوَةَ مِنْ شَعَائِرِ اللَّهِ. أَبْدَأُ بِمَا بَدَأَ اللَّهُ بِهِ.",
+      "note": "عند الدنو من الصفا أول مرة.",
+      "repeat": 1,
       "reference": "",
       "keywords": "دعاء الوقوف على الصفا والمروة",
-      "sourceRow": 273
+      "sourceRow": 273,
+      "title": "عند الدنو من الصفا",
+      "counterKind": "reading",
+      "referenceUrl": "",
+      "appliesTo": [],
+      "curated": true
+    },
+    {
+      "id": "z-5d3ad6468eab6fc6",
+      "categoryId": "c-ba656dd0e0ea",
+      "text": "لَا إِلَهَ إِلَّا اللَّهُ وَحْدَهُ لَا شَرِيكَ لَهُ، لَهُ الْمُلْكُ وَلَهُ الْحَمْدُ، وَهُوَ عَلَى كُلِّ شَيْءٍ قَدِيرٌ، لَا إِلَهَ إِلَّا اللَّهُ وَحْدَهُ، أَنْجَزَ وَعْدَهُ، وَنَصَرَ عَبْدَهُ، وَهَزَمَ الْأَحْزَابَ وَحْدَهُ.",
+      "note": "يستقبل القبلة ويدعو بين التكرارات، ويفعل على المروة مثل ما فعل على الصفا.",
+      "repeat": 3,
+      "reference": "",
+      "keywords": "دعاء الوقوف على الصفا والمروة",
+      "sourceRow": 273,
+      "title": "الذكر على الصفا والمروة",
+      "counterKind": "fixed",
+      "referenceUrl": "",
+      "appliesTo": [],
+      "curated": true
     },
     {
       "id": "z-c8c0ad8061bcfdda",
@@ -3964,7 +4892,8 @@
       "repeat": null,
       "reference": "",
       "keywords": "الدعاء يوم عرفة",
-      "sourceRow": 274
+      "sourceRow": 274,
+      "counterKind": "free"
     },
     {
       "id": "z-9c908319d9e8d6b8",
@@ -3974,7 +4903,8 @@
       "repeat": null,
       "reference": "",
       "keywords": "الذكر عند المشعر الحرام",
-      "sourceRow": 275
+      "sourceRow": 275,
+      "counterKind": "free"
     },
     {
       "id": "z-ed25ad464953df44",
@@ -3984,7 +4914,9 @@
       "repeat": null,
       "reference": "",
       "keywords": "التكبير عند رمي الجمار مع كل حصاة",
-      "sourceRow": 276
+      "sourceRow": 276,
+      "counterKind": "instruction",
+      "curated": true
     },
     {
       "id": "z-b790990903a8e3c1",
@@ -3994,7 +4926,8 @@
       "repeat": null,
       "reference": "",
       "keywords": "دعاء التعجب والأمر السار - خبر أخبار الفرح السرور",
-      "sourceRow": 277
+      "sourceRow": 277,
+      "counterKind": "free"
     },
     {
       "id": "z-c3280d9c792b8d29",
@@ -4004,7 +4937,8 @@
       "repeat": null,
       "reference": "",
       "keywords": "دعاء التعجب والأمر السار - خبر أخبار الفرح السرور",
-      "sourceRow": 278
+      "sourceRow": 278,
+      "counterKind": "free"
     },
     {
       "id": "z-dc998c6a2e78d725",
@@ -4014,17 +4948,39 @@
       "repeat": null,
       "reference": "",
       "keywords": "ما يفعل من أتاه أمر يسره - خبر أخبار الفرح السرور",
-      "sourceRow": 279
+      "sourceRow": 279,
+      "counterKind": "instruction",
+      "curated": true
     },
     {
-      "id": "z-1dd2235ff1e4a9fa",
+      "id": "z-af769675522a3aa6",
       "categoryId": "c-27be624991c7",
-      "text": "((ضَعْ يَدَكَ عَلَى الَّذِي تَألَّمَ مِنْ جَسَدِكَ وَقُلْ: بِسْمِ اللَّهِ، ثَلاَثاً، وَقُلْ سَبْعَ مَرَّاتٍ: أَعُوذُ بِاللَّهِ وَقُدْرَتِهِ مِنْ شَرِّ مَا أَجِدُ وَأُحَاذِرُ)).",
-      "note": "",
-      "repeat": null,
-      "reference": "",
+      "text": "بِسْمِ اللَّهِ.",
+      "note": "ضع يدك على موضع الألم، ثم الذكر في البطاقة التالية.",
+      "repeat": 3,
+      "reference": "صحيح مسلم 2202",
       "keywords": "ما يقول من أحس وجعا في جسده - الألم المرض الوجع",
-      "sourceRow": 280
+      "sourceRow": 280,
+      "title": "التسمية عند الألم",
+      "counterKind": "fixed",
+      "referenceUrl": "https://sunnah.com/muslim:2202",
+      "appliesTo": [],
+      "curated": true
+    },
+    {
+      "id": "z-b8d90e7c5f907474",
+      "categoryId": "c-27be624991c7",
+      "text": "أَعُوذُ بِاللَّهِ وَقُدْرَتِهِ مِنْ شَرِّ مَا أَجِدُ وَأُحَاذِرُ.",
+      "note": "",
+      "repeat": 7,
+      "reference": "صحيح مسلم 2202",
+      "keywords": "ما يقول من أحس وجعا في جسده - الألم المرض الوجع",
+      "sourceRow": 280,
+      "title": "الاستعاذة عند الألم",
+      "counterKind": "fixed",
+      "referenceUrl": "https://sunnah.com/muslim:2202",
+      "appliesTo": [],
+      "curated": true
     },
     {
       "id": "z-77f871f7de3e2e65",
@@ -4034,7 +4990,9 @@
       "repeat": null,
       "reference": "",
       "keywords": "دعاء من خشي أن يصيب شيئا بعينه - الحسد",
-      "sourceRow": 281
+      "sourceRow": 281,
+      "counterKind": "instruction",
+      "curated": true
     },
     {
       "id": "z-87b3f32639e8c663",
@@ -4044,7 +5002,8 @@
       "repeat": null,
       "reference": "",
       "keywords": "ما يقال عند الفزع - الخوف",
-      "sourceRow": 282
+      "sourceRow": 282,
+      "counterKind": "free"
     },
     {
       "id": "z-4b40a0a67cea2fc1",
@@ -4054,7 +5013,8 @@
       "repeat": null,
       "reference": "",
       "keywords": "ما يقول عند الذبح أو النحر- الأضحية أضحية",
-      "sourceRow": 283
+      "sourceRow": 283,
+      "counterKind": "free"
     },
     {
       "id": "z-b9df805584f29713",
@@ -4064,7 +5024,8 @@
       "repeat": null,
       "reference": "",
       "keywords": "ما يقول لرد كيد مردة الشياطين - وسوسة الشيطان",
-      "sourceRow": 284
+      "sourceRow": 284,
+      "counterKind": "free"
     },
     {
       "id": "z-4c5f92d641848076",
@@ -4074,7 +5035,9 @@
       "repeat": null,
       "reference": "البخاري",
       "keywords": "الاستغفار و التوبة",
-      "sourceRow": 285
+      "sourceRow": 285,
+      "counterKind": "instruction",
+      "curated": true
     },
     {
       "id": "z-1328dc58b0e8dfdb",
@@ -4084,7 +5047,9 @@
       "repeat": null,
       "reference": "مسلم",
       "keywords": "الاستغفار و التوبة",
-      "sourceRow": 286
+      "sourceRow": 286,
+      "counterKind": "instruction",
+      "curated": true
     },
     {
       "id": "z-9be150f396b0ec08",
@@ -4094,7 +5059,8 @@
       "repeat": null,
       "reference": "الترمذي",
       "keywords": "الاستغفار و التوبة",
-      "sourceRow": 287
+      "sourceRow": 287,
+      "counterKind": "free"
     },
     {
       "id": "z-d796cec0c8b64eb4",
@@ -4104,7 +5070,8 @@
       "repeat": null,
       "reference": "الترمذي",
       "keywords": "الاستغفار و التوبة",
-      "sourceRow": 288
+      "sourceRow": 288,
+      "counterKind": "free"
     },
     {
       "id": "z-f31e559f05a503f0",
@@ -4114,7 +5081,8 @@
       "repeat": null,
       "reference": "مسلم",
       "keywords": "الاستغفار و التوبة",
-      "sourceRow": 289
+      "sourceRow": 289,
+      "counterKind": "free"
     },
     {
       "id": "z-decc861fab29cca0",
@@ -4124,27 +5092,39 @@
       "repeat": null,
       "reference": "مسلم",
       "keywords": "الاستغفار و التوبة",
-      "sourceRow": 290
+      "sourceRow": 290,
+      "counterKind": "instruction",
+      "curated": true
     },
     {
-      "id": "z-aea209f5cd095cfa",
+      "id": "z-4e105e07e92dfd53",
       "categoryId": "tasbih",
-      "text": "قَالَ صلى الله عليه وسلم مَنْ قَالَ: سُبْحَانَ اللَّهِ وَبِحَمْدِهِ فِي يَوْمٍ مِائَةَ مَرَّةٍ حُطَّتْ خَطَايَاهُ وَلَوْ كَانَتْ مِثْلَ زَبَدِ الْبَحْر)).",
-      "note": "",
-      "repeat": null,
+      "text": "سُبْحَانَ اللَّهِ وَبِحَمْدِهِ.",
+      "note": "قَالَ صلى الله عليه وسلم مَنْ قَالَ: سُبْحَانَ اللَّهِ وَبِحَمْدِهِ فِي يَوْمٍ مِائَةَ مَرَّةٍ حُطَّتْ خَطَايَاهُ وَلَوْ كَانَتْ مِثْلَ زَبَدِ الْبَحْر)).",
+      "repeat": 100,
       "reference": "البخاري",
       "keywords": "التسبيح، التحميد، التهليل، التكبير",
-      "sourceRow": 291
+      "sourceRow": 291,
+      "title": "التسبيح مائة مرة",
+      "counterKind": "fixed",
+      "referenceUrl": "",
+      "appliesTo": [],
+      "curated": true
     },
     {
-      "id": "z-f734a05eab1af8cd",
+      "id": "z-9c317af65234c680",
       "categoryId": "tasbih",
-      "text": "وَقَالَ صلى الله عليه وسلم: ((مَنْ قَالَ لاَ إِلَهَ إِلاَّ اللَّهُ وَحْدَهُ لاَ شَرِيكَ لَهُ، لَهُ الْمُلْكُ، وَلَهُ الْحَمْدُ، وَهُوَ عَلَى كُلِّ شَيْءٍ قَدِيرٌ عَشْرَ مِرَارٍ، كَانَ كَمَنْ أَعْتَقَ أَرْبَعَةَ أَنْفُسٍ مِنْ وَلَدِ إِسْمَاعِيلَ)).",
-      "note": "",
-      "repeat": null,
+      "text": "لَا إِلَهَ إِلَّا اللَّهُ وَحْدَهُ لَا شَرِيكَ لَهُ، لَهُ الْمُلْكُ وَلَهُ الْحَمْدُ، وَهُوَ عَلَى كُلِّ شَيْءٍ قَدِيرٌ.",
+      "note": "وَقَالَ صلى الله عليه وسلم: ((مَنْ قَالَ لاَ إِلَهَ إِلاَّ اللَّهُ وَحْدَهُ لاَ شَرِيكَ لَهُ، لَهُ الْمُلْكُ، وَلَهُ الْحَمْدُ، وَهُوَ عَلَى كُلِّ شَيْءٍ قَدِيرٌ عَشْرَ مِرَارٍ، كَانَ كَمَنْ أَعْتَقَ أَرْبَعَةَ أَنْفُسٍ مِنْ وَلَدِ إِسْمَاعِيلَ)).",
+      "repeat": 10,
       "reference": "البخاري",
       "keywords": "التسبيح، التحميد، التهليل، التكبير",
-      "sourceRow": 292
+      "sourceRow": 292,
+      "title": "التهليل عشر مرات",
+      "counterKind": "fixed",
+      "referenceUrl": "",
+      "appliesTo": [],
+      "curated": true
     },
     {
       "id": "z-236833734509adbf",
@@ -4154,7 +5134,8 @@
       "repeat": null,
       "reference": "البخاري",
       "keywords": "التسبيح، التحميد، التهليل، التكبير",
-      "sourceRow": 293
+      "sourceRow": 293,
+      "counterKind": "free"
     },
     {
       "id": "z-3b635a98affb1044",
@@ -4164,17 +5145,23 @@
       "repeat": null,
       "reference": "مسلم",
       "keywords": "التسبيح، التحميد، التهليل، التكبير",
-      "sourceRow": 294
+      "sourceRow": 294,
+      "counterKind": "free"
     },
     {
-      "id": "z-6ca624f884c5d468",
+      "id": "z-1cbf6959b81314d0",
       "categoryId": "tasbih",
-      "text": "وَقَالَ صلى الله عليه وسلم: ((أَيَعْجِزُ أَحَدُكُم أَنْ يَكْسِبَ كُلَّ يَوْمٍ أَلْفَ حَسَنَةٍ)) فَسَأَلَهُ سَائِلٌ مِنْ جُلَسَائِهِ كَيْفَ يَكْسِبُ أَحَدُنَا أَلْفَ حَسَنَةٍ؟ قَالَ: ((يُسَبِّحُ مِائَةَ تَسْبِيحَةٍ، فَيُكتَبُ لَهُ أَلْفُ حَسَنَةٍ أَوْ يُحَطُّ عَنْهُ أَلْفُ خَطِيئَةٍ)).",
-      "note": "",
-      "repeat": null,
+      "text": "سُبْحَانَ اللَّهِ.",
+      "note": "وَقَالَ صلى الله عليه وسلم: ((أَيَعْجِزُ أَحَدُكُم أَنْ يَكْسِبَ كُلَّ يَوْمٍ أَلْفَ حَسَنَةٍ)) فَسَأَلَهُ سَائِلٌ مِنْ جُلَسَائِهِ كَيْفَ يَكْسِبُ أَحَدُنَا أَلْفَ حَسَنَةٍ؟ قَالَ: ((يُسَبِّحُ مِائَةَ تَسْبِيحَةٍ، فَيُكتَبُ لَهُ أَلْفُ حَسَنَةٍ أَوْ يُحَطُّ عَنْهُ أَلْفُ خَطِيئَةٍ)).",
+      "repeat": 100,
       "reference": "مسلم",
       "keywords": "التسبيح، التحميد، التهليل، التكبير",
-      "sourceRow": 295
+      "sourceRow": 295,
+      "title": "مائة تسبيحة",
+      "counterKind": "fixed",
+      "referenceUrl": "",
+      "appliesTo": [],
+      "curated": true
     },
     {
       "id": "z-3f80ee1d43a3651e",
@@ -4184,7 +5171,8 @@
       "repeat": null,
       "reference": "الترمذي",
       "keywords": "التسبيح، التحميد، التهليل، التكبير",
-      "sourceRow": 296
+      "sourceRow": 296,
+      "counterKind": "free"
     },
     {
       "id": "z-64214cc736651e9b",
@@ -4194,17 +5182,68 @@
       "repeat": null,
       "reference": "البخاري",
       "keywords": "التسبيح، التحميد، التهليل، التكبير",
-      "sourceRow": 297
+      "sourceRow": 297,
+      "counterKind": "free"
     },
     {
-      "id": "z-7b963447d9ef9fd8",
+      "id": "z-3486ac2758b3ed22",
       "categoryId": "tasbih",
-      "text": "وَقَالَ صلى الله عليه وسلم: ((أَحَبُّ الْكَلاَمِ إِلَى اللَّهِ أَرْبَعٌ: سُبْحَانَ اللَّهِ، وَالْحَمْدُ لِلَّهِ، وَلاَ إِلَهَ إِلاَّ اللَّهُ، وَاللَّهُ أَكْبَرُ، لاَ يَضُرُّكَ بِأَيِّهِنَّ بَدَأتَ)).",
-      "note": "",
+      "text": "سُبْحَانَ اللَّهِ.",
+      "note": "وَقَالَ صلى الله عليه وسلم: ((أَحَبُّ الْكَلاَمِ إِلَى اللَّهِ أَرْبَعٌ: سُبْحَانَ اللَّهِ، وَالْحَمْدُ لِلَّهِ، وَلاَ إِلَهَ إِلاَّ اللَّهُ، وَاللَّهُ أَكْبَرُ، لاَ يَضُرُّكَ بِأَيِّهِنَّ بَدَأتَ)).",
       "repeat": null,
       "reference": "مسلم",
       "keywords": "التسبيح، التحميد، التهليل، التكبير",
-      "sourceRow": 298
+      "sourceRow": 298,
+      "title": "ذكر مطلق",
+      "counterKind": "free",
+      "referenceUrl": "",
+      "appliesTo": [],
+      "curated": true
+    },
+    {
+      "id": "z-351a97153a9b4ae6",
+      "categoryId": "tasbih",
+      "text": "الْحَمْدُ لِلَّهِ.",
+      "note": "وَقَالَ صلى الله عليه وسلم: ((أَحَبُّ الْكَلاَمِ إِلَى اللَّهِ أَرْبَعٌ: سُبْحَانَ اللَّهِ، وَالْحَمْدُ لِلَّهِ، وَلاَ إِلَهَ إِلاَّ اللَّهُ، وَاللَّهُ أَكْبَرُ، لاَ يَضُرُّكَ بِأَيِّهِنَّ بَدَأتَ)).",
+      "repeat": null,
+      "reference": "مسلم",
+      "keywords": "التسبيح، التحميد، التهليل، التكبير",
+      "sourceRow": 298,
+      "title": "ذكر مطلق",
+      "counterKind": "free",
+      "referenceUrl": "",
+      "appliesTo": [],
+      "curated": true
+    },
+    {
+      "id": "z-51a8c87bf6f1f619",
+      "categoryId": "tasbih",
+      "text": "لَا إِلَهَ إِلَّا اللَّهُ.",
+      "note": "وَقَالَ صلى الله عليه وسلم: ((أَحَبُّ الْكَلاَمِ إِلَى اللَّهِ أَرْبَعٌ: سُبْحَانَ اللَّهِ، وَالْحَمْدُ لِلَّهِ، وَلاَ إِلَهَ إِلاَّ اللَّهُ، وَاللَّهُ أَكْبَرُ، لاَ يَضُرُّكَ بِأَيِّهِنَّ بَدَأتَ)).",
+      "repeat": null,
+      "reference": "مسلم",
+      "keywords": "التسبيح، التحميد، التهليل، التكبير",
+      "sourceRow": 298,
+      "title": "ذكر مطلق",
+      "counterKind": "free",
+      "referenceUrl": "",
+      "appliesTo": [],
+      "curated": true
+    },
+    {
+      "id": "z-ad68e0d97b69cee1",
+      "categoryId": "tasbih",
+      "text": "اللَّهُ أَكْبَرُ.",
+      "note": "وَقَالَ صلى الله عليه وسلم: ((أَحَبُّ الْكَلاَمِ إِلَى اللَّهِ أَرْبَعٌ: سُبْحَانَ اللَّهِ، وَالْحَمْدُ لِلَّهِ، وَلاَ إِلَهَ إِلاَّ اللَّهُ، وَاللَّهُ أَكْبَرُ، لاَ يَضُرُّكَ بِأَيِّهِنَّ بَدَأتَ)).",
+      "repeat": null,
+      "reference": "مسلم",
+      "keywords": "التسبيح، التحميد، التهليل، التكبير",
+      "sourceRow": 298,
+      "title": "ذكر مطلق",
+      "counterKind": "free",
+      "referenceUrl": "",
+      "appliesTo": [],
+      "curated": true
     },
     {
       "id": "z-518f031e3e23c98d",
@@ -4214,7 +5253,8 @@
       "repeat": null,
       "reference": "مسلم",
       "keywords": "التسبيح، التحميد، التهليل، التكبير",
-      "sourceRow": 299
+      "sourceRow": 299,
+      "counterKind": "free"
     },
     {
       "id": "z-d2b43a785c04d26a",
@@ -4224,27 +5264,113 @@
       "repeat": null,
       "reference": "مسلم",
       "keywords": "التسبيح، التحميد، التهليل، التكبير",
-      "sourceRow": 300
+      "sourceRow": 300,
+      "counterKind": "free"
     },
     {
-      "id": "z-b3577d88dbb1f07e",
+      "id": "z-33b79696b065eae3",
       "categoryId": "tasbih",
-      "text": "((إِنَّ أَفْضَلَ الدُّعَاءِ الْحَمْدُ لِلَّهِ، وَأَفْضَلَ الذِّكْرِ لاَ إِلَهَ إِلاَّ اللَّهُ)).",
-      "note": "",
+      "text": "الْحَمْدُ لِلَّهِ.",
+      "note": "((إِنَّ أَفْضَلَ الدُّعَاءِ الْحَمْدُ لِلَّهِ، وَأَفْضَلَ الذِّكْرِ لاَ إِلَهَ إِلاَّ اللَّهُ)).",
       "repeat": null,
       "reference": "الترمذي",
       "keywords": "التسبيح، التحميد، التهليل، التكبير",
-      "sourceRow": 301
+      "sourceRow": 301,
+      "title": "ذكر مطلق",
+      "counterKind": "free",
+      "referenceUrl": "",
+      "appliesTo": [],
+      "curated": true
     },
     {
-      "id": "z-8d753fcc7eb8ec1d",
+      "id": "z-c86c897a24a957c8",
       "categoryId": "tasbih",
-      "text": "الباقيات الصالحات : سبحان الله والحمد لله ، ولا إله إلا الله ،والله أكبر ،و لا حول ولا قوة إلا بالله",
-      "note": "",
+      "text": "لَا إِلَهَ إِلَّا اللَّهُ.",
+      "note": "((إِنَّ أَفْضَلَ الدُّعَاءِ الْحَمْدُ لِلَّهِ، وَأَفْضَلَ الذِّكْرِ لاَ إِلَهَ إِلاَّ اللَّهُ)).",
+      "repeat": null,
+      "reference": "الترمذي",
+      "keywords": "التسبيح، التحميد، التهليل، التكبير",
+      "sourceRow": 301,
+      "title": "ذكر مطلق",
+      "counterKind": "free",
+      "referenceUrl": "",
+      "appliesTo": [],
+      "curated": true
+    },
+    {
+      "id": "z-c52167821a2d8b6c",
+      "categoryId": "tasbih",
+      "text": "سُبْحَانَ اللَّهِ.",
+      "note": "الباقيات الصالحات : سبحان الله والحمد لله ، ولا إله إلا الله ،والله أكبر ،و لا حول ولا قوة إلا بالله",
       "repeat": null,
       "reference": "أحمد",
       "keywords": "التسبيح، التحميد، التهليل، التكبير",
-      "sourceRow": 302
+      "sourceRow": 302,
+      "title": "ذكر مطلق",
+      "counterKind": "free",
+      "referenceUrl": "",
+      "appliesTo": [],
+      "curated": true
+    },
+    {
+      "id": "z-5f8edf304e5b4cfe",
+      "categoryId": "tasbih",
+      "text": "الْحَمْدُ لِلَّهِ.",
+      "note": "الباقيات الصالحات : سبحان الله والحمد لله ، ولا إله إلا الله ،والله أكبر ،و لا حول ولا قوة إلا بالله",
+      "repeat": null,
+      "reference": "أحمد",
+      "keywords": "التسبيح، التحميد، التهليل، التكبير",
+      "sourceRow": 302,
+      "title": "ذكر مطلق",
+      "counterKind": "free",
+      "referenceUrl": "",
+      "appliesTo": [],
+      "curated": true
+    },
+    {
+      "id": "z-2a35fc92d0e5a9d6",
+      "categoryId": "tasbih",
+      "text": "لَا إِلَهَ إِلَّا اللَّهُ.",
+      "note": "الباقيات الصالحات : سبحان الله والحمد لله ، ولا إله إلا الله ،والله أكبر ،و لا حول ولا قوة إلا بالله",
+      "repeat": null,
+      "reference": "أحمد",
+      "keywords": "التسبيح، التحميد، التهليل، التكبير",
+      "sourceRow": 302,
+      "title": "ذكر مطلق",
+      "counterKind": "free",
+      "referenceUrl": "",
+      "appliesTo": [],
+      "curated": true
+    },
+    {
+      "id": "z-fad2f9beb2066ac4",
+      "categoryId": "tasbih",
+      "text": "اللَّهُ أَكْبَرُ.",
+      "note": "الباقيات الصالحات : سبحان الله والحمد لله ، ولا إله إلا الله ،والله أكبر ،و لا حول ولا قوة إلا بالله",
+      "repeat": null,
+      "reference": "أحمد",
+      "keywords": "التسبيح، التحميد، التهليل، التكبير",
+      "sourceRow": 302,
+      "title": "ذكر مطلق",
+      "counterKind": "free",
+      "referenceUrl": "",
+      "appliesTo": [],
+      "curated": true
+    },
+    {
+      "id": "z-5d5efcc6c68b9900",
+      "categoryId": "tasbih",
+      "text": "لَا حَوْلَ وَلَا قُوَّةَ إِلَّا بِاللَّهِ.",
+      "note": "الباقيات الصالحات : سبحان الله والحمد لله ، ولا إله إلا الله ،والله أكبر ،و لا حول ولا قوة إلا بالله",
+      "repeat": null,
+      "reference": "أحمد",
+      "keywords": "التسبيح، التحميد، التهليل، التكبير",
+      "sourceRow": 302,
+      "title": "ذكر مطلق",
+      "counterKind": "free",
+      "referenceUrl": "",
+      "appliesTo": [],
+      "curated": true
     },
     {
       "id": "z-641b2496df04859b",
@@ -4254,7 +5380,9 @@
       "repeat": null,
       "reference": "",
       "keywords": "كيف كان النبي يسبح؟",
-      "sourceRow": 303
+      "sourceRow": 303,
+      "counterKind": "instruction",
+      "curated": true
     },
     {
       "id": "z-be047fa093868813",
@@ -4264,7 +5392,9 @@
       "repeat": null,
       "reference": "",
       "keywords": "من أنواع الخير والآداب الجامعة - الليل النوم",
-      "sourceRow": 304
+      "sourceRow": 304,
+      "counterKind": "instruction",
+      "curated": true
     },
     {
       "id": "z-b80c2f742a9ca89d",
@@ -4274,7 +5404,8 @@
       "repeat": null,
       "reference": "",
       "keywords": "الرقية الشرعية من القرآن الكريم",
-      "sourceRow": 305
+      "sourceRow": 305,
+      "counterKind": "free"
     },
     {
       "id": "z-55b606c9c9086a52",
@@ -4284,7 +5415,8 @@
       "repeat": null,
       "reference": "",
       "keywords": "الرقية الشرعية من القرآن الكريم",
-      "sourceRow": 306
+      "sourceRow": 306,
+      "counterKind": "free"
     },
     {
       "id": "z-b02b91b42cf42c8d",
@@ -4294,7 +5426,8 @@
       "repeat": null,
       "reference": "",
       "keywords": "الرقية الشرعية من القرآن الكريم",
-      "sourceRow": 307
+      "sourceRow": 307,
+      "counterKind": "free"
     },
     {
       "id": "z-1f1122b1696a6d8e",
@@ -4304,7 +5437,8 @@
       "repeat": null,
       "reference": "",
       "keywords": "الرقية الشرعية من القرآن الكريم",
-      "sourceRow": 308
+      "sourceRow": 308,
+      "counterKind": "free"
     },
     {
       "id": "z-4a9b300e83c7dffe",
@@ -4314,7 +5448,8 @@
       "repeat": null,
       "reference": "",
       "keywords": "الرقية الشرعية من القرآن الكريم",
-      "sourceRow": 309
+      "sourceRow": 309,
+      "counterKind": "free"
     },
     {
       "id": "z-5254ca4d10f8a188",
@@ -4324,7 +5459,8 @@
       "repeat": null,
       "reference": "",
       "keywords": "الرقية الشرعية من القرآن الكريم",
-      "sourceRow": 310
+      "sourceRow": 310,
+      "counterKind": "free"
     },
     {
       "id": "z-ea43c2104cfb9417",
@@ -4334,7 +5470,8 @@
       "repeat": null,
       "reference": "",
       "keywords": "الرقية الشرعية من القرآن الكريم",
-      "sourceRow": 311
+      "sourceRow": 311,
+      "counterKind": "free"
     },
     {
       "id": "z-151fa46d04e369a4",
@@ -4344,7 +5481,8 @@
       "repeat": null,
       "reference": "",
       "keywords": "الرقية الشرعية من القرآن الكريم",
-      "sourceRow": 312
+      "sourceRow": 312,
+      "counterKind": "free"
     },
     {
       "id": "z-345c50a520c33b2d",
@@ -4354,7 +5492,8 @@
       "repeat": null,
       "reference": "أبو داود",
       "keywords": "الرقية الشرعية من السنة النبوية",
-      "sourceRow": 313
+      "sourceRow": 313,
+      "counterKind": "free"
     },
     {
       "id": "z-5d100c1aff3e232e",
@@ -4364,7 +5503,8 @@
       "repeat": null,
       "reference": "الترمذي",
       "keywords": "الرقية الشرعية من السنة النبوية",
-      "sourceRow": 314
+      "sourceRow": 314,
+      "counterKind": "free"
     },
     {
       "id": "z-f79e2c81bf79ac96",
@@ -4374,7 +5514,8 @@
       "repeat": null,
       "reference": "البخاري",
       "keywords": "الرقية الشرعية من السنة النبوية",
-      "sourceRow": 315
+      "sourceRow": 315,
+      "counterKind": "free"
     },
     {
       "id": "z-c414daf0e2fb0682",
@@ -4384,7 +5525,8 @@
       "repeat": null,
       "reference": "مسلم",
       "keywords": "الرقية الشرعية من السنة النبوية",
-      "sourceRow": 316
+      "sourceRow": 316,
+      "counterKind": "free"
     },
     {
       "id": "z-ab49ee74b42c09d6",
@@ -4394,17 +5536,38 @@
       "repeat": null,
       "reference": "مسلم",
       "keywords": "الرقية الشرعية من السنة النبوية",
-      "sourceRow": 317
+      "sourceRow": 317,
+      "counterKind": "free"
     },
     {
-      "id": "z-fa6ceb15fb0fbe5d",
+      "id": "z-7ccfcb211162ab86",
       "categoryId": "c-ae5cfd58d0ea",
-      "text": "بِسْمِ اللَّهِ (ثَلَاثًا)، أَعُوذُ بِاللَّهِ وَقُدْرَتِهِ مِنْ شَرِّ مَا أَجِدُ وَأُحَاذِرُ (سَبْعَ مَرَّاتٍ).",
-      "note": "",
-      "repeat": null,
-      "reference": "مسلم",
+      "text": "بِسْمِ اللَّهِ.",
+      "note": "ضع يدك على موضع الألم، ثم الذكر في البطاقة التالية.",
+      "repeat": 3,
+      "reference": "صحيح مسلم 2202",
       "keywords": "الرقية الشرعية من السنة النبوية",
-      "sourceRow": 318
+      "sourceRow": 318,
+      "title": "التسمية عند الألم",
+      "counterKind": "fixed",
+      "referenceUrl": "https://sunnah.com/muslim:2202",
+      "appliesTo": [],
+      "curated": true
+    },
+    {
+      "id": "z-aa6d9760a0dbdb24",
+      "categoryId": "c-ae5cfd58d0ea",
+      "text": "أَعُوذُ بِاللَّهِ وَقُدْرَتِهِ مِنْ شَرِّ مَا أَجِدُ وَأُحَاذِرُ.",
+      "note": "",
+      "repeat": 7,
+      "reference": "صحيح مسلم 2202",
+      "keywords": "الرقية الشرعية من السنة النبوية",
+      "sourceRow": 318,
+      "title": "الاستعاذة عند الألم",
+      "counterKind": "fixed",
+      "referenceUrl": "https://sunnah.com/muslim:2202",
+      "appliesTo": [],
+      "curated": true
     },
     {
       "id": "z-979a28c9add8a416",
@@ -4414,7 +5577,8 @@
       "repeat": 7,
       "reference": "أحمد",
       "keywords": "الرقية الشرعية من السنة النبوية",
-      "sourceRow": 319
+      "sourceRow": 319,
+      "counterKind": "fixed"
     },
     {
       "id": "z-8a41b289d377e0e1",
@@ -4424,7 +5588,8 @@
       "repeat": null,
       "reference": "البخاري",
       "keywords": "الرقية الشرعية من السنة النبوية",
-      "sourceRow": 320
+      "sourceRow": 320,
+      "counterKind": "free"
     },
     {
       "id": "z-cdbf58a77b9bb88d",
@@ -4434,7 +5599,8 @@
       "repeat": null,
       "reference": "أحمد",
       "keywords": "الرقية الشرعية من السنة النبوية",
-      "sourceRow": 321
+      "sourceRow": 321,
+      "counterKind": "free"
     },
     {
       "id": "z-d928a5bf5c97b7b9",
@@ -4444,7 +5610,8 @@
       "repeat": null,
       "reference": "أحمد",
       "keywords": "الرقية الشرعية من السنة النبوية",
-      "sourceRow": 322
+      "sourceRow": 322,
+      "counterKind": "free"
     },
     {
       "id": "z-e42330f834501ba9",
@@ -4454,7 +5621,8 @@
       "repeat": null,
       "reference": "الترمذي",
       "keywords": "الرقية الشرعية من السنة النبوية",
-      "sourceRow": 323
+      "sourceRow": 323,
+      "counterKind": "free"
     },
     {
       "id": "z-05106be8c04050fd",
@@ -4464,7 +5632,8 @@
       "repeat": null,
       "reference": "أحمد",
       "keywords": "الرقية الشرعية من السنة النبوية",
-      "sourceRow": 324
+      "sourceRow": 324,
+      "counterKind": "free"
     },
     {
       "id": "z-b03347997f5fd4cd",
@@ -4474,7 +5643,8 @@
       "repeat": 3,
       "reference": "أبو داود",
       "keywords": "الرقية الشرعية من السنة النبوية",
-      "sourceRow": 325
+      "sourceRow": 325,
+      "counterKind": "fixed"
     },
     {
       "id": "z-64b3d2ae05d2c700",
@@ -4484,7 +5654,8 @@
       "repeat": null,
       "reference": "أحمد",
       "keywords": "الرقية الشرعية من السنة النبوية",
-      "sourceRow": 326
+      "sourceRow": 326,
+      "counterKind": "free"
     },
     {
       "id": "z-2679960d8f9662fc",
@@ -4494,7 +5665,8 @@
       "repeat": 3,
       "reference": "أبو داود",
       "keywords": "الرقية الشرعية من السنة النبوية",
-      "sourceRow": 327
+      "sourceRow": 327,
+      "counterKind": "fixed"
     },
     {
       "id": "z-730dc73a23809e87",
@@ -4504,7 +5676,8 @@
       "repeat": null,
       "reference": "أبو داود",
       "keywords": "الرقية الشرعية من السنة النبوية",
-      "sourceRow": 328
+      "sourceRow": 328,
+      "counterKind": "free"
     },
     {
       "id": "z-4e619f1216165957",
@@ -4514,7 +5687,8 @@
       "repeat": null,
       "reference": "الترمذي",
       "keywords": "الرقية الشرعية من السنة النبوية",
-      "sourceRow": 329
+      "sourceRow": 329,
+      "counterKind": "free"
     },
     {
       "id": "z-39a291d258ed0b7b",
@@ -4524,7 +5698,8 @@
       "repeat": null,
       "reference": "البخاري",
       "keywords": "الرقية الشرعية من السنة النبوية",
-      "sourceRow": 330
+      "sourceRow": 330,
+      "counterKind": "free"
     },
     {
       "id": "z-ee4d09c05359b05b",
@@ -4534,7 +5709,8 @@
       "repeat": 7,
       "reference": "أحمد",
       "keywords": "الرقية الشرعية من السنة النبوية",
-      "sourceRow": 331
+      "sourceRow": 331,
+      "counterKind": "fixed"
     },
     {
       "id": "z-0b588fe2af3f316b",
@@ -4544,7 +5720,8 @@
       "repeat": null,
       "reference": "الترمذي",
       "keywords": "الرقية الشرعية من السنة النبوية",
-      "sourceRow": 332
+      "sourceRow": 332,
+      "counterKind": "free"
     },
     {
       "id": "z-e2252e4b604b73fd",
@@ -4554,7 +5731,8 @@
       "repeat": null,
       "reference": "أبو داود",
       "keywords": "الرقية الشرعية من السنة النبوية",
-      "sourceRow": 333
+      "sourceRow": 333,
+      "counterKind": "free"
     },
     {
       "id": "z-08ac14b37f5bf235",
@@ -4564,7 +5742,8 @@
       "repeat": null,
       "reference": "مسلم",
       "keywords": "الرقية الشرعية من السنة النبوية",
-      "sourceRow": 334
+      "sourceRow": 334,
+      "counterKind": "free"
     },
     {
       "id": "z-a2dd83d720517b13",
@@ -4574,7 +5753,8 @@
       "repeat": null,
       "reference": "أحمد",
       "keywords": "الرقية الشرعية من السنة النبوية",
-      "sourceRow": 335
+      "sourceRow": 335,
+      "counterKind": "free"
     },
     {
       "id": "z-eff3233270e7cfbb",
@@ -4584,7 +5764,8 @@
       "repeat": null,
       "reference": "البخاري",
       "keywords": "الرقية الشرعية من السنة النبوية",
-      "sourceRow": 336
+      "sourceRow": 336,
+      "counterKind": "free"
     },
     {
       "id": "z-b634388211799f5e",
@@ -4594,7 +5775,8 @@
       "repeat": null,
       "reference": "مسلم",
       "keywords": "الرقية الشرعية من السنة النبوية",
-      "sourceRow": 337
+      "sourceRow": 337,
+      "counterKind": "free"
     },
     {
       "id": "z-3ef27b9a1385cdf7",
@@ -4604,7 +5786,8 @@
       "repeat": 1,
       "reference": "البخاري",
       "keywords": "من تعار من الليل",
-      "sourceRow": 338
+      "sourceRow": 338,
+      "counterKind": "fixed"
     },
     {
       "id": "z-97ccd3b6101b5558",
@@ -4614,7 +5797,9 @@
       "repeat": null,
       "reference": "أبو داود",
       "keywords": "أماكن وأوقات إجابة الدعاء",
-      "sourceRow": 339
+      "sourceRow": 339,
+      "counterKind": "instruction",
+      "curated": true
     },
     {
       "id": "z-a6144696704b697f",
@@ -4624,7 +5809,9 @@
       "repeat": null,
       "reference": "مسلم",
       "keywords": "أماكن وأوقات إجابة الدعاء",
-      "sourceRow": 340
+      "sourceRow": 340,
+      "counterKind": "instruction",
+      "curated": true
     },
     {
       "id": "z-af6025f76f0ae0e3",
@@ -4634,7 +5821,9 @@
       "repeat": null,
       "reference": "أبو داود",
       "keywords": "أماكن وأوقات إجابة الدعاء",
-      "sourceRow": 341
+      "sourceRow": 341,
+      "counterKind": "instruction",
+      "curated": true
     },
     {
       "id": "z-f96468b26afa68cb",
@@ -4644,7 +5833,9 @@
       "repeat": null,
       "reference": "البخاري",
       "keywords": "أماكن وأوقات إجابة الدعاء",
-      "sourceRow": 342
+      "sourceRow": 342,
+      "counterKind": "instruction",
+      "curated": true
     },
     {
       "id": "z-43d16bb858e0a63d",
@@ -4654,7 +5845,9 @@
       "repeat": null,
       "reference": "أبو داود",
       "keywords": "أماكن وأوقات إجابة الدعاء",
-      "sourceRow": 343
+      "sourceRow": 343,
+      "counterKind": "instruction",
+      "curated": true
     },
     {
       "id": "z-f63f3e7fd27261b3",
@@ -4664,7 +5857,9 @@
       "repeat": null,
       "reference": "البخاري",
       "keywords": "أماكن وأوقات إجابة الدعاء",
-      "sourceRow": 344
+      "sourceRow": 344,
+      "counterKind": "instruction",
+      "curated": true
     },
     {
       "id": "z-3b93b9cfdc2a66ce",
@@ -4674,7 +5869,9 @@
       "repeat": null,
       "reference": "البخاري",
       "keywords": "أماكن وأوقات إجابة الدعاء",
-      "sourceRow": 345
+      "sourceRow": 345,
+      "counterKind": "instruction",
+      "curated": true
     }
   ]
 }

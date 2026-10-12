@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from 'next';
 import localFont from 'next/font/local';
 import { SiteHeader, SiteFooter } from '@/components/site-shell';
 import './globals.css';
+import { ThemeSync } from '@/components/theme';
 
 const ibm = localFont({
   src: [
@@ -20,5 +21,6 @@ export const metadata: Metadata = {
 };
 export const viewport: Viewport = { width: 'device-width', initialScale: 1, themeColor: '#7a2038' };
 export default function RootLayout({ children }: { children: React.ReactNode }) {
-  return <html lang="ar" dir="rtl" className={ibm.variable}><body><SiteHeader /><main id="main">{children}</main><SiteFooter /></body></html>;
+  const themeBootstrap = `try{var s=JSON.parse(localStorage.getItem('sakina:reading:v1')||'{}');var t=s.version===1?s.theme:'system';document.documentElement.dataset.theme=t==='dark'||t==='light'?t:matchMedia('(prefers-color-scheme:dark)').matches?'dark':'light'}catch(e){document.documentElement.dataset.theme=matchMedia('(prefers-color-scheme:dark)').matches?'dark':'light'}`;
+  return <html lang="ar" dir="rtl" className={ibm.variable} suppressHydrationWarning><head><script dangerouslySetInnerHTML={{ __html: themeBootstrap }} /></head><body><ThemeSync /><SiteHeader /><main id="main">{children}</main><SiteFooter /></body></html>;
 }

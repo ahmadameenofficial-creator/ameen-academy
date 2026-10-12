@@ -3,6 +3,7 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { ArrowUpLeft, BookOpen, Bookmark, Home, Search } from 'lucide-react';
 import { Icon } from './icon';
+import { ThemeControl } from './theme';
 
 export function SiteHeader() {
   const pathname = usePathname();
@@ -17,7 +18,7 @@ export function SiteHeader() {
           <Link href="/saved" className={pathname === '/saved' ? 'active' : ''}>المحفوظات</Link>
           <Link href="/sources" className={pathname === '/sources' ? 'active' : ''}>عن المحتوى</Link>
         </nav>
-        <Link href="/library" className="header-cta">وقتٌ للذكر <ArrowUpLeft size={17} /></Link>
+        <div className="header-actions"><ThemeControl /><Link href="/library" className="header-cta">وقتٌ للذكر <ArrowUpLeft size={17} /></Link></div>
       </div>
     </header>
     <div className="dedication-banner">

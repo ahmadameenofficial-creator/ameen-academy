@@ -1,9 +1,13 @@
 {
   "sourceRows": 345,
-  "importedEntries": 345,
-  "categories": 135,
-  "missingReferences": 242,
-  "missingRepetitions": 278,
-  "textPreservation": "Only literal \\n converted to newline and surrounding whitespace trimmed.",
+  "importedEntries": 390,
+  "categories": 137,
+  "missingReferences": 246,
+  "missingRepetitions": 260,
+  "freeCounters": 237,
+  "instructionCards": 23,
+  "auditedOriginallyFreeCounters": 278,
+  "correctedSourceRows": 53,
+  "textPreservation": "All 345 original rows preserved in original-entries.json. Explicit splits/corrections are recorded in corrections.json.",
   "independentReligiousReview": false
 }

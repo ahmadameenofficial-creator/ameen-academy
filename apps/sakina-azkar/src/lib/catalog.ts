@@ -4,7 +4,7 @@ import { normalizeArabic } from './text';
 export { normalizeArabic, withoutDiacritics, number } from './text';
 
 export const categories = raw.categories as Category[];
-export const entries: Dhikr[] = raw.entries;
+export const entries = raw.entries as Dhikr[];
 export const source = raw.source;
 export const groups: { id: GroupId; title: string }[] = [
   { id: 'daily', title: 'الحياة اليومية' },

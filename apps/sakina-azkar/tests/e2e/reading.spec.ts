@@ -7,7 +7,7 @@ test('home, full library and Arabic search work without horizontal overflow', as
   await expect(page.getByRole('heading', { level: 1 })).toContainText('ذِكرٌ');
   await expect(page.locator('.featured-card')).toHaveCount(6);
   await page.goto('/library');
-  await expect(page.locator('.library-grid .category-card')).toHaveCount(135);
+  await expect(page.locator('.library-grid .category-card')).toHaveCount(137);
   await page.getByRole('searchbox').fill('اذكار الصباح');
   await expect(page.locator('.library-grid .category-card')).toHaveCount(1);
   await expect(page.locator('.library-grid')).toContainText('أذكار الصباح');

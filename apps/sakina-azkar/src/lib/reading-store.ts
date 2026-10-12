@@ -1,6 +1,7 @@
 'use client';
 import { useSyncExternalStore } from 'react';
 import { initialState, parseState, readingDay, readingReducer, type ReadingAction } from './progress';
+import { migrateCatalogState } from './catalog-migration';
 
 const KEY = 'sakina:reading:v1';
 const serverState = initialState('');
@@ -13,7 +14,7 @@ function emit() { listeners.forEach(listener => listener()); }
 function load() {
   if (loaded) return;
   loaded = true;
-  try { state = parseState(localStorage.getItem(KEY), readingDay()); }
+  try { state = migrateCatalogState(parseState(localStorage.getItem(KEY), readingDay())); }
   catch { state = initialState(); persistent = false; }
 }
 function getSnapshot() { load(); return state; }
@@ -27,7 +28,7 @@ function persist() {
 }
 function onStorage(event: StorageEvent) {
   if (event.key !== KEY && event.key !== null) return;
-  state = parseState(event.newValue, readingDay());
+  state = migrateCatalogState(parseState(event.newValue, readingDay()));
   emit();
 }
 function subscribe(listener: () => void) {

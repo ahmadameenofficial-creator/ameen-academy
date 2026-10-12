@@ -3,8 +3,45 @@ import Link from 'next/link';
 import { ArrowUpLeft, BookOpen } from 'lucide-react';
 import { entries, categories, source, number } from '@/lib/catalog';
 export const metadata: Metadata = { title: 'المصادر ومراجعة المحتوى' };
+
 export default function SourcesPage() {
   const missingReferences = entries.filter(e => !e.reference).length;
-  const missingCounts = entries.filter(e => e.repeat === null).length;
-  return <div className="container sources-page"><span className="reader-category-icon"><BookOpen size={32} /></span><span className="eyebrow">الأمانة في نقل النص</span><h1>المحتوى ومصادره</h1><p className="page-description">نوضح ما نعرفه، وما يحتاج إلى مراجعة.</p><section className="source-panel"><h2>من أين تأتي الأذكار؟</h2><p>تضم هذه النسخة جميع صفوف قاعدة البيانات المفتوحة <b dir="ltr">osamayy/azkar-db</b>: {number(entries.length)} نصًا موزعة على {number(categories.length)} تصنيفًا. يصرّح صاحب المصدر في ملف README بإتاحة الاستخدام والتعديل وإعادة التوزيع مجانًا.</p><a href={source.url} target="_blank" rel="noopener noreferrer" className="text-link">عرض النسخة الأصلية المستخدمة <ArrowUpLeft size={18} /></a><p>ثُبّتت نسخة محددة من المصدر لضمان إمكانية إعادة بناء نفس البيانات. لم تُولّد نصوص الأذكار أو تُختصر، وحُفظ التشكيل كما ورد في المصدر.</p><code className="source-commit" dir="ltr">{source.commit}</code></section><section className="source-panel"><h2>ما حدود مراجعة المحتوى؟</h2><p>هذه قاعدة بيانات منقولة، وليست تحقيقًا علميًا مستقلًا للأحاديث. المراجع والتوضيحات، عندما تظهر، معروضة كما وردت في المصدر، ولا تُعد حكمًا جديدًا على صحة الحديث.</p><ul><li>{number(missingReferences)} نصًا لا يحتوي على مرجع في قاعدة البيانات.</li><li>{number(missingCounts)} نصًا لا يحتوي على عدد تكرار محدد؛ لذلك يظهر بعدّاد حر، ولا يدخل في نسبة إكمال القسم.</li><li>اكتمال استيراد البيانات لا يعني اكتمال جميع الأذكار في السنة، أو مطابقة كل محتوى موقع إسلام بوك.</li></ul><p>مراجعة النصوص والتخريج لدى مختص مرحلة مطلوبة قبل تقديم المنتج باعتباره مكتبة دينية مُحققة. إن وجدت خطأ، ارجع إلى المصدر المعتمد ولا تعتمد على هذه النسخة وحدها.</p></section><section className="source-panel"><h2>بياناتك على جهازك</h2><p>العدّادات والمحفوظات وحجم الخط تُحفظ في متصفحك. لا نطلب حسابًا ولا نرسل تقدمك إلى خادم. حذف بيانات المتصفح يمسح هذا الحفظ؛ وهو لا ينتقل تلقائيًا بين الأجهزة.</p><p>تتجدد العدّادات عند تغير اليوم حسب توقيت جهازك، وتبقى المحفوظات وإعدادات القراءة.</p></section><Link href="/library" className="button button-primary">العودة إلى الأذكار</Link></div>;
+  const free = entries.filter(e => e.counterKind === 'free').length;
+  const instructions = entries.filter(e => e.counterKind === 'instruction').length;
+  return <div className="container sources-page">
+    <span className="reader-category-icon"><BookOpen size={32} /></span>
+    <span className="eyebrow">الأمانة في نقل النص</span>
+    <h1>المحتوى ومصادره</h1>
+    <p className="page-description">نوضح النصوص وأعدادها، وما يحتاج إلى مراجعة.</p>
+    <section className="source-panel">
+      <h2>المصدر الأصلي والتصحيحات</h2>
+      <p>تنطلق المكتبة من {number(source.originalRows)} سجلًا في قاعدة البيانات <b dir="ltr">osamayy/azkar-db</b>. حُفظت النسخة الأصلية كاملة للمراجعة. يصرّح صاحب المصدر في README بإتاحة الاستخدام والتعديل وإعادة التوزيع مجانًا.</p>
+      <p>تضم الواجهة الآن {number(entries.length)} بطاقة في {number(categories.length)} تصنيفًا؛ يزيد العدد بعد فصل النصوص المركبة وعرض مجموعتي الصلاة. أعداد الصلاة مرتبطة بمراجعها داخل كل بطاقة، والتصحيحات محفوظة في سجل مستقل.</p>
+      <a href={source.url} target="_blank" rel="noopener noreferrer" className="text-link">عرض النسخة الأصلية المستخدمة <ArrowUpLeft size={18} /></a>
+      <code className="source-commit" dir="ltr">{source.commit}</code>
+    </section>
+    <section className="source-panel">
+      <h2>كيف حُددت أعداد ما بعد الصلاة؟</h2>
+      <p>الاستغفار ثلاثًا ثم دعاء السلام: مسلم 591. التهليل ودعاء «لا مانع»: مسلم 593a. التسبيح والتحميد والتكبير 33 لكل صيغة، ثم التهليل تمام المائة: مسلم 597a. فُصلت الصيغ المستقلة في كروت وعدّادات منفصلة.</p>
+      <p>الإخلاص والفلق والناس: ثلاث مرات بعد الفجر والمغرب ومرة بعد بقية الصلوات، بحسب حصن المسلم 70. التهليل عشرًا للفجر والمغرب: حصن المسلم 72. دعاء العلم النافع خاص بالفجر: حصن المسلم 73.</p>
+      <p>اخترنا صيغة واضحة من الصيغ المذكورة؛ توجد صيغ أخرى للذكر بعد الصلاة. عدّادات الفجر والمغرب والظهر والعصر والعشاء منفصلة، ويُخفى الدعاء الخاص بالفجر عند اختيار المغرب.</p>
+    </section>
+    <section className="source-panel">
+      <h2>العدّادات الحرة والنصوص الإرشادية</h2>
+      <ul>
+        <li>{number(free)} بطاقة بعدّاد حر؛ لا يوجد هدف تكرار صريح في المصدر المستخدم، ولا نختلق عددًا لها.</li>
+        <li>{number(instructions)} بطاقة إرشادية أو حديث في الفضل، بدون عدّاد تكرار مضلل.</li>
+        <li>«متابعة قراءة» وسيلة لتنظيم قراءة النص، وليست حكمًا بأن له عدد تكرار مسنونًا.</li>
+        <li>العدّادات الحرة والنصوص الإرشادية لا تدخل في نسبة إكمال الجلسة.</li>
+        <li>{number(missingReferences)} بطاقة ما زالت بلا مرجع تفصيلي في المصدر.</li>
+      </ul>
+      <p>مراجعة تنظيم الأعداد لا تعني تحقيقًا شرعيًا مستقلًا لكل الأحاديث. اكتمال هذا المصدر لا يعني كل الأذكار في السنة، أو مطابقة كل محتوى إسلام بوك. ارجع إلى المصادر المعتمدة عند الحاجة.</p>
+    </section>
+    <section className="source-panel">
+      <h2>الحفظ والمظهر</h2>
+      <p>العدّادات والمحفوظات وحجم الخط واختيار الوضع الفاتح أو الليلي تُحفظ في متصفحك. لا نطلب حسابًا ولا نرسل تقدمك إلى خادم. الحفظ لا ينتقل بين الأجهزة، وحذف بيانات المتصفح يمسحه.</p>
+      <p>تتجدد العدّادات عند تغير اليوم حسب توقيت جهازك، وتبقى المحفوظات والإعدادات. العدّادات القديمة التي جمعت عدة صيغ تُستبدل بعدّادات جديدة مستقلة، وتنتقل محفوظاتها إلى الصيغ المفصولة.</p>
+    </section>
+    <Link href="/library" className="button button-primary">العودة إلى الأذكار</Link>
+  </div>;
 }

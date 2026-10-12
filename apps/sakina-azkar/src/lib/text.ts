@@ -8,4 +8,4 @@ export function normalizeArabic(text: string): string {
 export function withoutDiacritics(text: string): string {
   return text.replace(/[\u0610-\u061A\u064B-\u065F\u0670\u06D6-\u06ED]/g, '');
 }
-export const number = (value: number) => new Intl.NumberFormat('ar-EG').format(value);
+export const number = (value: number) => new Intl.NumberFormat('en-US', { useGrouping: false }).format(value);

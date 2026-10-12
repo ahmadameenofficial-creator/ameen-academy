@@ -1,0 +1,418 @@
+[
+  {
+    "sourceRow": 127,
+    "reason": "Separated prayer recipe, verified counts and prayer applicability against Muslim and Hisn 66–73.",
+    "resultIds": [
+      "z-7ab1ca44d84a4712",
+      "z-9d5aa63a7e531c56",
+      "z-36a0778f078f14cf",
+      "z-b92c0477951613dd"
+    ]
+  },
+  {
+    "sourceRow": 128,
+    "reason": "Separated prayer recipe, verified counts and prayer applicability against Muslim and Hisn 66–73.",
+    "resultIds": [
+      "z-975e683e4eb30542",
+      "z-a8f1ab34f4d633f9",
+      "z-b6db3433d91629ca",
+      "z-6ecfef74f0ccb881"
+    ]
+  },
+  {
+    "sourceRow": 129,
+    "reason": "Separated prayer recipe, verified counts and prayer applicability against Muslim and Hisn 66–73.",
+    "resultIds": [
+      "z-5c0788c676fe330b",
+      "z-20abd9d5a676c756"
+    ]
+  },
+  {
+    "sourceRow": 130,
+    "reason": "Separated prayer recipe, verified counts and prayer applicability against Muslim and Hisn 66–73.",
+    "resultIds": [
+      "z-be7a745074f37e85",
+      "z-57346e23cbae9253",
+      "z-bd5b5a04bd4253db",
+      "z-1fa53183e6db1b73",
+      "z-834ba988a7877af7",
+      "z-e7d376fbf17a8cd4",
+      "z-c3467dea396059f7",
+      "z-47ff37ba8b13e1c4"
+    ]
+  },
+  {
+    "sourceRow": 131,
+    "reason": "Separated prayer recipe, verified counts and prayer applicability against Muslim and Hisn 66–73.",
+    "resultIds": [
+      "z-e51d555d30733d6d",
+      "z-757316181876673b",
+      "z-adcf4b80152ff9db",
+      "z-dec1f054ed234c85",
+      "z-fc97460033822726",
+      "z-0173afa2a59cac13"
+    ]
+  },
+  {
+    "sourceRow": 132,
+    "reason": "Separated prayer recipe, verified counts and prayer applicability against Muslim and Hisn 66–73.",
+    "resultIds": [
+      "z-b262e192e684d51a",
+      "z-7b489e0725889b2e"
+    ]
+  },
+  {
+    "sourceRow": 133,
+    "reason": "Separated prayer recipe, verified counts and prayer applicability against Muslim and Hisn 66–73.",
+    "resultIds": [
+      "z-9f6dc302020d22cb"
+    ]
+  },
+  {
+    "sourceRow": 134,
+    "reason": "Separated prayer recipe, verified counts and prayer applicability against Muslim and Hisn 66–73.",
+    "resultIds": [
+      "z-c45ec40873bd6f11"
+    ]
+  },
+  {
+    "sourceRow": 94,
+    "reason": "Explicit repetition moved from source text into the counter; narration retained as note.",
+    "resultIds": [
+      "z-7875ffb5eb8099f1"
+    ]
+  },
+  {
+    "sourceRow": 102,
+    "reason": "Explicit repetition moved from source text into the counter; narration retained as note.",
+    "resultIds": [
+      "z-e477fda1dcf0e86e"
+    ]
+  },
+  {
+    "sourceRow": 167,
+    "reason": "Explicit repetition moved from source text into the counter; narration retained as note.",
+    "resultIds": [
+      "z-0df8b8ec19eb378a"
+    ]
+  },
+  {
+    "sourceRow": 232,
+    "reason": "Explicit repetition moved from source text into the counter; narration retained as note.",
+    "resultIds": [
+      "z-efb9f25dcacd267d"
+    ]
+  },
+  {
+    "sourceRow": 291,
+    "reason": "Explicit repetition moved from source text into the counter; narration retained as note.",
+    "resultIds": [
+      "z-4e105e07e92dfd53"
+    ]
+  },
+  {
+    "sourceRow": 292,
+    "reason": "Explicit repetition moved from source text into the counter; narration retained as note.",
+    "resultIds": [
+      "z-9c317af65234c680"
+    ]
+  },
+  {
+    "sourceRow": 295,
+    "reason": "Explicit repetition moved from source text into the counter; narration retained as note.",
+    "resultIds": [
+      "z-1cbf6959b81314d0"
+    ]
+  },
+  {
+    "sourceRow": 92,
+    "reason": "Separate the repeated opening formulas; do not repeat the already-repeated source paragraph three more times.",
+    "resultIds": [
+      "z-b8deef4bbceefffa",
+      "z-78374387dd5082da",
+      "z-c286e0d8025360c1",
+      "z-5f7a0b99a3087d21"
+    ]
+  },
+  {
+    "sourceRow": 136,
+    "reason": "Separate three Quran recitations, retaining the complete ritual instruction in the notes.",
+    "resultIds": [
+      "z-66b8487dc08f1c1d",
+      "z-8da5a9a719548444",
+      "z-40c92efb60199be4"
+    ]
+  },
+  {
+    "sourceRow": 143,
+    "reason": "Bedtime has 33/33/34; do not use the post-prayer 33/33/33 recipe.",
+    "resultIds": [
+      "z-919c9d828525385a",
+      "z-b823d3d5072665f4",
+      "z-7b98ace65c7f5db0"
+    ]
+  },
+  {
+    "sourceRow": 109,
+    "reason": "Keep the unbounded supplication free, but remove inline duplication so each tap represents one utterance.",
+    "resultIds": [
+      "z-c1d80325aa2166ab"
+    ]
+  },
+  {
+    "sourceRow": 207,
+    "reason": "Move the three explicit repeated utterances into a single-formula counter.",
+    "resultIds": [
+      "z-d0bf3d926bfb20e8"
+    ]
+  },
+  {
+    "sourceRow": 243,
+    "reason": "Separate riding instructions and repeated hamd/takbir; do not count an entire five-part paragraph as one free chant.",
+    "resultIds": [
+      "z-8cbc78cdc5f477ae",
+      "z-554b5ab6674bda43",
+      "z-e81d63c5f78ee0ea",
+      "z-708fdd7943ed3d49",
+      "z-b25d1b1e69b29abf"
+    ]
+  },
+  {
+    "sourceRow": 244,
+    "reason": "Separate three opening takbirs from the travel supplication; returning-only text is an explicit note.",
+    "resultIds": [
+      "z-d0c07d44a512ada1",
+      "z-f2fca2a5ae09b9ee"
+    ]
+  },
+  {
+    "sourceRow": 156,
+    "reason": "A three-time dhikr and its final appendage need distinct counters.",
+    "resultIds": [
+      "z-11d331174c9d97f1",
+      "z-614a5b28b41e25e0"
+    ]
+  },
+  {
+    "sourceRow": 254,
+    "reason": "Do not attach the takbir count to the entire travel supplication.",
+    "resultIds": [
+      "z-05b54a3ac63f0db1",
+      "z-a8d3f9ecf0af8aa8"
+    ]
+  },
+  {
+    "sourceRow": 273,
+    "reason": "Separate initial approach text from the repeated formula and retain instructions.",
+    "resultIds": [
+      "z-5a60672e0ff24eaf",
+      "z-5d3ad6468eab6fc6"
+    ]
+  },
+  {
+    "sourceRow": 280,
+    "reason": "Separate the 3-time and 7-time formulas; one combined free counter is incorrect.",
+    "resultIds": [
+      "z-af769675522a3aa6",
+      "z-b8d90e7c5f907474"
+    ]
+  },
+  {
+    "sourceRow": 318,
+    "reason": "Separate the 3-time and 7-time formulas; one combined free counter is incorrect.",
+    "resultIds": [
+      "z-7ccfcb211162ab86",
+      "z-aa6d9760a0dbdb24"
+    ]
+  },
+  {
+    "sourceRow": 298,
+    "reason": "Separate freely repeatable formulas; do not turn 'four phrases' into four repetitions.",
+    "resultIds": [
+      "z-3486ac2758b3ed22",
+      "z-351a97153a9b4ae6",
+      "z-51a8c87bf6f1f619",
+      "z-ad68e0d97b69cee1"
+    ]
+  },
+  {
+    "sourceRow": 302,
+    "reason": "Separate freely repeatable formulas; do not turn 'four phrases' into four repetitions.",
+    "resultIds": [
+      "z-c52167821a2d8b6c",
+      "z-5f8edf304e5b4cfe",
+      "z-2a35fc92d0e5a9d6",
+      "z-fad2f9beb2066ac4",
+      "z-5d5efcc6c68b9900"
+    ]
+  },
+  {
+    "sourceRow": 301,
+    "reason": "Separate freely repeatable formulas; do not turn 'four phrases' into four repetitions.",
+    "resultIds": [
+      "z-33b79696b065eae3",
+      "z-c86c897a24a957c8"
+    ]
+  },
+  {
+    "sourceRow": 256,
+    "reason": "Instruction or narration, not a chant; suppress the misleading free counter.",
+    "resultIds": [
+      "z-08a765dc4e2ae2c9"
+    ]
+  },
+  {
+    "sourceRow": 262,
+    "reason": "Instruction or narration, not a chant; suppress the misleading free counter.",
+    "resultIds": [
+      "z-7686093ad5eb0c09"
+    ]
+  },
+  {
+    "sourceRow": 339,
+    "reason": "Instruction or narration, not a chant; suppress the misleading free counter.",
+    "resultIds": [
+      "z-97ccd3b6101b5558"
+    ]
+  },
+  {
+    "sourceRow": 276,
+    "reason": "Instruction or narration, not a chant; suppress the misleading free counter.",
+    "resultIds": [
+      "z-ed25ad464953df44"
+    ]
+  },
+  {
+    "sourceRow": 340,
+    "reason": "Instruction or narration, not a chant; suppress the misleading free counter.",
+    "resultIds": [
+      "z-a6144696704b697f"
+    ]
+  },
+  {
+    "sourceRow": 85,
+    "reason": "Instruction or narration, not a chant; suppress the misleading free counter.",
+    "resultIds": [
+      "z-439e9fc9961065a5"
+    ]
+  },
+  {
+    "sourceRow": 279,
+    "reason": "Instruction or narration, not a chant; suppress the misleading free counter.",
+    "resultIds": [
+      "z-dc998c6a2e78d725"
+    ]
+  },
+  {
+    "sourceRow": 151,
+    "reason": "Instruction or narration, not a chant; suppress the misleading free counter.",
+    "resultIds": [
+      "z-5edb9dab45084481"
+    ]
+  },
+  {
+    "sourceRow": 281,
+    "reason": "Instruction or narration, not a chant; suppress the misleading free counter.",
+    "resultIds": [
+      "z-77f871f7de3e2e65"
+    ]
+  },
+  {
+    "sourceRow": 341,
+    "reason": "Instruction or narration, not a chant; suppress the misleading free counter.",
+    "resultIds": [
+      "z-af6025f76f0ae0e3"
+    ]
+  },
+  {
+    "sourceRow": 87,
+    "reason": "Instruction or narration, not a chant; suppress the misleading free counter.",
+    "resultIds": [
+      "z-58f2bf005116d10b"
+    ]
+  },
+  {
+    "sourceRow": 342,
+    "reason": "Instruction or narration, not a chant; suppress the misleading free counter.",
+    "resultIds": [
+      "z-f96468b26afa68cb"
+    ]
+  },
+  {
+    "sourceRow": 285,
+    "reason": "Instruction or narration, not a chant; suppress the misleading free counter.",
+    "resultIds": [
+      "z-4c5f92d641848076"
+    ]
+  },
+  {
+    "sourceRow": 286,
+    "reason": "Instruction or narration, not a chant; suppress the misleading free counter.",
+    "resultIds": [
+      "z-1328dc58b0e8dfdb"
+    ]
+  },
+  {
+    "sourceRow": 343,
+    "reason": "Instruction or narration, not a chant; suppress the misleading free counter.",
+    "resultIds": [
+      "z-43d16bb858e0a63d"
+    ]
+  },
+  {
+    "sourceRow": 344,
+    "reason": "Instruction or narration, not a chant; suppress the misleading free counter.",
+    "resultIds": [
+      "z-f63f3e7fd27261b3"
+    ]
+  },
+  {
+    "sourceRow": 345,
+    "reason": "Instruction or narration, not a chant; suppress the misleading free counter.",
+    "resultIds": [
+      "z-3b93b9cfdc2a66ce"
+    ]
+  },
+  {
+    "sourceRow": 290,
+    "reason": "Instruction or narration, not a chant; suppress the misleading free counter.",
+    "resultIds": [
+      "z-decc861fab29cca0"
+    ]
+  },
+  {
+    "sourceRow": 236,
+    "reason": "Instruction or narration, not a chant; suppress the misleading free counter.",
+    "resultIds": [
+      "z-596193ff2273776c"
+    ]
+  },
+  {
+    "sourceRow": 175,
+    "reason": "Instruction or narration, not a chant; suppress the misleading free counter.",
+    "resultIds": [
+      "z-09151adf6a1e83f5"
+    ]
+  },
+  {
+    "sourceRow": 303,
+    "reason": "Instruction or narration, not a chant; suppress the misleading free counter.",
+    "resultIds": [
+      "z-641b2496df04859b"
+    ]
+  },
+  {
+    "sourceRow": 304,
+    "reason": "Instruction or narration, not a chant; suppress the misleading free counter.",
+    "resultIds": [
+      "z-be047fa093868813"
+    ]
+  },
+  {
+    "sourceRow": 186,
+    "reason": "Instruction or narration, not a chant; suppress the misleading free counter.",
+    "resultIds": [
+      "z-e96fc368cb6cc170"
+    ]
+  }
+]

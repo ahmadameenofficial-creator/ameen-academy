@@ -2,6 +2,7 @@ import { notFound } from 'next/navigation';
 import type { Metadata } from 'next';
 import { categories, getCategory, getCategoryEntries } from '@/lib/catalog';
 import { Reader } from '@/components/reader';
+import { PrayerHub } from '@/components/prayer-hub';
 export function generateStaticParams() { return categories.map(c => ({ id: c.id })); }
 export async function generateMetadata({ params }: { params: Promise<{ id: string }> }): Promise<Metadata> {
   const { id } = await params;
@@ -11,5 +12,6 @@ export default async function CategoryPage({ params }: { params: Promise<{ id: s
   const { id } = await params;
   const category = getCategory(id);
   if (!category) notFound();
+  if (category.children) return <PrayerHub>{category.children.map(getCategory).filter(c => c !== undefined)}</PrayerHub>;
   return <Reader category={category} entries={getCategoryEntries(id)} />;
 }
