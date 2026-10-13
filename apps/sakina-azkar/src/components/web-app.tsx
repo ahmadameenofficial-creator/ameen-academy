@@ -1,5 +1,7 @@
 'use client';
 import Image from 'next/image';
+import { usePathname } from 'next/navigation';
+import { recordAnalytics } from '@/lib/analytics-client';
 import { Download, WifiOff, Check, RefreshCw, X } from 'lucide-react';
 import { useEffect, useRef, useState, useSyncExternalStore } from 'react';
 import { number } from '@/lib/text';
@@ -16,6 +18,10 @@ const subscribeNetwork = (callback: () => void) => {
 };
 
 export function WebApp() {
+  const pathname = usePathname();
+  return pathname.startsWith('/dashboard') ? null : <WebAppContent />;
+}
+function WebAppContent() {
   const online = useSyncExternalStore(subscribeNetwork, () => navigator.onLine, () => true);
   const [prompt, setPrompt] = useState<InstallPrompt | null>(null);
   const [installed, setInstalled] = useState(false);
@@ -28,7 +34,7 @@ export function WebApp() {
 
   useEffect(() => {
     const beforeInstall = (event: Event) => { event.preventDefault(); setPrompt(event as InstallPrompt); };
-    const appInstalled = () => { setInstalled(true); setPrompt(null); };
+    const appInstalled = () => { setInstalled(true); setPrompt(null); recordAnalytics('install'); };
     window.addEventListener('beforeinstallprompt', beforeInstall);
     window.addEventListener('appinstalled', appInstalled);
     const display = matchMedia('(display-mode: standalone)');
@@ -50,7 +56,7 @@ export function WebApp() {
     }
     let alive = true;
     const message = (event: MessageEvent) => {
-      if (event.data?.type === 'OFFLINE_READY') setStatus('ready');
+      if (event.data?.type === 'OFFLINE_READY') setStatus(current => { if (current !== 'ready') recordAnalytics('offline_ready'); return 'ready'; });
       if (event.data?.type === 'OFFLINE_FAILED') setStatus(current => current === 'ready' ? current : 'unavailable');
       if (event.data?.type === 'OFFLINE_PROGRESS' && event.data.total > 0) {
         setProgress(Math.min(100, Math.round(event.data.completed / event.data.total * 100)));

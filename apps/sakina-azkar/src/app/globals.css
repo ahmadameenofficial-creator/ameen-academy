@@ -96,6 +96,42 @@
 }
 
 @layer components {
+  .progress-shortcut { display: none; }
+  .reader-guide { border: 1px solid var(--line); background: var(--surface); border-radius: 12px; padding: 12px 18px; margin-bottom: 24px; }
+  .reader-guide summary { cursor: pointer; font-size: 13px; color: var(--burgundy); }
+  .reader-guide p { font-size: 13px; color: var(--muted); line-height: 1.9; margin-top: 12px; }
+  .reader-guide a { color: var(--burgundy); text-decoration: underline; }
+  .personal-progress { max-width: 1000px; padding-block: 45px 65px; }
+  .personal-progress h1 { font-size: clamp(28px,4vw,40px); }
+  .personal-metrics { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 18px; margin-block: 30px; }
+  .personal-metrics section { padding: 26px; border: 1px solid var(--line); background: var(--card-blue); border-radius: 16px; }
+  .personal-metrics svg { color: var(--burgundy); }
+  .personal-metrics strong { display: block; font-size: 38px; color: var(--ink); margin-block: 12px; }
+  .personal-metrics h2 { font-size: 17px; }
+  .personal-metrics p { font-size: 12px; color: var(--muted); margin-top: 8px; }
+  .weekly-progress, .history-list { border: 1px solid var(--line); border-radius: 16px; background: var(--surface); padding: 26px; margin-block: 22px; }
+  .weekly-progress h2, .history-list h2 { font-size: 20px; }
+  .week-grid { display: grid; grid-template-columns: repeat(7,minmax(0,1fr)); gap: 10px; margin-top: 25px; }
+  .week-day { text-align: center; background: var(--soft-surface); border: 1px solid var(--line); border-radius: 12px; padding: 16px 5px; }
+  .week-day > span { color: var(--muted); font-size: 12px; }
+  .week-day b { display: grid; place-items: center; height: 40px; color: var(--muted); margin-top: 8px; }
+  .week-day small { display: block; color: var(--muted); font-size: 13px; }
+  .week-day.has-completions { background: var(--card-blue); border-color: var(--burgundy); }
+  .has-completions b, .has-completions small { color: var(--burgundy); }
+  .history-list ul { list-style: none; padding: 0; margin: 20px 0 0; }
+  .history-list li { display: flex; align-items: center; justify-content: space-between; gap: 20px; padding-block: 15px; border-bottom: 1px solid var(--line); font-size: 14px; }
+  .history-list li:last-child { border-bottom: 0; }
+  .history-list a { color: var(--burgundy); }
+  .history-list time { font-size: 12px; color: var(--muted); white-space: nowrap; }
+  .history-note { font-size: 13px; color: var(--muted); line-height: 1.9; }
+  .personal-empty { padding-block: 25px; }
+  .personal-empty p { color: var(--muted); margin-bottom: 18px; font-size: 14px; }
+  .analytics-choice { padding-block: 18px; border-top: 1px solid var(--line); color: var(--muted); font-size: 13px; }
+  .analytics-choice summary { cursor: pointer; padding-block: 8px; color: var(--burgundy); }
+  .analytics-choice p { max-width: 750px; margin-block: 12px; }
+  .analytics-choice > details > div { display: flex; flex-wrap: wrap; gap: 12px; }
+  .analytics-choice .button { font-size: 12px; min-height: 44px; }
+  .analytics-choice .button[aria-pressed="true"] { background: var(--rose); border-color: var(--burgundy); }
   .header-actions { display: flex; align-items: center; gap: 12px; }
   .web-app-panel { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 24px; margin-block: 50px 24px; padding: 28px; background: var(--card-blue); border: 1px solid var(--line); border-radius: 18px; }
   .app-identity { display: flex; align-items: center; gap: 24px; }
@@ -378,6 +414,15 @@
     .ring-three { width: 255px; height: 255px; top: 63px; }
   }
   @media (max-width: 760px) {
+    .progress-shortcut { display: inline-flex; }
+    .personal-progress { padding-top: 30px; }
+    .personal-metrics { grid-template-columns: 1fr; gap: 12px; }
+    .personal-metrics section { padding: 20px; }
+    .weekly-progress, .history-list { padding: 20px; }
+    .week-grid { gap: 5px; }
+    .week-day { padding: 12px 2px; border-radius: 8px; }
+    .week-day > span { font-size: 10px; }
+    .history-list li { flex-wrap: wrap; gap: 6px; }
     .brand-logo { width: 122px; height: 42px; }
     .web-app-panel { padding: 20px; margin-top: 32px; gap: 20px; }
     .app-identity { gap: 16px; width: 100%; }

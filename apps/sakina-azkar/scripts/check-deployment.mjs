@@ -16,6 +16,8 @@ const middleware = JSON.parse(readFileSync(join(appRoot, '.next/server/middlewar
 assert.deepEqual(Object.keys(middleware.middleware ?? {}), [],
   'The public azkar app must not inherit the academy authentication middleware.');
 const precache = JSON.parse(readFileSync(join(appRoot, 'public/offline-precache.json'), 'utf8'));
+assert.ok(precache.pages.includes('/progress') && precache.pages.every(path => !path.startsWith('/dashboard') && !path.startsWith('/api/')),
+  'Private dashboard pages and APIs must never be precached with the public reader.');
 assert.ok(precache.pages.includes('/library') && precache.pages.includes('/azkar/after-prayer-fajr-maghrib'),
   'The offline package must include the library and split prayer categories.');
 const worker = readFileSync(join(appRoot, 'public/sw.js'), 'utf8');

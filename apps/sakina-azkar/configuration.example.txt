@@ -1,0 +1,6 @@
+SAKINA_DATABASE_URL=postgresql://USER:PASSWORD@YOUR-NEON-HOST/sakina?sslmode=require
+DASHBOARD_PASSWORD=REPLACE_WITH_A_UNIQUE_PASSWORD_AT_LEAST_16_CHARACTERS
+DASHBOARD_SESSION_SECRET=REPLACE_WITH_A_RANDOM_SECRET_AT_LEAST_32_CHARACTERS
+
+Set these server-only variables in the ameen-academy-azkar Vercel project.
+Do not prefix them with NEXT_PUBLIC_. Do not commit real values.

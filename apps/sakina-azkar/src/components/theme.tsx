@@ -3,6 +3,7 @@ import { useEffect, useRef } from 'react';
 import { Moon, Sun, Monitor } from 'lucide-react';
 import { useReading } from '@/lib/reading-store';
 import type { Theme } from '@/lib/progress';
+import { recordAnalytics } from '@/lib/analytics-client';
 
 export function ThemeSync() {
   const { state, ready } = useReading();
@@ -43,6 +44,6 @@ export function ThemeControl() {
     if (event.key === 'Escape' && ref.current) { ref.current.open = false; ref.current.querySelector('summary')?.focus(); }
   }}>
     <summary aria-label="إعدادات المظهر"><CurrentIcon size={20} /><span>المظهر</span></summary>
-    <div className="theme-menu" role="group" aria-label="اختيار مظهر الموقع">{choices.map(choice => <button key={choice.id} aria-pressed={state.theme === choice.id} disabled={!ready} onClick={() => { dispatch({ type: 'theme', theme: choice.id }); if (ref.current) ref.current.open = false; }}><choice.icon size={17} />{choice.title}</button>)}</div>
+    <div className="theme-menu" role="group" aria-label="اختيار مظهر الموقع">{choices.map(choice => <button key={choice.id} aria-pressed={state.theme === choice.id} disabled={!ready} onClick={() => { dispatch({ type: 'theme', theme: choice.id }); if (choice.id !== 'system') recordAnalytics(choice.id === 'dark' ? 'theme_dark' : 'theme_light'); if (ref.current) ref.current.open = false; }}><choice.icon size={17} />{choice.title}</button>)}</div>
   </details>;
 }

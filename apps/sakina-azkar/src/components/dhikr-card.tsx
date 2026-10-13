@@ -5,6 +5,7 @@ import type { Dhikr, PrayerId } from '@/lib/types';
 import { number, withoutDiacritics } from '@/lib/text';
 import { useReading } from '@/lib/reading-store';
 import { counterKey, prayers } from '@/lib/progress';
+import { recordAnalytics } from '@/lib/analytics-client';
 
 export function DhikrCard({ entry, position, compact = false, scope }: {
   entry: Dhikr; position: number; compact?: boolean; scope?: PrayerId;
@@ -19,7 +20,7 @@ export function DhikrCard({ entry, position, compact = false, scope }: {
   const copyText = entry.text + (entry.reference ? '\n\nالمصدر: ' + entry.reference : '');
 
   async function copy() {
-    try { await navigator.clipboard.writeText(copyText); setMessage('تم نسخ الذكر'); }
+    try { await navigator.clipboard.writeText(copyText); setMessage('تم نسخ الذكر'); recordAnalytics('copy', '/azkar/' + entry.categoryId); }
     catch { setMessage('تعذّر النسخ تلقائيًا. يمكنك تحديد النص ونسخه.'); }
   }
   async function share() {
@@ -27,6 +28,7 @@ export function DhikrCard({ entry, position, compact = false, scope }: {
     try {
       if (navigator.share) await navigator.share({ title: 'ذكر من سكينة', text: copyText, url });
       else { await navigator.clipboard.writeText(copyText + '\n' + url); setMessage('تم نسخ الذكر ورابطه للمشاركة'); }
+      recordAnalytics('share', '/azkar/' + entry.categoryId);
     } catch (error) {
       if (!(error instanceof DOMException && error.name === 'AbortError')) setMessage('تعذّرت المشاركة. يمكنك نسخ الذكر.');
     }
@@ -84,7 +86,7 @@ export function DhikrCard({ entry, position, compact = false, scope }: {
       </div>
       <button className={'count-button' + (completed ? ' count-complete' : '')}
         disabled={!ready || completed}
-        onClick={() => dispatch({ type: 'increment', id: key, limit: entry.repeat })}
+        onClick={() => { dispatch({ type: 'increment', id: key, limit: entry.repeat }); recordAnalytics('counter', '/azkar/' + entry.categoryId); if (entry.repeat && count + 1 === entry.repeat) recordAnalytics('completion', '/azkar/' + entry.categoryId); }}
         aria-label={completed ? 'اكتمل الذكر' : 'تسجيل قراءة الذكر'}>
         <span key={count} className="animated-count">
           {completed ? <Check size={27} /> : <Plus size={24} />}

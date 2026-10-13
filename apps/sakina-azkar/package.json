@@ -10,6 +10,7 @@
     "lint": "eslint .",
     "typecheck": "tsc --noEmit",
     "test": "tsx --test tests/*.test.ts",
+    "test:analytics-integration": "tsx --test tests/integration/*.test.ts",
     "test:e2e": "playwright test",
     "data:import": "python3 scripts/import-data.py",
     "check:deployment": "node scripts/check-deployment.mjs"
@@ -17,8 +18,10 @@
   "dependencies": {
     "lucide-react": "^0.468.0",
     "next": "16.2.10",
+    "postgres": "^3.4.9",
     "react": "19.2.4",
-    "react-dom": "19.2.4"
+    "react-dom": "19.2.4",
+    "web-vitals": "^5.3.0"
   },
   "devDependencies": {
     "@axe-core/playwright": "^4.13.0",

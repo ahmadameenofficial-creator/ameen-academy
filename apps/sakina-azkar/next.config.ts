@@ -6,7 +6,7 @@ const config: NextConfig = {
   // relative app path instead of making it look like a root-level app.
   outputFileTracingRoot: resolve(__dirname, '../..'),
   async headers() {
-    return [{ source: '/sw.js', headers: [
+    return [{ source: '/dashboard/:path*', headers: [{ key: 'Cache-Control', value: 'private, no-store' }, { key: 'X-Robots-Tag', value: 'noindex, nofollow' }] }, { source: '/api/dashboard/:path*', headers: [{ key: 'Cache-Control', value: 'private, no-store' }] }, { source: '/sw.js', headers: [
       { key: 'Cache-Control', value: 'no-cache, no-store, must-revalidate' },
       { key: 'Service-Worker-Allowed', value: '/' },
     ] }];

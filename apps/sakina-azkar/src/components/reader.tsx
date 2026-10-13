@@ -1,5 +1,5 @@
 'use client';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { ArrowRight, Check, Eye, EyeOff, Maximize2, Minimize2, RotateCcw, Minus, Plus } from 'lucide-react';
 import type { Category, Dhikr, PrayerId } from '@/lib/types';
@@ -9,6 +9,7 @@ import { useReading } from '@/lib/reading-store';
 import { Icon } from './icon';
 import { DhikrCard } from './dhikr-card';
 import { Reveal } from './reveal';
+import { recordCompletion } from '@/lib/history-store';
 
 export function Reader({ category, entries }: { category: Category; entries: Dhikr[] }) {
   const { state, dispatch, ready, persistent } = useReading();
@@ -23,6 +24,9 @@ export function Reader({ category, entries }: { category: Category; entries: Dhi
   const progress = countable.length ? completed / countable.length * 100 : 0;
   const visible = applicable.filter(e => !hideCompleted || e.repeat === null || (state.counts[counterKey(e.id, scope)] ?? 0) < e.repeat);
   const prayerTitle = prayers.find(p => p.id === scope)?.title;
+  useEffect(() => {
+    if (ready && countable.length > 0 && completed === countable.length) recordCompletion({day:state.day,categoryId:category.id,...(scope?{scope}:{})});
+  },[ready,countable.length,completed,state.day,category.id,scope]);
 
   return <div className={'reader container' + (focus ? ' focus-mode' : '')}>
     <Link href="/library" className="back-link"><ArrowRight size={18} /> مكتبة الأذكار</Link>
@@ -68,6 +72,7 @@ export function Reader({ category, entries }: { category: Category; entries: Dhi
         </button>
       </div>
     </div>
+    <details className="reader-guide"><summary>كيف تتابع أذكارك؟</summary><p>اضغط الزر الكبير بعد كل قراءة. الأرقام تعرض ما قرأته من العدد المحدد، ويمكنك التراجع عن ضغطة أو تصفير العداد. العدّاد الحر يظل مفتوحًا.</p><p>أذكار الصلاة لها عدّادات مستقلة لكل صلاة. عند إتمام بطاقات القسم ذات العدد المحدد، يُضاف اليوم إلى <Link href="/progress">متابعتك الأسبوعية</Link>.</p></details>
     {!persistent && <p className="storage-warning" role="status">الحفظ غير متاح في هذا المتصفح. تقدمك الحالي سيظل متاحًا حتى تغادر الصفحة.</p>}
     <div className="reader-content">{visible.map(entry => <Reveal key={entry.id + (scope ?? '')}>
       <DhikrCard entry={entry} position={applicable.indexOf(entry) + 1} scope={scope} />

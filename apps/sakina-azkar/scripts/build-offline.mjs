@@ -16,7 +16,7 @@ const catalog = JSON.parse(await readFile('src/data/azkar.json', 'utf8'));
 const buildId = (await readFile('.next/BUILD_ID', 'utf8')).trim();
 const staticFiles = await files('.next/static');
 const publicFiles = await files('public');
-const pages = ['/', '/library', '/saved', '/sources', ...catalog.categories.map(category => '/azkar/' + category.id)];
+const pages = ['/', '/library', '/saved', '/sources', '/progress', ...catalog.categories.map(category => '/azkar/' + category.id)];
 const assets = [
   '/manifest.webmanifest', '/icon.svg',
   ...staticFiles.filter(path => /\.(js|css|woff2?|ttf)$/.test(path)).map(path => '/_next/static/' + path),
