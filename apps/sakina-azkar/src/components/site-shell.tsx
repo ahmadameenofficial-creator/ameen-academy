@@ -4,6 +4,7 @@ import Image from 'next/image';
 import { usePathname } from 'next/navigation';
 import { ArrowUpLeft, BookOpen, Bookmark, Home, Search, Download, ChartNoAxesColumn } from 'lucide-react';
 import { ThemeControl } from './theme';
+import { NotificationBell } from './notification-bell';
 
 export function SiteHeader() {
   const pathname = usePathname();
@@ -20,7 +21,7 @@ export function SiteHeader() {
           <Link href="/progress" className={pathname === '/progress' ? 'active' : ''}>متابعتي</Link>
           <Link href="/sources" className={pathname === '/sources' ? 'active' : ''}>عن المحتوى</Link>
         </nav>
-        <div className="header-actions"><ThemeControl /><Link href="/progress" className="icon-button progress-shortcut" aria-label="متابعتك الأسبوعية"><ChartNoAxesColumn size={20}/></Link><Link href="/#install" className="icon-button" aria-label="تثبيت تطبيق سكينة"><Download size={20} /></Link><Link href="/library" className="header-cta">وقتٌ للذكر <ArrowUpLeft size={17} /></Link></div>
+        <div className="header-actions"><ThemeControl /><NotificationBell /><Link href="/progress" className="icon-button progress-shortcut" aria-label="متابعتك الأسبوعية"><ChartNoAxesColumn size={20}/></Link><Link href="/#install" className="icon-button" aria-label="تثبيت تطبيق سكينة"><Download size={20} /></Link><Link href="/library" className="header-cta">وقتٌ للذكر <ArrowUpLeft size={17} /></Link></div>
       </div>
     </header>
     <div className="dedication-banner">

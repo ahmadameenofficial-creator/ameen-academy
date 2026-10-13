@@ -1,0 +1,250 @@
+{
+  "morning": [
+    {
+      "id": "z-40943b2f43b8fd52",
+      "repeat": 1
+    },
+    {
+      "id": "z-a94ea95cae3ba560",
+      "repeat": 3
+    },
+    {
+      "id": "z-df52b826256d8f30",
+      "repeat": 3
+    },
+    {
+      "id": "z-1c5dc9ef877d361c",
+      "repeat": 3
+    },
+    {
+      "id": "z-03ff1fb7eacc0430",
+      "repeat": 1
+    },
+    {
+      "id": "z-acd068f006279c04",
+      "repeat": 1
+    },
+    {
+      "id": "z-aaca4283c2e3de2c",
+      "repeat": 3
+    },
+    {
+      "id": "z-405cefe391ce68c6",
+      "repeat": 4
+    },
+    {
+      "id": "z-c9ea242ce1a7cceb",
+      "repeat": 1
+    },
+    {
+      "id": "z-07b8ed23edeea94e",
+      "repeat": 7
+    },
+    {
+      "id": "z-23bb643df89f3cb1",
+      "repeat": 3
+    },
+    {
+      "id": "z-903ce63c3dbba796",
+      "repeat": 1
+    },
+    {
+      "id": "z-8cd7791b7bf6b234",
+      "repeat": 1
+    },
+    {
+      "id": "z-b65c08f8153ef80a",
+      "repeat": 3
+    },
+    {
+      "id": "z-066f8c5230df9be4",
+      "repeat": 3
+    },
+    {
+      "id": "z-e041e2cec2880ef8",
+      "repeat": 3
+    },
+    {
+      "id": "z-c7bea85cdfe7a3f0",
+      "repeat": 1
+    },
+    {
+      "id": "z-d2c11e869e069462",
+      "repeat": 3
+    },
+    {
+      "id": "z-23871c77bc296d29",
+      "repeat": 1
+    },
+    {
+      "id": "z-67a9e2f4a8bebd5a",
+      "repeat": 1
+    },
+    {
+      "id": "z-5aa947aab721e7d8",
+      "repeat": 3
+    },
+    {
+      "id": "z-5ffa32dffe7ec4d5",
+      "repeat": 10
+    },
+    {
+      "id": "z-4f2418ce2b15c661",
+      "repeat": 3
+    },
+    {
+      "id": "z-073dca08bbbf21a5",
+      "repeat": 3
+    },
+    {
+      "id": "z-2b72009bbd9cdfde",
+      "repeat": 3
+    },
+    {
+      "id": "z-ccc31aefbe92b385",
+      "repeat": 3
+    },
+    {
+      "id": "z-c2c59499e04028b0",
+      "repeat": 1
+    },
+    {
+      "id": "z-ee22b0a5f43d4cab",
+      "repeat": 1
+    },
+    {
+      "id": "z-5d657d57b11ad1cd",
+      "repeat": 100
+    },
+    {
+      "id": "z-4ca6d491dbd94c46",
+      "repeat": 100
+    },
+    {
+      "id": "z-51d58c82917350d9",
+      "repeat": 100
+    }
+  ],
+  "evening": [
+    {
+      "id": "z-0aa4e14e9f34dd54",
+      "repeat": 1
+    },
+    {
+      "id": "z-8eefbab5a94f712a",
+      "repeat": 1
+    },
+    {
+      "id": "z-9c4ca8d7b93b1b18",
+      "repeat": 3
+    },
+    {
+      "id": "z-d4c8540afa8aa298",
+      "repeat": 3
+    },
+    {
+      "id": "z-031f089049fbc445",
+      "repeat": 3
+    },
+    {
+      "id": "z-e340c2202573e6e0",
+      "repeat": 1
+    },
+    {
+      "id": "z-6fec182f91ccb4cb",
+      "repeat": 1
+    },
+    {
+      "id": "z-230b5320ca68f64f",
+      "repeat": 3
+    },
+    {
+      "id": "z-bd075a9930fe19bb",
+      "repeat": 4
+    },
+    {
+      "id": "z-4955ce744e24ec13",
+      "repeat": 1
+    },
+    {
+      "id": "z-ed0d81775dce08b4",
+      "repeat": 7
+    },
+    {
+      "id": "z-79fa74a0ea87f1dd",
+      "repeat": 3
+    },
+    {
+      "id": "z-0c9a5cd88ba4d063",
+      "repeat": 1
+    },
+    {
+      "id": "z-71b780c9f0d0465e",
+      "repeat": 1
+    },
+    {
+      "id": "z-4b7adf6e2181c851",
+      "repeat": 3
+    },
+    {
+      "id": "z-e74f6d1398e5cef3",
+      "repeat": 3
+    },
+    {
+      "id": "z-31cbfe1863ae8b3d",
+      "repeat": 3
+    },
+    {
+      "id": "z-9cd07967fc49b2a4",
+      "repeat": 1
+    },
+    {
+      "id": "z-abcd4483b26bde12",
+      "repeat": 3
+    },
+    {
+      "id": "z-e34a550c1dd9d300",
+      "repeat": 1
+    },
+    {
+      "id": "z-9dfd697fc9e320ca",
+      "repeat": 1
+    },
+    {
+      "id": "z-91332881f8b924c2",
+      "repeat": 3
+    },
+    {
+      "id": "z-e0a12a90d53f65aa",
+      "repeat": 10
+    },
+    {
+      "id": "z-29847dbd7e5cd688",
+      "repeat": 3
+    },
+    {
+      "id": "z-33d1baad4d6907be",
+      "repeat": 3
+    },
+    {
+      "id": "z-ba5a86ae179f1a4a",
+      "repeat": 3
+    },
+    {
+      "id": "z-750c1b9810f27252",
+      "repeat": 3
+    },
+    {
+      "id": "z-c6a650c9a875128a",
+      "repeat": 100
+    },
+    {
+      "id": "z-305b6827482fcdfe",
+      "repeat": 1
+    },
+    {
+      "id": "z-f63e49f8788d92a8",
+      "repeat": 100
+    }
+  ]
+}

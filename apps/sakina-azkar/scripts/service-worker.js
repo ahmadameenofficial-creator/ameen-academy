@@ -3,6 +3,35 @@ const precache = /* PRECACHE */ {};
 const cachePrefix = 'sakina-offline-';
 const cacheName = cachePrefix + precache.version;
 const urls = [...precache.assets, ...precache.pages];
+const hadithIds = ['sadaqa', 'two-words', 'hundred', 'daily-hundred', 'four-words', 'sun'];
+
+self.addEventListener('push', event => {
+  event.waitUntil((async () => {
+    let data;
+    try { data = event.data?.json(); } catch { return; }
+    if (data?.version !== 1 || !['morning', 'evening'].includes(data.ward) || !hadithIds.includes(data.hadith) || typeof data.title !== 'string' || data.title.length > 80 || typeof data.body !== 'string' || data.body.length > 320 || typeof data.id !== 'string' || !/^[a-f0-9-]{36}$/.test(data.id) || !Number.isFinite(data.expires) || data.expires <= Date.now()) return;
+    await self.registration.showNotification(data.title, {
+      body: data.body, lang: 'ar', dir: 'rtl', icon: '/icons/icon-192.png', badge: '/icons/notification-badge.png',
+      tag: 'sakina-' + data.id, renotify: false,
+      actions: [{ action: 'open', title: data.ward === 'morning' ? 'افتح ورد الصباح' : 'افتح ورد المساء' }],
+      data: { ward: data.ward, hadith: data.hadith },
+    });
+  })());
+});
+self.addEventListener('notificationclick', event => {
+  event.notification.close();
+  event.waitUntil((async () => {
+    const data = event.notification.data;
+    if (!['morning', 'evening'].includes(data?.ward) || !hadithIds.includes(data?.hadith)) return;
+    const url = new URL('/azkar/' + data.ward, self.location.origin);
+    url.searchParams.set('reminder', data.ward);
+    url.searchParams.set('hadith', data.hadith);
+    const windows = await self.clients.matchAll({ type: 'window', includeUncontrolled: true });
+    const client = windows.find(client => new URL(client.url).pathname === url.pathname) ?? windows[0];
+    if (client) { try { await client.navigate(url.href); await client.focus(); return; } catch {} }
+    await self.clients.openWindow(url.href);
+  })());
+});
 
 async function notify(message) {
   const clients = await self.clients.matchAll({ includeUncontrolled: true });
@@ -47,6 +76,7 @@ self.addEventListener('activate', event => {
 });
 
 self.addEventListener('message', event => {
+  if (event.data?.type === 'PUSH_CAPABILITIES') event.ports?.[0]?.postMessage({ notificationVersion: 1 });
   if (event.data?.type === 'SKIP_WAITING') self.skipWaiting();
   if (event.data?.type === 'OFFLINE_STATUS') {
     event.waitUntil((async () => {

@@ -4,3 +4,14 @@ DASHBOARD_SESSION_SECRET=REPLACE_WITH_A_RANDOM_SECRET_AT_LEAST_32_CHARACTERS
 
 Set these server-only variables in the ameen-academy-azkar Vercel project.
 Do not prefix them with NEXT_PUBLIC_. Do not commit real values.
+
+Optional real Web Push reminders:
+WEB_PUSH_PUBLIC_KEY=GENERATE_WITH_scripts/generate-notification-secrets.mjs
+WEB_PUSH_PRIVATE_KEY=GENERATE_WITH_scripts/generate-notification-secrets.mjs
+WEB_PUSH_STORAGE_SECRET=GENERATE_WITH_scripts/generate-notification-secrets.mjs
+CRON_SECRET=GENERATE_WITH_scripts/generate-notification-secrets.mjs
+WEB_PUSH_SUBJECT=https://azkar.ameen.academy
+
+Uses the same SAKINA_DATABASE_URL, with a separate sakina_notifications schema.
+Requires an authenticated scheduler calling /api/notifications/dispatch every 10 minutes.
+See docs/notifications-setup.md. Keys alone do not start scheduled delivery.

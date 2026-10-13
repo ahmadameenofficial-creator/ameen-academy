@@ -23,6 +23,8 @@ import { Reveal } from './reveal';
 import { recordCompletion } from '@/lib/history-store';
 import { supportsHundredSession } from '@/lib/hundred-session';
 import { HundredSession } from './hundred-session';
+import { NotificationBell } from './notification-bell';
+import { NotificationArrival } from './notification-arrival';
 
 export function Reader({
   category,
@@ -104,7 +106,7 @@ export function Reader({
           <Icon name={category.icon} size={36} />
         </span>
         <span className="eyebrow">وقتٌ لك، وقلبك</span>
-        <h1>{category.title}</h1>
+        <div className="reader-title-row"><h1>{category.title}</h1>{['morning','evening'].includes(category.id) && <NotificationBell />}</div>
         <p>{category.description}</p>
         <div className="reader-meta">
           <span>{number(applicable.length)} نصًا</span>
@@ -112,6 +114,7 @@ export function Reader({
           <span>تقدمك محفوظ على هذا الجهاز</span>
         </div>
       </header>
+      {['morning','evening'].includes(category.id) && <NotificationArrival ward={category.id as 'morning' | 'evening'} entries={entries} />}
       {category.prayers && (
         <section className="prayer-selection" aria-label="اختيار الصلاة">
           <div className="prayer-tabs" role="group" aria-label="الصلاة الحالية">
