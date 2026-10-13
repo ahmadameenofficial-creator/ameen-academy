@@ -2,6 +2,7 @@ import { test, expect } from '@playwright/test';
 import AxeBuilder from '@axe-core/playwright';
 import { randomUUID } from 'node:crypto';
 import { database } from '../../src/lib/analytics-db';
+import { privateHash } from '../../src/lib/dashboard-auth';
 
 test('the bell opens honest notification settings, rotates sourced messages and stays usable on small screens in both themes', async ({
   page,
@@ -44,6 +45,35 @@ test('the bell opens honest notification settings, rotates sourced messages and 
   expect((await request.get('/api/notifications/dispatch')).status()).toBe(401);
   expect((await request.post('/api/notifications/progress', { data: {} })).status()).toBe(403);
   expect((await request.get('/api/notifications/config?city=invalid')).status()).toBe(400);
+  if (process.env.SAKINA_DATABASE_URL && process.env.DASHBOARD_SESSION_SECRET) {
+    const visitor = randomUUID();
+    try {
+      const response = await request.post('/api/analytics/events', {
+        headers: { origin: 'http://127.0.0.1:3100', 'user-agent': 'Mozilla/5.0 Chrome/130.0' },
+        data: {
+          consent: true,
+          session: visitor,
+          source: 'direct',
+          returning: false,
+          events: [
+            {
+              id: randomUUID(),
+              name: 'page_view',
+              path: '/notifications',
+              quantity: 1,
+              at: Date.now(),
+            },
+          ],
+        },
+      });
+      expect(response.status()).toBe(204);
+      const recorded =
+        await database()`SELECT path FROM sakina_analytics.events WHERE session_id=${privateHash('session:' + visitor)}`;
+      expect(recorded[0]?.path).toBe('/notifications');
+    } finally {
+      await database()`DELETE FROM sakina_analytics.sessions WHERE id=${privateHash('session:' + visitor)}`;
+    }
+  }
 });
 
 test('iPhone browser without Push APIs explains installation and notification arrival opens the sourced ward safely', async ({

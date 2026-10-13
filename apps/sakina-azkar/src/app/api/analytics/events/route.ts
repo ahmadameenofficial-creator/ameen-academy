@@ -8,6 +8,7 @@ const paths = new Set([
   '/saved',
   '/sources',
   '/progress',
+  '/notifications',
   ...categories.map((category) => '/azkar/' + category.id),
 ]);
 export async function POST(request: Request) {
