@@ -1,8 +1,8 @@
-import type { Metadata } from 'next';
 import Link from 'next/link';
 import { ArrowUpLeft, BookOpen } from 'lucide-react';
 import { entries, categories, source, number } from '@/lib/catalog';
-export const metadata: Metadata = { title: 'المصادر ومراجعة المحتوى' };
+import { pageMetadata } from '@/lib/seo';
+export const metadata=pageMetadata('/sources','مصادر الأذكار ومنهج مراجعة محتوى سكينة','تعرف على مصدر نصوص الأذكار في سكينة، ومراجع أذكار بعد الصلاة، ومنهج فصل الأعداد والصيغ، والنصوص التي تحتاج إلى توثيق أو مراجعة مستقلة.');
 
 export default function SourcesPage() {
   const missingReferences = entries.filter(e => !e.reference).length;

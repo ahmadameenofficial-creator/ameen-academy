@@ -4,9 +4,12 @@ import { categories, entries, number } from '@/lib/catalog';
 import { CategoryCard } from '@/components/category-card';
 import { Explorer } from '@/components/explorer';
 import { Reveal } from '@/components/reveal';
+import { pageMetadata, siteUrl, jsonLd } from '@/lib/seo';
+export const metadata=pageMetadata('/','أذكار الصباح والمساء وأذكار بعد الصلاة','سكينة: مكتبة الأذكار المكتوبة، من أذكار الصباح والمساء والنوم إلى أذكار بعد الصلاة، مع عدّادات مستقلة، ومراجع متاحة، وتطبيق قابل للتثبيت.');
 
 export default function Home() {
   return <>
+    <script type="application/ld+json" dangerouslySetInnerHTML={{__html:jsonLd({'@context':'https://schema.org','@graph':[{'@type':'WebSite','@id':siteUrl+'/#website',url:siteUrl+'/',name:'سكينة',alternateName:'Sakina',inLanguage:'ar',description:'مكتبة الأذكار المكتوبة مع عدّادات ومتابعة محلية'},{'@type':'Organization','@id':siteUrl+'/#organization',name:'سكينة',url:siteUrl+'/',logo:siteUrl+'/brand/sakina-logo.png'}]})}}/>
     <section className="hero container">
       <div className="hero-copy"><div className="hero-eyebrow"><span className="live-dot" /> مساحة صغيرة، لأثرٍ كبير</div><h1>ذِكرٌ يطمئنّ<br />به <span>قلبك.</span><Sparkles className="hero-spark" size={39} strokeWidth={1.1} aria-hidden="true" /></h1><p>وسط زحمة يومك، خُد لحظة لنفسك.<br />أذكارك وأدعيتك، في مساحة هادئة تليق بها.</p><div className="hero-actions"><Link href="/azkar/morning" className="button button-primary">ابدأ بأذكار الصباح <ArrowUpLeft size={20} /></Link><Link href="#library" className="hero-secondary">استكشف الأذكار <ArrowLeft size={18} /></Link></div><div className="hero-trust"><span><CircleCheck size={15} /> بدون إعلانات</span><span><Heart size={15} /> صُمّم للقراءة بهدوء</span></div></div>
       <div className="hero-art" aria-label="ألا بذكر الله تطمئن القلوب، سورة الرعد، الآية 28"><div className="ornament-ring ring-one" /><div className="ornament-ring ring-two" /><div className="ornament-ring ring-three" /><div className="art-star star-one">✦</div><div className="art-star star-two">✧</div><div className="art-star star-three">✦</div><div className="art-quote"><span className="quote-mark">۞</span><p>أَلَا بِذِكْرِ اللَّهِ<br />تَطْمَئِنُّ الْقُلُوبُ</p><span className="verse-source">سورة الرعد · الآية ٢٨</span></div><div className="art-caption"><span className="caption-line" /> لحظة ذكر، مساحة سكينة <span className="caption-line" /></div></div>

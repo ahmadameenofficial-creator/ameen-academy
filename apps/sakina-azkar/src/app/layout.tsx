@@ -19,6 +19,7 @@ export const metadata: Metadata = {
   title: { default: 'سكينة — رفيقك في الذكر', template: '%s | سكينة' },
   description: 'مكتبة الأذكار والأدعية، بتجربة قراءة هادئة، وعدّادات ومحفوظات على جهازك. بدون إعلانات.',
   applicationName: 'سكينة',
+  verification: { google: process.env.GOOGLE_SITE_VERIFICATION },
   metadataBase: new URL('https://azkar.ameen.academy'),
   manifest: '/manifest.webmanifest',
   appleWebApp: { capable: true, title: 'سكينة', statusBarStyle: 'black-translucent' },

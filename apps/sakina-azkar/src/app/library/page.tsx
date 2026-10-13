@@ -1,6 +1,10 @@
 import type { Metadata } from 'next';
 import { Explorer } from '@/components/explorer';
-export const metadata: Metadata = { title: 'مكتبة الأذكار' };
+import { pageMetadata } from '@/lib/seo';
+export async function generateMetadata({searchParams}:{searchParams:Promise<{q?:string|string[];search?:string|string[]}>}):Promise<Metadata> {
+  const params=await searchParams;
+  return {...pageMetadata('/library','مكتبة الأذكار والأدعية المكتوبة','تصفح مكتبة سكينة للأذكار والأدعية المكتوبة: الصباح والمساء والصلاة والنوم والسفر، مع بحث عربي وعدّادات ومراجع متاحة.'),robots:{index:!params.q&&!params.search,follow:true}};
+}
 export default async function LibraryPage({ searchParams }: { searchParams: Promise<{ q?: string | string[]; search?: string | string[] }> }) {
   const { q, search } = await searchParams;
   const query = Array.isArray(q) ? q[0] ?? '' : q ?? '';

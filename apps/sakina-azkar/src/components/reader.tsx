@@ -1,5 +1,5 @@
 'use client';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, type ReactNode } from 'react';
 import Link from 'next/link';
 import { ArrowRight, Check, Eye, EyeOff, Maximize2, Minimize2, RotateCcw, Minus, Plus } from 'lucide-react';
 import type { Category, Dhikr, PrayerId } from '@/lib/types';
@@ -11,7 +11,7 @@ import { DhikrCard } from './dhikr-card';
 import { Reveal } from './reveal';
 import { recordCompletion } from '@/lib/history-store';
 
-export function Reader({ category, entries }: { category: Category; entries: Dhikr[] }) {
+export function Reader({ category, entries, context }: { category: Category; entries: Dhikr[]; context: ReactNode }) {
   const { state, dispatch, ready, persistent } = useReading();
   const [focus, setFocus] = useState(false);
   const [hideCompleted, setHideCompleted] = useState(false);
@@ -82,6 +82,7 @@ export function Reader({ category, entries }: { category: Category; entries: Dhi
       <p>أتممت بطاقات هذا القسم ذات العدد المحدد.</p>
       <button className="button button-secondary" onClick={() => setHideCompleted(false)}>عرض الأذكار المكتملة</button>
     </div>}
+    {context}
     <div className="reader-bottom">
       <p>الذكر على مهل أجمل. خُذ وقتك.</p>
       {confirmReset ? <div className="reset-confirm" role="group" aria-label="تأكيد تصفير القسم">
