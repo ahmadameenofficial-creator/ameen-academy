@@ -1,6 +1,6 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { initialState, readingReducer, parseState, readingDay } from '../src/lib/progress';
+import { initialState, readingReducer, parseState, readingDay, type ReadingState } from '../src/lib/progress';
 import { counterKey } from '../src/lib/progress';
 import { migrateCatalogState } from '../src/lib/catalog-migration';
 import changes from '../src/data/counter-migration.json';
@@ -71,7 +71,7 @@ test('each prayer has separate counts, resets, persistence and bookmark context'
 });
 
 test('free counts pass the former 100000 cap and fixed undo clamps old excess counts', () => {
-  let state = { ...initialState(day), counts: { [id]: 100000 } };
+  let state: ReadingState = { ...initialState(day), counts: { [id]: 100000 } };
   state = readingReducer(state, { type: 'increment', id, limit: null });
   assert.equal(state.counts[id], 100001);
   assert.equal(parseState(JSON.stringify(state), day).counts[id], 100001);
