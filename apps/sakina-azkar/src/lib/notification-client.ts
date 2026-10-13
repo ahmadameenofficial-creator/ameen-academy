@@ -100,13 +100,7 @@ export function wardProgress(day: string, counts: Record<string, number>): WardP
   return { day, morning: status('morning'), evening: status('evening') };
 }
 export function notificationPermission() {
-  if (
-    !window.isSecureContext ||
-    !('Notification' in window) ||
-    !('serviceWorker' in navigator) ||
-    !('PushManager' in window)
-  )
-    return 'unsupported';
+  if (!window.isSecureContext) return 'unsupported';
   const ios =
     /iPhone|iPad|iPod/.test(navigator.userAgent) ||
     (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
@@ -116,6 +110,8 @@ export function notificationPermission() {
     !(navigator as Navigator & { standalone?: boolean }).standalone
   )
     return 'install-required';
+  if (!('Notification' in window) || !('serviceWorker' in navigator) || !('PushManager' in window))
+    return 'unsupported';
   return Notification.permission;
 }
 export async function notificationRegistration() {

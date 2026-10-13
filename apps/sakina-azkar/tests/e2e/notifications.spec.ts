@@ -46,13 +46,15 @@ test('the bell opens honest notification settings, rotates sourced messages and 
   expect((await request.get('/api/notifications/config?city=invalid')).status()).toBe(400);
 });
 
-test('iPhone browser explains installation, denied permissions explain recovery, and notification arrival opens the sourced ward safely', async ({
+test('iPhone browser without Push APIs explains installation and notification arrival opens the sourced ward safely', async ({
   page,
 }) => {
   await page.addInitScript(() => {
     Object.defineProperty(navigator, 'userAgent', {
       get: () => 'Mozilla/5.0 (iPhone; CPU iPhone OS 17_0 like Mac OS X)',
     });
+    Reflect.deleteProperty(window, 'Notification');
+    Reflect.deleteProperty(window, 'PushManager');
   });
   await page.goto('/notifications');
   await expect(page.getByText('على iPhone وiPad', { exact: true })).toBeVisible();
