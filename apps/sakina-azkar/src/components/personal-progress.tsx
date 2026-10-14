@@ -9,6 +9,7 @@ import { getCategory } from '@/lib/catalog';
 import { number } from '@/lib/text';
 import { progressPercent } from '@/lib/daily-progress';
 import { DailyProgress } from './daily-progress';
+import { AccountProfileForm } from './account-profile';
 import { AccountControls } from './account-sync';
 import { useReading } from '@/lib/reading-store';
 export function PersonalProgress() {
@@ -27,7 +28,7 @@ export function PersonalProgress() {
       <p className="page-description">
         كل جزء من عدّادات الصباح والمساء يُحتسب ويحفظ يوميًا، حتى قبل إتمام الورد.
       </p>
-      <DailyProgress /><AccountControls />
+      <DailyProgress /><AccountControls /><AccountProfileForm />
       {!ready ? (
         <p role="status">جارٍ استعادة السجل…</p>
       ) : (

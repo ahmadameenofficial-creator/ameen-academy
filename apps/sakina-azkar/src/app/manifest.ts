@@ -3,7 +3,7 @@ import type { MetadataRoute } from 'next';
 export default function manifest(): MetadataRoute.Manifest {
   return {
     id: '/', name: 'سكينة — رفيقك في الذكر', short_name: 'سكينة',
-    description: 'أذكارك وعدّاداتك ومحفوظاتك في تطبيق هادئ، بدون إعلانات.',
+    description: 'أذكارك وعدّاداتك ومحفوظاتك في تطبيق هادئ، مع رعاية هادفة دون محتوى مسيء أو إزعاج.',
     start_url: '/', scope: '/', display: 'standalone', lang: 'ar', dir: 'rtl',
     background_color: '#171b20', theme_color: '#171b20',
     icons: [

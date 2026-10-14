@@ -1,5 +1,6 @@
 import Image from 'next/image';
 import Link from 'next/link';
+import { AccountDirectory } from '@/components/account-directory';
 import { cookies } from 'next/headers';
 import { redirect } from 'next/navigation';
 import { adminCookie, validSession } from '@/lib/dashboard-auth';
@@ -69,7 +70,7 @@ function BreakdownCard({ title, rows, unit }: { title: string; rows: Breakdown[]
 export default async function Dashboard({
   searchParams,
 }: {
-  searchParams: Promise<{ from?: string; to?: string }>;
+  searchParams: Promise<{ from?: string; to?: string; accountsPage?: string }>;
 }) {
   if (!validSession((await cookies()).get(adminCookie)?.value)) redirect('/dashboard/login');
   const params = await searchParams;
@@ -368,6 +369,7 @@ export default async function Dashboard({
           unit="تقدير على مستوى الدولة من Vercel؛ لا يُحفظ عنوان IP"
         />
       </div>
+      <AccountDirectory page={Number(params.accountsPage) || 1} from={range.from} to={range.to} />
       <section className="dashboard-card dashboard-health">
         <h2>التفاعل وجودة البيانات</h2>
         <div>

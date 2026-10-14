@@ -20,14 +20,14 @@ const ibm = localFont({
 });
 export const metadata: Metadata = {
   title: { default: 'سكينة — رفيقك في الذكر', template: '%s | سكينة' },
-  description: 'مكتبة الأذكار والأدعية، بتجربة قراءة هادئة، وعدّادات ومحفوظات على جهازك. بدون إعلانات.',
+  description: 'مكتبة الأذكار والأدعية، بتجربة قراءة هادئة، وعدّادات ومحفوظات على جهازك. رعاية هادفة دون محتوى مسيء أو إزعاج.',
   applicationName: 'سكينة',
   verification: { google: process.env.GOOGLE_SITE_VERIFICATION },
   metadataBase: new URL('https://azkar.ameen.academy'),
   manifest: '/manifest.webmanifest',
   appleWebApp: { capable: true, title: 'سكينة', statusBarStyle: 'black-translucent' },
   icons: { icon: '/icon.svg', apple: '/icons/icon-180.png' },
-  openGraph: { title: 'سكينة — رفيقك في الذكر', description: 'أذكارك في مساحة هادئة، بدون إعلانات.', locale: 'ar_EG', type: 'website', images: [{ url: '/brand/social.png', width: 1200, height: 630, alt: 'شعار سكينة' }] },
+  openGraph: { title: 'سكينة — رفيقك في الذكر', description: 'أذكارك في مساحة هادئة، رعاية هادفة دون محتوى مسيء أو إزعاج.', locale: 'ar_EG', type: 'website', images: [{ url: '/brand/social.png', width: 1200, height: 630, alt: 'شعار سكينة' }] },
   twitter: { card: 'summary_large_image', images: ['/brand/social.png'] },
   robots: { index: true, follow: true },
 };

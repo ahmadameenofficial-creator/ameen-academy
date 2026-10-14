@@ -45,7 +45,7 @@ export async function syncAccount() {
     let attempts = 0;
     while (pending && epoch === generation && attempts++ < 4) {
       pending = false;
-      const response = await fetch('/api/account/progress', { method: 'PUT', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ revision, records: historySnapshot(), today: readingDay() }) });
+      const response = await fetch('/api/account/progress', { method: 'PUT', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ accountId: state.userId, revision, records: historySnapshot(), today: readingDay() }) });
       if (epoch !== generation) return;
       if (response.status === 409) { if (!await remoteRecords(epoch)) return; pending = true; continue; }
       if (!response.ok) throw new Error('sync');

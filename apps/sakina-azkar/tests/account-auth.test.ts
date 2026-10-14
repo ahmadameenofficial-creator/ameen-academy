@@ -33,7 +33,7 @@ test('Google linking verifies state, PKCE, cookie purpose/expiry and never expos
         assert.equal(new URLSearchParams(String(options?.body)).get('code_verifier'), flow.verifier);
         return Response.json({ access_token: 'never-exposed-provider-token' });
       }
-      return Response.json({ sub: 'google-subject', email_verified: true });
+      return Response.json({ sub: 'google-subject', email: 'reader@example.test', email_verified: true });
     };
     const cookie = signAccountToken({ state: flow.state, verifier: flow.verifier }, 'flow', 600);
     const invalid = await GET(new NextRequest('http://localhost:3100/api/account/callback?state=wrong&code=code', { headers: { cookie: 'sakina_google_flow=' + cookie } }), { params: Promise.resolve({ action: 'callback' }) });

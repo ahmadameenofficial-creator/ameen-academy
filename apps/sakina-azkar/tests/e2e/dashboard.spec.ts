@@ -1,6 +1,8 @@
 import { test, expect } from '@playwright/test';
 import AxeBuilder from '@axe-core/playwright';
 import { randomUUID } from 'node:crypto';
+import { registerAccount, saveAccountProfile } from '../../src/lib/account-db';
+import { createHash } from 'node:crypto';
 import { database } from '../../src/lib/analytics-db';
 import { privateHash } from '../../src/lib/dashboard-auth';
 test.describe('configured analytics dashboard', () => {
@@ -126,4 +128,28 @@ test.describe('configured analytics dashboard', () => {
       await sql`DELETE FROM sakina_analytics.sessions WHERE id=${id}`;
     }
   });
+  test('administrator sees verified email and consented profile details, while guests cannot access the directory', async ({ page }) => {
+    const id=createHash('sha256').update(randomUUID()).digest('hex');
+    const email='reader-'+id.slice(0,8)+'@example.test';
+    await registerAccount(id,email);
+    await saveAccountProfile(id,{age:27,country:'EG',gender:'female',consent:true});
+    try {
+      await page.setExtraHTTPHeaders({'x-vercel-forwarded-for':'profile-admin-'+randomUUID()});
+      await page.goto('/dashboard');
+      await expect(page).toHaveURL(/\/dashboard\/login$/);
+      await expect(page.locator('.account-directory')).toHaveCount(0);
+      await page.getByLabel('كلمة مرور الإدارة').fill(process.env.DASHBOARD_PASSWORD!);
+      await page.getByRole('button',{name:'دخول الداشبورد'}).click();
+      const row=page.locator('.account-directory tr').filter({hasText:email});
+      await expect(row).toContainText('27');
+      await expect(row).toContainText('مصر');
+      await expect(row).toContainText('أنثى');
+      await page.setViewportSize({width:360,height:800});
+      expect(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth)).toBe(true);
+      await saveAccountProfile(id,{age:null,country:null,gender:null,consent:false});
+      await page.reload();
+      await expect(page.locator('.account-directory tr').filter({hasText:email})).toContainText('غير مضاف');
+    } finally { await database()`DELETE FROM sakina_personal.accounts WHERE user_id=${id}`; }
+  });
+
 });

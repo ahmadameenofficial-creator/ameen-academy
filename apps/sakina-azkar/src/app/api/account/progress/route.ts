@@ -18,6 +18,7 @@ export async function PUT(request: NextRequest) {
     const raw = await request.text();
     if (raw.length > 2000000) return json({ error: 'Payload too large' }, 413);
     const data = JSON.parse(raw);
+    if (data.accountId !== undefined && data.accountId !== user) return json({ error: 'Account changed' }, 409);
     if (!Number.isSafeInteger(data.revision) || data.revision < 0 || !Array.isArray(data.records) || data.records.length > 5000 || !/^\d{4}-\d{2}-\d{2}$/.test(data.today)) return json({ error: 'Invalid progress' }, 400);
     const date = new Date(data.today + 'T00:00:00Z');
     if (!Number.isFinite(date.getTime()) || date.toISOString().slice(0, 10) !== data.today || Math.abs(date.getTime() - Date.now()) > 2 * 86400000) return json({ error: 'Invalid day' }, 400);

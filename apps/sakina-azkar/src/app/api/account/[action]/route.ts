@@ -1,3 +1,5 @@
+import { registerAccount } from '@/lib/account-db';
+import { verifiedAccountEmail } from '@/lib/account-profile';
 import { NextRequest, NextResponse } from 'next/server';
 import { accountConfigured, accountCookie, flowCookie, signAccountToken, readAccountToken, googleFlow, accountId, accountOrigin, accountSameOrigin, cookieOptions, sessionUser } from '@/lib/account-auth';
 export const runtime = 'nodejs';
@@ -5,7 +7,15 @@ export const dynamic = 'force-dynamic';
 function json(value: object, status = 200) { return NextResponse.json(value, { status, headers: { 'Cache-Control': 'no-store' } }); }
 export async function GET(request: NextRequest, context: { params: Promise<{ action: string }> }) {
   const { action } = await context.params;
-  if (action === 'session') return json({ configured: accountConfigured(), userId: sessionUser(request.cookies.get(accountCookie)?.value) });
+  if (action === 'session') {
+    const token = request.cookies.get(accountCookie)?.value;
+    const userId = sessionUser(token);
+    if (userId) {
+      const session = readAccountToken(token, 'session');
+      try { await registerAccount(userId, verifiedAccountEmail(session?.email)); } catch { /* Local reading remains available if the database is temporarily down. */ }
+    }
+    return json({ configured: accountConfigured(), userId });
+  }
   if (!accountConfigured()) return json({ error: 'ربط Google غير متاح حاليًا. كل المزايا المحلية متاحة.' }, 503);
   if (action === 'login') {
     const { state, verifier, challenge } = googleFlow();
@@ -33,10 +43,12 @@ export async function GET(request: NextRequest, context: { params: Promise<{ act
     if (!profileResponse.ok) return response;
     const profile = await profileResponse.json();
     if (typeof profile.sub !== 'string' || profile.sub.length > 255 || !profile.sub || profile.email_verified !== true) return response;
+    const email = verifiedAccountEmail(profile.email);
+    if (!email) return response;
     const success = NextResponse.redirect(accountOrigin() + '/progress');
     success.headers.set('Cache-Control', 'no-store');
     success.cookies.set(flowCookie, '', cookieOptions(0));
-    success.cookies.set(accountCookie, signAccountToken({ userId: accountId(profile.sub) }, 'session', 2592000), cookieOptions(2592000));
+    success.cookies.set(accountCookie, signAccountToken({ userId: accountId(profile.sub), email }, 'session', 2592000), cookieOptions(2592000));
     return success;
   } catch { return response; }
 }
