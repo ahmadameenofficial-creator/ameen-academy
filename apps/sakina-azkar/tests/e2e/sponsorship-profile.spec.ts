@@ -18,6 +18,12 @@ test('two quiet sponsorship banners use WhatsApp, preserve layout, and replace o
     await page.setViewportSize({ width, height:900 });
     expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth), 'width '+width).toBe(true);
     await expect(page.locator('.header-account')).toBeVisible();
+    await expect(page.locator('.header-account span')).toBeVisible();
+    expect((await page.locator('.header-account').boundingBox())!.width).toBeGreaterThan(100);
+    await page.evaluate(() => window.scrollTo(0, 500));
+    expect(await page.locator('.sticky-site-header').evaluate(node => Math.abs(node.getBoundingClientRect().top))).toBeLessThan(1);
+    await expect(page.getByRole('link', { name: 'اشتري مساحتك الإعلانية هنا' })).toBeVisible();
+    await page.evaluate(() => window.scrollTo(0, 0));
   }
   await page.setViewportSize({ width:390, height:844 });
   await page.locator('.theme-control summary').click();
@@ -25,7 +31,7 @@ test('two quiet sponsorship banners use WhatsApp, preserve layout, and replace o
   const result = await new AxeBuilder({page}).withTags(['wcag2a','wcag2aa','wcag21aa']).analyze();
   expect(result.violations.map(v => ({id:v.id,nodes:v.nodes.map(n=>n.target)}))).toEqual([]);
   await page.goto('/azkar/morning');
-  await expect(page.locator('.sponsor-banner')).toHaveCount(0);
+  await expect(page.locator('.sponsor-banner')).toHaveCount(1);
   await expect(page.locator('.dhikr-card').first().getByRole('button',{name:'تسجيل قراءة الذكر',exact:true})).toBeEnabled();
 });
 test('header account link opens an optional profile, saves with consent and supports removing demographics', async ({page}) => {

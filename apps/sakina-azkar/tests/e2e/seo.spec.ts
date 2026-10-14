@@ -12,6 +12,8 @@ test('bots receive meaningful HTML, canonical metadata, public sitemap and robot
   expect(html).toContain('rel="canonical" href="https://azkar.ameen.academy/azkar/morning"');
   expect(html).toContain('application/ld+json');
   expect(html).toContain('BreadcrumbList');
+  expect(html).toContain('هل يُحفظ تقدمي قبل إكمال الأذكار؟');
+  expect(html).toContain('هل أحتاج إلى حساب Google لقراءة الأذكار؟');
   expect(html).toContain(
     catalog.entries
       .find((entry) => entry.categoryId === 'morning')!

@@ -5,6 +5,7 @@ import { usePathname } from 'next/navigation';
 import { ArrowUpLeft, BookOpen, Bookmark, Home, Search, Download, ChartNoAxesColumn } from 'lucide-react';
 import { ThemeControl } from './theme';
 import { AccountHeader } from './account-sync';
+import { SponsorBanner } from './sponsor-banner';
 import { NotificationBell } from './notification-bell';
 
 export function SiteHeader() {
@@ -12,6 +13,7 @@ export function SiteHeader() {
   if (pathname.startsWith('/dashboard')) return null;
   return <>
     <a className="skip-link" href="#main">انتقل إلى المحتوى</a>
+    <div className="sticky-site-header"><SponsorBanner placement="header" />
     <header className="site-header">
       <div className="container header-inner">
         <Link href="/" className="brand" aria-label="سكينة، الرئيسية"><span><Image className="brand-logo" src="/brand/sakina-logo.png" alt="سكينة" width={300} height={100} priority unoptimized /><span className="brand-sub">رفيقك في الذكر</span></span></Link>
@@ -24,7 +26,7 @@ export function SiteHeader() {
         </nav>
         <div className="header-actions"><AccountHeader /><ThemeControl /><NotificationBell /><Link href="/progress" className="icon-button progress-shortcut" aria-label="متابعتك الأسبوعية"><ChartNoAxesColumn size={20}/></Link><Link href="/#install" className="icon-button" aria-label="تثبيت تطبيق سكينة"><Download size={20} /></Link><Link href="/library" className="header-cta">وقتٌ للذكر <ArrowUpLeft size={17} /></Link></div>
       </div>
-    </header>
+    </header></div>
     <nav className="mobile-nav" aria-label="التنقل على الموبايل">
       {[{ href: '/', label: 'الرئيسية', icon: Home }, { href: '/library', label: 'الأذكار', icon: BookOpen }, { href: '/library?search=1', label: 'البحث', icon: Search }, { href: '/saved', label: 'المحفوظات', icon: Bookmark }].map(item => <Link key={item.label} href={item.href} className={(item.href === '/' ? pathname === '/' : item.label !== 'البحث' && pathname.startsWith(item.href)) ? 'active' : ''}><item.icon size={21} strokeWidth={1.7} /><span>{item.label}</span></Link>)}
     </nav>

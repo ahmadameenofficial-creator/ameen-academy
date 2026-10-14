@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { categories } from '../src/lib/catalog';
+import { categories, getCategoryEntries } from '../src/lib/catalog';
 import { categorySeo, categoryStructuredData, jsonLd, pageMetadata, siteUrl } from '../src/lib/seo';
 import sitemap from '../src/app/sitemap';
 import robots from '../src/app/robots';
@@ -15,6 +15,11 @@ test('every category has specific metadata, a canonical URL, and honest structur
     assert.equal(structured['@graph'][0].name, category.title);
     assert.equal(structured['@graph'][1].itemListElement?.length, 3);
     assert.equal(JSON.stringify(structured).includes('aggregateRating'), false);
+    if (!category.children) {
+      const list = structured['@graph'][0].mainEntity!;
+      assert.equal(list.numberOfItems, getCategoryEntries(category.id).length);
+      assert.deepEqual(list.itemListElement.map(item => item.url), getCategoryEntries(category.id).map(entry => siteUrl + '/azkar/' + category.id + '#' + entry.id));
+    }
   }
   assert.equal(jsonLd({ name: '</script>' }).includes('</script>'), false);
 });

@@ -1,17 +1,17 @@
 import type { Metadata } from 'next';
 import type { Category } from './types';
-import { source } from './catalog';
+import { source, getCategoryEntries } from './catalog';
 export const siteUrl = 'https://azkar.ameen.academy';
 const focused: Record<string, { title: string; description: string }> = {
   morning: {
     title: 'أذكار الصباح مكتوبة بالتشكيل مع عدّاد',
     description:
-      'اقرأ أذكار الصباح مكتوبة بالتشكيل في سكينة، مع عدّاد لكل ذكر، وحفظ تقدمك وحجم الخط على جهازك. تظهر المراجع المتاحة وحدود مراجعة النصوص بوضوح.',
+      'أذكار الصباح مكتوبة بالتشكيل مع عدّاد لكل ذكر ومراجع النصوص. احفظ تقدمك اليومي حتى قبل إكمال الأذكار، واربط Google اختياريًا لاستعادة متابعتك بين الأجهزة.',
   },
   evening: {
     title: 'أذكار المساء مكتوبة بالتشكيل مع عدّاد',
     description:
-      'أذكار المساء مكتوبة بالتشكيل، مع عدّادات مستقلة وتراجع عن الضغطات وحفظ التقدم على جهازك. اقرأ النصوص واطّلع على المراجع المتاحة في سكينة.',
+      'أذكار المساء مكتوبة بالتشكيل مع عدّادات ومراجع النصوص. تابع نسبة إنجازك اليومية، وتراجع عن الضغطات، واحفظ متابعتك بين الأجهزة بربط Google اختياريًا.',
   },
   sleep: {
     title: 'أذكار النوم مكتوبة بالتشكيل مع عدّاد',
@@ -77,6 +77,15 @@ export function categoryStructuredData(category: Category) {
         about: { '@type': 'Thing', name: category.title },
         citation: source.url,
         breadcrumb: { '@id': url + '#breadcrumb' },
+        ...(!category.children ? { mainEntity: {
+          '@type': 'ItemList',
+          numberOfItems: getCategoryEntries(category.id).length,
+          itemListElement: getCategoryEntries(category.id).map((entry, index) => ({
+            '@type': 'ListItem', position: index + 1,
+            url: url + '#' + entry.id,
+            name: entry.title || entry.text.split('\n')[0].slice(0, 160),
+          })),
+        }} : {}),
       },
       {
         '@type': 'BreadcrumbList',

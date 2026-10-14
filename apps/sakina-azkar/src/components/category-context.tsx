@@ -23,6 +23,13 @@ export function CategoryContext({ category }: { category: Category }) {
         العدّاد الحر لا يفترض عدد تكرار مسنونًا. راجع{' '}
         <Link href="/sources">المصادر ومنهج مراجعة المحتوى</Link> لمعرفة أصل النصوص وحدود توثيقها.
       </p>
+      {(category.id === 'morning' || category.id === 'evening') && <section className="category-faq" aria-label="أسئلة استخدام الأذكار">
+        <h2>كيف تتابع {category.title}؟</h2>
+        <details><summary>هل يُحفظ تقدمي قبل إكمال الأذكار؟</summary><p>نعم، تُحفظ قراءات كل عدّاد على جهازك، وتظهر نسبة التقدم الجزئي اليومية في الرئيسية وصفحة متابعتي، حتى لو لم تصل إلى 100%. يمكنك التراجع عن ضغطة خاطئة، وتتحدث النسبة وفق العدد الجديد.</p></details>
+        <details><summary>هل أحتاج إلى حساب Google لقراءة الأذكار؟</summary><p>لا، القراءة والعدّادات والمتابعة متاحة للزائر. ربط Google اختياري لاستعادة متابعة حسابك بين الأجهزة، وتظل بيانات الزائر منفصلة عن بيانات الحساب.</p></details>
+        <details><summary>أين أجد مصادر الأذكار وعدد التكرار؟</summary><p>تظهر المراجع المتاحة والأعداد بجوار بطاقات الأذكار. راجع صفحة المصادر لمعرفة منهج جمع النصوص وحدود مراجعتها؛ العدّاد الحر لا يحدد عددًا مسنونًا.</p></details>
+        <p><Link href="/progress">افتح متابعتك اليومية</Link> أو <Link href="/library">تصفح مكتبة الأذكار</Link>.</p>
+      </section>}
       <nav aria-label="أقسام أذكار مرتبطة">
         {categories
           .filter((item) => item.featured && item.id !== category.id)
