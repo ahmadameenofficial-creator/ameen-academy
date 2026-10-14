@@ -31,8 +31,8 @@ export const metadata: Metadata = {
   twitter: { card: 'summary_large_image', images: ['/brand/social.png'] },
   robots: { index: true, follow: true },
 };
-export const viewport: Viewport = { width: 'device-width', initialScale: 1, viewportFit: 'cover', themeColor: [{ media: '(prefers-color-scheme: light)', color: '#ffffff' }, { media: '(prefers-color-scheme: dark)', color: '#081321' }] };
+export const viewport: Viewport = { width: 'device-width', initialScale: 1, viewportFit: 'cover', themeColor: '#ffffff' };
 export default function RootLayout({ children }: { children: React.ReactNode }) {
-  const themeBootstrap = `try{var s=JSON.parse(localStorage.getItem('sakina:reading:v1')||'{}');var t=s.version===1?s.theme:'system';document.documentElement.dataset.theme=t==='dark'||t==='light'?t:matchMedia('(prefers-color-scheme:dark)').matches?'dark':'light'}catch(e){document.documentElement.dataset.theme=matchMedia('(prefers-color-scheme:dark)').matches?'dark':'light'}`;
+  const themeBootstrap = `try{var a=localStorage.getItem('sakina:account:active');var k=a&&/^[a-f0-9]{64}$/.test(a)?'sakina:account:'+a+':reading:v1':'sakina:reading:v1';var s=JSON.parse(localStorage.getItem(k)||'{}');document.documentElement.dataset.theme=s.version===1&&s.theme==='dark'?'dark':'light'}catch(e){document.documentElement.dataset.theme='light'}`;
   return <html lang="ar" dir="rtl" className={ibm.variable} suppressHydrationWarning><head><script dangerouslySetInnerHTML={{ __html: themeBootstrap }} /></head><body><AccountSync /><ThemeSync /><SiteHeader /><main id="main">{children}</main><WebApp /><Analytics /><NotificationManager /><SiteFooter /></body></html>;
 }

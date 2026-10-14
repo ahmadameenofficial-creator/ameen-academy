@@ -1,5 +1,5 @@
 import type { PrayerId } from './types';
-export type Theme = 'light' | 'dark' | 'system';
+export type Theme = 'light' | 'dark';
 export const prayers: { id: PrayerId; title: string }[] = [
   { id: 'fajr', title: 'الفجر' }, { id: 'maghrib', title: 'المغرب' },
   { id: 'dhuhr', title: 'الظهر' }, { id: 'asr', title: 'العصر' }, { id: 'isha', title: 'العشاء' },
@@ -30,7 +30,7 @@ export function readingDay(date = new Date()): string {
   return [date.getFullYear(), String(date.getMonth() + 1).padStart(2, '0'), String(date.getDate()).padStart(2, '0')].join('-');
 }
 export function initialState(day = readingDay()): ReadingState {
-  return { version: 1, day, counts: {}, saved: [], savedScopes: {}, fontSize: 26, diacritics: true, theme: 'system' };
+  return { version: 1, day, counts: {}, saved: [], savedScopes: {}, fontSize: 26, diacritics: true, theme: 'light' };
 }
 export function parseState(value: string | null, day: string): ReadingState {
   const base = initialState(day);
@@ -54,7 +54,7 @@ export function parseState(value: string | null, day: string): ReadingState {
         if (saved.includes(id) && prayers.some(p => p.id === scope)) savedScopes[id] = scope as PrayerId;
       }
     }
-    const theme = candidate.theme === 'light' || candidate.theme === 'dark' ? candidate.theme : 'system';
+    const theme = candidate.theme === 'light' || candidate.theme === 'dark' ? candidate.theme : 'light';
     return { ...base, counts, saved, savedScopes, theme, fontSize, diacritics: typeof candidate.diacritics === 'boolean' ? candidate.diacritics : true };
   } catch { return base; }
 }

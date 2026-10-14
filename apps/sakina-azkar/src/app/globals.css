@@ -32,32 +32,33 @@
     --font-ibm: sans-serif;
   }
   :root[data-theme="dark"] {
-    --ink: #f4f9ff;
-    --muted: #c0d1e2;
-    --burgundy: #b7dfff;
-    --burgundy-dark: #d6ecff;
-    --action: #b7dfff;
-    --action-ink: #071b2c;
-    --rose: #18334b;
-    --blue: #18334b;
-    --blue-ink: #d5ebff;
-    --blue-muted: #bfdcf3;
-    --line: #3c5872;
-    --paper: #081321;
-    --surface: #122338;
-    --soft-surface: #1c354c;
-    --card-rose: #12283c;
-    --card-blue: #12283c;
-    --tag-rose: #203b53;
-    --tag-blue: #203b53;
-    --field: #122338;
-    --art-background: #102e48;
-    --tag-text: #d2eaff;
-    --success-surface: #b7dfff;
-    --success-ink: #071b2c;
-    --header-background: #081321;
+    --ink: #e5e7e9;
+    --muted: #a8b1bb;
+    --burgundy: #aac8da;
+    --burgundy-dark: #c0d5e2;
+    --action: #aac8da;
+    --action-ink: #17242c;
+    --rose: #293239;
+    --blue: #293840;
+    --blue-ink: #c3d4df;
+    --blue-muted: #afc2ce;
+    --line: #39424c;
+    --paper: #171b20;
+    --surface: #20262d;
+    --soft-surface: #242b33;
+    --card-rose: #222930;
+    --card-blue: #232e36;
+    --tag-rose: #2e363e;
+    --tag-blue: #2c3943;
+    --field: #1e252c;
+    --art-background: #26343e;
+    --tag-text: #c0ced9;
+    --success-surface: #293d42;
+    --success-ink: #b9d6d5;
+    --header-background: #171b20;
     color-scheme: dark;
   }
+  :root[data-theme="dark"] ::selection { background: #3a5365; color: #e5e7e9; }
   * { box-sizing: border-box; }
   html { scroll-behavior: smooth; scroll-padding-top: 110px; }
   body { margin: 0; font-family: var(--font-ibm), sans-serif; color: var(--ink); background: var(--paper); line-height: 1.7; -webkit-font-smoothing: antialiased; }
@@ -321,27 +322,26 @@
   .counter-tools .icon-button { height: 44px; width: 44px; }
   .count-button { position: relative; overflow: hidden; width: 100%; min-width: 0; min-height: 92px; border-radius: 14px; background: var(--action); color: var(--action-ink); border: 0; transition: transform .16s, box-shadow .16s; }
   .count-button:not(:disabled):hover { background: var(--burgundy-dark); box-shadow: 0 5px 16px #7a20382b; transform: translateY(-2px); }
-  :root[data-theme="dark"] ::selection { background: #b7dfff; color: #071b2c; }
   :root[data-theme="dark"] .site-header,
   :root[data-theme="dark"] .mobile-nav,
-  :root[data-theme="dark"] .reading-toolbar { background: #081321; backdrop-filter: none; }
-  :root[data-theme="dark"] .reading-toolbar { border-color: #52708b; }
-  :root[data-theme="dark"] .dhikr-card { border-color: #52708b; box-shadow: 0 8px 24px #020910; transition: border-color .18s; }
-  :root[data-theme="dark"] .dhikr-card-title { color: #b7dfff; }
+  :root[data-theme="dark"] .reading-toolbar { background: var(--paper); backdrop-filter: none; }
+  :root[data-theme="dark"] .reading-toolbar { border-color: var(--line); }
+  :root[data-theme="dark"] .dhikr-card { border-color: var(--line); box-shadow: 0 8px 24px #00000024; transition: border-color .18s; }
+  :root[data-theme="dark"] .dhikr-card-title { color: var(--burgundy); }
   :root[data-theme="dark"] .button-primary,
   :root[data-theme="dark"] .count-button { box-shadow: none; }
   :root[data-theme="dark"] .button:hover,
-  :root[data-theme="dark"] .count-button:not(:disabled):hover { transform: none; box-shadow: 0 0 0 3px #52708b; }
+  :root[data-theme="dark"] .count-button:not(:disabled):hover { transform: none; box-shadow: 0 0 0 3px #62798b; }
   :root[data-theme="dark"] .count-button:not(:disabled):active { transform: scale(.985); }
   :root[data-theme="dark"] .entry-progress span,
-  :root[data-theme="dark"] .session-progress-track span { background: #b7dfff; }
-  :root[data-theme="dark"] .live-dot { box-shadow: 0 0 0 4px #203b53; }
+  :root[data-theme="dark"] .session-progress-track span { background: var(--burgundy); }
+  :root[data-theme="dark"] .live-dot { box-shadow: 0 0 0 4px var(--tag-blue); }
   :root[data-theme="dark"] .art-star,
   :root[data-theme="dark"] .ring-three { animation: none; }
   :root[data-theme="dark"] .reveal { transition-duration: .24s; }
   :root[data-theme="dark"] .reveal-pending { transform: translateY(8px); }
   :root[data-theme="dark"] .revealed { transform: none; }
-  :root[data-theme="dark"] .dhikr-card:target { border-color: #b7dfff; box-shadow: 0 0 0 3px #52708b; }
+  :root[data-theme="dark"] .dhikr-card:target { border-color: var(--burgundy); box-shadow: 0 0 0 3px #62798b; }
   .count-button:not(:disabled):active { transform: scale(.94); }
   .animated-count { display: flex; align-items: center; justify-content: center; gap: 12px; direction: ltr; animation: count-pop .25s ease-out; }
   .animated-count b { font-size: 34px; font-weight: 500; }

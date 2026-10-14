@@ -111,18 +111,25 @@ test('night mode persists, synchronizes and has no detected WCAG A/AA violations
   await other.close();
 });
 
-test('system appearance follows OS changes and legacy bookmarks survive corrections', async ({ page }) => {
+test('only light and dark are offered, OS changes do not override the selection, and legacy bookmarks survive', async ({ page }) => {
   const old = originals.find(e => e.sourceRow === 127)!;
   await page.addInitScript(({ id }) => {
     const d = new Date();
     const day = [d.getFullYear(), String(d.getMonth() + 1).padStart(2, '0'), String(d.getDate()).padStart(2, '0')].join('-');
-    if (!localStorage.getItem('sakina:reading:v1')) localStorage.setItem('sakina:reading:v1', JSON.stringify({ version: 1, day, counts: { [id]: 22 }, saved: [id], fontSize: 30, diacritics: true }));
+    if (!localStorage.getItem('sakina:reading:v1')) localStorage.setItem('sakina:reading:v1', JSON.stringify({ version: 1, day, counts: { [id]: 22 }, saved: [id], fontSize: 30, diacritics: true, theme: 'system' }));
   }, { id: old.id });
   await page.emulateMedia({ colorScheme: 'dark' });
   await page.goto('/saved');
   await expect(page.locator('.dhikr-card')).toHaveCount(2);
-  await expect(page.locator('html')).toHaveAttribute('data-theme', 'dark');
-  await expect(page.locator('.animated-count b').first()).toHaveText('0');
-  await page.emulateMedia({ colorScheme: 'light' });
   await expect(page.locator('html')).toHaveAttribute('data-theme', 'light');
+  await expect(page.locator('.animated-count b').first()).toHaveText('0');
+  await page.locator('.theme-control summary').click();
+  await expect(page.locator('.theme-menu button')).toHaveCount(2);
+  await expect(page.getByRole('button', { name: 'حسب الجهاز', exact: true })).toHaveCount(0);
+  await page.getByRole('button', { name: 'الوضع الليلي', exact: true }).click();
+  await expect(page.locator('html')).toHaveAttribute('data-theme', 'dark');
+  await page.emulateMedia({ colorScheme: 'light' });
+  await expect(page.locator('html')).toHaveAttribute('data-theme', 'dark');
+  await page.reload();
+  await expect(page.locator('html')).toHaveAttribute('data-theme', 'dark');
 });

@@ -85,7 +85,7 @@
     overscroll-behavior: contain;
   }
   .hundred-session::backdrop {
-    background: #050d17;
+    background: #111519;
   }
   .hundred-session :focus-visible {
     outline: 3px solid var(--burgundy);

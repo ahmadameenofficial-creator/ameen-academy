@@ -84,7 +84,11 @@ test('themes persist, sanitize and survive day rollover without altering reading
   state = readingReducer(state, { type: 'increment', id, limit: 3 });
   assert.equal(parseState(JSON.stringify(state), day).theme, 'dark');
   assert.equal(readingReducer(state, { type: 'day', day: '2026-10-13' }).theme, 'dark');
-  assert.equal(parseState(JSON.stringify({ ...state, theme: 'invalid' }), day).theme, 'system');
+  assert.equal(parseState(JSON.stringify({ ...state, theme: 'invalid' }), day).theme, 'light');
+  const legacy = parseState(JSON.stringify({ ...state, theme: 'system' }), day);
+  assert.equal(legacy.theme, 'light');
+  assert.deepEqual(legacy.counts, state.counts);
+  assert.deepEqual(legacy.saved, state.saved);
 });
 
 test('legacy combined counters reset safely and their bookmarks migrate idempotently', () => {
