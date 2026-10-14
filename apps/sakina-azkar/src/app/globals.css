@@ -584,3 +584,13 @@
 @keyframes float { 0%, 100% { transform: translateY(0) rotate(0); } 50% { transform: translateY(-8px) rotate(7deg); } }
 @keyframes orbit { from { transform: rotate(0); } to { transform: rotate(360deg); } }
 @keyframes count-pop { from { transform: translateY(4px) scale(.94); opacity: .6; } to { transform: none; opacity: 1; } }
+
+/* Daily partial progress and optional account sync. */
+.daily-ward-progress,.account-controls{margin-block:2rem;padding:1.5rem;border:1px solid var(--line);border-radius:24px}
+.daily-ward-progress h2,.account-controls h2{font-size:1.35rem;margin-block:0 1rem}
+.daily-ward-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:1rem}
+.daily-ward-card{display:grid;gap:.65rem;padding:1rem;border-radius:18px;border:1px solid var(--line)}
+.daily-ward-card strong{font-size:1.7rem}.daily-ward-card .session-progress-track{width:100%}
+.account-controls p,.daily-ward-progress p{line-height:1.8;margin-block:.8rem}
+.account-actions{display:flex;gap:.75rem;flex-wrap:wrap}.week-day small span{display:block;font-size:.7rem}
+@media(max-width:480px){.daily-ward-progress,.account-controls{padding:1rem}.daily-ward-grid{gap:.5rem}.daily-ward-card{padding:.7rem}.week-grid{gap:.2rem}}

@@ -7,9 +7,14 @@ import { historyStreak, shiftDay } from '@/lib/reading-history';
 import { readingDay, prayers } from '@/lib/progress';
 import { getCategory } from '@/lib/catalog';
 import { number } from '@/lib/text';
+import { progressPercent } from '@/lib/daily-progress';
+import { DailyProgress } from './daily-progress';
+import { AccountControls } from './account-sync';
 import { useReading } from '@/lib/reading-store';
 export function PersonalProgress() {
-  const { records, ready } = useHistory();
+  const { records: allRecords, ready } = useHistory();
+  const records = allRecords.filter(row => (row.progress ?? 1) > 0);
+  const completedRecords = records.filter(row => (row.progress ?? 1) >= 1);
   const { state } = useReading();
   const today = state.day || readingDay();
   const [confirm, setConfirm] = useState(false);
@@ -20,8 +25,9 @@ export function PersonalProgress() {
       <span className="eyebrow">على مهل، يومًا بعد يوم</span>
       <h1>متابعتك الأسبوعية</h1>
       <p className="page-description">
-        سجل محفوظ على جهازك للأقسام التي أتممت بطاقاتها ذات العدد المحدد.
+        كل جزء من عدّادات الصباح والمساء يُحتسب ويحفظ يوميًا، حتى قبل إتمام الورد.
       </p>
+      <DailyProgress /><AccountControls />
       {!ready ? (
         <p role="status">جارٍ استعادة السجل…</p>
       ) : (
@@ -29,19 +35,19 @@ export function PersonalProgress() {
           <div className="personal-metrics">
             <section>
               <ChartNoAxesColumn size={24} />
-              <strong>{number(historyStreak(records, today))}</strong>
+              <strong>{number(historyStreak(completedRecords, today))}</strong>
               <h2>أيام متتالية</h2>
               <p>تشمل اليوم، أو تنتهي بالأمس إلى أن تكمل يومك.</p>
             </section>
             <section>
               <Check size={24} />
               <strong>{number(totalDays)}</strong>
-              <h2>أيام فيها إتمام</h2>
+              <h2>أيام فيها قراءة</h2>
               <p>من السجل المحفوظ خلال آخر سنة.</p>
             </section>
             <section>
               <Check size={24} />
-              <strong>{number(records.length)}</strong>
+              <strong>{number(completedRecords.length)}</strong>
               <h2>أقسام أتممت عدّاداتها</h2>
               <p>كل قسم أو صلاة تُسجّل مرة واحدة في اليوم.</p>
             </section>
@@ -55,7 +61,7 @@ export function PersonalProgress() {
                   <div
                     key={day}
                     className={count ? 'week-day has-completions' : 'week-day'}
-                    aria-label={day + ': ' + number(count) + ' أقسام مكتملة'}
+                    aria-label={day + ': ' + number(count) + ' أقسام فيها قراءة'}
                   >
                     <span>
                       {new Intl.DateTimeFormat('ar-EG', {
@@ -64,14 +70,14 @@ export function PersonalProgress() {
                       }).format(new Date(day + 'T12:00:00Z'))}
                     </span>
                     <b>{count ? <Check size={23} /> : '—'}</b>
-                    <small>{number(count)}</small>
+                    <small>{['morning', 'evening'].map(ward => { const row = records.find(r => r.day === day && r.categoryId === ward); return <span key={ward}>{ward === 'morning' ? 'ص' : 'م'} {number(progressPercent(row ? row.progress ?? 1 : 0))}% </span>; })}</small>
                   </div>
                 );
               })}
             </div>
           </section>
           <section className="history-list">
-            <h2>آخر ما أتممت</h2>
+            <h2>آخر تقدمك</h2>
             {records.length ? (
               <ul>
                 {[...records]
@@ -88,13 +94,13 @@ export function PersonalProgress() {
                           </span>
                         )}
                       </Link>
-                      <time dateTime={record.day}>{record.day}</time>
+                      <span>{number(progressPercent(record.progress ?? 1))}%</span><time dateTime={record.day}>{record.day}</time>
                     </li>
                   ))}
               </ul>
             ) : (
               <div className="personal-empty">
-                <p>تبدأ المتابعة عندما تكمل عدّادات قسم ذي أعداد محددة.</p>
+                <p>ابدأ أي عدّاد للصباح أو المساء؛ سيظهر تقدمك حتى لو لم تكمل الورد.</p>
                 <Link className="button button-primary" href="/azkar/morning">
                   ابدأ بأذكار الصباح
                 </Link>
@@ -102,12 +108,11 @@ export function PersonalProgress() {
             )}
           </section>
           <p className="history-note">
-            العدادات الحرة والتعليمات لا تُنشئ هدف إتمام. لا يُرسل هذا السجل للداشبورد أو لأي جهة،
-            ومسح بيانات المتصفح يمسحه.
+            العدادات الحرة والتعليمات لا تُنشئ هدف إتمام. لا يُرسل السجل للداشبورد. عند ربط Google اختياريًا تُحفظ المتابعة في حسابك؛ بدون حساب تبقى على جهازك.
           </p>
           {confirm ? (
             <div className="reset-confirm">
-              <span>مسح سجل المتابعة من هذا الجهاز؟</span>
+              <span>مسح سجل المتابعة الحالي؟ إذا كنت مرتبطًا بحساب فسيتزامن المسح معه.</span>
               <button
                 className="button button-danger"
                 onClick={() => {

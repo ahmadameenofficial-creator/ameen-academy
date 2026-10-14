@@ -8,8 +8,10 @@ import {
   type ReadingAction,
 } from './progress';
 import { migrateCatalogState } from './catalog-migration';
+import { recordPartial, historySnapshot } from './history-store';
+import { partialProgress, wardEntries, wardCounts } from './daily-progress';
 
-const KEY = 'sakina:reading:v1';
+let KEY = 'sakina:reading:v1';
 const serverState = initialState('');
 let state = serverState;
 let loaded = false;
@@ -23,11 +25,45 @@ function load() {
   if (loaded) return;
   loaded = true;
   try {
-    state = migrateCatalogState(parseState(localStorage.getItem(KEY), readingDay()));
+    const raw = localStorage.getItem(KEY);
+    const oldDay = raw ? JSON.parse(raw)?.day : undefined;
+    if (typeof oldDay === 'string' && /^\d{4}-\d{2}-\d{2}$/.test(oldDay) && oldDay < readingDay()) {
+      recordWards(migrateCatalogState(parseState(raw, oldDay)), true);
+    }
+    state = migrateCatalogState(parseState(raw, readingDay()));
+    recordWards(state, true);
   } catch {
     state = initialState();
     persistent = false;
   }
+}
+function recordWards(value: typeof state, initialize = false) {
+  if (!value.day) return;
+  for (const ward of ['morning', 'evening']) {
+    if (initialize && historySnapshot().some(row => row.day === value.day && row.categoryId === ward)) continue;
+    const counts = wardCounts(ward, value.counts);
+    const progress = partialProgress(wardEntries(ward), counts);
+    if (progress > 0 || historySnapshot().some(row => row.day === value.day && row.categoryId === ward))
+      recordPartial({ day: value.day, categoryId: ward, progress, counts });
+  }
+}
+export function switchReadingOwner(owner: string | null) {
+  KEY = owner ? `sakina:account:${owner}:reading:v1` : 'sakina:reading:v1';
+  loaded = false;
+  load();
+  emit();
+}
+export function restoreWardCounters() {
+  load();
+  const counts = { ...state.counts };
+  for (const row of historySnapshot()) {
+    if (row.day !== readingDay() || !['morning', 'evening'].includes(row.categoryId) || !row.counts) continue;
+    Object.assign(counts, wardCounts(row.categoryId, row.counts));
+  }
+  if (JSON.stringify(counts) === JSON.stringify(state.counts)) return;
+  state = { ...state, counts };
+  persist();
+  emit();
 }
 function getSnapshot() {
   load();
@@ -36,6 +72,7 @@ function getSnapshot() {
 function checkDay() {
   const next = readingReducer(state, { type: 'day', day: readingDay() });
   if (next !== state) {
+    recordWards(state);
     state = next;
     persist();
     emit();
@@ -76,6 +113,7 @@ export function dispatchReading(action: ReadingAction) {
   checkDay();
   const previous = state;
   state = readingReducer(state, action);
+  if (['increment', 'decrement', 'reset'].includes(action.type)) recordWards(state);
   persist();
   emit();
   return { previous, current: state };

@@ -21,6 +21,7 @@ import { Icon } from './icon';
 import { DhikrCard } from './dhikr-card';
 import { Reveal } from './reveal';
 import { recordCompletion } from '@/lib/history-store';
+import { partialProgress, progressPercent } from '@/lib/daily-progress';
 import { supportsHundredSession } from '@/lib/hundred-session';
 import { HundredSession } from './hundred-session';
 import { NotificationBell } from './notification-bell';
@@ -52,7 +53,7 @@ export function Reader({
   const completed = countable.filter(
     (e) => (state.counts[counterKey(e.id, scope)] ?? 0) >= e.repeat!,
   ).length;
-  const progress = countable.length ? (completed / countable.length) * 100 : 0;
+  const progress = partialProgress(applicable, state.counts, scope) * 100;
   const visible = applicable.filter(
     (e) =>
       !hideCompleted ||
@@ -92,7 +93,7 @@ export function Reader({
       });
   }
   useEffect(() => {
-    if (ready && countable.length > 0 && completed === countable.length)
+    if (ready && !['morning', 'evening'].includes(category.id) && countable.length > 0 && completed === countable.length)
       recordCompletion({ day: state.day, categoryId: category.id, ...(scope ? { scope } : {}) });
   }, [ready, countable.length, completed, state.day, category.id, scope]);
 
@@ -161,12 +162,12 @@ export function Reader({
             role="progressbar"
             aria-label="تقدم الجلسة"
             aria-valuemin={0}
-            aria-valuemax={countable.length}
-            aria-valuenow={completed}
+            aria-valuemax={100}
+            aria-valuenow={progressPercent(progress / 100)}
           >
             <span style={{ width: String(progress) + '%' }} />
           </div>
-          <small>العدّادات الحرة والنصوص الإرشادية لا تدخل في نسبة الإكمال.</small>
+          <small>{number(progressPercent(progress / 100))}% — يحتسب جزء كل عدّاد؛ العدّادات الحرة والتعليمات لا تدخل في النسبة.</small>
         </div>
       )}
       {hundredEntries.length > 0 && (

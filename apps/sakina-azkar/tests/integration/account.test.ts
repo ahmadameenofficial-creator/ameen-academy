@@ -1,0 +1,56 @@
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import { randomBytes } from 'node:crypto';
+import { getAccountProgress, saveAccountProgress, sanitizeAccountRecords } from '../../src/lib/account-db';
+import { database } from '../../src/lib/analytics-db';
+import { wardEntries, partialProgress } from '../../src/lib/daily-progress';
+import { readingDay } from '../../src/lib/progress';
+import { NextRequest } from 'next/server';
+import { GET, PUT } from '../../src/app/api/account/progress/route';
+import { signAccountToken } from '../../src/lib/account-auth';
+import { mergeHistory } from '../../src/lib/reading-history';
+test('account snapshots restore in another client, isolate users and reject stale writes including undo/clear', async () => {
+  const a = randomBytes(32).toString('hex'), b = randomBytes(32).toString('hex');
+  process.env.SAKINA_ACCOUNT_SECRET = randomBytes(32).toString('hex');
+  process.env.SAKINA_APP_URL = 'http://localhost:3100';
+  const day = readingDay();
+  const entry = wardEntries('morning').find(e => e.repeat === 100)!;
+  const row = { day, categoryId: 'morning', counts: { [entry.id]: 43 }, progress: .5, updatedAt: Date.now() };
+  const rows = sanitizeAccountRecords([row], day);
+  assert.equal(rows[0].progress, partialProgress(wardEntries('morning'), row.counts));
+  try {
+    assert.deepEqual(await getAccountProgress(a), { revision: 0, records: [] });
+    assert.equal(await saveAccountProgress(a, 0, rows), 1);
+    assert.deepEqual((await getAccountProgress(a)).records, rows);
+    assert.deepEqual((await getAccountProgress(b)).records, []);
+    assert.equal(await saveAccountProgress(a, 0, []), null);
+    const undo = sanitizeAccountRecords([{ ...row, counts: { [entry.id]: 42 }, updatedAt: row.updatedAt + 1 }], day);
+    assert.equal(await saveAccountProgress(a, 1, undo), 2);
+    assert.equal(await saveAccountProgress(a, 1, rows), null);
+    const current = await getAccountProgress(a);
+    const evening = { day, categoryId: 'evening', progress: .2, updatedAt: row.updatedAt };
+    const merged = mergeHistory([evening], current.records, day);
+    assert.equal(await saveAccountProgress(a, current.revision, merged), 3);
+    const restored = (await getAccountProgress(a)).records;
+    assert.equal(restored.find(r => r.categoryId === 'morning')?.counts?.[entry.id], 42);
+    assert.equal(restored.length, 2);
+    const cleared = restored.map(r => ({ ...r, counts: {}, progress: 0, updatedAt: row.updatedAt + 2 }));
+    assert.equal(await saveAccountProgress(a, 3, cleared), 4);
+    assert.ok((await getAccountProgress(a)).records.every(r => r.progress === 0));
+    assert.deepEqual((await getAccountProgress(b)).records, []);
+    const cookie = 'sakina_account_session=' + signAccountToken({ userId: a }, 'session', 60);
+    assert.equal((await GET(new NextRequest('http://localhost:3100/api/account/progress'))).status, 401);
+    const restoredResponse = await GET(new NextRequest('http://localhost:3100/api/account/progress', { headers: { cookie } }));
+    assert.equal(restoredResponse.status, 200);
+    assert.equal((await restoredResponse.json()).revision, 4);
+    assert.equal(restoredResponse.headers.get('cache-control'), 'no-store');
+    assert.equal((await GET(new NextRequest('http://localhost:3100/api/account/progress', { headers: { cookie: cookie + 'forged' } }))).status, 401);
+    const badOrigin = await PUT(new NextRequest('http://localhost:3100/api/account/progress', { method: 'PUT', headers: { cookie, origin: 'https://evil.example' }, body: '{}' }));
+    assert.equal(badOrigin.status, 403);
+    const stale = await PUT(new NextRequest('http://localhost:3100/api/account/progress', { method: 'PUT', headers: { cookie, origin: 'http://localhost:3100' }, body: JSON.stringify({ revision: 1, records: rows, today: day }) }));
+    assert.equal(stale.status, 409);
+  } finally {
+    await database()`DELETE FROM sakina_personal.progress WHERE user_id IN (${a},${b})`;
+    await database().end();
+  }
+});
