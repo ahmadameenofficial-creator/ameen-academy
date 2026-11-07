@@ -1,0 +1,23 @@
+{
+  "name": "ameen-portfolio",
+  "version": "0.2.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "node build.mjs",
+    "dev": "python3 -m http.server 4173 --bind 0.0.0.0"
+  },
+  "dependencies": {
+    "react": "19.0.0",
+    "react-dom": "19.0.0",
+    "three": "0.174.0",
+    "gsap": "3.15.0"
+  },
+  "devDependencies": {
+    "esbuild": "0.27.7",
+    "typescript": "5.7.3",
+    "@types/react": "19.0.0",
+    "@types/react-dom": "19.0.0",
+    "@types/three": "0.174.0"
+  }
+}
