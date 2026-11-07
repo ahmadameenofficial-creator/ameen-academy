@@ -28,7 +28,7 @@ export function HorizonHero({lang}) {
     const createStarField = () => {
       const { current: refs } = threeRefs;
       const starCount = mobile ? 1000 : 2400;
-      
+
       for (let i = 0; i < 3; i++) {
         const geometry = new THREE.BufferGeometry();
         const positions = new Float32Array(starCount * 3);
@@ -54,7 +54,7 @@ export function HorizonHero({lang}) {
           } else {
             color.setHSL(0.6, 0.5, 0.8);
           }
-          
+
           colors[j * 3] = color.r;
           colors[j * 3 + 1] = color.g;
           colors[j * 3 + 2] = color.b;
@@ -77,16 +77,16 @@ export function HorizonHero({lang}) {
             varying vec3 vColor;
             uniform float time;
             uniform float depth;
-            
+
             void main() {
               vColor = color;
               vec3 pos = position;
-              
+
               // Slow rotation based on depth
               float angle = time * 0.05 * (1.0 - depth * 0.3);
               mat2 rot = mat2(cos(angle), -sin(angle), sin(angle), cos(angle));
               pos.xy = rot * pos.xy;
-              
+
               vec4 mvPosition = modelViewMatrix * vec4(pos, 1.0);
               gl_PointSize = size * (300.0 / -mvPosition.z);
               gl_Position = projectionMatrix * mvPosition;
@@ -94,11 +94,11 @@ export function HorizonHero({lang}) {
           `,
           fragmentShader: `
             varying vec3 vColor;
-            
+
             void main() {
               float dist = length(gl_PointCoord - vec2(0.5));
               if (dist > 0.5) discard;
-              
+
               float opacity = 1.0 - smoothstep(0.0, 0.5, dist);
               gl_FragColor = vec4(vColor, opacity);
             }
@@ -116,7 +116,7 @@ export function HorizonHero({lang}) {
 
     const createNebula = () => {
       const { current: refs } = threeRefs;
-      
+
       const geometry = new THREE.PlaneGeometry(8000, 4000, 100, 100);
       const material = new THREE.ShaderMaterial({
         uniforms: {
@@ -129,15 +129,15 @@ export function HorizonHero({lang}) {
           varying vec2 vUv;
           varying float vElevation;
           uniform float time;
-          
+
           void main() {
             vUv = uv;
             vec3 pos = position;
-            
+
             float elevation = sin(pos.x * 0.01 + time) * cos(pos.y * 0.01 + time) * 20.0;
             pos.z += elevation;
             vElevation = elevation;
-            
+
             gl_Position = projectionMatrix * modelViewMatrix * vec4(pos, 1.0);
           }
         `,
@@ -148,14 +148,14 @@ export function HorizonHero({lang}) {
           uniform float time;
           varying vec2 vUv;
           varying float vElevation;
-          
+
           void main() {
             float mixFactor = sin(vUv.x * 10.0 + time) * cos(vUv.y * 10.0 + time);
             vec3 color = mix(color1, color2, mixFactor * 0.5 + 0.5);
-            
+
             float alpha = opacity * (1.0 - length(vUv - 0.5) * 2.0);
             alpha *= 1.0 + vElevation * 0.01;
-            
+
             gl_FragColor = vec4(color, alpha);
           }
         `,
@@ -174,7 +174,7 @@ export function HorizonHero({lang}) {
 
     const createMountains = () => {
       const { current: refs } = threeRefs;
-      
+
       const layers = [
         { distance: -50, height: 60, color: 0x1a1a2e, opacity: 1 },
         { distance: -100, height: 80, color: 0x16213e, opacity: 0.8 },
@@ -185,15 +185,15 @@ export function HorizonHero({lang}) {
       layers.forEach((layer, index) => {
         const points = [];
         const segments = 50;
-        
+
         for (let i = 0; i <= segments; i++) {
           const x = (i / segments - 0.5) * 1000;
-          const y = Math.sin(i * 0.1) * layer.height + 
+          const y = Math.sin(i * 0.1) * layer.height +
                    Math.sin(i * 0.05) * layer.height * 0.5 +
                    Math.random() * layer.height * 0.2 - 100;
           points.push(new THREE.Vector2(x, y));
         }
-        
+
         points.push(new THREE.Vector2(5000, -300));
         points.push(new THREE.Vector2(-5000, -300));
 
@@ -217,7 +217,7 @@ export function HorizonHero({lang}) {
 
     const createAtmosphere = () => {
       const { current: refs } = threeRefs;
-      
+
       const geometry = new THREE.SphereGeometry(600, 32, 32);
       const material = new THREE.ShaderMaterial({
         uniforms: {
@@ -226,7 +226,7 @@ export function HorizonHero({lang}) {
         vertexShader: `
           varying vec3 vNormal;
           varying vec3 vPosition;
-          
+
           void main() {
             vNormal = normalize(normalMatrix * normal);
             vPosition = position;
@@ -237,14 +237,14 @@ export function HorizonHero({lang}) {
           varying vec3 vNormal;
           varying vec3 vPosition;
           uniform float time;
-          
+
           void main() {
             float intensity = pow(0.7 - dot(vNormal, vec3(0.0, 0.0, 1.0)), 2.0);
             vec3 atmosphere = vec3(0.3, 0.6, 1.0) * intensity * 0.12;
-            
+
             float pulse = sin(time * 2.0) * 0.1 + 0.9;
             atmosphere *= pulse;
-            
+
             gl_FragColor = vec4(atmosphere, intensity * 0.015);
           }
         `,
