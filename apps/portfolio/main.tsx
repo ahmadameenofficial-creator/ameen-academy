@@ -35,15 +35,24 @@ function ResponsiveFolder(props:Omit<React.ComponentProps<typeof GlassFolder>,'w
 function ProjectFolders(){
  const {lang,theme}=usePreferences();const ar=lang==='ar';
  const [filter,setFilter]=useState('all');
- const zhalwaDialog=useRef<HTMLDialogElement>(null);
+ const zhalwaDialog=useRef<HTMLDialogElement>(null),zhalwaViewer=useRef<HTMLDialogElement>(null);
+ const [zhalwaIndex,setZhalwaIndex]=useState(7);
+ const zhalwaImages=projectAssets.zhalwa;
+ const openZhalwaImage=(index:number)=>{setZhalwaIndex(index);zhalwaViewer.current?.showModal();document.body.classList.add('dialog-active')};
+ const moveZhalwaImage=(step:number)=>setZhalwaIndex(i=>(i+step+zhalwaImages.length)%zhalwaImages.length);
  const covers=projectAssets.covers as Record<string,string>;
- const cover=(p:Project)=>p.local==='luqaimah'?'assets/luqaimah-05.webp':p.local==='zhalwa'?projectAssets.zhalwa[0]:covers[p.en];
+ const cover=(p:Project)=>p.local==='luqaimah'?'assets/luqaimah-05.webp':p.local==='zhalwa'?projectAssets.zhalwa[7]:covers[p.en];
  const [openFolders,setOpenFolders]=useState<Record<string,boolean>>({});
  const cats={brand:ar?'هوية بصرية':'Brand identity',social:ar?'سوشيال ميديا':'Social media',logo:ar?'لوجوهات':'Logo collection'};
- const choose=(p:Project)=>{if(p.local==='luqaimah'){dispatchEvent(new Event('portfolio:luqaimah'))}else if(p.local==='zhalwa'){zhalwaDialog.current?.showModal();document.body.classList.add('dialog-active')}};
+ const choose=(p:Project)=>{if(p.local==='luqaimah'){dispatchEvent(new Event('portfolio:luqaimah'))}else if(p.local==='zhalwa'){zhalwaDialog.current?.showModal();if(zhalwaDialog.current)zhalwaDialog.current.scrollTop=0;document.body.classList.add('dialog-active')}};
  function files(p:Project):FolderFile[]{
   if(p.local==='luqaimah')return [{name:ar?'الهوية والتغليف':'Identity & packaging',image:'assets/luqaimah-05.webp'},{name:ar?'مجموعة التطبيقات':'Brand applications',image:'assets/luqaimah-14.webp'},{name:ar?'الخامات والتفاصيل':'Materials & details',image:'assets/luqaimah-07.webp'},{name:ar?'افتح المعرض الكامل':'Open full gallery',image:'assets/luqaimah-13.webp',meta:ar?'١٨ صورة':'18 images'}];
-  if(p.local==='zhalwa')return [{name:ar?'ظلوة — الهوية البصرية':'Zhalwa — visual identity',meta:ar?'قهوة ومخبوزات':'Coffee & bakery',art:{style:'streak',colors:['#1348dc','#f25b36','#f5ecd6','#d7df62'],gloss:.3}},{name:ar?'استكشف فكرة الهوية':'Explore the identity',meta:cats.brand,art:{style:'marble',colors:['#153fe0','#203fc1','#f5ecd6','#f75c33'],scale:.9,warp:1.5}}];
+  if(p.local==='zhalwa')return [
+   {name:ar?'الهوية والتغليف':'Identity & packaging',image:zhalwaImages[7]},
+   {name:ar?'الشعار والمطبوعات':'The mark & print',image:zhalwaImages[8]},
+   {name:ar?'تطبيقات الأكواب':'Cup applications',image:zhalwaImages[5]},
+   {name:ar?'افتح المعرض الكامل':'Open full gallery',image:zhalwaImages[6],meta:ar?'١٣ صورة':'13 images'}
+  ];
   const href='https://www.behance.net/gallery/'+p.slug;
   return [{name:p.en,meta:cats[p.category],image:cover(p),art:{style:'streak',colors:['#090c18',p.color,'#e9e4e0',p.color],scale:.75,warp:1.7},href},{name:ar?'افتح المشروع على Behance':'View project on Behance',meta:'BEHANCE ↗',art:{style:'marble',colors:[p.color,'#111321','#f8f3e8'],scale:1.1,warp:2},href}];
  }
@@ -56,12 +65,20 @@ function ProjectFolders(){
    {p.local?<button className="project-direct-open" onClick={()=>choose(p)}><span>{ar?'افتح مشروع '+p.name:'View '+p.en+' project'}</span><span aria-hidden="true">↗</span></button>:<a className="project-direct-open" href={'https://www.behance.net/gallery/'+p.slug} target="_blank" rel="noopener"><span>{ar?'افتح مشروع '+p.name:'View '+p.en+' project'}</span><span aria-hidden="true">↗</span></a>}
 
   </article>)}</div>
-  <dialog ref={zhalwaDialog} className="zhalwa-dialog" onClose={()=>document.body.classList.remove('dialog-active')}><div className="dialog-bar"><span>SELECTED PROJECT / BRAND IDENTITY</span><button onClick={()=>zhalwaDialog.current?.close()} aria-label="Close">✕</button></div><div className="zhalwa-intro"><span>COFFEE & BAKERY</span><h2>{ar?'ظلوة':'ZHALWA'}</h2><p>{ar?'هوية عربية للقهوة ولحظات الاستراحة. أزرق واضح، برتقالي دافئ وكريمي، مع لمسة ليمونية ونظام بصري ممتد عبر الأكواب والتغليف والزي.':'An Arabic identity for coffee and moments of pause. Cobalt blue, warm orange and cream, a lime accent, and a visual language carried across cups, packaging and uniforms.'}</p><div className="zhalwa-palette" aria-label="Zhalwa color palette">{['#214ee6','#f25b36','#f5ecd6','#d7df62'].map(c=><span key={c} style={{background:c}}/>)}</div>{[
- {ar:'الشعار والهوية',en:'The mark & identity',descAr:'حضور الشعار والألوان في نقاط التواصل الأساسية.',descEn:'The mark and palette across key touchpoints.',items:[3,2]},
- {ar:'التغليف والأكواب',en:'Packaging & cups',descAr:'نظام واحد يربط الأكواب والأكياس والبوكسات.',descEn:'One visual system connecting cups, bags and boxes.',items:[4,6,1,5]},
- {ar:'الزي والتفاصيل',en:'Uniforms & details',descAr:'الهوية في تفاصيل اللبس والتطبيقات الصغيرة.',descEn:'The identity carried into uniforms and smaller details.',items:[7,8,9]},
- {ar:'البراند في الاستخدام',en:'The brand in use',descAr:'من المنتج للحظة اللي يوصل فيها للعميل.',descEn:'From the product to a moment in the customer’s hands.',items:[0,10,11,12]}
- ].map((chapter,index)=>{const photos=chapter.items.map(i=>(projectAssets.zhalwa as string[])[i]).filter(Boolean);return <section className="case-chapter zhalwa-chapter" key={chapter.en}><div className="chapter-heading"><span>{String(index+1).padStart(2,'0')} / ZHALWA</span><h3>{ar?chapter.ar:chapter.en}</h3><p>{ar?chapter.descAr:chapter.descEn}</p></div>{photos.length>0?<div className={'case-mosaic mosaic-'+photos.length}>{photos.map((src,i)=><figure key={src}><img src={src} alt={'Zhalwa — '+chapter.en+' '+(i+1)} loading="lazy"/></figure>)}</div>:null}</section>})}</div></dialog>
+  <dialog ref={zhalwaDialog} className="zhalwa-dialog" aria-labelledby="zhalwa-title" onClose={()=>{if(!zhalwaViewer.current?.open)document.body.classList.remove('dialog-active')}}>
+   <div className="dialog-bar"><span>SELECTED WORK / ZHALWA</span><button onClick={()=>zhalwaDialog.current?.close()} aria-label={ar?'غلق المشروع':'Close project'}>✕</button></div>
+   <div className="case-intro zhalwa-intro"><div><p className="eyebrow">BRAND IDENTITY / PACKAGING / COFFEE</p><h2 id="zhalwa-title">{ar?'ظلوة':'Zhalwa'}</h2><p className="case-lede">{ar?'ظلوة بعض الوقت، كلّه لك.':'A little pause. All yours.'}</p><p>{ar?'هوية عربية للقهوة ولحظات الاستراحة. أزرق واضح، برتقالي دافئ وكريمي، مع لمسة ليمونية ونظام بصري ممتد عبر الأكواب والتغليف والزي.':'An Arabic identity for coffee and moments of pause. Cobalt blue, warm orange and cream, a lime accent, and a visual language carried across cups, packaging and uniforms.'}</p><div className="zhalwa-palette" aria-label="Zhalwa color palette">{['#214ee6','#f25b36','#f5ecd6','#d7df62'].map(c=><span key={c} style={{background:c}}/>)}</div></div><button className="case-opening-image" onClick={()=>openZhalwaImage(7)} aria-label={ar?'تكبير مجموعة التغليف':'Enlarge packaging collection'}><img src={zhalwaImages[7]} alt={ar?'مجموعة تغليف ظلوة: بوكس وأكياس وكوب':'Zhalwa packaging: box, bags and cup'} width={1024} height={1280}/></button></div>
+   {[
+    {ar:'الشعار والهوية',en:'The mark & identity',descAr:'الشعار العربي والباترن ممتدين على المطبوعات وتطبيقات الأكواب.',descEn:'The Arabic wordmark and pattern carried across print and cup applications.',items:[8,9]},
+    {ar:'التغليف والأكواب',en:'Packaging & cups',descAr:'ألوان وتطبيقات مختلفة، بتتكلم نفس اللغة البصرية.',descEn:'Different colours and applications, speaking the same visual language.',items:[5,10,12]},
+    {ar:'الزي والتفاصيل',en:'Uniforms & details',descAr:'من تطريز الزي للكاب وأكياس الطلبات، الهوية بتكمل حضورها.',descEn:'From embroidered uniforms to caps and takeaway bags, the identity carries through.',items:[6,3,4]},
+    {ar:'البراند في الاستخدام',en:'The brand in use',descAr:'القهوة والمخبوزات والهوية في لحظات الاستخدام.',descEn:'Coffee, pastries and identity in moments of use.',items:[0,1,2,11]}
+   ].map((chapter,index)=><section className="case-chapter zhalwa-chapter" key={chapter.en}><div className="chapter-heading"><span>{String(index+1).padStart(2,'0')} / ZHALWA</span><h3>{ar?chapter.ar:chapter.en}</h3><p>{ar?chapter.descAr:chapter.descEn}</p></div><div className={'case-mosaic mosaic-'+chapter.items.length}>{chapter.items.map(i=><button className="case-photo" key={i} onClick={()=>openZhalwaImage(i)} aria-label={(ar?'تكبير صورة ظلوة ':'Enlarge Zhalwa image ')+(i+1)}><img src={zhalwaImages[i]} alt={'Zhalwa — '+chapter.en+' '+(i+1)} width={1024} height={1280} loading="lazy"/><span className="case-photo-zoom" aria-hidden="true">+</span></button>)}</div></section>)}
+   <div className="case-outro"><p>{ar?'هوية تربط كل نقطة تواصل.':'An identity connecting every touchpoint.'}</p><a className="pill" href={'https://wa.me/201090912747?text='+encodeURIComponent(ar?'أهلاً أحمد، شفت مشروع ظلوة وحابب أتكلم معاك عن مشروع هوية بصرية.':'Hi Ahmad, I saw Zhalwa and would like to discuss a brand identity project.')} target="_blank" rel="noopener"><span>{ar?'خلّينا نتكلم عن براندك':'Let’s talk about your brand'}</span><b>↗</b></a></div>
+  </dialog>
+  <dialog ref={zhalwaViewer} className="zhalwa-lightbox" aria-label={ar?'عارض صور ظلوة':'Zhalwa image viewer'} onClose={()=>{if(!zhalwaDialog.current?.open)document.body.classList.remove('dialog-active')}} onKeyDown={e=>{if(e.key==='ArrowRight'){e.preventDefault();moveZhalwaImage(1)}else if(e.key==='ArrowLeft'){e.preventDefault();moveZhalwaImage(-1)}}}>
+   <button className="viewer-close" onClick={()=>zhalwaViewer.current?.close()} aria-label={ar?'غلق الصورة':'Close image'}>✕</button><button onClick={()=>moveZhalwaImage(-1)} aria-label={ar?'الصورة السابقة':'Previous image'}>←</button><figure><img src={zhalwaImages[zhalwaIndex]} alt={'Zhalwa — '+(zhalwaIndex+1)}/><figcaption>{String(zhalwaIndex+1).padStart(2,'0')} / 13</figcaption></figure><button onClick={()=>moveZhalwaImage(1)} aria-label={ar?'الصورة التالية':'Next image'}>→</button>
+  </dialog>
  </>
 }
 createRoot(document.getElementById('hero-root')!).render(<HeroIsland/>);
