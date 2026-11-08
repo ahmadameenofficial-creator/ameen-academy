@@ -77,10 +77,14 @@
   [projectDialog,lightbox].forEach(d=>d.addEventListener('click',e=>{if(e.target===d){const r=d.getBoundingClientRect();if(e.clientX<r.left||e.clientX>r.right||e.clientY<r.top||e.clientY>r.bottom)d.close()}}));
 
 
-  document.querySelectorAll('.glass-portrait,.portrait').forEach(card=>{
-    if(reduced)return;
-    card.addEventListener('pointermove',e=>{if(e.pointerType==='touch')return;const rect=card.getBoundingClientRect();const x=(e.clientX-rect.left)/rect.width,y=(e.clientY-rect.top)/rect.height;card.style.setProperty('--glass-x',`${x*100}%`);card.style.setProperty('--glass-y',`${y*100}%`);card.style.setProperty('--tilt-x',`${(y-.5)*-5}deg`);card.style.setProperty('--tilt-y',`${(x-.5)*6}deg`)});
-    card.addEventListener('pointerleave',()=>{card.style.setProperty('--tilt-x','0deg');card.style.setProperty('--tilt-y','0deg')});
-  });
-  if(!reduced){const observer=new IntersectionObserver(entries=>entries.forEach(e=>{if(e.isIntersecting){e.target.classList.add('is-in-view');observer.unobserve(e.target)}}),{threshold:.15});document.querySelectorAll('.glass-reveal').forEach(el=>observer.observe(el));}
+  if(!reduced){
+    const portraits=[...document.querySelectorAll('.glass-portrait,.portrait')];const visible=new Set();let frame=0;
+    const update=()=>{frame=0;visible.forEach(card=>{const r=card.getBoundingClientRect();const phase=Math.max(-1,Math.min(1,(innerHeight/2-r.top-r.height/2)/(innerHeight+r.height)*2));if(card.classList.contains('gf-root')){card.style.setProperty('--gf-scroll-y',`${phase*8}px`);return}card.style.setProperty('--glass-x',`${50+phase*40}%`);card.style.setProperty('--glass-y',`${50-phase*35}%`);card.style.setProperty('--glass-scroll',phase.toFixed(3));card.style.setProperty('--tilt-x',`${phase*3}deg`);card.style.setProperty('--tilt-y',`${phase*-4}deg`)})};
+    const request=()=>{if(!frame)frame=requestAnimationFrame(update)};
+    const observer=new IntersectionObserver(entries=>{entries.forEach(e=>{if(e.isIntersecting){visible.add(e.target);e.target.classList.add('is-in-view')}else{visible.delete(e.target);e.target.classList.remove('is-in-view')}});request()},{rootMargin:'60px',threshold:0});
+    addEventListener('portfolio:motion-register',e=>observer.observe(e.detail));
+    addEventListener('portfolio:motion-unregister',e=>{visible.delete(e.detail);observer.unobserve(e.detail)});
+    portraits.forEach(card=>{observer.observe(card);card.addEventListener('pointermove',e=>{const r=card.getBoundingClientRect();const x=(e.clientX-r.left)/r.width,y=(e.clientY-r.top)/r.height;card.style.setProperty('--glass-x',`${x*100}%`);card.style.setProperty('--glass-y',`${y*100}%`);card.style.setProperty('--tilt-x',`${(y-.5)*-5}deg`);card.style.setProperty('--tilt-y',`${(x-.5)*6}deg`)});card.addEventListener('pointerleave',request)});
+    addEventListener('scroll',request,{passive:true});addEventListener('resize',request,{passive:true});
+  }
 })();

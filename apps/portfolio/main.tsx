@@ -28,9 +28,10 @@ function usePreferences(){
 }
 function HeroIsland(){const {lang}=usePreferences();return <HorizonHero lang={lang}/>}
 function ResponsiveFolder(props:Omit<React.ComponentProps<typeof GlassFolder>,'width'>){
- const host=useRef<HTMLDivElement>(null);const [width,setWidth]=useState(120);
+ const host=useRef<HTMLDivElement>(null);const [width,setWidth]=useState(120);const [near,setNear]=useState(false);
  useEffect(()=>{const element=host.current;if(!element)return;const resize=()=>setWidth(Math.max(96,Math.min(340,Math.floor(element.getBoundingClientRect().width))));resize();const observer=new ResizeObserver(resize);observer.observe(element);return()=>observer.disconnect()},[]);
- return <div className="folder-object" ref={host}><GlassFolder {...props} width={width}/></div>
+ useEffect(()=>{const el=host.current;if(!el)return;const observer=new IntersectionObserver(entries=>{if(entries.some(e=>e.isIntersecting)){setNear(true);observer.disconnect()}},{rootMargin:'250px'});observer.observe(el);return()=>observer.disconnect()},[]);
+ return <div className="folder-object" ref={host} style={{minHeight:width*326/340}}>{near?<GlassFolder {...props} width={width}/>:null}</div>
 }
 function ProjectFolders(){
  const {lang,theme}=usePreferences();const ar=lang==='ar';

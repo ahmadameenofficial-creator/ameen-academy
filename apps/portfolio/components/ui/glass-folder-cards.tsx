@@ -594,11 +594,12 @@ export default function GlassFolder({
     let t = 0
     const io = new IntersectionObserver(
       (entries) => {
-        if (!entries.some((e) => e.isIntersecting)) return
-        io.disconnect()
-        t = window.setTimeout(() => setEntered(true), appearDelay)
+        window.clearTimeout(t)
+        if(entries.some(e=>e.isIntersecting && e.intersectionRatio>=.12)) {
+          t = window.setTimeout(() => setEntered(true), appearDelay)
+        } else { setEntered(false) }
       },
-      { threshold: 0.25 },
+      { threshold: [0,.12] },
     )
     io.observe(el)
     return () => {
@@ -606,6 +607,14 @@ export default function GlassFolder({
       window.clearTimeout(t)
     }
   }, [appear, appearDelay])
+
+  // Share the site's single visible-element scroll loop; no per-folder scroll listeners.
+  React.useEffect(() => {
+    const element=rootRef.current
+    if(!element)return
+    window.dispatchEvent(new CustomEvent('portfolio:motion-register',{detail:element}))
+    return()=>{window.dispatchEvent(new CustomEvent('portfolio:motion-unregister',{detail:element}))}
+  },[])
 
   // ---- pointer: light and parallax follow the cursor, no re-renders -------
   React.useEffect(() => {
